@@ -5,20 +5,44 @@
 
 Projectile::Projectile()
 {
-	this->m_circle = sf::CircleShape(5.f);
+	this->m_circle = sf::CircleShape(2.5f);
 	this->m_position = sf::Vector2f(0.f, 0.f);
 	this->m_velocity = sf::Vector2f(0.f, 0.f);
 	this->m_Type = CLASSIC;
+	switch (this->m_Type)
+	{
+		case FLAMMING :
+			this->m_circle.setFillColor(sf::Color::Red);
+			break;
+		case PIERCING :
+			this->m_circle.setFillColor(sf::Color::Yellow);
+			break;
+		default :
+			this->m_circle.setFillColor(sf::Color::White);
+			break;
+	}
 	this->m_damage = 0;
 	this->m_range = 0;
 	this->m_distance = 0.f;
 }
 Projectile::Projectile(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range)
 {
-	this->m_circle = sf::CircleShape(5.f);
+	this->m_circle = sf::CircleShape(2.5f);
 	this->m_position = _pos;
 	this->m_velocity = _vel;
 	this->m_Type = _type;
+	switch (this->m_Type)
+	{
+		case FLAMMING:
+			this->m_circle.setFillColor(sf::Color::Red);
+			break;
+		case PIERCING:
+			this->m_circle.setFillColor(sf::Color::Yellow);
+			break;
+		default:
+			this->m_circle.setFillColor(sf::Color::White);
+			break;
+	}
 	this->m_damage = _dmg;
 	this->m_range = _range;
 	this->m_distance = 0.f;
