@@ -35,11 +35,11 @@ class BuckShot : public Shell
 		void Shot(ProjectileList& _list) override;
 };
 
-class Incendiary : public Shell
+class DragonBreath : public Shell
 {
 	public :
-		Incendiary();
-		~Incendiary();
+		DragonBreath();
+		~DragonBreath();
 
 		void Shot(ProjectileList& _list) override;
 };

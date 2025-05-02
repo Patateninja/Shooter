@@ -60,6 +60,9 @@
     <ClCompile Include="ResourceManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="Shotgun.cpp">
+      <Filter>Source Files\Shooting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tools.hpp">
@@ -85,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="ResourceManager.hpp">
       <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Shotgun.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

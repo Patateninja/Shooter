@@ -1,7 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "ResourceManager.hpp"
-#include "Projectile.hpp"
+#include "Shotgun.hpp"
 #include <iostream>
 
 class StateManager;
@@ -51,6 +51,7 @@ class Game : public State
 {
 	private:
 		ProjectileList m_List;
+		Shotgun m_Shotgun;
 		float m_SpawnTimer;
 		float m_Deltatime;
 	public:

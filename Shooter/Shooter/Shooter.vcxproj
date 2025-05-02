@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="Shotgun.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Projectile.cpp" />
@@ -154,6 +155,7 @@
   <ItemGroup>
     <ClInclude Include="Resource.hpp" />
     <ClInclude Include="ResourceManager.hpp" />
+    <ClInclude Include="Shotgun.hpp" />
     <ClInclude Include="StateManager.hpp" />
     <ClInclude Include="Projectile.hpp" />
     <ClInclude Include="Shell.hpp" />

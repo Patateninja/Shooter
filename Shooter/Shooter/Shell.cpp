@@ -50,7 +50,7 @@ void BuckShot::Shot(ProjectileList& _list)
 
 //////////////////////////////////////////////////
 
-Incendiary::Incendiary()
+DragonBreath::DragonBreath()
 {
 	this->m_Damage = 5;
 	this->m_Range = 400;
@@ -58,12 +58,12 @@ Incendiary::Incendiary()
 	this->m_Pellets = 5;
 	this->m_Velocity = 1000.f;
 }
-Incendiary::~Incendiary()
+DragonBreath::~DragonBreath()
 {
 
 }
 
-void Incendiary::Shot(ProjectileList& _list)
+void DragonBreath::Shot(ProjectileList& _list)
 {
 	for (int i = 0; i < this->m_Pellets; ++i)
 	{

@@ -1,8 +1,6 @@
 #include "State.hpp"
 #include "StateManager.hpp"
 
-#include "Shell.hpp"
-
 ////////////////////////////////////////////////////////
 
 bool State::m_GameResult = true;
@@ -111,38 +109,27 @@ void Game::Update()
 		this->ChangeState<EndGame>();
 	}
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+	{
+		this->m_Shotgun.Load(1);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+	{
+		this->m_Shotgun.Load(2);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+	{
+		this->m_Shotgun.Load(3);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
+	{
+		this->m_Shotgun.Load(4);
+	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->m_SpawnTimer > 1.f)
 	{
 		this->m_SpawnTimer = 0.f;
-		
-		switch (rand() % 4)
-		{
-			case 0 : 
-			{
-				BirdShot shell;
-				shell.Shot(this->m_List);
-				break;
-			}
-			case 1 :
-			{
-				BuckShot shell;
-				shell.Shot(this->m_List);
-				break;
-			}
-			case 2 :
-			{
-				Incendiary shell;
-				shell.Shot(this->m_List);
-				break;
-			}
-			case 3 :
-			{
-				Slug shell;
-				shell.Shot(this->m_List);
-				break;
-			}
-		}
-		
+		this->m_Shotgun.Shoot(this->m_List);
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F11) && this->m_SpawnTimer > 0.3f)
