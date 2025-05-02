@@ -2,6 +2,8 @@
 #include "SFML/Graphics.hpp"
 #include <cmath>
 
+#define PI 3.14159
+
 namespace Tools
 {
 	float GetDeltaTime(sf::Clock& _clock);
@@ -15,4 +17,8 @@ namespace Tools
 	float Magnitude(sf::Vector2f const _vector);
 
 	sf::Vector2f Normalize(sf::Vector2f _vect);
+
+	float RadToDeg(float _rad);
+
+	float DegToRad(float _deg);
 }

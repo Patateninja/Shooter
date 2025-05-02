@@ -13,7 +13,6 @@ Projectile::Projectile()
 	this->m_range = 0;
 	this->m_distance = 0.f;
 }
-
 Projectile::Projectile(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range)
 {
 	this->m_circle = sf::CircleShape(5.f);
@@ -24,7 +23,6 @@ Projectile::Projectile(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _typ
 	this->m_range = _range;
 	this->m_distance = 0.f;
 }
-
 Projectile::~Projectile()
 {
 
@@ -45,18 +43,17 @@ bool Projectile::Update(float _deltatime)
 	return false;
 }
 
-void Projectile::Display(sf::RenderWindow& _win)
+void Projectile::Display(Window& _win)
 {
-	_win.draw(this->m_circle);
+	_win.Draw(this->m_circle);
 }
 
 //////////////////////////////////////////////////
 
 ProjectileList::ProjectileList()
 {
-
+	this->m_list.clear();
 }
-
 ProjectileList::~ProjectileList()
 {
 
@@ -64,12 +61,11 @@ ProjectileList::~ProjectileList()
 
 void ProjectileList::Add(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range)
 {
-	for (int i = 0; i < 1000; i++) this->m_list.push_back(std::make_unique<Projectile>(_pos, _vel, _type, _dmg, _range));
+	this->m_list.push_back(std::make_unique<Projectile>(_pos, _vel, _type, _dmg, _range));
 }
-
 void ProjectileList::Add(Projectile& _proj)
 {
-	for (int i = 0; i < 1000; i++) this->m_list.push_back(std::make_unique<Projectile>(_proj));
+	this->m_list.push_back(std::make_unique<Projectile>(_proj));
 }
 
 void ProjectileList::Update(float _deltatime)
@@ -87,10 +83,12 @@ void ProjectileList::Update(float _deltatime)
 	}
 }
 
-void ProjectileList::Display(sf::RenderWindow& _win)
+void ProjectileList::Display(Window& _win)
 {
 	for (std::unique_ptr<Projectile>& proj : this->m_list)
 	{
 		proj->Display(_win);
 	}
 }
+
+//////////////////////////////////////////////////

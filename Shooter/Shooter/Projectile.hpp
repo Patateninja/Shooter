@@ -1,5 +1,6 @@
 #pragma once
 #include "tools.hpp"
+#include "Window.hpp"
 #include <list>
 
 typedef enum ProjectileType
@@ -27,7 +28,7 @@ class Projectile
 		inline sf::Vector2f GetPos() { return this->m_position; };
 
 		bool Update(float _deltatime);
-		void Display(sf::RenderWindow& _win);
+		void Display(Window& _win);
 };
 
 class ProjectileList
@@ -42,5 +43,7 @@ class ProjectileList
 		void Add(Projectile& _proj);
 
 		void Update(float _deltatime);
-		void Display(sf::RenderWindow& _win);
+		void Display(Window& _win);
+
+		int size() { return this->m_list.size(); };
 };

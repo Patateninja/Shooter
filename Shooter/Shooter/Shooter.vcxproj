@@ -141,15 +141,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Resource.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Shell.cpp" />
+    <ClCompile Include="State.cpp" />
     <ClCompile Include="Tools.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Resource.hpp" />
+    <ClInclude Include="ResourceManager.hpp" />
+    <ClInclude Include="StateManager.hpp" />
     <ClInclude Include="Projectile.hpp" />
     <ClInclude Include="Shell.hpp" />
+    <ClInclude Include="State.hpp" />
     <ClInclude Include="Tools.hpp" />
+    <ClInclude Include="Window.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
