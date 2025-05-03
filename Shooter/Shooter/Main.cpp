@@ -1,21 +1,23 @@
-#include "SFML/Graphics.hpp"
+#include "StateManager.hpp"
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1920, 1080), "Window", sf::Style::Fullscreen);
+	ResourceManager rscmana;
+	StateManager statemana(&rscmana);
 	sf::Event event;
 
-	while (window.isOpen())
+	while (statemana.WindowIsOpen())
 	{
-		while (window.pollEvent(event))
+		while (statemana.GetWindow().PollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
 			{
-				window.close();
+				statemana.GetWindow().Close();
 			}
 		}
-		window.clear();
-		window.display();
+
+		statemana.Update();
+		statemana.Display();
 	}
 
 	return 42;
