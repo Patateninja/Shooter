@@ -2,6 +2,7 @@
 #include "SFML/Graphics.hpp"
 #include "ResourceManager.hpp"
 #include "Shotgun.hpp"
+#include "Player.hpp"
 #include <iostream>
 
 class StateManager;
@@ -17,6 +18,7 @@ class State
 		State() = default;
 		~State() = default;
 
+		Window& Window();
 		void ClearWindow();
 		void Draw(sf::Drawable& _toDraw);
 		void DisplayWindow();
@@ -49,9 +51,10 @@ class Menu : public State
 
 class Game : public State
 {
-	private:
-		ProjectileList m_List;
+	private :
+		Player m_Player;
 		Shotgun m_Shotgun;
+		ProjectileList m_List;
 		float m_SpawnTimer;
 		float m_Deltatime;
 	public:

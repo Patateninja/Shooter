@@ -5,6 +5,10 @@
 
 bool State::m_GameResult = true;
 
+Window& State::Window()
+{
+	return this->m_StateManager->GetWindow();
+}
 void State::ClearWindow()
 {
 	this->m_StateManager->ClearWindow();
@@ -125,10 +129,12 @@ void Game::Update()
 		this->m_Shotgun.Load(4);
 	}
 
+	this->m_Player.Update(this->m_Deltatime);
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->m_SpawnTimer > 1.f)
 	{
 		this->m_SpawnTimer = 0.f;
-		this->m_Shotgun.Shoot(this->m_List);
+		this->m_Shotgun.Shoot(this->m_List, this->m_Player.GetPos());
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F11) && this->m_SpawnTimer > 0.3f)
@@ -137,31 +143,26 @@ void Game::Update()
 		this->m_StateManager->GetWindow().ToggleFullscreen();
 	}
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+	{
+		this->m_Player.Respawn();
+	}
+
 	this->m_List.Update(this->m_Deltatime);
 }
 void Game::Display()
 {
 	this->ClearWindow();
 
-	this->m_List.Display(this->m_StateManager->GetWindow());
-
-	sf::VertexArray lines(sf::Lines, 2);
-	lines[0].position = sf::Vector2f(0.f, 0.f);
-	lines[0].color = sf::Color::Red;
-	lines[1].position = Tools::AngleToVector(800.f, Tools::VectorsToAngle(sf::Vector2f(1.f, 0.f), sf::Vector2f(sf::Mouse::getPosition())));
-	lines[1].color = sf::Color::Red;
-	this->Draw(lines);
+	this->m_List.Display(this->Window());
+	this->m_Player.Display(this->Window());
+	this->m_Shotgun.DisplayMagazine(this->Window());
 
 	sf::Font font;
 	font.loadFromFile("..\\Resources\\Font\\Ubuntu.ttf");
-	sf::Text text(std::to_string(this->m_List.size()), font);
+	sf::Text text("Projectile : " + std::to_string(this->m_List.size()) + " " + std::to_string(int(1 / this->m_Deltatime)) + "fps", font);
+	text.setPosition(sf::Vector2f(1900.f - text.getGlobalBounds().width, 0.f));
 	this->Draw(text);
-
-	sf::Text fps(std::to_string(int(1 / this->m_Deltatime)) + "fps", font);
-	fps.setPosition(sf::Vector2f(1900.f - fps.getGlobalBounds().width, 0.f));
-	this->Draw(fps);
-
-	this->m_Shotgun.DisplayMagazine(this->m_StateManager->GetWindow());
 
 	this->DisplayWindow();
 }
