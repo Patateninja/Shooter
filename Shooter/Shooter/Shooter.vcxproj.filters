@@ -90,7 +90,7 @@
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="Shotgun.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Shooting</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

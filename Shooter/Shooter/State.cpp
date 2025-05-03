@@ -56,11 +56,6 @@ void Menu::Update()
 		this->ChangeState<Game>();
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tab) && Tools::GetDeltaTime(this->m_Clock) > 0.2)
-	{
-		this->ChangeState<Option>();
-	}
-
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && Tools::GetDeltaTime(this->m_Clock) > 0.2)
 	{
 		this->ChangeState<Quit>();
@@ -109,20 +104,24 @@ void Game::Update()
 		this->ChangeState<EndGame>();
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && this->m_SpawnTimer > 0.3f)
 	{
+		this->m_SpawnTimer = 0.f;
 		this->m_Shotgun.Load(1);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && this->m_SpawnTimer > 0.3f)
 	{
+		this->m_SpawnTimer = 0.f;
 		this->m_Shotgun.Load(2);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && this->m_SpawnTimer > 0.3f)
 	{
+		this->m_SpawnTimer = 0.f;
 		this->m_Shotgun.Load(3);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && this->m_SpawnTimer > 0.3f)
 	{
+		this->m_SpawnTimer = 0.f;
 		this->m_Shotgun.Load(4);
 	}
 
@@ -161,6 +160,8 @@ void Game::Display()
 	sf::Text fps(std::to_string(int(1 / this->m_Deltatime)) + "fps", font);
 	fps.setPosition(sf::Vector2f(1900.f - fps.getGlobalBounds().width, 0.f));
 	this->Draw(fps);
+
+	this->m_Shotgun.DisplayMagazine(this->m_StateManager->GetWindow());
 
 	this->DisplayWindow();
 }
