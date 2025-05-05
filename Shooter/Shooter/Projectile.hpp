@@ -45,5 +45,14 @@ class ProjectileList
 		void Update(float _deltatime);
 		void Display(Window& _win);
 
-		int size() { return this->m_list.size(); };
+		int Size() { return this->m_list.size(); };
 };
+
+namespace ProjList
+{
+	void ListDisplay(Window& _window);
+	void ListUpdate(float _deltatime);
+	void AddToList(Projectile& _thing);
+	void AddToList(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range);
+	int ListSize();
+}

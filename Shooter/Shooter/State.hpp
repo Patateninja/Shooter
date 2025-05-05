@@ -14,7 +14,7 @@ class State
 		ResourceManager* m_ResourceManager = nullptr;
 		sf::Clock m_Clock;
 		static bool m_GameResult;
-	public:
+	public :
 		State() = default;
 		~State() = default;
 
@@ -53,8 +53,6 @@ class Game : public State
 {
 	private :
 		Player m_Player;
-		Shotgun m_Shotgun;
-		ProjectileList m_List;
 		float m_SpawnTimer;
 		float m_Deltatime;
 	public:

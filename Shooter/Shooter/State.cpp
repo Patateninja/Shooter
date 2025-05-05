@@ -35,12 +35,17 @@ T& State::GetRsc(std::string _name)
 }
 
 ////////////////////////////////////////////////////////
+sf::Font font;
+sf::Text text;
 
 Menu::Menu(StateManager* _stateManager, ResourceManager* _resourceManager)
 {
 	std::cout << "Menu Created" << std::endl;
 	this->m_StateManager = _stateManager;
 	this->m_ResourceManager = _resourceManager;
+
+	font.loadFromFile("..\\Resources\\Font\\Ubuntu.ttf");
+	text.setFont(font);
 }
 Menu::~Menu()
 {
@@ -69,6 +74,10 @@ void Menu::Display()
 {
 	this->ClearWindow();
 
+	text.setString("Menu, Press Enter To Play");
+	text.setPosition(sf::Vector2f(900.f - text.getGlobalBounds().width, 540.f));
+	this->Draw(text);
+
 	this->DisplayWindow();
 }
 void Menu::DeInit()
@@ -87,6 +96,9 @@ Game::Game(StateManager* _stateManager, ResourceManager* _resourceManager)
 
 	this->m_Deltatime = 0;
 	this->m_SpawnTimer = 0;
+
+	font.loadFromFile("..\\Resources\\Font\\Ubuntu.ttf");
+	text.setFont(font);
 }
 Game::~Game()
 {
@@ -101,66 +113,28 @@ void Game::Update()
 {
 	this->m_Deltatime = Tools::GetDeltaTime(this->m_Clock);
 	this->m_Clock.restart();
-	this->m_SpawnTimer += this->m_Deltatime;
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace))
-	{
-		this->ChangeState<EndGame>();
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && this->m_SpawnTimer > 0.3f)
-	{
-		this->m_SpawnTimer = 0.f;
-		this->m_Shotgun.Load(1);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && this->m_SpawnTimer > 0.3f)
-	{
-		this->m_SpawnTimer = 0.f;
-		this->m_Shotgun.Load(2);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && this->m_SpawnTimer > 0.3f)
-	{
-		this->m_SpawnTimer = 0.f;
-		this->m_Shotgun.Load(3);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && this->m_SpawnTimer > 0.3f)
-	{
-		this->m_SpawnTimer = 0.f;
-		this->m_Shotgun.Load(4);
-	}
 
 	this->m_Player.Update(this->m_Deltatime);
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->m_SpawnTimer > 1.f)
-	{
-		this->m_SpawnTimer = 0.f;
-		this->m_Shotgun.Shoot(this->m_List, this->m_Player.GetPos());
-	}
+	ProjList::ListUpdate(this->m_Deltatime);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F11) && this->m_SpawnTimer > 0.3f)
 	{
 		this->m_SpawnTimer = 0.f;
 		this->m_StateManager->GetWindow().ToggleFullscreen();
 	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace))
 	{
-		this->m_Player.Respawn();
+		this->ChangeState<EndGame>();
 	}
-
-	this->m_List.Update(this->m_Deltatime);
 }
 void Game::Display()
 {
 	this->ClearWindow();
 
-	this->m_List.Display(this->Window());
+	ProjList::ListDisplay(this->Window());
 	this->m_Player.Display(this->Window());
-	this->m_Shotgun.DisplayMagazine(this->Window());
 
-	sf::Font font;
-	font.loadFromFile("..\\Resources\\Font\\Ubuntu.ttf");
-	sf::Text text("Projectile : " + std::to_string(this->m_List.size()) + " " + std::to_string(int(1 / this->m_Deltatime)) + "fps", font);
+	text.setString("Projectile : " + std::to_string(ProjList::ListSize()) + " / " + std::to_string(int(1 / this->m_Deltatime)) + "fps");
 	text.setPosition(sf::Vector2f(1900.f - text.getGlobalBounds().width, 0.f));
 	this->Draw(text);
 

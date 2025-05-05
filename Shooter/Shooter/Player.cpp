@@ -9,6 +9,7 @@ Player::Player()
 	this->m_Circle.setFillColor(sf::Color::Blue);
 	this->m_Position = sf::Vector2f(0.f, 0.f);
 	this->m_Velocity = sf::Vector2f(0.f, 0.f);
+	this->m_InputTimer = 0.f;
 	this->m_Life = 3;
 	this->m_CanMove = false;
 	this->m_CanReload = true;
@@ -20,12 +21,34 @@ Player::~Player()
 
 void Player::Update(float _deltatime)
 {
+	this->m_InputTimer += _deltatime;
 
 	if (this->m_CanReload)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 		{
 			this->Ready();
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && this->m_InputTimer > 0.3f)
+		{
+			this->m_InputTimer = 0.f;
+			this->m_Shotgun.Load(1);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && this->m_InputTimer > 0.3f)
+		{
+			this->m_InputTimer = 0.f;
+			this->m_Shotgun.Load(2);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && this->m_InputTimer > 0.3f)
+		{
+			this->m_InputTimer = 0.f;
+			this->m_Shotgun.Load(3);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && this->m_InputTimer > 0.3f)
+		{
+			this->m_InputTimer = 0.f;
+			this->m_Shotgun.Load(4);
 		}
 	}
 	else if (this->m_CanMove)
@@ -54,6 +77,17 @@ void Player::Update(float _deltatime)
 			this->m_Velocity.x = -375;
 		}
 
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->m_InputTimer > 0.75f)
+		{
+			this->m_InputTimer = 0.f;
+			this->m_Shotgun.Shoot(this->m_Position);
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+		{
+			this->Respawn();
+		}
+
 		this->m_Position -= this->m_Velocity * _deltatime;
 	}
 
@@ -66,9 +100,11 @@ void Player::Display(Window& _window)
 	sf::VertexArray lines(sf::Lines, 2);
 	lines[0].position = this->m_Position;
 	lines[0].color = sf::Color::Red;
-	lines[1].position = Tools::AngleToVector(200.f, Tools::VectorsToAngle(sf::Vector2f(1.f, 0.f), sf::Vector2f(0.f, 0.f) - (this->m_Position - sf::Vector2f(sf::Mouse::getPosition())))) + this->m_Position;
+	lines[1].position = Tools::AngleToVector(200.f, Tools::VectorToAngle(sf::Vector2f(0.f, 0.f) - (this->m_Position - sf::Vector2f(sf::Mouse::getPosition())))) + this->m_Position;
 	lines[1].color = sf::Color::Red;
 	_window.Draw(lines);
+
+	this->m_Shotgun.DisplayMagazine(_window);
 }
 
 void Player::Ready()

@@ -14,5 +14,5 @@ class Shotgun
 		void DisplayMagazine(Window& _window);
 
 		void Load(int _input);
-		void Shoot(ProjectileList& _list, sf::Vector2f& _playerpos);
+		void Shoot(sf::Vector2f& _playerpos);
 };
