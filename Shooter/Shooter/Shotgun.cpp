@@ -12,7 +12,7 @@ Shotgun::~Shotgun()
 	this->m_Magazine.clear();
 }
 
-void Shotgun::DisplayMagazine(Window& _window)
+void Shotgun::DisplayMagazine(Window& _window, ResourceManager& _rscmana)
 {
 	sf::RectangleShape bg(sf::Vector2f(1135.f, 100.f));
 	bg.setPosition(sf::Vector2f(10.f, 10.f));
@@ -30,7 +30,7 @@ void Shotgun::DisplayMagazine(Window& _window)
 		}
 		else if (dynamic_cast<BuckShot*>(this->m_Magazine[i].get()))
 		{
-			shell.setFillColor(sf::Color(255, 0, 0, 255));
+			shell.setTexture(&_rscmana.Get<sf::Texture>("Red_Shell"));
 		}
 		else if (dynamic_cast<DragonBreath*>(this->m_Magazine[i].get()))
 		{

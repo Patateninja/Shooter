@@ -11,7 +11,7 @@ class Shotgun
 		Shotgun();
 		~Shotgun();
 
-		void DisplayMagazine(Window& _window);
+		void DisplayMagazine(Window& _window, ResourceManager& _rscmana);
 
 		void Load(int _input);
 		void Shoot(ProjectileList& _list);

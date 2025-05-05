@@ -31,6 +31,10 @@ T& State::GetRsc(std::string _name)
 }
 
 ////////////////////////////////////////////////////////
+<<<<<<< Updated upstream
+=======
+sf::Text text;
+>>>>>>> Stashed changes
 
 Menu::Menu(StateManager* _stateManager, ResourceManager* _resourceManager)
 {
@@ -46,6 +50,8 @@ Menu::~Menu()
 void Menu::Init()
 {
 	std::cout << "Menu Init" << std::endl;
+	text.setFont(this->GetRsc<sf::Font>("Ubuntu"));
+
 }
 void Menu::Update()
 {
@@ -92,6 +98,9 @@ Game::~Game()
 void Game::Init()
 {
 	std::cout << "Game Init" << std::endl;
+	text.setFont(this->GetRsc<sf::Font>("Ubuntu"));
+
+	this->GetRsc<sf::Music>("Bogus").play();
 }
 void Game::Update()
 {
@@ -131,6 +140,11 @@ void Game::Update()
 		this->m_Shotgun.Shoot(this->m_List);
 	}
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	{
+		this->GetRsc<sf::Sound>("Shot").play();
+	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F11) && this->m_SpawnTimer > 0.3f)
 	{
 		this->m_SpawnTimer = 0.f;
@@ -143,7 +157,12 @@ void Game::Display()
 {
 	this->ClearWindow();
 
+<<<<<<< Updated upstream
 	this->m_List.Display(this->m_StateManager->GetWindow());
+=======
+	ProjList::ListDisplay(this->Window());
+	this->m_Player.Display(this->Window(), *this->m_ResourceManager);
+>>>>>>> Stashed changes
 
 	sf::VertexArray lines(sf::Lines, 2);
 	lines[0].position = sf::Vector2f(0.f, 0.f);

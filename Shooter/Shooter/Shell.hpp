@@ -1,5 +1,5 @@
 #pragma once
-
+#include "ResourceManager.hpp"
 #include "Projectile.hpp"
 
 class Shell
