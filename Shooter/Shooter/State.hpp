@@ -7,7 +7,7 @@ class State
 {
 	protected:
 		StateManager* m_StateManager = nullptr;
-		ResourceManager* m_ResourceManager = nullptr;
+		sf::Text m_Text;
 		sf::Clock m_Clock;
 		static bool m_GameResult;
 	public:
@@ -37,7 +37,7 @@ class Menu : public State
 	private:
 
 	public:
-		Menu(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
+		Menu(StateManager* _stateManager);
 		~Menu();
 
 		void Init() override;
@@ -53,7 +53,7 @@ class Game : public State
 		float m_SpawnTimer;
 		float m_Deltatime;
 	public:
-		Game(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
+		Game(StateManager* _stateManager);
 		~Game();
 
 		void Init() override;
@@ -67,7 +67,7 @@ class EndGame : public State
 	private:
 
 	public:
-		EndGame(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
+		EndGame(StateManager* _stateManager);
 		~EndGame();
 
 		void Init() override;
@@ -81,7 +81,7 @@ class Option : public State
 	private:
 
 	public:
-		Option(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
+		Option(StateManager* _stateManager);
 		~Option();
 
 		void Init() override;
@@ -95,7 +95,7 @@ class Quit : public State
 	private:
 
 	public:
-		Quit(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
+		Quit(StateManager* _stateManager);
 		~Quit();
 
 		void Init() override;

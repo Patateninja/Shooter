@@ -2,6 +2,7 @@
 #include "StateManager.hpp"
 
 ////////////////////////////////////////////////////////
+#pragma region State
 
 bool State::m_GameResult = true;
 
@@ -27,7 +28,7 @@ State* State::ChangeState()
 template<typename T>
 T& State::GetRsc(std::string _name)
 {
-	return this->m_ResourceManager->Get<T>(_name);
+	return RscMana::Get<T>(_name);
 }
 
 Window& State::Window()
@@ -35,14 +36,14 @@ Window& State::Window()
 	return this->m_StateManager->GetWindow();
 }
 
+#pragma endregion
 ////////////////////////////////////////////////////////
-sf::Text text;
+#pragma region Menu
 
-Menu::Menu(StateManager* _stateManager, ResourceManager* _resourceManager)
+Menu::Menu(StateManager* _stateManager)
 {
 	std::cout << "Menu Created" << std::endl;
 	this->m_StateManager = _stateManager;
-	this->m_ResourceManager = _resourceManager;
 }
 Menu::~Menu()
 {
@@ -52,8 +53,7 @@ Menu::~Menu()
 void Menu::Init()
 {
 	std::cout << "Menu Init" << std::endl;
-	text.setFont(this->GetRsc<sf::Font>("Ubuntu"));
-
+	this->m_Text.setFont(this->GetRsc<sf::Font>("Ubuntu"));
 }
 void Menu::Update()
 {
@@ -73,8 +73,8 @@ void Menu::Display()
 {
 	this->ClearWindow();
 
-	text.setString("Menu, Press Enter to continue");
-	this->Draw(text);
+	this->m_Text.setString("Menu, Press Enter to continue");
+	this->Draw(this->m_Text);
 
 	this->DisplayWindow();
 }
@@ -83,13 +83,14 @@ void Menu::DeInit()
 	std::cout << "Menu DeInit" << std::endl;
 }
 
+#pragma endregion
 ////////////////////////////////////////////////////////
+#pragma region Game
 
-Game::Game(StateManager* _stateManager, ResourceManager* _resourceManager)
+Game::Game(StateManager* _stateManager)
 {
 	std::cout << "Game Created" << std::endl;
 	this->m_StateManager = _stateManager;
-	this->m_ResourceManager = _resourceManager;
 	this->m_Clock = sf::Clock();
 
 	this->m_Deltatime = 0;
@@ -103,7 +104,7 @@ Game::~Game()
 void Game::Init()
 {
 	std::cout << "Game Init" << std::endl;
-	text.setFont(this->GetRsc<sf::Font>("Ubuntu"));
+	this->m_Text.setFont(this->GetRsc<sf::Font>("Ubuntu"));
 
 	this->GetRsc<sf::Music>("Bogus").play();
 }
@@ -113,8 +114,8 @@ void Game::Update()
 	this->m_Clock.restart();
 	this->m_SpawnTimer += this->m_Deltatime;
 
-	text.setString(std::to_string(ProjList::Size()) + " / " + std::to_string(int(1 / this->m_Deltatime)) + "fps");
-	text.setPosition(sf::Vector2f(1900.f - text.getGlobalBounds().width, 0.f));
+	this->m_Text.setString(std::to_string(ProjList::Size()) + " / " + std::to_string(int(1 / this->m_Deltatime)) + "fps");
+	this->m_Text.setPosition(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f));
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace))
 	{
@@ -134,9 +135,9 @@ void Game::Display()
 	this->ClearWindow();
 
 	ProjList::Display(this->Window());
-	this->m_Player.Display(this->Window(), *this->m_ResourceManager);
+	this->m_Player.Display(this->Window());
 
-	this->Draw(text);
+	this->Draw(this->m_Text);
 
 	this->DisplayWindow();
 }
@@ -145,13 +146,14 @@ void Game::DeInit()
 	std::cout << "Game DeInit" << std::endl;
 }
 
+#pragma endregion
 ////////////////////////////////////////////////////////
+#pragma region  EndGame
 
-EndGame::EndGame(StateManager* _stateManager, ResourceManager* _resourceManager)
+EndGame::EndGame(StateManager* _stateManager)
 {
 	std::cout << "EndGame Created" << std::endl;
 	this->m_StateManager = _stateManager;
-	this->m_ResourceManager = _resourceManager;
 }
 EndGame::~EndGame()
 {
@@ -180,13 +182,14 @@ void EndGame::DeInit()
 	std::cout << "EndGame DeInit" << std::endl;
 }
 
+#pragma endregion
 ////////////////////////////////////////////////////////
+#pragma region Option
 
-Option::Option(StateManager* _stateManager, ResourceManager* _resourceManager)
+Option::Option(StateManager* _stateManager)
 {
 	std::cout << "Option Created" << std::endl;
 	this->m_StateManager = _stateManager;
-	this->m_ResourceManager = _resourceManager;
 }
 Option::~Option()
 {
@@ -196,6 +199,7 @@ Option::~Option()
 void Option::Init()
 {
 	std::cout << "Option Init" << std::endl;
+	this->m_Text.setFont(this->GetRsc<sf::Font>("Ubuntu"));
 }
 void Option::Update()
 {
@@ -208,8 +212,8 @@ void Option::Display()
 {
 	this->ClearWindow();
 
-	sf::Text text("Option\nPress Backspace to return to Menu", this->GetRsc<sf::Font>("Ubuntu"));
-	this->Draw(text);
+	this->m_Text.setString("Option\nPress Backspace to return to Menu");
+	this->Draw(this->m_Text);
 
 	this->DisplayWindow();
 }
@@ -218,13 +222,14 @@ void Option::DeInit()
 	std::cout << "Option DeInit" << std::endl;
 }
 
+#pragma endregion
 ////////////////////////////////////////////////////////
+#pragma region Quit
 
-Quit::Quit(StateManager* _stateManager, ResourceManager* _resourceManager)
+Quit::Quit(StateManager* _stateManager)
 {
 	std::cout << "Quit Created" << std::endl;
 	this->m_StateManager = _stateManager;
-	this->m_ResourceManager = nullptr;
 }
 Quit::~Quit()
 {
@@ -237,7 +242,7 @@ void Quit::Init()
 }
 void Quit::Update()
 {
-	this->m_StateManager->GetWindow().Close();
+	this->Window().Close();
 }
 void Quit::Display()
 {
@@ -248,4 +253,5 @@ void Quit::DeInit()
 	std::cout << "Quit DeInit" << std::endl;
 }
 
+#pragma endregion
 ////////////////////////////////////////////////////////

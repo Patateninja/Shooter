@@ -2,11 +2,9 @@
 
 StateManager::StateManager()
 {
-	this->m_ResourceManager = new ResourceManager();
-	this->m_ResourceManager->Init();
+	RscMana::Init();
 	this->m_Window.Create(sf::VideoMode(1920,1080),"Shooter", sf::Style::Default);
-	this->m_ResourceManager = this->m_ResourceManager;
-	this->m_CurrentState = new Menu(this, this->m_ResourceManager);
+	this->m_CurrentState = new Menu(this);
 	this->m_CurrentState->Init();
 }
 StateManager::~StateManager()

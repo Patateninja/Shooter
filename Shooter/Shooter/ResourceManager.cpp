@@ -39,9 +39,9 @@ namespace RscMana
 		RscMana::rscm.GetMap().insert(std::make_pair(_name, _rsc));
 	}
 
-	RSC& Get(std::string _name)
+	RSC* GetWrapped(std::string _name)
 	{
-		RscMana::rscm.GetMap().insert(std::make_pair(_name, _rsc));
+		return RscMana::rscm.GetMap()[_name];
 	}
 	
 }

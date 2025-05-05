@@ -12,7 +12,7 @@ Shotgun::~Shotgun()
 	this->m_Magazine.clear();
 }
 
-void Shotgun::DisplayMagazine(Window& _window, ResourceManager& _rscmana)
+void Shotgun::DisplayMagazine(Window& _window)
 {
 	sf::RectangleShape bg(sf::Vector2f(1135.f, 100.f));
 	bg.setPosition(sf::Vector2f(10.f, 10.f));

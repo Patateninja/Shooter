@@ -31,6 +31,12 @@
     <Filter Include="Header Files\Managers">
       <UniqueIdentifier>{440339ca-9a4d-4dbf-bef2-29578b0ae812}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Player">
+      <UniqueIdentifier>{bf702191-bdef-4e4e-a327-ef7ade6dc53f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Player">
+      <UniqueIdentifier>{ad8e5c34-4f5b-498d-b5f9-896808484f0c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -63,6 +69,9 @@
     <ClCompile Include="Shotgun.cpp">
       <Filter>Source Files\Shooting</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tools.hpp">
@@ -91,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="Shotgun.hpp">
       <Filter>Header Files\Shooting</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.hpp">
+      <Filter>Header Files\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

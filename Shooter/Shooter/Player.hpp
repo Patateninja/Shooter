@@ -20,7 +20,7 @@ class Player
 		inline sf::Vector2f& GetVel() { return this->m_Velocity; };
 
 		void Update(float _deltatime);
-		void Display(Window& _window,ResourceManager& _rsc);
+		void Display(Window& _window);
 
 		void Ready();
 		void Die();

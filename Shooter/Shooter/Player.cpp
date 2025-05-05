@@ -93,7 +93,7 @@ void Player::Update(float _deltatime)
 
 	this->m_Circle.setPosition(this->m_Position);
 }
-void Player::Display(Window& _window,ResourceManager& _rsc)
+void Player::Display(Window& _window)
 {
 	_window.Draw(this->m_Circle);
 
@@ -104,7 +104,7 @@ void Player::Display(Window& _window,ResourceManager& _rsc)
 	lines[1].color = sf::Color::Red;
 	_window.Draw(lines);
 
-	this->m_Shotgun.DisplayMagazine(_window,_rsc);
+	this->m_Shotgun.DisplayMagazine(_window);
 }
 
 void Player::Ready()

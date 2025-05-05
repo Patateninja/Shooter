@@ -32,18 +32,20 @@ namespace RscMana
 {
 	void Init();
 
-	void AddWrapped(RSC* _r);
+	void AddWrapped(std::string _name, RSC* _r);
+
 	template <typename T>
 	void Add(std::string _name, std::string _path)
 	{
 		Resource<T>* resource = new Resource<T>(_path);
-		AddWrapped(resource);
+		RscMana::AddWrapped(_name, resource);
 	};
 
-	RSC& GetWrapped(std::string _name);
+	RSC* GetWrapped(std::string _name);
+
 	template <typename T>
 	T& Get(std::string _name)
 	{
-		return AddWrapped(dynamic_cast<Resource<T>*>(RscMana::rscm.GetMap()[_name]))->GetRSC();
+		return dynamic_cast<Resource<T>*>(GetWrapped(_name))->GetRSC();
 	}
 }
