@@ -25,3 +25,23 @@ void ResourceManager::Init()
 	//BGM
 	this->Add<sf::Music>("Bogus", path + "BGM\\Bogus.ogg");
 }
+
+namespace RscMana
+{
+	ResourceManager rscm;
+
+	void Init()
+	{
+		RscMana::rscm.Init();
+	}
+
+	void AddWrapped(std::string _name, RSC* _rsc) {
+		RscMana::rscm.GetMap().insert(std::make_pair(_name, _rsc));
+	}
+
+	RSC& Get(std::string _name)
+	{
+		RscMana::rscm.GetMap().insert(std::make_pair(_name, _rsc));
+	}
+	
+}

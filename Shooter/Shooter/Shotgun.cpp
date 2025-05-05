@@ -30,7 +30,7 @@ void Shotgun::DisplayMagazine(Window& _window, ResourceManager& _rscmana)
 		}
 		else if (dynamic_cast<BuckShot*>(this->m_Magazine[i].get()))
 		{
-			shell.setTexture(&_rscmana.Get<sf::Texture>("Red_Shell"));
+			shell.setTexture(&RscMana::Get<sf::Texture>("Red_Shell"));
 		}
 		else if (dynamic_cast<DragonBreath*>(this->m_Magazine[i].get()))
 		{

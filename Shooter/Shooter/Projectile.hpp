@@ -8,7 +8,7 @@ typedef enum ProjectileType
 	CLASSIC,
 	FLAMMING,
 	PIERCING,
-};
+} ProjectileType;
 
 class Projectile
 {
@@ -45,7 +45,7 @@ class ProjectileList
 		void Update(float _deltatime);
 		void Display(Window& _win);
 
-		int Size() { return this->m_list.size(); };
+		int Size() { return int(this->m_list.size()); };
 };
 
 namespace ProjList
