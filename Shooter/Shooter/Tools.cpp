@@ -16,7 +16,7 @@ float Tools::VectorsToAngle(sf::Vector2f const _vect1, sf::Vector2f const _vect2
 float Tools::VectorToAngle(sf::Vector2f const _vect)
 {
 	sf::Vector2f vect(1.f, 0.f);
-	return Tools::VectorsToAngle(_vect, vect);
+	return Tools::VectorsToAngle(vect, _vect);
 }
 sf::Vector2f Tools::AngleToVector(float const _len, float const _angle)
 {

@@ -1,6 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "SFML/Audio.hpp"
+#include <iostream>
 
 class RSC
 {
@@ -16,6 +17,7 @@ class Resource : public RSC
 		Resource(std::string _path)
 		{
 			this->m_Rsc.loadFromFile(_path);
+			std::cout << "Resource created with path : " << _path << std::endl;
 		}
 		~Resource()
 		{
@@ -37,6 +39,8 @@ class Resource<sf::Music> : public RSC
 		Resource(std::string _path)
 		{
 			this->m_Music.openFromFile(_path);
+			this->m_Music.setLoop(true);
+			std::cout << "Resource created with path : " << _path << std::endl;
 		}
 		~Resource()
 		{
@@ -60,13 +64,14 @@ class Resource<sf::Sound> : public RSC
 		{
 			this->m_Buffer.loadFromFile(_path);
 			this->m_Sound.setBuffer(this->m_Buffer);
+			std::cout << "Resource created with path : " << _path << std::endl;
 		}
 		~Resource()
 		{
 
 		}
 
-		sf::Sound& GetRsc()
+		sf::Sound& GetRSC()
 		{
 			return this->m_Sound;
 		}

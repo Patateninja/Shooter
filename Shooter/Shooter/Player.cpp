@@ -1,0 +1,130 @@
+#include "Player.hpp"
+
+////////////////////////////////////////////////////////
+
+Player::Player()
+{
+	this->m_Circle = sf::CircleShape(37.5f);
+	this->m_Circle.setOrigin(37.5f, 37.5f);
+	this->m_Circle.setFillColor(sf::Color::Blue);
+	this->m_Position = sf::Vector2f(0.f, 0.f);
+	this->m_Velocity = sf::Vector2f(0.f, 0.f);
+	this->m_InputTimer = 0.f;
+	this->m_Life = 3;
+	this->m_CanMove = false;
+	this->m_CanReload = true;
+}
+Player::~Player()
+{
+
+}
+
+void Player::Update(float _deltatime)
+{
+	this->m_InputTimer += _deltatime;
+
+	if (this->m_CanReload)
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+		{
+			this->Ready();
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && this->m_InputTimer > 0.3f)
+		{
+			this->m_InputTimer = 0.f;
+			this->m_Shotgun.Load(1);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && this->m_InputTimer > 0.3f)
+		{
+			this->m_InputTimer = 0.f;
+			this->m_Shotgun.Load(2);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && this->m_InputTimer > 0.3f)
+		{
+			this->m_InputTimer = 0.f;
+			this->m_Shotgun.Load(3);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && this->m_InputTimer > 0.3f)
+		{
+			this->m_InputTimer = 0.f;
+			this->m_Shotgun.Load(4);
+		}
+	}
+	else if (this->m_CanMove)
+	{
+		if (false) //Get Hit
+		{
+			this->Die();
+		}
+
+		this->m_Velocity.x = 0;
+		this->m_Velocity.y = 0;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+		{
+			this->m_Velocity.y = 375;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		{
+			this->m_Velocity.y = -375;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+		{
+			this->m_Velocity.x = 375;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		{
+			this->m_Velocity.x = -375;
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->m_InputTimer > 0.75f)
+		{
+			this->m_InputTimer = 0.f;
+			this->m_Shotgun.Shoot(this->m_Position, this->m_Velocity);
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+		{
+			this->Respawn();
+		}
+
+		this->m_Position -= this->m_Velocity * _deltatime;
+	}
+
+	this->m_Circle.setPosition(this->m_Position);
+}
+void Player::Display(Window& _window,ResourceManager& _rsc)
+{
+	_window.Draw(this->m_Circle);
+
+	sf::VertexArray lines(sf::Lines, 2);
+	lines[0].position = this->m_Position;
+	lines[0].color = sf::Color::Red;
+	lines[1].position = Tools::AngleToVector(200.f, Tools::VectorToAngle(sf::Vector2f(0.f, 0.f) - (this->m_Position - sf::Vector2f(sf::Mouse::getPosition())))) + this->m_Position;
+	lines[1].color = sf::Color::Red;
+	_window.Draw(lines);
+
+	this->m_Shotgun.DisplayMagazine(_window,_rsc);
+}
+
+void Player::Ready()
+{
+	if (true) //Shotgun Not Empty & Other Conditions
+	{
+		this->m_CanMove = true;
+		this->m_CanReload = false;
+	}
+}
+void Player::Die()
+{
+	--this->m_Life;
+	this->Respawn();
+}
+void Player::Respawn()
+{
+	this->m_Position = sf::Vector2f(0.f, 0.f); //Change to stage start pos;
+	this->m_CanReload = true;
+	this->m_CanMove = false;
+}
+
+////////////////////////////////////////////////////////

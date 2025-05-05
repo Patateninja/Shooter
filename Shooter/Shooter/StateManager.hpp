@@ -9,7 +9,7 @@ class StateManager
 		ResourceManager* m_ResourceManager;
 		State* m_CurrentState;
 	public:
-		StateManager(ResourceManager* _resourceManager);
+		StateManager();
 		~StateManager();
 
 		inline State* GetState() { return StateManager::m_CurrentState; };

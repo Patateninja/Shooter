@@ -1,8 +1,5 @@
 #pragma once
-#include "SFML/Graphics.hpp"
-#include "ResourceManager.hpp"
-#include "Shotgun.hpp"
-#include <iostream>
+#include "Player.hpp"
 
 class StateManager;
 
@@ -27,6 +24,8 @@ class State
 		template<typename T>
 		T& GetRsc(std::string _name);
 
+		Window& Window();
+
 		virtual void Init() = 0;
 		virtual void Update() = 0;
 		virtual void Display() = 0;
@@ -50,8 +49,7 @@ class Menu : public State
 class Game : public State
 {
 	private:
-		ProjectileList m_List;
-		Shotgun m_Shotgun;
+		Player m_Player;
 		float m_SpawnTimer;
 		float m_Deltatime;
 	public:
