@@ -66,11 +66,11 @@ void Shotgun::Load(int _input)
 		}
 	}
 }
-void Shotgun::Shoot(sf::Vector2f& _playerPos)
+void Shotgun::Shoot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel)
 {
 	if (!this->m_Magazine.empty())
 	{
-		this->m_Magazine.front()->Shot(_playerPos);
+		this->m_Magazine.front()->Shot(_playerPos, _playerVel);
 		this->m_Magazine.erase(this->m_Magazine.begin());
 	}
 }

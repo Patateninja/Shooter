@@ -113,6 +113,9 @@ void Game::Update()
 	this->m_Clock.restart();
 	this->m_SpawnTimer += this->m_Deltatime;
 
+	text.setString(std::to_string(ProjList::Size()) + " / " + std::to_string(int(1 / this->m_Deltatime)) + "fps");
+	text.setPosition(sf::Vector2f(1900.f - text.getGlobalBounds().width, 0.f));
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace))
 	{
 		this->ChangeState<EndGame>();
@@ -121,12 +124,6 @@ void Game::Update()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		this->GetRsc<sf::Sound>("Shot").play();
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F11) && this->m_SpawnTimer > 0.3f)
-	{
-		this->m_SpawnTimer = 0.f;
-		this->m_StateManager->GetWindow().ToggleFullscreen();
 	}
 
 	this->m_Player.Update(this->m_Deltatime);
@@ -139,8 +136,6 @@ void Game::Display()
 	ProjList::Display(this->Window());
 	this->m_Player.Display(this->Window(), *this->m_ResourceManager);
 
-	text.setString(std::to_string(ProjList::Size())+ " / " + std::to_string(int(1 / this->m_Deltatime)) + "fps");
-	text.setPosition(sf::Vector2f(1900.f - text.getGlobalBounds().width, 0.f));
 	this->Draw(text);
 
 	this->DisplayWindow();

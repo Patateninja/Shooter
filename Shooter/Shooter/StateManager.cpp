@@ -31,6 +31,11 @@ void StateManager::DisplayWindow()
 
 void StateManager::Update()
 {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F11))
+	{
+		this->m_Window.ToggleFullscreen();
+	}
+
 	this->m_CurrentState->Update();
 }
 void StateManager::Display()

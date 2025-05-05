@@ -13,7 +13,7 @@ class Shell
 		Shell() = default;
 		~Shell() = default;
 
-		virtual void Shot(sf::Vector2f& _playerPos) = 0;
+		virtual void Shot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel) = 0;
 };
 
 class BirdShot : public Shell
@@ -22,7 +22,7 @@ class BirdShot : public Shell
 		BirdShot();
 		~BirdShot();
 
-		void Shot(sf::Vector2f& _playerPos) override;
+		void Shot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel) override;
 };
 
 class BuckShot : public Shell
@@ -31,7 +31,7 @@ class BuckShot : public Shell
 		BuckShot();
 		~BuckShot();
 
-		void Shot(sf::Vector2f& _playerPos) override;
+		void Shot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel) override;
 };
 
 class DragonBreath : public Shell
@@ -40,7 +40,7 @@ class DragonBreath : public Shell
 		DragonBreath();
 		~DragonBreath();
 
-		void Shot(sf::Vector2f& _playerPos) override;
+		void Shot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel) override;
 };
 
 class Slug : public Shell
@@ -49,5 +49,5 @@ class Slug : public Shell
 		Slug();
 		~Slug();
 
-		void Shot(sf::Vector2f& _playerPos) override;
+		void Shot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel) override;
 };
