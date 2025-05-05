@@ -1,5 +1,5 @@
 #pragma once
-
+#include "ResourceManager.hpp"
 #include "Shell.hpp"
 
 class Shotgun
@@ -14,5 +14,5 @@ class Shotgun
 		void DisplayMagazine(Window& _window, ResourceManager& _rscmana);
 
 		void Load(int _input);
-		void Shoot(ProjectileList& _list);
+		void Shoot(sf::Vector2f& _playerPos);
 };

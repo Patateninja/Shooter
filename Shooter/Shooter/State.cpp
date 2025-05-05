@@ -30,11 +30,13 @@ T& State::GetRsc(std::string _name)
 	return this->m_ResourceManager->Get<T>(_name);
 }
 
+Window& State::Window()
+{
+	return this->m_StateManager->GetWindow();
+}
+
 ////////////////////////////////////////////////////////
-<<<<<<< Updated upstream
-=======
 sf::Text text;
->>>>>>> Stashed changes
 
 Menu::Menu(StateManager* _stateManager, ResourceManager* _resourceManager)
 {
@@ -70,6 +72,9 @@ void Menu::Update()
 void Menu::Display()
 {
 	this->ClearWindow();
+
+	text.setString("Menu, Press Enter to continue");
+	this->Draw(text);
 
 	this->DisplayWindow();
 }
@@ -113,33 +118,6 @@ void Game::Update()
 		this->ChangeState<EndGame>();
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && this->m_SpawnTimer > 0.3f)
-	{
-		this->m_SpawnTimer = 0.f;
-		this->m_Shotgun.Load(1);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && this->m_SpawnTimer > 0.3f)
-	{
-		this->m_SpawnTimer = 0.f;
-		this->m_Shotgun.Load(2);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && this->m_SpawnTimer > 0.3f)
-	{
-		this->m_SpawnTimer = 0.f;
-		this->m_Shotgun.Load(3);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && this->m_SpawnTimer > 0.3f)
-	{
-		this->m_SpawnTimer = 0.f;
-		this->m_Shotgun.Load(4);
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->m_SpawnTimer > 1.f)
-	{
-		this->m_SpawnTimer = 0.f;
-		this->m_Shotgun.Shoot(this->m_List);
-	}
-
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		this->GetRsc<sf::Sound>("Shot").play();
@@ -151,36 +129,19 @@ void Game::Update()
 		this->m_StateManager->GetWindow().ToggleFullscreen();
 	}
 
-	this->m_List.Update(this->m_Deltatime);
+	this->m_Player.Update(this->m_Deltatime);
+	ProjList::Update(this->m_Deltatime);
 }
 void Game::Display()
 {
 	this->ClearWindow();
 
-<<<<<<< Updated upstream
-	this->m_List.Display(this->m_StateManager->GetWindow());
-=======
-	ProjList::ListDisplay(this->Window());
+	ProjList::Display(this->Window());
 	this->m_Player.Display(this->Window(), *this->m_ResourceManager);
->>>>>>> Stashed changes
 
-	sf::VertexArray lines(sf::Lines, 2);
-	lines[0].position = sf::Vector2f(0.f, 0.f);
-	lines[0].color = sf::Color::Red;
-	lines[1].position = Tools::AngleToVector(800.f, Tools::VectorsToAngle(sf::Vector2f(1.f, 0.f), sf::Vector2f(sf::Mouse::getPosition())));
-	lines[1].color = sf::Color::Red;
-	this->Draw(lines);
-
-	sf::Font font;
-	font.loadFromFile("..\\Resources\\Font\\Ubuntu.ttf");
-	sf::Text text(std::to_string(this->m_List.size()), font);
+	text.setString(std::to_string(ProjList::Size())+ " / " + std::to_string(int(1 / this->m_Deltatime)) + "fps");
+	text.setPosition(sf::Vector2f(1900.f - text.getGlobalBounds().width, 0.f));
 	this->Draw(text);
-
-	sf::Text fps(std::to_string(int(1 / this->m_Deltatime)) + "fps", font);
-	fps.setPosition(sf::Vector2f(1900.f - fps.getGlobalBounds().width, 0.f));
-	this->Draw(fps);
-
-	this->m_Shotgun.DisplayMagazine(this->m_StateManager->GetWindow());
 
 	this->DisplayWindow();
 }
