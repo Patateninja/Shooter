@@ -37,4 +37,10 @@ class Window
 		bool IsOpen();
 		bool PollEvent(sf::Event& _event);
 		void Close();
+
+		template<typename T>
+		sf::Vector2f RelativePos(const sf::Vector2<T>& _vector)
+		{
+			return this->m_Window.mapPixelToCoords(sf::Vector2i(_vector));
+		}
 };

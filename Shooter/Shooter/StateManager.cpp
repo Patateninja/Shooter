@@ -10,7 +10,7 @@ StateManager::StateManager()
 StateManager::~StateManager()
 {
 	this->m_CurrentState->DeInit();
-	delete this->m_CurrentState;
+	this->m_CurrentState->Deletor();
 	this->m_Window.Close();
 }
 

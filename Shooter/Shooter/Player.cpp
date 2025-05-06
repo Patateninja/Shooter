@@ -19,13 +19,13 @@ Player::~Player()
 
 }
 
-void Player::Update(float _deltatime)
+void Player::Update(float _deltatime, Window& _window)
 {
 	this->m_InputTimer += _deltatime;
 
 	if (this->m_CanReload)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 		{
 			this->Ready();
 		}
@@ -80,7 +80,7 @@ void Player::Update(float _deltatime)
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->m_InputTimer > 0.75f)
 		{
 			this->m_InputTimer = 0.f;
-			this->m_Shotgun.Shoot(this->m_Position, this->m_Velocity);
+			this->m_Shotgun.Shoot(this->m_Position, this->m_Velocity, _window);
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
@@ -100,7 +100,8 @@ void Player::Display(Window& _window)
 	sf::VertexArray lines(sf::Lines, 2);
 	lines[0].position = this->m_Position;
 	lines[0].color = sf::Color::Red;
-	lines[1].position = Tools::AngleToVector(200.f, Tools::VectorToAngle(sf::Vector2f(0.f, 0.f) - (this->m_Position - sf::Vector2f(sf::Mouse::getPosition())))) + this->m_Position;
+	//lines[1].position = Tools::AngleToVector(200.f, Tools::VectorToAngle(sf::Vector2f(0.f, 0.f) - (this->m_Position - sf::Vector2f(sf::Mouse::getPosition())))) + this->m_Position;
+	lines[1].position = Tools::AngleToVector(200.f, Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition())))) + this->m_Position;
 	lines[1].color = sf::Color::Red;
 	_window.Draw(lines);
 

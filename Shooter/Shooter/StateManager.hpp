@@ -18,7 +18,7 @@ class StateManager
 		State* ChangeState()
 		{
 			StateManager::m_CurrentState->DeInit();
-			delete StateManager::m_CurrentState;
+			StateManager::m_CurrentState->Deletor();
 
 			StateManager::m_CurrentState = new T(this);
 			StateManager::m_CurrentState->Init();

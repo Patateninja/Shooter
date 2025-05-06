@@ -35,11 +35,6 @@ T& State::GetRsc(std::string _name)
 	return RscMana::Get<T>(_name);
 }
 
-Window& State::Window()
-{
-	return this->m_StateManager->GetWindow();
-}
-
 #pragma endregion
 ////////////////////////////////////////////////////////
 #pragma region Menu
@@ -103,8 +98,7 @@ Game::Game(StateManager* _stateManager)
 	this->m_Deltatime = 0;
 	this->m_SpawnTimer = 0;
 
-	font.loadFromFile("..\\Resources\\Font\\Ubuntu.ttf");
-	text.setFont(font);
+	this->m_Text.setFont(this->GetRsc<sf::Font>("Ubuntu"));
 }
 Game::~Game()
 {
@@ -119,9 +113,9 @@ void Game::Deletor()
 void Game::Init()
 {
 	std::cout << "Game Init" << std::endl;
+	this->Window().ResetView();
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Ubuntu"));
-
-	this->GetRsc<sf::Music>("Bogus").play();
+	//this->GetRsc<sf::Music>("Bogus").play();
 }
 void Game::Update()
 {
@@ -129,20 +123,16 @@ void Game::Update()
 	this->m_Clock.restart();
 
 	this->m_Text.setString(std::to_string(ProjList::Size()) + " / " + std::to_string(int(1 / this->m_Deltatime)) + "fps");
-	this->m_Text.setPosition(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f));
+	this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace))
 	{
 		this->ChangeState<EndGame>();
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-	{
-		this->GetRsc<sf::Sound>("Shot").play();
-	}
-
-	this->m_Player.Update(this->m_Deltatime);
+	this->m_Player.Update(this->m_Deltatime, this->Window());
 	ProjList::Update(this->m_Deltatime);
+	this->Window().SetViewCenter(this->m_Player.GetPos());
 }
 void Game::Display()
 {
@@ -150,6 +140,9 @@ void Game::Display()
 
 	ProjList::Display(this->Window());
 	this->m_Player.Display(this->Window());
+
+	sf::RectangleShape rect(sf::Vector2f(50.f, 50.f));
+	this->Draw(rect);
 
 	this->Draw(this->m_Text);
 
@@ -268,6 +261,7 @@ void Quit::Deletor()
 void Quit::Init()
 {
 	std::cout << "Quit Init" << std::endl;
+	this->Window().ResetView();
 }
 void Quit::Update()
 {

@@ -27,8 +27,6 @@ class State
 		template<typename T>
 		T& GetRsc(std::string _name);
 
-		Window& Window();
-
 		virtual void Init() = 0;
 		virtual void Update() = 0;
 		virtual void Display() = 0;

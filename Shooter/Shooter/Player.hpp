@@ -19,7 +19,7 @@ class Player
 		inline sf::Vector2f& GetPos() { return this->m_Position; };
 		inline sf::Vector2f& GetVel() { return this->m_Velocity; };
 
-		void Update(float _deltatime);
+		void Update(float _deltatime, Window& _window);
 		void Display(Window& _window);
 
 		void Ready();
