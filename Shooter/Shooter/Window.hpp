@@ -7,8 +7,7 @@ class View
 		sf::View m_View;
 	public :
 		View();
-		View(sf::Vector2f _center, sf::Vector2f size);
-		View(sf::View _view);
+		View(const sf::Vector2f& _center, const sf::Vector2f& size);
 		~View();
 
 		inline sf::View GetView() { return this->m_View; };
@@ -27,11 +26,11 @@ class Window
 
 		void ToggleFullscreen();
 		void SetView(View _view);
-		void SetViewCenter(sf::Vector2f _center);
+		void SetViewCenter(const sf::Vector2f& _center);
 		void ResetView();
 
 		void Clear();
-		void Draw(sf::Drawable& _drawable);
+		void Draw(const sf::Drawable& _drawable);
 		void Display();
 
 		bool IsOpen();
@@ -44,3 +43,23 @@ class Window
 			return this->m_Window.mapPixelToCoords(sf::Vector2i(_vector));
 		}
 };
+
+namespace Win
+{
+	Window& GetWindow();
+
+	void Create(sf::VideoMode _videoMode, const sf::String& _title, sf::Uint32 _style);
+
+	void ToggleFullscreen();
+	void SetView(const View& _view);
+	void SetViewCenter(const sf::Vector2f& _center);
+	void ResetView();
+
+	void Clear();
+	void Draw(const sf::Drawable& _drawable);
+	void Display();
+
+	bool IsOpen();
+	bool PollEvent(sf::Event& _event);
+	void Close();
+}

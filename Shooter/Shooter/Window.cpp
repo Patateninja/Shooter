@@ -6,13 +6,9 @@ View::View()
 {
 	this->m_View = sf::View();
 }
-View::View(sf::Vector2f _center, sf::Vector2f _size)
+View::View(const sf::Vector2f& _center, const sf::Vector2f& _size)
 {
 	this->m_View = sf::View(_center,_size);
-}
-View::View(sf::View _view)
-{
-	this->m_View = _view;
 }
 View::~View()
 {
@@ -45,7 +41,7 @@ void Window::SetView(View _view)
 {
 	this->m_Window.setView(_view.GetView());
 }
-void Window::SetViewCenter(sf::Vector2f _center)
+void Window::SetViewCenter(const sf::Vector2f& _center)
 {
 	sf::View view(this->m_Window.getView());
 	view.setCenter(_center);
@@ -60,7 +56,7 @@ void Window::Clear()
 {
 	this->m_Window.clear();
 }
-void Window::Draw(sf::Drawable& _drawable)
+void Window::Draw(const sf::Drawable& _drawable)
 {
 	this->m_Window.draw(_drawable);
 }
@@ -80,6 +76,66 @@ bool Window::PollEvent(sf::Event& _event)
 void Window::Close()
 {
 	this->m_Window.close();
+}
+
+//////////////////////////////////////////////////
+
+namespace Win
+{
+	Window window;
+
+	Window& GetWindow()
+	{
+		return Win::window;
+	}
+
+	void Create(sf::VideoMode _videoMode, const sf::String& _title, sf::Uint32 _style)
+	{
+		Win::window.Create(_videoMode, _title, _style);
+	}
+
+	void ToggleFullscreen()
+	{
+		Win::window.ToggleFullscreen();
+	}
+	void SetView(const View& _view)
+	{
+		Win::window.SetView(_view);
+	}
+	void SetViewCenter(const sf::Vector2f& _center)
+	{
+		Win::window.SetViewCenter(_center);
+	}
+	void ResetView()
+	{
+		Win::window.ResetView();
+	}
+
+	void Clear()
+	{
+		Win::window.Clear();
+	}
+	void Draw(const sf::Drawable& _drawable)
+	{
+		Win::window.Draw(_drawable);
+	}
+	void Display()
+	{
+		Win::window.Display();
+	}
+
+	bool IsOpen()
+	{
+		return Win::window.IsOpen();
+	}
+	bool PollEvent(sf::Event& _event)
+	{
+		return Win::window.PollEvent(_event);
+	}
+	void Close()
+	{
+		Win::window.Close();
+	}
 }
 
 //////////////////////////////////////////////////

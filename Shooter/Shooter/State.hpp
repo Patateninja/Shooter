@@ -18,14 +18,14 @@ class State
 
 		Window& Window();
 		void ClearWindow();
-		void Draw(sf::Drawable& _toDraw);
+		void Draw(const sf::Drawable& _toDraw);
 		void DisplayWindow();
 
 		template <typename T>
 		State* ChangeState();
 
 		template<typename T>
-		T& GetRsc(std::string _name);
+		T& GetRsc(const std::string& _name);
 
 		virtual void Init() = 0;
 		virtual void Update() = 0;
