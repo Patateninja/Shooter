@@ -7,7 +7,7 @@ Player::Player()
 	this->m_Circle = sf::CircleShape(25.f);
 	this->m_Circle.setOrigin(25.f, 25.f);
 	this->m_Circle.setFillColor(sf::Color::Blue);
-	this->m_Position = sf::Vector2f(0.f, 0.f);
+	this->m_Position = sf::Vector2f(1920.f, 0.f);
 	this->m_Velocity = sf::Vector2f(0.f, 0.f);
 	this->m_InputTimer = 0.f;
 	this->m_Life = 3;
@@ -123,7 +123,7 @@ void Player::Die()
 }
 void Player::Respawn()
 {
-	this->m_Position = sf::Vector2f(0.f, 0.f); //Change to stage start pos;
+	this->m_Position = sf::Vector2f(1900.f, 0.f); //Change to stage start pos;
 	this->m_CanReload = true;
 	this->m_CanMove = false;
 }

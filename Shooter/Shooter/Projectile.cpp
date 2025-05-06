@@ -5,47 +5,49 @@
 
 Projectile::Projectile()
 {
-	this->m_circle = sf::CircleShape(2.5f);
-	this->m_position = sf::Vector2f(0.f, 0.f);
-	this->m_velocity = sf::Vector2f(0.f, 0.f);
+	this->m_Circle = sf::CircleShape(2.5f);
+	this->m_Position = sf::Vector2f(0.f, 0.f);
+	this->m_Velocity = sf::Vector2f(0.f, 0.f);
 	this->m_Type = CLASSIC;
 	switch (this->m_Type)
 	{
 		case FLAMMING :
-			this->m_circle.setFillColor(sf::Color::Red);
+			this->m_Circle.setFillColor(sf::Color::Red);
 			break;
 		case PIERCING :
-			this->m_circle.setFillColor(sf::Color::Yellow);
+			this->m_Circle.setFillColor(sf::Color::Yellow);
 			break;
 		default :
-			this->m_circle.setFillColor(sf::Color::White);
+			this->m_Circle.setFillColor(sf::Color::White);
 			break;
 	}
-	this->m_damage = 0;
-	this->m_range = 0;
-	this->m_distance = 0.f;
+	this->m_Damage = 0;
+	this->m_Range = 0;
+	this->m_Distance = 0.f;
+	this->m_ToDestroy = false;
 }
 Projectile::Projectile(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range)
 {
-	this->m_circle = sf::CircleShape(2.5f);
-	this->m_position = _pos;
-	this->m_velocity = _vel;
+	this->m_Circle = sf::CircleShape(2.5f);
+	this->m_Position = _pos;
+	this->m_Velocity = _vel;
 	this->m_Type = _type;
 	switch (this->m_Type)
 	{
 		case FLAMMING:
-			this->m_circle.setFillColor(sf::Color::Red);
+			this->m_Circle.setFillColor(sf::Color::Red);
 			break;
 		case PIERCING:
-			this->m_circle.setFillColor(sf::Color::Yellow);
+			this->m_Circle.setFillColor(sf::Color::Yellow);
 			break;
 		default:
-			this->m_circle.setFillColor(sf::Color::White);
+			this->m_Circle.setFillColor(sf::Color::White);
 			break;
 	}
-	this->m_damage = _dmg;
-	this->m_range = _range;
-	this->m_distance = 0.f;
+	this->m_Damage = _dmg;
+	this->m_Range = _range;
+	this->m_Distance = 0.f;
+	this->m_ToDestroy = false;
 }
 Projectile::~Projectile()
 {
@@ -54,22 +56,25 @@ Projectile::~Projectile()
 
 bool Projectile::Update(float _deltatime)
 {
-	sf::Vector2f mvt = this->m_velocity * _deltatime;
-	this->m_position += mvt;
-	this->m_distance += Tools::Magnitude(mvt);
-
-	this->m_circle.setPosition(this->m_position);
-
-	if (this->m_distance > this->m_range)
+	if (!this->m_ToDestroy)
 	{
-		return true;
+		sf::Vector2f mvt = this->m_Velocity * _deltatime;
+		this->m_Position += mvt;
+		this->m_Distance += Tools::Magnitude(mvt);
+
+		this->m_Circle.setPosition(this->m_Position);
+
+		if (this->m_Distance > this->m_Range)
+		{
+			return true;
+		}
+		return false;
 	}
-	return false;
 }
 
 void Projectile::Display(Window& _window)
 {
-	_window.Draw(this->m_circle);
+	_window.Draw(this->m_Circle);
 }
 
 //////////////////////////////////////////////////
@@ -96,7 +101,7 @@ void ProjectileList::Update(float _deltatime)
 {
 	for (auto proj = this->m_list.begin(); proj != this->m_list.end(); ++proj)
 	{
-		if ((*proj)->Update(_deltatime) || (*proj)->GetPos().x > 1920.f || (*proj)->GetPos().y > 1080.f)
+		if ((*proj)->Update(_deltatime) || (*proj)->GetPos().x > 1920.f || (*proj)->GetPos().y > 1080.f || (*proj)->GetToDestroy())
 		{
 			proj = this->m_list.erase(proj);
 			if (proj == this->m_list.end())
@@ -120,6 +125,12 @@ void ProjectileList::Display(Window& _window)
 namespace ProjList
 {
 	ProjectileList list;
+
+
+	std::list<std::unique_ptr<Projectile>>& GetList()
+	{
+		return ProjList::list.GetList();
+	}
 
 	void Add(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range)
 	{

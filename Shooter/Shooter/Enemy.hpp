@@ -1,5 +1,7 @@
 #pragma once
 #include "Window.hpp"
+#include "Projectile.hpp"
+#include "ResourceManager.hpp"
 
 class Enemy
 {
@@ -17,6 +19,6 @@ class Enemy
 		void Update(float _deltatime, sf::Vector2f& _playerPos);
 		void Display(Window& _window);
 
-		void Move();
+		void Move(float _deltatime);
 		void TakeDamage();
 };
