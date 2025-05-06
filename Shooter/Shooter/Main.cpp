@@ -5,13 +5,13 @@ int main()
 	StateManager statemana;
 	sf::Event event;
 
-	while (Win::IsOpen())
+	while (statemana.WindowIsOpen())
 	{
-		while (Win::PollEvent(event))
+		while (statemana.GetWindow().PollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
 			{
-				Win::Close();
+				statemana.ChangeState<Quit>();
 			}
 		}
 		statemana.Update();

@@ -8,19 +8,19 @@ bool State::m_GameResult = true;
 
 Window& State::Window()
 {
-	return Win::GetWindow();
+	return this->m_StateManager->GetWindow();
 }
 void State::ClearWindow()
 {
-	Win::Clear();
+	this->Window().Clear();
 }
 void State::Draw(const sf::Drawable& _toDraw)
 {
-	Win::Draw(_toDraw);
+	this->m_StateManager->Draw(_toDraw);
 }
 void State::DisplayWindow()
 {
-	Win::Display();
+	this->m_StateManager->DisplayWindow();
 }
 
 template<typename T>
@@ -95,8 +95,9 @@ Game::Game(StateManager* _stateManager)
 	this->m_StateManager = _stateManager;
 	this->m_Clock = sf::Clock();
 
+	this->enemy = Enemy();
+
 	this->m_Deltatime = 0;
-	this->m_SpawnTimer = 0;
 
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Ubuntu"));
 }
@@ -133,6 +134,8 @@ void Game::Update()
 	this->m_Player.Update(this->m_Deltatime, this->Window());
 	ProjList::Update(this->m_Deltatime);
 	this->Window().SetViewCenter(this->m_Player.GetPos());
+
+	this->enemy.Update(this->m_Deltatime, this->m_Player.GetPos());
 }
 void Game::Display()
 {
@@ -145,6 +148,8 @@ void Game::Display()
 	this->Draw(rect);
 
 	this->Draw(this->m_Text);
+
+	this->enemy.Display(this->Window());
 
 	this->DisplayWindow();
 }

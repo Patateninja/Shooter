@@ -4,9 +4,10 @@
 
 class StateManager
 {
-	private:
+	private :
+		Window m_Window;
 		State* m_CurrentState;
-	public:
+	public :
 		StateManager();
 		~StateManager();
 
@@ -24,6 +25,13 @@ class StateManager
 
 			return StateManager::m_CurrentState;
 		}
+
+		Window& GetWindow() { return this->m_Window; };
+		bool WindowIsOpen() { return StateManager::m_Window.IsOpen(); };
+
+		void ClearWindow();
+		void Draw(const sf::Drawable& _toDraw);
+		void DisplayWindow();
 
 		void Update();
 		void Display();

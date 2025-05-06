@@ -7,7 +7,7 @@ Player::Player()
 	this->m_Circle = sf::CircleShape(25.f);
 	this->m_Circle.setOrigin(25.f, 25.f);
 	this->m_Circle.setFillColor(sf::Color::Blue);
-	this->m_Position = sf::Vector2f(0.f, 0.f);
+	this->m_Position = sf::Vector2f(1920.f, 0.f);
 	this->m_Velocity = sf::Vector2f(0.f, 0.f);
 	this->m_InputTimer = 0.f;
 	this->m_Life = 3;
@@ -101,8 +101,7 @@ void Player::Display(Window& _window)
 	sf::VertexArray lines(sf::Lines, 2);
 	lines[0].position = this->m_Position;
 	lines[0].color = sf::Color::Red;
-	//lines[1].position = Tools::AngleToVector(200.f, Tools::VectorToAngle(sf::Vector2f(0.f, 0.f) - (this->m_Position - sf::Vector2f(sf::Mouse::getPosition())))) + this->m_Position;
-	lines[1].position = Tools::AngleToVector(200.f, Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition())))) + this->m_Position;
+	lines[1].position = Tools::AngleToVector(200.f, Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0,0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition())))) + this->m_Position;
 	lines[1].color = sf::Color::Red;
 	_window.Draw(lines);
 
@@ -124,7 +123,7 @@ void Player::Die()
 }
 void Player::Respawn()
 {
-	this->m_Position = sf::Vector2f(0.f, 0.f); //Change to stage start pos;
+	this->m_Position = sf::Vector2f(1900.f, 0.f); //Change to stage start pos;
 	this->m_CanReload = true;
 	this->m_CanMove = false;
 }

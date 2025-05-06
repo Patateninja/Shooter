@@ -5,7 +5,8 @@
 
 class RSC
 {
-	virtual void foo() {};
+	public :
+		virtual void Deletor() {};
 };
 
 template <typename T>
@@ -21,7 +22,12 @@ class Resource : public RSC
 		}
 		~Resource()
 		{
-
+			std::cout << "Resource deleted" << std::endl;
+		}
+		
+		void Deletor() override
+		{
+			this->~Resource();
 		}
 
 		T& GetRSC()
@@ -44,7 +50,12 @@ class Resource<sf::Music> : public RSC
 		}
 		~Resource()
 		{
+			std::cout << "Resource deleted" << std::endl;
+		}
 
+		void Deletor() override
+		{
+			this->~Resource();
 		}
 
 		sf::Music& GetRSC()
@@ -68,7 +79,12 @@ class Resource<sf::Sound> : public RSC
 		}
 		~Resource()
 		{
+			std::cout << "Resource deleted" << std::endl;
+		}
 
+		void Deletor() override
+		{
+			this->~Resource();
 		}
 
 		sf::Sound& GetRSC()

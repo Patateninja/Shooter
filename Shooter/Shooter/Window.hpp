@@ -43,23 +43,3 @@ class Window
 			return this->m_Window.mapPixelToCoords(sf::Vector2i(_vector));
 		}
 };
-
-namespace Win
-{
-	Window& GetWindow();
-
-	void Create(sf::VideoMode _videoMode, const sf::String& _title, sf::Uint32 _style);
-
-	void ToggleFullscreen();
-	void SetView(const View& _view);
-	void SetViewCenter(const sf::Vector2f& _center);
-	void ResetView();
-
-	void Clear();
-	void Draw(const sf::Drawable& _drawable);
-	void Display();
-
-	bool IsOpen();
-	bool PollEvent(sf::Event& _event);
-	void Close();
-}
