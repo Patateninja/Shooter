@@ -18,6 +18,8 @@ class State
 		State() = default;
 		~State() = default;
 
+		virtual void Deletor() = 0;
+
 		Window& Window();
 		void ClearWindow();
 		void Draw(sf::Drawable& _toDraw);
@@ -43,6 +45,8 @@ class Menu : public State
 		Menu(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
 		~Menu();
 
+		void Deletor() override;
+
 		void Init() override;
 		void Update() override;
 		void Display() override;
@@ -59,6 +63,8 @@ class Game : public State
 		Game(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
 		~Game();
 
+		void Deletor() override;
+
 		void Init() override;
 		void Update() override;
 		void Display() override;
@@ -72,6 +78,8 @@ class EndGame : public State
 	public:
 		EndGame(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
 		~EndGame();
+
+		void Deletor() override;
 
 		void Init() override;
 		void Update() override;
@@ -87,6 +95,8 @@ class Option : public State
 		Option(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
 		~Option();
 
+		void Deletor() override;
+
 		void Init() override;
 		void Update() override;
 		void Display() override;
@@ -100,6 +110,8 @@ class Quit : public State
 	public:
 		Quit(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
 		~Quit();
+
+		void Deletor() override;
 
 		void Init() override;
 		void Update() override;

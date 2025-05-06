@@ -27,6 +27,8 @@ class Window
 
 		void ToggleFullscreen();
 		void SetView(View _view);
+		void SetViewCenter(sf::Vector2f _center);
+		void ResetView();
 
 		void Clear();
 		void Draw(sf::Drawable& _drawable);

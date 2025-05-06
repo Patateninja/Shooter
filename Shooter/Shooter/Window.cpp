@@ -45,6 +45,16 @@ void Window::SetView(View _view)
 {
 	this->m_Window.setView(_view.GetView());
 }
+void Window::SetViewCenter(sf::Vector2f _center)
+{
+	sf::View view(this->m_Window.getView());
+	view.setCenter(_center);
+	this->m_Window.setView(view);
+}
+void Window::ResetView()
+{
+	this->m_Window.setView(this->m_Window.getDefaultView());
+}
 
 void Window::Clear()
 {

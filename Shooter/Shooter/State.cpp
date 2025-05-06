@@ -52,19 +52,24 @@ Menu::~Menu()
 	std::cout << "Menu Deleted" << std::endl;
 }
 
+void Menu::Deletor()
+{
+	this->~Menu();
+}
+
 void Menu::Init()
 {
 	std::cout << "Menu Init" << std::endl;
+
+	this->Window().ResetView();
 }
 void Menu::Update()
 {
-
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && Tools::GetDeltaTime(this->m_Clock) > 0.2)
 	{
 		this->m_Clock.restart();
 		this->ChangeState<Game>();
 	}
-
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && Tools::GetDeltaTime(this->m_Clock) > 0.2)
 	{
 		this->ChangeState<Quit>();
@@ -103,6 +108,11 @@ Game::Game(StateManager* _stateManager, ResourceManager* _resourceManager)
 Game::~Game()
 {
 	std::cout << "Game Deleted" << std::endl;
+}
+
+void Game::Deletor()
+{
+	this->~Game();
 }
 
 void Game::Init()
@@ -158,6 +168,11 @@ EndGame::~EndGame()
 	std::cout << "EndGame Deleted" << std::endl;
 }
 
+void EndGame::Deletor()
+{
+	this->~EndGame();
+}
+
 void EndGame::Init()
 {
 	std::cout << "EndGame Init" << std::endl;
@@ -191,6 +206,11 @@ Option::Option(StateManager* _stateManager, ResourceManager* _resourceManager)
 Option::~Option()
 {
 	std::cout << "Option Deleted" << std::endl;
+}
+
+void Option::Deletor()
+{
+	this->~Option();
 }
 
 void Option::Init()
@@ -229,6 +249,11 @@ Quit::Quit(StateManager* _stateManager, ResourceManager* _resourceManager)
 Quit::~Quit()
 {
 	std::cout << "Quit Deleted" << std::endl;
+}
+
+void Quit::Deletor()
+{
+	this->~Quit();
 }
 
 void Quit::Init()
