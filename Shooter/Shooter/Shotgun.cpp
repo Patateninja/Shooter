@@ -30,7 +30,7 @@ void Shotgun::DisplayMagazine(Window& _window)
 		}
 		else if (dynamic_cast<BuckShot*>(this->m_Magazine[i].get()))
 		{
-			shell.setFillColor(sf::Color(255, 0, 0, 255));
+			shell.setTexture(&RscMana::Get<sf::Texture>("Red_Shell"));
 		}
 		else if (dynamic_cast<DragonBreath*>(this->m_Magazine[i].get()))
 		{
@@ -66,11 +66,11 @@ void Shotgun::Load(int _input)
 		}
 	}
 }
-void Shotgun::Shoot(sf::Vector2f& _playerpos)
+void Shotgun::Shoot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel)
 {
 	if (!this->m_Magazine.empty())
 	{
-		this->m_Magazine.front()->Shot(_playerpos);
+		this->m_Magazine.front()->Shot(_playerPos, _playerVel);
 		this->m_Magazine.erase(this->m_Magazine.begin());
 	}
 }

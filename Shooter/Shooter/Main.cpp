@@ -2,8 +2,7 @@
 
 int main()
 {
-	ResourceManager rscmana;
-	StateManager statemana(&rscmana);
+	StateManager statemana;
 	sf::Event event;
 
 	while (statemana.WindowIsOpen())
@@ -15,7 +14,6 @@ int main()
 				statemana.GetWindow().Close();
 			}
 		}
-
 		statemana.Update();
 		statemana.Display();
 	}

@@ -121,25 +121,28 @@ namespace ProjList
 {
 	ProjectileList list;
 
-	void ListDisplay(Window& _window)
+	void Add(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range)
 	{
-		ProjList::list.Display(_window);
+		ProjList::list.Add(_pos, _vel, _type, _dmg, _range);
 	}
-	void ListUpdate(float _deltatime)
+	void Add(Projectile& _proj)
+	{
+		ProjList::list.Add(_proj);
+	}
+
+	void Update(float _deltatime)
 	{
 		ProjList::list.Update(_deltatime);
 	}
+	void Display(Window& _window)
+	{
+		ProjList::list.Display(_window);
+	}
 
-	void AddToList(Projectile& _thing)
-	{
-		ProjList::list.Add(_thing);
-	}
-	void AddToList(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range)
-	{
-		ProjList::list.Add(_pos,_vel,_type,_dmg,_range);
-	}
-	int ListSize()
+	int Size()
 	{
 		return ProjList::list.Size();
 	}
 }
+
+//////////////////////////////////////////////////

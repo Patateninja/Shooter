@@ -15,12 +15,12 @@ BirdShot::~BirdShot()
 
 }
 
-void BirdShot::Shot(sf::Vector2f& _playerpos)
+void BirdShot::Shot(sf::Vector2f& _playerpos, sf::Vector2f& _playerVel)
 {
 	for (int i = 0; i < this->m_Pellets; ++i)
 	{
 		float angle = Tools::VectorsToAngle(sf::Vector2f(1.f, 0.f), sf::Vector2f(0.f, 0.f) - (_playerpos - sf::Vector2f(sf::Mouse::getPosition()))) + Tools::DegToRad((this->m_Spread / 2) - ((this->m_Spread / this->m_Pellets) * i));
-		ProjList::AddToList(_playerpos, Tools::AngleToVector(this->m_Velocity, angle), CLASSIC, this->m_Damage, this->m_Range);
+		ProjList::Add(_playerpos, Tools::AngleToVector(this->m_Velocity, angle) - _playerVel, CLASSIC, this->m_Damage, this->m_Range);
 	}
 }
 
@@ -39,12 +39,12 @@ BuckShot::~BuckShot()
 
 }
 
-void BuckShot::Shot(sf::Vector2f& _playerpos)
+void BuckShot::Shot(sf::Vector2f& _playerpos, sf::Vector2f& _playerVel)
 {
 	for (int i = 0; i < this->m_Pellets; ++i)
 	{
 		float angle = Tools::VectorsToAngle(sf::Vector2f(1.f, 0.f), sf::Vector2f(0.f, 0.f) - (_playerpos - sf::Vector2f(sf::Mouse::getPosition()))) + Tools::DegToRad((this->m_Spread / 2) - ((this->m_Spread / this->m_Pellets) * i));
-		ProjList::AddToList(_playerpos, Tools::AngleToVector(this->m_Velocity, angle), CLASSIC, this->m_Damage, this->m_Range);
+		ProjList::Add(_playerpos, Tools::AngleToVector(this->m_Velocity, angle) - _playerVel, CLASSIC, this->m_Damage, this->m_Range);
 	}
 }
 
@@ -63,12 +63,12 @@ DragonBreath::~DragonBreath()
 
 }
 
-void DragonBreath::Shot(sf::Vector2f& _playerpos)
+void DragonBreath::Shot(sf::Vector2f& _playerpos, sf::Vector2f& _playerVel)
 {
 	for (int i = 0; i < this->m_Pellets; ++i)
 	{
 		float angle = Tools::VectorsToAngle(sf::Vector2f(1.f, 0.f), sf::Vector2f(0.f, 0.f) - (_playerpos - sf::Vector2f(sf::Mouse::getPosition()))) + Tools::DegToRad((this->m_Spread / 2) - ((this->m_Spread / this->m_Pellets) * i));
-		ProjList::AddToList(_playerpos, Tools::AngleToVector(this->m_Velocity, angle), FLAMMING, this->m_Damage, this->m_Range);
+		ProjList::Add(_playerpos, Tools::AngleToVector(this->m_Velocity, angle) - _playerVel, FLAMMING, this->m_Damage, this->m_Range);
 	}
 }
 
@@ -87,12 +87,12 @@ Slug::~Slug()
 
 }
 
-void Slug::Shot(sf::Vector2f& _playerpos)
+void Slug::Shot(sf::Vector2f& _playerpos, sf::Vector2f& _playerVel)
 {
 	for (int i = 0; i < this->m_Pellets; ++i)
 	{
 		float angle = Tools::VectorsToAngle(sf::Vector2f(1.f, 0.f), sf::Vector2f(0.f, 0.f) - (_playerpos - sf::Vector2f(sf::Mouse::getPosition()))) + Tools::DegToRad((this->m_Spread / 2) - ((this->m_Spread / this->m_Pellets) * i));
-		ProjList::AddToList(_playerpos, Tools::AngleToVector(this->m_Velocity, angle), PIERCING, this->m_Damage, this->m_Range);
+		ProjList::Add(_playerpos, Tools::AngleToVector(this->m_Velocity, angle) - _playerVel, PIERCING, this->m_Damage, this->m_Range);
 	}
 }
 

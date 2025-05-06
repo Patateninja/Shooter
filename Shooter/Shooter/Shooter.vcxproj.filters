@@ -31,11 +31,11 @@
     <Filter Include="Header Files\Managers">
       <UniqueIdentifier>{440339ca-9a4d-4dbf-bef2-29578b0ae812}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Player">
-      <UniqueIdentifier>{7561d2cc-3dfc-488c-a72d-3b538ceb6987}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Player">
-      <UniqueIdentifier>{86a38223-2a3d-489a-9867-c4a1f68b1837}</UniqueIdentifier>
+      <UniqueIdentifier>{bf702191-bdef-4e4e-a327-ef7ade6dc53f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Player">
+      <UniqueIdentifier>{ad8e5c34-4f5b-498d-b5f9-896808484f0c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

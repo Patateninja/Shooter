@@ -80,7 +80,7 @@ void Player::Update(float _deltatime)
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->m_InputTimer > 0.75f)
 		{
 			this->m_InputTimer = 0.f;
-			this->m_Shotgun.Shoot(this->m_Position);
+			this->m_Shotgun.Shoot(this->m_Position, this->m_Velocity);
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
