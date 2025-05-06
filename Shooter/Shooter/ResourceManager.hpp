@@ -1,17 +1,17 @@
 #pragma once
-#include <map>
+#include <unordered_map>
 #include "Resource.hpp"
 
 class ResourceManager
 {
 	private:
-		std::map<std::string, RSC*> m_RessourcesStorage;
+		std::unordered_map<std::string, RSC*> m_RessourcesStorage;
 	public:
 		ResourceManager();
 		~ResourceManager();
 
 		void Init();
-		inline std::map<std::string, RSC*>& GetMap() { return this->m_RessourcesStorage; };
+		inline std::unordered_map<std::string, RSC*>& GetMap() { return this->m_RessourcesStorage; };
 
 		template <typename T>
 		void Add(std::string _name, std::string _path)

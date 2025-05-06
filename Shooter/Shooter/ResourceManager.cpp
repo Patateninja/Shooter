@@ -6,7 +6,11 @@ ResourceManager::ResourceManager()
 }
 ResourceManager::~ResourceManager()
 {
-	this->m_RessourcesStorage.clear();
+	while (!this->m_RessourcesStorage.empty())
+	{
+		this->m_RessourcesStorage.begin()->second->Deletor();
+		this->m_RessourcesStorage.erase(this->m_RessourcesStorage.begin());
+	}
 }
 
 void ResourceManager::Init()
