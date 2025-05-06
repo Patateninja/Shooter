@@ -28,7 +28,7 @@ class Projectile
 		inline sf::Vector2f GetPos() { return this->m_position; };
 
 		bool Update(float _deltatime);
-		void Display(Window& _win);
+		void Display(Window& _window);
 };
 
 class ProjectileList
@@ -43,7 +43,7 @@ class ProjectileList
 		void Add(Projectile& _proj);
 
 		void Update(float _deltatime);
-		void Display(Window& _win);
+		void Display(Window& _window);
 
 		int Size() { return int(this->m_list.size()); };
 };

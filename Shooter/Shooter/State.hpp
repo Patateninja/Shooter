@@ -1,5 +1,6 @@
 #pragma once
 #include "Player.hpp"
+#include "Enemy.hpp"
 
 class StateManager;
 
@@ -53,7 +54,9 @@ class Game : public State
 {
 	private:
 		Player m_Player;
-		float m_SpawnTimer;
+
+		Enemy enemy;
+
 		float m_Deltatime;
 	public:
 		Game(StateManager* _stateManager);

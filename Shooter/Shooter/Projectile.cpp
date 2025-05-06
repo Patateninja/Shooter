@@ -67,9 +67,9 @@ bool Projectile::Update(float _deltatime)
 	return false;
 }
 
-void Projectile::Display(Window& _win)
+void Projectile::Display(Window& _window)
 {
-	_win.Draw(this->m_circle);
+	_window.Draw(this->m_circle);
 }
 
 //////////////////////////////////////////////////
@@ -107,11 +107,11 @@ void ProjectileList::Update(float _deltatime)
 	}
 }
 
-void ProjectileList::Display(Window& _win)
+void ProjectileList::Display(Window& _window)
 {
 	for (std::unique_ptr<Projectile>& proj : this->m_list)
 	{
-		proj->Display(_win);
+		proj->Display(_window);
 	}
 }
 
