@@ -4,8 +4,8 @@
 
 Player::Player()
 {
-	this->m_Circle = sf::CircleShape(37.5f);
-	this->m_Circle.setOrigin(37.5f, 37.5f);
+	this->m_Circle = sf::CircleShape(25.f);
+	this->m_Circle.setOrigin(25.f, 25.f);
 	this->m_Circle.setFillColor(sf::Color::Blue);
 	this->m_Position = sf::Vector2f(0.f, 0.f);
 	this->m_Velocity = sf::Vector2f(0.f, 0.f);
@@ -25,8 +25,9 @@ void Player::Update(float _deltatime, Window& _window)
 
 	if (this->m_CanReload)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && this->m_InputTimer > 0.3f)
 		{
+			this->m_InputTimer = 0.f;
 			this->Ready();
 		}
 
