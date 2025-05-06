@@ -101,7 +101,7 @@ void ProjectileList::Update(float _deltatime)
 {
 	for (auto proj = this->m_list.begin(); proj != this->m_list.end(); ++proj)
 	{
-		if ((*proj)->Update(_deltatime) || (*proj)->GetPos().x > 1920.f || (*proj)->GetPos().y > 1080.f || (*proj)->GetToDestroy())
+		if ((*proj)->Update(_deltatime) || (*proj)->GetToDestroy())
 		{
 			proj = this->m_list.erase(proj);
 			if (proj == this->m_list.end())

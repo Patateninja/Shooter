@@ -78,7 +78,7 @@ void Player::Update(float _deltatime, Window& _window)
 			this->m_Velocity.x = -375;
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->m_InputTimer > 0.75f)
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->m_InputTimer > 0.75f)
 		{
 			this->m_InputTimer = 0.f;
 			this->m_Shotgun.Shoot(this->m_Position, this->m_Velocity, _window);

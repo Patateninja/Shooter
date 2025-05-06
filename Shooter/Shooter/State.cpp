@@ -142,14 +142,15 @@ void Game::Display()
 	this->ClearWindow();
 
 	ProjList::Display(this->Window());
+	
+	this->enemy.Display(this->Window());
+
 	this->m_Player.Display(this->Window());
 
 	sf::RectangleShape rect(sf::Vector2f(50.f, 50.f));
 	this->Draw(rect);
 
 	this->Draw(this->m_Text);
-
-	this->enemy.Display(this->Window());
 
 	this->DisplayWindow();
 }

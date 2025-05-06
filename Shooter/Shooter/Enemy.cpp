@@ -29,10 +29,6 @@ void Enemy::Update(float _deltatime, sf::Vector2f& _playerPos)
 void Enemy::Display(Window& _window)
 {
 	_window.Draw(this->m_Circle);
-	
-	sf::Text text(std::to_string(this->m_Hp), RscMana::Get<sf::Font>("Ubuntu"));
-	text.setPosition(this->m_Position);
-	_window.Draw(text);
 }
 
 void Enemy::Move(float _deltatime)
@@ -54,6 +50,7 @@ void Enemy::TakeDamage()
 			if (this->m_Hp <= 0)
 			{
 				this->m_Active = false;
+				this->m_Circle.setFillColor(sf::Color(125, 125, 125, 255));
 				break;
 			}
 		}
