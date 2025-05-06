@@ -1,8 +1,5 @@
 #pragma once
-#include "SFML/Graphics.hpp"
-#include "ResourceManager.hpp"
-#include "Shotgun.hpp"
-#include <iostream>
+#include "Player.hpp"
 
 class StateManager;
 
@@ -10,13 +7,16 @@ class State
 {
 	protected:
 		StateManager* m_StateManager = nullptr;
-		ResourceManager* m_ResourceManager = nullptr;
+		sf::Text m_Text;
 		sf::Clock m_Clock;
 		static bool m_GameResult;
-	public:
+	public :
 		State() = default;
 		~State() = default;
 
+		virtual void Deletor() = 0;
+
+		Window& Window();
 		void ClearWindow();
 		void Draw(sf::Drawable& _toDraw);
 		void DisplayWindow();
@@ -38,8 +38,10 @@ class Menu : public State
 	private:
 
 	public:
-		Menu(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
+		Menu(StateManager* _stateManager);
 		~Menu();
+
+		void Deletor() override;
 
 		void Init() override;
 		void Update() override;
@@ -50,13 +52,14 @@ class Menu : public State
 class Game : public State
 {
 	private:
-		ProjectileList m_List;
-		Shotgun m_Shotgun;
+		Player m_Player;
 		float m_SpawnTimer;
 		float m_Deltatime;
 	public:
-		Game(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
+		Game(StateManager* _stateManager);
 		~Game();
+
+		void Deletor() override;
 
 		void Init() override;
 		void Update() override;
@@ -69,8 +72,10 @@ class EndGame : public State
 	private:
 
 	public:
-		EndGame(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
+		EndGame(StateManager* _stateManager);
 		~EndGame();
+
+		void Deletor() override;
 
 		void Init() override;
 		void Update() override;
@@ -83,8 +88,10 @@ class Option : public State
 	private:
 
 	public:
-		Option(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
+		Option(StateManager* _stateManager);
 		~Option();
+
+		void Deletor() override;
 
 		void Init() override;
 		void Update() override;
@@ -97,8 +104,10 @@ class Quit : public State
 	private:
 
 	public:
-		Quit(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
+		Quit(StateManager* _stateManager);
 		~Quit();
+
+		void Deletor() override;
 
 		void Init() override;
 		void Update() override;
