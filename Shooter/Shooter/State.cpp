@@ -8,19 +8,19 @@ bool State::m_GameResult = true;
 
 Window& State::Window()
 {
-	return this->m_StateManager->GetWindow();
+	return Win::GetWindow();
 }
 void State::ClearWindow()
 {
-	this->m_StateManager->ClearWindow();
+	Win::Clear();
 }
-void State::Draw(sf::Drawable& _toDraw)
+void State::Draw(const sf::Drawable& _toDraw)
 {
-	this->m_StateManager->Draw(_toDraw);
+	Win::Draw(_toDraw);
 }
 void State::DisplayWindow()
 {
-	this->m_StateManager->DisplayWindow();
+	Win::Display();
 }
 
 template<typename T>
@@ -30,7 +30,7 @@ State* State::ChangeState()
 }
 
 template<typename T>
-T& State::GetRsc(std::string _name)
+T& State::GetRsc(const std::string& _name)
 {
 	return RscMana::Get<T>(_name);
 }

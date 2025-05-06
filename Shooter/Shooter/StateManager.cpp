@@ -3,7 +3,7 @@
 StateManager::StateManager()
 {
 	RscMana::Init();
-	this->m_Window.Create(sf::VideoMode(1920,1080),"Shooter", sf::Style::Default);
+	Win::Create(sf::VideoMode(1920,1080),"Shooter", sf::Style::Default);
 	this->m_CurrentState = new Menu(this);
 	this->m_CurrentState->Init();
 }
@@ -11,27 +11,15 @@ StateManager::~StateManager()
 {
 	this->m_CurrentState->DeInit();
 	this->m_CurrentState->Deletor();
-	this->m_Window.Close();
+	Win::Close();
 }
 
-void StateManager::ClearWindow()
-{
-	this->m_Window.Clear();
-}
-void StateManager::Draw(sf::Drawable& _toDraw)
-{
-	this->m_Window.Draw(_toDraw);
-}
-void StateManager::DisplayWindow()
-{
-	this->m_Window.Display();
-}
 
 void StateManager::Update()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F11))
 	{
-		this->m_Window.ToggleFullscreen();
+		Win::ToggleFullscreen();
 	}
 
 	this->m_CurrentState->Update();
