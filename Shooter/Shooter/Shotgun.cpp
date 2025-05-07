@@ -9,7 +9,7 @@ Shotgun::Shotgun()
 }
 Shotgun::~Shotgun()
 {
-	this->m_Magazine.clear();
+	this->EmptyMagazine();
 }
 
 void Shotgun::DisplayMagazine(Window& _window)
@@ -74,6 +74,16 @@ void Shotgun::Shoot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel, Window& 
 		this->m_Magazine.front()->Shot(_playerPos, _playerVel, _window);
 		this->m_Magazine.erase(this->m_Magazine.begin());
 	}
+}
+
+void Shotgun::EmptyMagazine()
+{
+	for (std::unique_ptr<Shell>& shell : this->m_Magazine)
+	{
+		shell.release();
+	}
+
+	this->m_Magazine.clear();
 }
 
 //////////////////////////////////////////////////

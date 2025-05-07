@@ -30,7 +30,8 @@ class Projectile
 		inline sf::FloatRect GetHitbox() { return this->m_Circle.getGlobalBounds(); };
 		inline int GetDamage() { return this->m_Damage; };
 		inline bool GetToDestroy() { return this->m_ToDestroy; };
-		
+		inline ProjectileType GetType() { return this->m_Type; };
+
 		inline void SetToDestroy(bool _set) { this->m_ToDestroy = _set; };
 
 		bool Update(float _deltatime);
@@ -40,12 +41,12 @@ class Projectile
 class ProjectileList
 {
 	private :
-		std::list<std::unique_ptr<Projectile>> m_list;
+		std::list<std::unique_ptr<Projectile>> m_List;
 	public :
 		ProjectileList();
 		~ProjectileList();
 
-		inline std::list<std::unique_ptr<Projectile>>& GetList() { return this->m_list ; };
+		inline std::list<std::unique_ptr<Projectile>>& GetList() { return this->m_List ; };
 
 		void Add(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range);
 		void Add(Projectile& _proj);
@@ -53,7 +54,9 @@ class ProjectileList
 		void Update(float _deltatime);
 		void Display(Window& _window);
 
-		int Size() { return int(this->m_list.size()); };
+		void Clear();
+
+		int Size() { return int(this->m_List.size()); };
 };
 
 namespace ProjList
@@ -65,6 +68,8 @@ namespace ProjList
 
 	void Update(float _deltatime);
 	void Display(Window& _window);
+
+	void Clear();
 
 	int Size();
 }

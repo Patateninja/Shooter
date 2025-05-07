@@ -79,7 +79,7 @@ void DragonBreath::Shot(sf::Vector2f& _playerpos, sf::Vector2f& _playerVel, Wind
 
 Slug::Slug()
 {
-	this->m_Damage = 20;
+	this->m_Damage = 50;
 	this->m_Range = 1600;
 	this->m_Spread = 0;
 	this->m_Pellets = 1;

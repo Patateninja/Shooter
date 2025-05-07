@@ -1,5 +1,6 @@
 #pragma once
 #include "Shotgun.hpp"
+#include "Enemy.hpp"
 
 class Player
 {
@@ -18,8 +19,9 @@ class Player
 
 		inline sf::Vector2f& GetPos() { return this->m_Position; };
 		inline sf::Vector2f& GetVel() { return this->m_Velocity; };
+		inline int GetHP() { return this->m_Life; };
 
-		void Update(float _deltatime, Window& _window);
+		void Update(float _deltatime, EnemyList& _enemyList, Window& _window);
 		void Display(Window& _window);
 
 		void Ready();

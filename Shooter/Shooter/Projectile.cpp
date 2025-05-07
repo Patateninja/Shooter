@@ -70,6 +70,10 @@ bool Projectile::Update(float _deltatime)
 		}
 		return false;
 	}
+	else
+	{
+		return true;
+	}
 }
 
 void Projectile::Display(Window& _window)
@@ -81,30 +85,30 @@ void Projectile::Display(Window& _window)
 
 ProjectileList::ProjectileList()
 {
-	this->m_list.clear();
+	this->m_List.clear();
 }
 ProjectileList::~ProjectileList()
 {
-
+	this->m_List.clear();
 }
 
 void ProjectileList::Add(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range)
 {
-	this->m_list.push_back(std::make_unique<Projectile>(_pos, _vel, _type, _dmg, _range));
+	this->m_List.push_back(std::make_unique<Projectile>(_pos, _vel, _type, _dmg, _range));
 }
 void ProjectileList::Add(Projectile& _proj)
 {
-	this->m_list.push_back(std::make_unique<Projectile>(_proj));
+	this->m_List.push_back(std::make_unique<Projectile>(_proj));
 }
 
 void ProjectileList::Update(float _deltatime)
 {
-	for (auto proj = this->m_list.begin(); proj != this->m_list.end(); ++proj)
+	for (auto proj = this->m_List.begin(); proj != this->m_List.end(); ++proj)
 	{
-		if ((*proj)->Update(_deltatime) || (*proj)->GetPos().x > 1920.f || (*proj)->GetPos().y > 1080.f || (*proj)->GetToDestroy())
+		if ((*proj)->GetToDestroy() || (*proj)->Update(_deltatime))
 		{
-			proj = this->m_list.erase(proj);
-			if (proj == this->m_list.end())
+			proj = this->m_List.erase(proj);
+			if (proj == this->m_List.end())
 			{
 				break;
 			}
@@ -114,10 +118,20 @@ void ProjectileList::Update(float _deltatime)
 
 void ProjectileList::Display(Window& _window)
 {
-	for (std::unique_ptr<Projectile>& proj : this->m_list)
+	for (std::unique_ptr<Projectile>& proj : this->m_List)
 	{
 		proj->Display(_window);
 	}
+}
+
+void ProjectileList::Clear()
+{
+	for (std::unique_ptr<Projectile>& projectile : this->m_List)
+	{
+		projectile.release();
+	}
+
+	this->m_List.clear();
 }
 
 //////////////////////////////////////////////////
@@ -125,7 +139,6 @@ void ProjectileList::Display(Window& _window)
 namespace ProjList
 {
 	ProjectileList list;
-
 
 	std::list<std::unique_ptr<Projectile>>& GetList()
 	{
@@ -148,6 +161,11 @@ namespace ProjList
 	void Display(Window& _window)
 	{
 		ProjList::list.Display(_window);
+	}
+
+	void Clear()
+	{
+		ProjList::list.Clear();
 	}
 
 	int Size()

@@ -57,7 +57,7 @@ void Menu::Deletor()
 void Menu::Init()
 {
 	std::cout << "Menu Init" << std::endl;
-	this->m_Text.setFont(this->GetRsc<sf::Font>("Ubuntu"));
+	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 }
 void Menu::Update()
 {
@@ -95,11 +95,11 @@ Game::Game(StateManager* _stateManager)
 	this->m_StateManager = _stateManager;
 	this->m_Clock = sf::Clock();
 
-	this->enemy = Enemy();
+	this->m_EnemyList = EnemyList();
 
 	this->m_Deltatime = 0;
 
-	this->m_Text.setFont(this->GetRsc<sf::Font>("Ubuntu"));
+	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 }
 Game::~Game()
 {
@@ -115,15 +115,20 @@ void Game::Init()
 {
 	std::cout << "Game Init" << std::endl;
 	this->Window().ResetView();
-	this->m_Text.setFont(this->GetRsc<sf::Font>("Ubuntu"));
+	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 	//this->GetRsc<sf::Music>("Bogus").play();
+	
+	this->m_EnemyList.Add(sf::Vector2f(450.f, 450.f));
+	this->m_EnemyList.Add(sf::Vector2f(450.f, -450.f));
+	this->m_EnemyList.Add(sf::Vector2f(-450.f, 450.f));
+	this->m_EnemyList.Add(sf::Vector2f(-450.f, -450.f));
 }
 void Game::Update()
 {
 	this->m_Deltatime = Tools::GetDeltaTime(this->m_Clock);
 	this->m_Clock.restart();
 
-	this->m_Text.setString(std::to_string(ProjList::Size()) + " / " + std::to_string(int(1 / this->m_Deltatime)) + "fps");
+	this->m_Text.setString(std::to_string(this->m_Player.GetHP()) + " Live(s) / Projectiles : " + std::to_string(ProjList::Size()) + " / " + std::to_string(int(1 / this->m_Deltatime)) + " fps");
 	this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace))
@@ -131,25 +136,26 @@ void Game::Update()
 		this->ChangeState<EndGame>();
 	}
 
-	this->m_Player.Update(this->m_Deltatime, this->Window());
+	this->m_Player.Update(this->m_Deltatime, this->m_EnemyList, this->Window());
 	ProjList::Update(this->m_Deltatime);
 	this->Window().SetViewCenter(this->m_Player.GetPos());
 
-	this->enemy.Update(this->m_Deltatime, this->m_Player.GetPos());
+	this->m_EnemyList.Update(this->m_Deltatime, this->m_Player.GetPos());
 }
 void Game::Display()
 {
 	this->ClearWindow();
 
 	ProjList::Display(this->Window());
+	
+	this->m_EnemyList.Display(this->Window());
+
 	this->m_Player.Display(this->Window());
 
 	sf::RectangleShape rect(sf::Vector2f(50.f, 50.f));
 	this->Draw(rect);
 
 	this->Draw(this->m_Text);
-
-	this->enemy.Display(this->Window());
 
 	this->DisplayWindow();
 }
@@ -221,7 +227,7 @@ void Option::Deletor()
 void Option::Init()
 {
 	std::cout << "Option Init" << std::endl;
-	this->m_Text.setFont(this->GetRsc<sf::Font>("Ubuntu"));
+	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 }
 void Option::Update()
 {
