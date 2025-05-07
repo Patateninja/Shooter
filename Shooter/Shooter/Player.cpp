@@ -7,7 +7,7 @@ Player::Player()
 	this->m_Circle = sf::CircleShape(25.f);
 	this->m_Circle.setOrigin(25.f, 25.f);
 	this->m_Circle.setFillColor(sf::Color::Blue);
-	this->m_Position = sf::Vector2f(1920.f, 0.f);
+	this->m_Position = sf::Vector2f(0.f, 0.f);
 	this->m_Velocity = sf::Vector2f(0.f, 0.f);
 	this->m_InputTimer = 0.f;
 	this->m_Life = 3;
@@ -19,7 +19,7 @@ Player::~Player()
 
 }
 
-void Player::Update(float _deltatime, Window& _window)
+void Player::Update(float _deltatime, EnemyList& _enemyList, Window& _window)
 {
 	this->m_InputTimer += _deltatime;
 
@@ -29,6 +29,7 @@ void Player::Update(float _deltatime, Window& _window)
 		{
 			this->m_InputTimer = 0.f;
 			this->Ready();
+			_enemyList.Activate();
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && this->m_InputTimer > 0.3f)
@@ -54,9 +55,13 @@ void Player::Update(float _deltatime, Window& _window)
 	}
 	else if (this->m_CanMove)
 	{
-		if (false) //Get Hit
+		for (std::shared_ptr<Enemy>& enemy : _enemyList.GetList())
 		{
-			this->Die();
+			if (this->m_Circle.getGlobalBounds().intersects(enemy->GetHitbox()))
+			{
+				this->Die();
+				_enemyList.Respawn();
+			}
 		}
 
 		this->m_Velocity.x = 0;
@@ -87,6 +92,7 @@ void Player::Update(float _deltatime, Window& _window)
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 		{
 			this->Respawn();
+			_enemyList.Respawn();
 		}
 
 		this->m_Position -= this->m_Velocity * _deltatime;
@@ -123,9 +129,11 @@ void Player::Die()
 }
 void Player::Respawn()
 {
-	this->m_Position = sf::Vector2f(1900.f, 0.f); //Change to stage start pos;
+	this->m_Position = sf::Vector2f(0.f, 0.f); //Change to stage start pos;
 	this->m_CanReload = true;
 	this->m_CanMove = false;
+	ProjList::Clear();
+	this->m_Shotgun.EmptyMagazine();
 }
 
 ////////////////////////////////////////////////////////

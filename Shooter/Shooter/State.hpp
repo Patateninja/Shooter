@@ -54,9 +54,7 @@ class Game : public State
 {
 	private:
 		Player m_Player;
-
-		Enemy enemy;
-
+		EnemyList m_EnemyList;
 		float m_Deltatime;
 	public:
 		Game(StateManager* _stateManager);
