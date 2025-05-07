@@ -57,7 +57,7 @@ void Player::Update(float _deltatime, EnemyList& _enemyList, Window& _window)
 	{
 		for (std::shared_ptr<Enemy>& enemy : _enemyList.GetList())
 		{
-			if (this->m_Circle.getGlobalBounds().intersects(enemy->GetHitbox()))
+			if (enemy->GetActive() && this->m_Circle.getGlobalBounds().intersects(enemy->GetHitbox()))
 			{
 				this->Die();
 				_enemyList.Respawn();

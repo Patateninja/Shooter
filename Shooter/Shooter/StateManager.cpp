@@ -30,8 +30,9 @@ void StateManager::DisplayWindow()
 
 void StateManager::Update()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F11))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F11) && Time::GetDeltaTime() > 0.5f)
 	{
+		Time::Restart();
 		this->m_Window.ToggleFullscreen();
 	}
 

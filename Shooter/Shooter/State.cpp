@@ -4,8 +4,6 @@
 ////////////////////////////////////////////////////////
 #pragma region State
 
-bool State::m_GameResult = true;
-
 Window& State::Window()
 {
 	return this->m_StateManager->GetWindow();
@@ -61,14 +59,21 @@ void Menu::Init()
 }
 void Menu::Update()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && Tools::GetDeltaTime(this->m_Clock) > 0.2)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && Time::GetDeltaTime() > 0.2f)
 	{
-		this->m_Clock.restart();
+		Time::Restart();
 		this->ChangeState<Game>();
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && Tools::GetDeltaTime(this->m_Clock) > 0.2)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && Time::GetDeltaTime() > 0.2f)
 	{
+		Time::Restart();
 		this->ChangeState<Quit>();
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F11) && Time::GetDeltaTime() > 0.5f)
+	{
+		Time::Restart();
+		this->Window().ToggleFullscreen();
 	}
 }
 void Menu::Display()
@@ -93,13 +98,7 @@ Game::Game(StateManager* _stateManager)
 {
 	std::cout << "Game Created" << std::endl;
 	this->m_StateManager = _stateManager;
-	this->m_Clock = sf::Clock();
-
 	this->m_EnemyList = EnemyList();
-
-	this->m_Deltatime = 0;
-
-	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 }
 Game::~Game()
 {
@@ -118,29 +117,26 @@ void Game::Init()
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 	//this->GetRsc<sf::Music>("Bogus").play();
 	
-	this->m_EnemyList.Add(sf::Vector2f(450.f, 450.f));
-	this->m_EnemyList.Add(sf::Vector2f(450.f, -450.f));
-	this->m_EnemyList.Add(sf::Vector2f(-450.f, 450.f));
-	this->m_EnemyList.Add(sf::Vector2f(-450.f, -450.f));
+	this->m_EnemyList.Add<Baseliner>(sf::Vector2f(450.f, 450.f));
+	this->m_EnemyList.Add<Tank>(sf::Vector2f(450.f, -450.f));
+	this->m_EnemyList.Add<Swarmer>(sf::Vector2f(-450.f, 450.f));
+	this->m_EnemyList.Add<Ranged>(sf::Vector2f(-450.f, -450.f));
 }
 void Game::Update()
 {
-	this->m_Deltatime = Tools::GetDeltaTime(this->m_Clock);
-	this->m_Clock.restart();
-
-	this->m_Text.setString(std::to_string(this->m_Player.GetHP()) + " Live(s) / Projectiles : " + std::to_string(ProjList::Size()) + " / " + std::to_string(int(1 / this->m_Deltatime)) + " fps");
+	this->m_Text.setString(std::to_string(this->m_Player.GetHP()) + " Live(s) / Projectiles : " + std::to_string(ProjList::Size()) + " / " + std::to_string(int(1 / Time::GetDeltaTime())) + " fps");
 	this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && Time::GetDeltaTime() > 0.2)
 	{
 		this->ChangeState<EndGame>();
 	}
 
-	this->m_Player.Update(this->m_Deltatime, this->m_EnemyList, this->Window());
-	ProjList::Update(this->m_Deltatime);
+	this->m_Player.Update(Time::GetDeltaTime(), this->m_EnemyList, this->Window());
+	ProjList::Update(Time::GetDeltaTime());
 	this->Window().SetViewCenter(this->m_Player.GetPos());
 
-	this->m_EnemyList.Update(this->m_Deltatime, this->m_Player.GetPos());
+	this->m_EnemyList.Update(Time::GetDeltaTime(), this->m_Player.GetPos());
 }
 void Game::Display()
 {

@@ -22,3 +22,10 @@ namespace Tools
 
 	float DegToRad(float _deg);
 }
+
+namespace Time
+{
+	void Init();
+	float GetDeltaTime();
+	sf::Time Restart();
+}

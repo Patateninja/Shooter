@@ -1,6 +1,7 @@
 #include "Enemy.hpp"
 
 ////////////////////////////////////////////////////////
+#pragma region Enemy
 
 Enemy::Enemy()
 {
@@ -17,6 +18,7 @@ Enemy::Enemy()
 	this->m_Active = false;
 	this->m_MaxHp = 50;
 	this->m_Hp = 50;
+	this->m_Speed = 200.f;
 }
 Enemy::Enemy(const sf::Vector2f& _startingPos)
 {
@@ -34,6 +36,7 @@ Enemy::Enemy(const sf::Vector2f& _startingPos)
 	this->m_Active = false;
 	this->m_MaxHp = 50;
 	this->m_Hp = 50;
+	this->m_Speed = 200.f;
 }
 Enemy::~Enemy()
 {
@@ -56,9 +59,7 @@ void Enemy::Update(float _deltatime, sf::Vector2f& _playerPos)
 {
 	if (this->m_Active)
 	{
-		this->m_Target = _playerPos;
-		this->m_Velocity = Tools::Normalize(this->m_Position - this->m_Target) * 250.f;
-		this->Move(_deltatime);
+		this->Move(_deltatime, _playerPos);
 		this->CheckDamage();
 
 		if (this->m_Burning)
@@ -77,9 +78,12 @@ void Enemy::Display(Window& _window)
 	_window.Draw(this->m_Circle);
 }
 
-void Enemy::Move(float _deltatime)
+void Enemy::Move(float _deltatime, sf::Vector2f& _playerPos)
 {
-	this->m_Position -= this->m_Velocity * _deltatime;
+	this->m_Target = _playerPos;
+	this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed;
+
+	this->m_Position += this->m_Velocity * _deltatime;
 	this->m_Circle.setPosition(this->m_Position);
 }
 void Enemy::CheckDamage()
@@ -129,7 +133,275 @@ void Enemy::Die()
 	this->m_Circle.setFillColor(sf::Color(125, 125, 125, 255));
 }
 
+#pragma endregion
 ////////////////////////////////////////////////////////
+#pragma region Enemy_Types
+#pragma region Baseliner
+
+Baseliner::Baseliner()
+{
+	this->m_Circle = sf::CircleShape(25.f);
+	this->m_Circle.setOrigin(25.f, 25.f);
+	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
+	this->m_Position = sf::Vector2f(0.f, 0.f);
+	this->m_Velocity = sf::Vector2f(0.f, 0.f);
+	this->m_Target = sf::Vector2f(0.f, 0.f);
+	this->m_BurningDamage = 0;
+	this->m_BurnCoolDown = 0.f;
+	this->m_Burning = false;
+	this->m_Active = false;
+	this->m_MaxHp = 50;
+	this->m_Hp = 50;
+	this->m_Speed = 200.f;
+}
+Baseliner::Baseliner(const sf::Vector2f& _startingPos)
+{
+	this->m_Circle = sf::CircleShape(25.f);
+	this->m_Circle.setOrigin(25.f, 25.f);
+	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_Circle.setPosition(_startingPos);
+	this->m_StartingPosition = _startingPos;
+	this->m_Position = _startingPos;
+	this->m_Velocity = sf::Vector2f(0.f, 0.f);
+	this->m_Target = sf::Vector2f(0.f, 0.f);
+	this->m_BurningDamage = 0;
+	this->m_BurnCoolDown = 0.f;
+	this->m_Burning = false;
+	this->m_Active = false;
+	this->m_MaxHp = 50;
+	this->m_Hp = 50;
+	this->m_Speed = 200.f;
+}
+Baseliner::~Baseliner()
+{
+
+}
+
+#pragma endregion
+////////////////////////////////////////////////////////
+#pragma region Tank
+
+Tank::Tank()
+{
+	this->m_Circle = sf::CircleShape(35.f);
+	this->m_Circle.setOrigin(35.f, 35.f);
+	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
+	this->m_Position = sf::Vector2f(0.f, 0.f);
+	this->m_Velocity = sf::Vector2f(0.f, 0.f);
+	this->m_Target = sf::Vector2f(0.f, 0.f);
+	this->m_BurningDamage = 0;
+	this->m_BurnCoolDown = 0.f;
+	this->m_Burning = false;
+	this->m_Active = false;
+	this->m_MaxHp = 150;
+	this->m_Hp = 150;
+	this->m_Speed = 150.f;
+}
+Tank::Tank(const sf::Vector2f& _startingPos)
+{
+	this->m_Circle = sf::CircleShape(35.f);
+	this->m_Circle.setOrigin(35.f, 35.f);
+	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_Circle.setPosition(_startingPos);
+	this->m_StartingPosition = _startingPos;
+	this->m_Position = _startingPos;
+	this->m_Velocity = sf::Vector2f(0.f, 0.f);
+	this->m_Target = sf::Vector2f(0.f, 0.f);
+	this->m_BurningDamage = 0;
+	this->m_BurnCoolDown = 0.f;
+	this->m_Burning = false;
+	this->m_Active = false;
+	this->m_MaxHp = 150;
+	this->m_Hp = 150;
+	this->m_Speed = 150.f;
+}
+Tank::~Tank()
+{
+
+}
+
+#pragma endregion
+////////////////////////////////////////////////////////
+#pragma region Ranged
+
+Ranged::Ranged()
+{
+	this->m_Circle = sf::CircleShape(25.f);
+	this->m_Circle.setOrigin(25.f, 25.f);
+	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
+	this->m_Position = sf::Vector2f(0.f, 0.f);
+	this->m_Velocity = sf::Vector2f(0.f, 0.f);
+	this->m_Target = sf::Vector2f(0.f, 0.f);
+	this->m_BurningDamage = 0;
+	this->m_BurnCoolDown = 0.f;
+	this->m_Burning = false;
+	this->m_Active = false;
+	this->m_MaxHp = 50;
+	this->m_Hp = 50;
+	this->m_Speed = 200.f;
+}
+Ranged::Ranged(const sf::Vector2f& _startingPos)
+{
+	this->m_Circle = sf::CircleShape(25.f);
+	this->m_Circle.setOrigin(25.f, 25.f);
+	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_Circle.setPosition(_startingPos);
+	this->m_StartingPosition = _startingPos;
+	this->m_Position = _startingPos;
+	this->m_Velocity = sf::Vector2f(0.f, 0.f);
+	this->m_Target = sf::Vector2f(0.f, 0.f);
+	this->m_BurningDamage = 0;
+	this->m_BurnCoolDown = 0.f;
+	this->m_Burning = false;
+	this->m_Active = false;
+	this->m_MaxHp = 50;
+	this->m_Hp = 50;
+	this->m_Speed = 200.f;
+}
+Ranged::~Ranged()
+{
+
+}
+
+#pragma endregion
+////////////////////////////////////////////////////////
+#pragma region Swarmer
+
+Swarmer::Swarmer()
+{
+	this->m_Circle = sf::CircleShape(15.f);
+	this->m_Circle.setOrigin(15.f, 15.f);
+	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
+	this->m_Position = sf::Vector2f(0.f, 0.f);
+	this->m_Velocity = sf::Vector2f(0.f, 0.f);
+	this->m_Target = sf::Vector2f(0.f, 0.f);
+	this->m_BurningDamage = 0;
+	this->m_BurnCoolDown = 0.f;
+	this->m_Burning = false;
+	this->m_Active = false;
+	this->m_MaxHp = 15;
+	this->m_Hp = 15;
+	this->m_Speed = 300.f;
+}
+Swarmer::Swarmer(const sf::Vector2f& _startingPos)
+{
+	this->m_Circle = sf::CircleShape(15.f);
+	this->m_Circle.setOrigin(15.f, 15.f);
+	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_Circle.setPosition(_startingPos);
+	this->m_StartingPosition = _startingPos;
+	this->m_Position = _startingPos;
+	this->m_Velocity = sf::Vector2f(0.f, 0.f);
+	this->m_Target = sf::Vector2f(0.f, 0.f);
+	this->m_BurningDamage = 0;
+	this->m_BurnCoolDown = 0.f;
+	this->m_Burning = false;
+	this->m_Active = false;
+	this->m_MaxHp = 15;
+	this->m_Hp = 15;
+	this->m_Speed = 300.f;
+}
+Swarmer::~Swarmer()
+{
+
+}
+
+#pragma endregion
+////////////////////////////////////////////////////////
+#pragma region Shielded
+
+Shielded::Shielded()
+{
+	this->m_Circle = sf::CircleShape(25.f);
+	this->m_Circle.setOrigin(25.f, 25.f);
+	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
+	this->m_Position = sf::Vector2f(0.f, 0.f);
+	this->m_Velocity = sf::Vector2f(0.f, 0.f);
+	this->m_Target = sf::Vector2f(0.f, 0.f);
+	this->m_BurningDamage = 0;
+	this->m_BurnCoolDown = 0.f;
+	this->m_Burning = false;
+	this->m_Active = false;
+	this->m_MaxHp = 50;
+	this->m_Hp = 50;
+	this->m_Speed = 100.f;
+}
+Shielded::Shielded(const sf::Vector2f& _startingPos)
+{
+	this->m_Circle = sf::CircleShape(25.f);
+	this->m_Circle.setOrigin(25.f, 25.f);
+	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_Circle.setPosition(_startingPos);
+	this->m_StartingPosition = _startingPos;
+	this->m_Position = _startingPos;
+	this->m_Velocity = sf::Vector2f(0.f, 0.f);
+	this->m_Target = sf::Vector2f(0.f, 0.f);
+	this->m_BurningDamage = 0;
+	this->m_BurnCoolDown = 0.f;
+	this->m_Burning = false;
+	this->m_Active = false;
+	this->m_MaxHp = 50;
+	this->m_Hp = 50;
+	this->m_Speed = 100.f;
+}
+Shielded::~Shielded()
+{
+
+}
+
+#pragma endregion
+////////////////////////////////////////////////////////
+#pragma region RangedShielded
+
+RangedShielded::RangedShielded()
+{
+	this->m_Circle = sf::CircleShape(25.f);
+	this->m_Circle.setOrigin(25.f, 25.f);
+	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
+	this->m_Position = sf::Vector2f(0.f, 0.f);
+	this->m_Velocity = sf::Vector2f(0.f, 0.f);
+	this->m_Target = sf::Vector2f(0.f, 0.f);
+	this->m_BurningDamage = 0;
+	this->m_BurnCoolDown = 0.f;
+	this->m_Burning = false;
+	this->m_Active = false;
+	this->m_MaxHp = 50;
+	this->m_Hp = 50;
+	this->m_Speed = 100.f;
+}
+RangedShielded::RangedShielded(const sf::Vector2f& _startingPos)
+{
+	this->m_Circle = sf::CircleShape(25.f);
+	this->m_Circle.setOrigin(25.f, 25.f);
+	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_Circle.setPosition(_startingPos);
+	this->m_StartingPosition = _startingPos;
+	this->m_Position = _startingPos;
+	this->m_Velocity = sf::Vector2f(0.f, 0.f);
+	this->m_Target = sf::Vector2f(0.f, 0.f);
+	this->m_BurningDamage = 0;
+	this->m_BurnCoolDown = 0.f;
+	this->m_Burning = false;
+	this->m_Active = false;
+	this->m_MaxHp = 50;
+	this->m_Hp = 50;
+	this->m_Speed = 100.f;
+}
+RangedShielded::~RangedShielded()
+{
+
+}
+
+#pragma endregion
+#pragma endregion
+////////////////////////////////////////////////////////
+#pragma region EnemyList
 
 EnemyList::EnemyList()
 {
@@ -140,14 +412,6 @@ EnemyList::~EnemyList()
 	this->m_List.clear();
 }
 
-void EnemyList::Add(const sf::Vector2f& _startingPos)
-{
-	this->m_List.push_back(std::make_unique<Enemy>(_startingPos));
-}
-void EnemyList::Add(Enemy& _enemy)
-{
-	this->m_List.push_back(std::make_unique<Enemy>(_enemy));
-}
 void EnemyList::Clear()
 {
 	this->m_List.clear();
@@ -183,4 +447,5 @@ void EnemyList::Respawn()
 	}
 }
 
+#pragma endregion
 ////////////////////////////////////////////////////////

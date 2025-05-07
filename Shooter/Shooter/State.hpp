@@ -9,8 +9,7 @@ class State
 	protected:
 		StateManager* m_StateManager = nullptr;
 		sf::Text m_Text;
-		sf::Clock m_Clock;
-		static bool m_GameResult;
+		float m_Timer = 0;
 	public :
 		State() = default;
 		~State() = default;
@@ -55,7 +54,7 @@ class Game : public State
 	private:
 		Player m_Player;
 		EnemyList m_EnemyList;
-		float m_Deltatime;
+
 	public:
 		Game(StateManager* _stateManager);
 		~Game();
