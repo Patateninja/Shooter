@@ -55,6 +55,7 @@ void Menu::Deletor()
 void Menu::Init()
 {
 	std::cout << "Menu Init" << std::endl;
+	this->Window().ResetView();
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 }
 void Menu::Update()
@@ -101,6 +102,7 @@ Game::Game(StateManager* _stateManager)
 	std::cout << "Game Created" << std::endl;
 	this->m_StateManager = _stateManager;
 	this->m_EnemyList = EnemyList();
+	this->m_Map = TileMap(sf::Vector2i(50, 50));
 }
 Game::~Game()
 {
@@ -118,11 +120,12 @@ void Game::Init()
 	this->Window().ResetView();
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 	//this->GetRsc<sf::Music>("Bogus").play();
-	
-	this->m_EnemyList.Add<Baseliner>(sf::Vector2f(450.f, 450.f));
-	this->m_EnemyList.Add<Tank>(sf::Vector2f(450.f, -450.f));
-	this->m_EnemyList.Add<Swarmer>(sf::Vector2f(-450.f, 450.f));
-	this->m_EnemyList.Add<Ranged>(sf::Vector2f(-450.f, -450.f));
+	this->m_Map.Generate();
+
+	this->m_EnemyList.Add<Baseliner>(sf::Vector2f(2050.f, 2050.f));
+	this->m_EnemyList.Add<Tank>(sf::Vector2f(2050.f, 1150.f));
+	this->m_EnemyList.Add<Swarmer>(sf::Vector2f(1150.f, 2050.f));
+	this->m_EnemyList.Add<Ranged>(sf::Vector2f(1150.f, 1150.f));
 }
 void Game::Update()
 {
@@ -131,30 +134,27 @@ void Game::Update()
 	this->m_Text.setString(std::to_string(this->m_Player.GetHP()) + " Live(s) / Projectiles : " + std::to_string(ProjList::Size()) + " / " + std::to_string(int(1 / Time::GetDeltaTime())) + " fps");
 	this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && this->m_InputTimer > 0.2f)
-	{
-		this->m_InputTimer = 0.f;
-		this->ChangeState<EndGame>();
-	}
-
 	this->m_Player.Update(this->m_EnemyList, this->Window());
 	ProjList::Update();
 	this->Window().SetViewCenter(this->m_Player.GetPos());
 
 	this->m_EnemyList.Update(this->m_Player.GetPos());
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && this->m_InputTimer > 0.2f)
+	{
+		this->m_InputTimer = 0.f;
+		this->ChangeState<Menu>();
+	}
 }
 void Game::Display()
 {
 	this->ClearWindow();
 
+	this->m_Map.Display(this->Window());
+
 	ProjList::Display(this->Window());
-	
 	this->m_EnemyList.Display(this->Window());
-
 	this->m_Player.Display(this->Window());
-
-	sf::RectangleShape rect(sf::Vector2f(50.f, 50.f));
-	this->Draw(rect);
 
 	this->Draw(this->m_Text);
 
@@ -187,6 +187,7 @@ void EndGame::Deletor()
 void EndGame::Init()
 {
 	std::cout << "EndGame Init" << std::endl;
+	this->Window().ResetView();
 }
 void EndGame::Update()
 {
@@ -228,6 +229,7 @@ void Option::Deletor()
 void Option::Init()
 {
 	std::cout << "Option Init" << std::endl;
+	this->Window().ResetView();
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 }
 void Option::Update()

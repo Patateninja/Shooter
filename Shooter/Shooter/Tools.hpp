@@ -1,6 +1,8 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include <cmath>
+#include <ctime>
+#include <cstdlib>
 
 #define PI 3.14159
 
@@ -21,6 +23,8 @@ namespace Tools
 	float RadToDeg(float _rad);
 
 	float DegToRad(float _deg);
+
+	int Random(int _max, int _min);
 }
 
 namespace Time

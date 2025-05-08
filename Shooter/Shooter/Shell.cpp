@@ -4,10 +4,10 @@
 
 BirdShot::BirdShot()
 {
-	this->m_Damage = 5;
+	this->m_Damage = 2;
 	this->m_Range = 400;
 	this->m_Spread = 50;
-	this->m_Pellets = 11;
+	this->m_Pellets = 21;
 	this->m_Velocity = 1000.f;
 }
 BirdShot::~BirdShot()

@@ -41,6 +41,11 @@ float Tools::DegToRad(float _deg)
 	return (_deg * (PI / 180));
 }
 
+int Tools::Random(int _max, int _min = 0)
+{
+	return (rand() % _max)  + _min;
+}
+
 //////////////////////////////////////////////////
 
 namespace Time

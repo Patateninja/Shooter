@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Astar.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Resource.cpp" />
@@ -151,10 +152,12 @@
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Shell.cpp" />
     <ClCompile Include="State.cpp" />
+    <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Tools.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Astar.hpp" />
     <ClInclude Include="Enemy.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="Resource.hpp" />
@@ -164,6 +167,7 @@
     <ClInclude Include="Projectile.hpp" />
     <ClInclude Include="Shell.hpp" />
     <ClInclude Include="State.hpp" />
+    <ClInclude Include="Tile.hpp" />
     <ClInclude Include="Tools.hpp" />
     <ClInclude Include="Window.hpp" />
   </ItemGroup>
