@@ -122,10 +122,10 @@ void Game::Init()
 	//this->GetRsc<sf::Music>("Bogus").play();
 	this->m_Map.Generate();
 
-	this->m_EnemyList.Add<Baseliner>(sf::Vector2f(450.f, 450.f));
-	this->m_EnemyList.Add<Tank>(sf::Vector2f(450.f, -450.f));
-	this->m_EnemyList.Add<Swarmer>(sf::Vector2f(-450.f, 450.f));
-	this->m_EnemyList.Add<Ranged>(sf::Vector2f(-450.f, -450.f));
+	this->m_EnemyList.Add<Baseliner>(sf::Vector2f(2050.f, 2050.f));
+	this->m_EnemyList.Add<Tank>(sf::Vector2f(2050.f, 1150.f));
+	this->m_EnemyList.Add<Swarmer>(sf::Vector2f(1150.f, 2050.f));
+	this->m_EnemyList.Add<Ranged>(sf::Vector2f(1150.f, 1150.f));
 }
 void Game::Update()
 {
