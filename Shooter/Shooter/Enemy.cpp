@@ -151,8 +151,8 @@ Baseliner::Baseliner()
 	this->m_BurnCoolDown = 0.f;
 	this->m_Burning = false;
 	this->m_Active = false;
-	this->m_MaxHp = 50;
-	this->m_Hp = 50;
+	this->m_MaxHp = 35;
+	this->m_Hp = 35;
 	this->m_Speed = 200.f;
 }
 Baseliner::Baseliner(const sf::Vector2f& _startingPos)
@@ -169,8 +169,8 @@ Baseliner::Baseliner(const sf::Vector2f& _startingPos)
 	this->m_BurnCoolDown = 0.f;
 	this->m_Burning = false;
 	this->m_Active = false;
-	this->m_MaxHp = 50;
-	this->m_Hp = 50;
+	this->m_MaxHp = 35;
+	this->m_Hp = 35;
 	this->m_Speed = 200.f;
 }
 Baseliner::~Baseliner()
@@ -195,8 +195,8 @@ Tank::Tank()
 	this->m_BurnCoolDown = 0.f;
 	this->m_Burning = false;
 	this->m_Active = false;
-	this->m_MaxHp = 150;
-	this->m_Hp = 150;
+	this->m_MaxHp = 75;
+	this->m_Hp = 75;
 	this->m_Speed = 150.f;
 }
 Tank::Tank(const sf::Vector2f& _startingPos)
@@ -213,8 +213,8 @@ Tank::Tank(const sf::Vector2f& _startingPos)
 	this->m_BurnCoolDown = 0.f;
 	this->m_Burning = false;
 	this->m_Active = false;
-	this->m_MaxHp = 150;
-	this->m_Hp = 150;
+	this->m_MaxHp = 75;
+	this->m_Hp = 75;
 	this->m_Speed = 150.f;
 }
 Tank::~Tank()
@@ -257,8 +257,8 @@ Ranged::Ranged(const sf::Vector2f& _startingPos)
 	this->m_BurnCoolDown = 0.f;
 	this->m_Burning = false;
 	this->m_Active = false;
-	this->m_MaxHp = 50;
-	this->m_Hp = 50;
+	this->m_MaxHp = 25;
+	this->m_Hp = 25;
 	this->m_Speed = 200.f;
 }
 Ranged::~Ranged()
@@ -283,8 +283,8 @@ Swarmer::Swarmer()
 	this->m_BurnCoolDown = 0.f;
 	this->m_Burning = false;
 	this->m_Active = false;
-	this->m_MaxHp = 15;
-	this->m_Hp = 15;
+	this->m_MaxHp = 10;
+	this->m_Hp = 10;
 	this->m_Speed = 300.f;
 }
 Swarmer::Swarmer(const sf::Vector2f& _startingPos)
@@ -301,8 +301,8 @@ Swarmer::Swarmer(const sf::Vector2f& _startingPos)
 	this->m_BurnCoolDown = 0.f;
 	this->m_Burning = false;
 	this->m_Active = false;
-	this->m_MaxHp = 15;
-	this->m_Hp = 15;
+	this->m_MaxHp = 10;
+	this->m_Hp = 10;
 	this->m_Speed = 300.f;
 }
 Swarmer::~Swarmer()
@@ -327,8 +327,8 @@ Shielded::Shielded()
 	this->m_BurnCoolDown = 0.f;
 	this->m_Burning = false;
 	this->m_Active = false;
-	this->m_MaxHp = 50;
-	this->m_Hp = 50;
+	this->m_MaxHp = 40;
+	this->m_Hp = 40;
 	this->m_Speed = 100.f;
 }
 Shielded::Shielded(const sf::Vector2f& _startingPos)
@@ -345,8 +345,8 @@ Shielded::Shielded(const sf::Vector2f& _startingPos)
 	this->m_BurnCoolDown = 0.f;
 	this->m_Burning = false;
 	this->m_Active = false;
-	this->m_MaxHp = 50;
-	this->m_Hp = 50;
+	this->m_MaxHp = 35;
+	this->m_Hp = 35;
 	this->m_Speed = 100.f;
 }
 Shielded::~Shielded()

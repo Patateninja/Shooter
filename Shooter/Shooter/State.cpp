@@ -137,6 +137,8 @@ void Game::Update()
 	this->Window().SetViewCenter(this->m_Player.GetPos());
 
 	this->m_EnemyList.Update(Time::GetDeltaTime(), this->m_Player.GetPos());
+	
+	Time::Restart();
 }
 void Game::Display()
 {
