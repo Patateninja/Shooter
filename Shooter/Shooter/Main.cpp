@@ -2,6 +2,8 @@
 
 int main()
 {
+	srand(unsigned int(time(nullptr)));
+
 	StateManager statemana;
 	sf::Event event;
 

@@ -4,8 +4,8 @@
 
 Player::Player()
 {
-	this->m_Circle = sf::CircleShape(25.f);
-	this->m_Circle.setOrigin(25.f, 25.f);
+	this->m_Circle = sf::CircleShape(20.f);
+	this->m_Circle.setOrigin(20.f, 20.f);
 	this->m_Circle.setFillColor(sf::Color::Blue);
 	this->m_Position = sf::Vector2f(0.f, 0.f);
 	this->m_Velocity = sf::Vector2f(0.f, 0.f);

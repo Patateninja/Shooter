@@ -146,8 +146,8 @@ void Enemy::Die()
 
 Baseliner::Baseliner()
 {
-	this->m_Circle = sf::CircleShape(25.f);
-	this->m_Circle.setOrigin(25.f, 25.f);
+	this->m_Circle = sf::CircleShape(20.f);
+	this->m_Circle.setOrigin(20.f, 20.f);
 	this->m_Circle.setFillColor(sf::Color::Red);
 	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
 	this->m_Position = sf::Vector2f(0.f, 0.f);
@@ -190,8 +190,8 @@ Baseliner::~Baseliner()
 
 Tank::Tank()
 {
-	this->m_Circle = sf::CircleShape(35.f);
-	this->m_Circle.setOrigin(35.f, 35.f);
+	this->m_Circle = sf::CircleShape(30.f);
+	this->m_Circle.setOrigin(30.f, 30.f);
 	this->m_Circle.setFillColor(sf::Color::Red);
 	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
 	this->m_Position = sf::Vector2f(0.f, 0.f);
@@ -234,8 +234,8 @@ Tank::~Tank()
 
 Ranged::Ranged()
 {
-	this->m_Circle = sf::CircleShape(25.f);
-	this->m_Circle.setOrigin(25.f, 25.f);
+	this->m_Circle = sf::CircleShape(20.f);
+	this->m_Circle.setOrigin(20.f, 20.f);
 	this->m_Circle.setFillColor(sf::Color::Red);
 	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
 	this->m_Position = sf::Vector2f(0.f, 0.f);
@@ -278,8 +278,8 @@ Ranged::~Ranged()
 
 Swarmer::Swarmer()
 {
-	this->m_Circle = sf::CircleShape(15.f);
-	this->m_Circle.setOrigin(15.f, 15.f);
+	this->m_Circle = sf::CircleShape(10.f);
+	this->m_Circle.setOrigin(10.f, 10.f);
 	this->m_Circle.setFillColor(sf::Color::Red);
 	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
 	this->m_Position = sf::Vector2f(0.f, 0.f);
@@ -322,8 +322,8 @@ Swarmer::~Swarmer()
 
 Shielded::Shielded()
 {
-	this->m_Circle = sf::CircleShape(25.f);
-	this->m_Circle.setOrigin(25.f, 25.f);
+	this->m_Circle = sf::CircleShape(20.f);
+	this->m_Circle.setOrigin(20.f, 20.f);
 	this->m_Circle.setFillColor(sf::Color::Red);
 	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
 	this->m_Position = sf::Vector2f(0.f, 0.f);
@@ -366,8 +366,8 @@ Shielded::~Shielded()
 
 RangedShielded::RangedShielded()
 {
-	this->m_Circle = sf::CircleShape(25.f);
-	this->m_Circle.setOrigin(25.f, 25.f);
+	this->m_Circle = sf::CircleShape(20.f);
+	this->m_Circle.setOrigin(20.f, 20.f);
 	this->m_Circle.setFillColor(sf::Color::Red);
 	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
 	this->m_Position = sf::Vector2f(0.f, 0.f);

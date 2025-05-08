@@ -151,6 +151,7 @@
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Shell.cpp" />
     <ClCompile Include="State.cpp" />
+    <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Tools.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -164,6 +165,7 @@
     <ClInclude Include="Projectile.hpp" />
     <ClInclude Include="Shell.hpp" />
     <ClInclude Include="State.hpp" />
+    <ClInclude Include="Tile.hpp" />
     <ClInclude Include="Tools.hpp" />
     <ClInclude Include="Window.hpp" />
   </ItemGroup>

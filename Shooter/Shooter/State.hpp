@@ -1,6 +1,7 @@
 #pragma once
 #include "Player.hpp"
 #include "Enemy.hpp"
+#include "Tile.hpp"
 
 class StateManager;
 
@@ -54,7 +55,7 @@ class Game : public State
 	private :
 		Player m_Player;
 		EnemyList m_EnemyList;
-
+		TileMap m_Map;
 	public :
 		Game(StateManager* _stateManager);
 		~Game();

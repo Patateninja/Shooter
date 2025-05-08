@@ -1,5 +1,7 @@
 #include "StateManager.hpp"
 
+////////////////////////////////////////////////////////
+
 StateManager::StateManager()
 {
 	RscMana::Init();
@@ -47,3 +49,5 @@ void StateManager::Display()
 {
 	this->m_CurrentState->Display();
 }
+
+////////////////////////////////////////////////////////

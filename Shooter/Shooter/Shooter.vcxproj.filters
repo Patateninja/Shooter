@@ -43,6 +43,12 @@
     <Filter Include="Header Files\Enemy">
       <UniqueIdentifier>{0b9c8760-ba67-4832-8297-f283d5bd99c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Stage">
+      <UniqueIdentifier>{7e64abe6-cb8f-4abb-8b6d-c25a560b9d2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Stage">
+      <UniqueIdentifier>{8ec46b4b-32d8-4022-8aed-32c75eafa7df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -81,6 +87,9 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>Source Files\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tools.hpp">
@@ -115,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="Enemy.hpp">
       <Filter>Header Files\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.hpp">
+      <Filter>Header Files\Stage</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
