@@ -42,3 +42,25 @@ float Tools::DegToRad(float _deg)
 }
 
 //////////////////////////////////////////////////
+
+namespace Time
+{
+	sf::Clock time;
+
+	void Init()
+	{
+		Time::time = sf::Clock();
+	}
+
+	float GetDeltaTime()
+	{
+		return Tools::GetDeltaTime(Time::time);
+	}
+
+	sf::Time Restart()
+	{
+		return Time::time.restart();
+	}
+}
+
+//////////////////////////////////////////////////

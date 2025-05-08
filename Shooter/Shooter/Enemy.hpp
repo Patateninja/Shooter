@@ -1,11 +1,10 @@
 #pragma once
-#include "Window.hpp"
 #include "Projectile.hpp"
-#include "ResourceManager.hpp"
 
 class Enemy
 {
 	protected :
+		std::vector<std::weak_ptr<Projectile>> m_IgnoreProj;
 		sf::CircleShape m_Circle;
 		sf::Vector2f m_StartingPosition;
 		sf::Vector2f m_Position;
@@ -14,6 +13,7 @@ class Enemy
 		int m_MaxHp;
 		int m_Hp;
 		int m_BurningDamage;
+		float m_Speed;
 		float m_BurnCoolDown;
 		bool m_Burning;
 		bool m_Active;
@@ -23,19 +23,67 @@ class Enemy
 		~Enemy();
 
 		inline sf::FloatRect GetHitbox() { return this->m_Circle.getGlobalBounds(); };
-
-		void SetActive(bool _input) { this->m_Active = _input; };
+		inline bool GetActive() { return this->m_Active; };
+		inline void SetActive(bool _input) { this->m_Active = _input; };
 
 		void Respawn();
 
-		void Update(float _deltatime, sf::Vector2f& _playerPos);
+		void Update(sf::Vector2f& _playerPos);
 		void Display(Window& _window);
 
-		void Move(float _deltatime);
+		void Move(sf::Vector2f& _playerPos);
 		void CheckDamage();
-		void TakeDamage(Projectile& _projectile);
+		void TakeDamage(std::shared_ptr<Projectile>& _projectile);
 		void TakeDamage(int _damage);
 		void Die();
+};
+
+class Baseliner : public Enemy
+{
+	public :
+		Baseliner();
+		Baseliner(const sf::Vector2f& _stratingPos);
+		~Baseliner();
+};
+
+class Tank : public Enemy
+{
+	public:
+		Tank();
+		Tank(const sf::Vector2f& _stratingPos);
+		~Tank();
+};
+
+class Ranged : public Enemy
+{
+	public:
+		Ranged();
+		Ranged(const sf::Vector2f& _stratingPos);
+		~Ranged();
+};
+
+class Swarmer : public Enemy
+{
+	public:
+		Swarmer();
+		Swarmer(const sf::Vector2f& _stratingPos);
+		~Swarmer();
+};
+
+class Shielded : public Enemy
+{
+	public:
+		Shielded();
+		Shielded(const sf::Vector2f& _stratingPos);
+		~Shielded();
+};
+
+class RangedShielded : public Enemy
+{
+	public:
+		RangedShielded();
+		RangedShielded(const sf::Vector2f& _stratingPos);
+		~RangedShielded();
 };
 
 class EnemyList
@@ -48,11 +96,19 @@ class EnemyList
 
 		inline std::list<std::shared_ptr<Enemy>>& GetList() { return this->m_List; };
 
-		void Add(const sf::Vector2f& _startingPos);
-		void Add(Enemy& _enemy);
+		template <typename T>
+		void Add(const sf::Vector2f& _startingPos)
+		{
+			this->m_List.push_back(std::make_unique<T>(_startingPos));
+		}
+		template <typename T>
+		void Add(Enemy& _enemy)
+		{
+			this->m_List.push_back(std::make_unique<Enemy>(_enemy));
+		}
 		void Clear();
 
-		void Update(float _deltatime, sf::Vector2f& _playerPos);
+		void Update(sf::Vector2f& _playerPos);
 		void Display(Window& _window);
 
 		void Activate();

@@ -7,6 +7,7 @@ class StateManager
 	private :
 		Window m_Window;
 		State* m_CurrentState;
+		float m_InputTimer;
 	public :
 		StateManager();
 		~StateManager();

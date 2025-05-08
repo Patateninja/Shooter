@@ -19,9 +19,9 @@ Player::~Player()
 
 }
 
-void Player::Update(float _deltatime, EnemyList& _enemyList, Window& _window)
+void Player::Update(EnemyList& _enemyList, Window& _window)
 {
-	this->m_InputTimer += _deltatime;
+	this->m_InputTimer += Time::GetDeltaTime();
 
 	if (this->m_CanReload)
 	{
@@ -57,7 +57,7 @@ void Player::Update(float _deltatime, EnemyList& _enemyList, Window& _window)
 	{
 		for (std::shared_ptr<Enemy>& enemy : _enemyList.GetList())
 		{
-			if (this->m_Circle.getGlobalBounds().intersects(enemy->GetHitbox()))
+			if (enemy->GetActive() && this->m_Circle.getGlobalBounds().intersects(enemy->GetHitbox()))
 			{
 				this->Die();
 				_enemyList.Respawn();
@@ -95,7 +95,7 @@ void Player::Update(float _deltatime, EnemyList& _enemyList, Window& _window)
 			_enemyList.Respawn();
 		}
 
-		this->m_Position -= this->m_Velocity * _deltatime;
+		this->m_Position -= this->m_Velocity * Time::GetDeltaTime();
 	}
 
 	this->m_Circle.setPosition(this->m_Position);
