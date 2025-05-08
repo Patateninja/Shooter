@@ -6,7 +6,7 @@ class StateManager;
 
 class State
 {
-	protected:
+	protected :
 		StateManager* m_StateManager = nullptr;
 		sf::Text m_Text;
 		float m_InputTimer = 0;
@@ -35,9 +35,9 @@ class State
 
 class Menu : public State
 {
-	private:
+	private :
 
-	public:
+	public :
 		Menu(StateManager* _stateManager);
 		~Menu();
 
@@ -51,11 +51,11 @@ class Menu : public State
 
 class Game : public State
 {
-	private:
+	private :
 		Player m_Player;
 		EnemyList m_EnemyList;
 
-	public:
+	public :
 		Game(StateManager* _stateManager);
 		~Game();
 
@@ -69,9 +69,9 @@ class Game : public State
 
 class EndGame : public State
 {
-	private:
+	private :
 
-	public:
+	public :
 		EndGame(StateManager* _stateManager);
 		~EndGame();
 
@@ -85,9 +85,9 @@ class EndGame : public State
 
 class Option : public State
 {
-	private:
+	private :
 
-	public:
+	public :
 		Option(StateManager* _stateManager);
 		~Option();
 
@@ -101,9 +101,9 @@ class Option : public State
 
 class Quit : public State
 {
-	private:
+	private :
 
-	public:
+	public :
 		Quit(StateManager* _stateManager);
 		~Quit();
 
