@@ -1,11 +1,10 @@
 #pragma once
-#include "Window.hpp"
 #include "Projectile.hpp"
-#include "ResourceManager.hpp"
 
 class Enemy
 {
 	protected :
+		std::vector<std::weak_ptr<Projectile>> m_IgnoreProj;
 		sf::CircleShape m_Circle;
 		sf::Vector2f m_StartingPosition;
 		sf::Vector2f m_Position;
@@ -29,12 +28,12 @@ class Enemy
 
 		void Respawn();
 
-		void Update(float _deltatime, sf::Vector2f& _playerPos);
+		void Update(sf::Vector2f& _playerPos);
 		void Display(Window& _window);
 
-		void Move(float _deltatime, sf::Vector2f& _playerPos);
+		void Move(sf::Vector2f& _playerPos);
 		void CheckDamage();
-		void TakeDamage(Projectile& _projectile);
+		void TakeDamage(std::shared_ptr<Projectile>& _projectile);
 		void TakeDamage(int _damage);
 		void Die();
 };
@@ -109,7 +108,7 @@ class EnemyList
 		}
 		void Clear();
 
-		void Update(float _deltatime, sf::Vector2f& _playerPos);
+		void Update(sf::Vector2f& _playerPos);
 		void Display(Window& _window);
 
 		void Activate();

@@ -59,20 +59,22 @@ void Menu::Init()
 }
 void Menu::Update()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && Time::GetDeltaTime() > 0.2f)
+	this->m_InputTimer += Time::GetDeltaTime();
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && this->m_InputTimer > 0.2f)
 	{
-		Time::Restart();
+		this->m_InputTimer = 0.f;
 		this->ChangeState<Game>();
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && Time::GetDeltaTime() > 0.2f)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && this->m_InputTimer > 0.2f)
 	{
-		Time::Restart();
+		this->m_InputTimer = 0.f;
 		this->ChangeState<Quit>();
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F11) && Time::GetDeltaTime() > 0.5f)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F11) && this->m_InputTimer > 0.5f)
 	{
-		Time::Restart();
+		this->m_InputTimer = 0.f;
 		this->Window().ToggleFullscreen();
 	}
 }
@@ -124,21 +126,22 @@ void Game::Init()
 }
 void Game::Update()
 {
+	this->m_InputTimer += Time::GetDeltaTime();
+
 	this->m_Text.setString(std::to_string(this->m_Player.GetHP()) + " Live(s) / Projectiles : " + std::to_string(ProjList::Size()) + " / " + std::to_string(int(1 / Time::GetDeltaTime())) + " fps");
 	this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && Time::GetDeltaTime() > 0.2)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && this->m_InputTimer > 0.2f)
 	{
+		this->m_InputTimer = 0.f;
 		this->ChangeState<EndGame>();
 	}
 
-	this->m_Player.Update(Time::GetDeltaTime(), this->m_EnemyList, this->Window());
-	ProjList::Update(Time::GetDeltaTime());
+	this->m_Player.Update(this->m_EnemyList, this->Window());
+	ProjList::Update();
 	this->Window().SetViewCenter(this->m_Player.GetPos());
 
-	this->m_EnemyList.Update(Time::GetDeltaTime(), this->m_Player.GetPos());
-	
-	Time::Restart();
+	this->m_EnemyList.Update(this->m_Player.GetPos());
 }
 void Game::Display()
 {

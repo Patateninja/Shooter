@@ -9,18 +9,6 @@ Projectile::Projectile()
 	this->m_Position = sf::Vector2f(0.f, 0.f);
 	this->m_Velocity = sf::Vector2f(0.f, 0.f);
 	this->m_Type = CLASSIC;
-	switch (this->m_Type)
-	{
-		case FLAMMING :
-			this->m_Circle.setFillColor(sf::Color::Red);
-			break;
-		case PIERCING :
-			this->m_Circle.setFillColor(sf::Color::Yellow);
-			break;
-		default :
-			this->m_Circle.setFillColor(sf::Color::White);
-			break;
-	}
 	this->m_Damage = 0;
 	this->m_Range = 0;
 	this->m_Distance = 0.f;
@@ -34,13 +22,13 @@ Projectile::Projectile(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _typ
 	this->m_Type = _type;
 	switch (this->m_Type)
 	{
-		case FLAMMING:
+		case FLAMMING :
 			this->m_Circle.setFillColor(sf::Color::Red);
 			break;
-		case PIERCING:
+		case PIERCING :
 			this->m_Circle.setFillColor(sf::Color::Yellow);
 			break;
-		default:
+		case CLASSIC :
 			this->m_Circle.setFillColor(sf::Color::White);
 			break;
 	}
@@ -54,11 +42,11 @@ Projectile::~Projectile()
 
 }
 
-bool Projectile::Update(float _deltatime)
+bool Projectile::Update()
 {
 	if (!this->m_ToDestroy)
 	{
-		sf::Vector2f mvt = this->m_Velocity * _deltatime;
+		sf::Vector2f mvt = this->m_Velocity * Time::GetDeltaTime();
 		this->m_Position += mvt;
 		this->m_Distance += Tools::Magnitude(mvt);
 
@@ -89,23 +77,23 @@ ProjectileList::ProjectileList()
 }
 ProjectileList::~ProjectileList()
 {
-	this->m_List.clear();
+	this->Clear();
 }
 
 void ProjectileList::Add(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range)
 {
-	this->m_List.push_back(std::make_unique<Projectile>(_pos, _vel, _type, _dmg, _range));
+	this->m_List.push_back(std::make_shared<Projectile>(_pos, _vel, _type, _dmg, _range));
 }
 void ProjectileList::Add(Projectile& _proj)
 {
-	this->m_List.push_back(std::make_unique<Projectile>(_proj));
+	this->m_List.push_back(std::make_shared<Projectile>(_proj));
 }
 
-void ProjectileList::Update(float _deltatime)
+void ProjectileList::Update()
 {
 	for (auto proj = this->m_List.begin(); proj != this->m_List.end(); ++proj)
 	{
-		if ((*proj)->GetToDestroy() || (*proj)->Update(_deltatime))
+		if ((*proj)->GetToDestroy() || (*proj)->Update())
 		{
 			proj = this->m_List.erase(proj);
 			if (proj == this->m_List.end())
@@ -118,7 +106,7 @@ void ProjectileList::Update(float _deltatime)
 
 void ProjectileList::Display(Window& _window)
 {
-	for (std::unique_ptr<Projectile>& proj : this->m_List)
+	for (std::shared_ptr<Projectile>& proj : this->m_List)
 	{
 		proj->Display(_window);
 	}
@@ -126,9 +114,9 @@ void ProjectileList::Display(Window& _window)
 
 void ProjectileList::Clear()
 {
-	for (std::unique_ptr<Projectile>& projectile : this->m_List)
+	for (std::shared_ptr<Projectile>& projectile : this->m_List)
 	{
-		projectile.release();
+		projectile.reset();
 	}
 
 	this->m_List.clear();
@@ -140,7 +128,7 @@ namespace ProjList
 {
 	ProjectileList list;
 
-	std::list<std::unique_ptr<Projectile>>& GetList()
+	std::list<std::shared_ptr<Projectile>>& GetList()
 	{
 		return ProjList::list.GetList();
 	}
@@ -154,9 +142,9 @@ namespace ProjList
 		ProjList::list.Add(_proj);
 	}
 
-	void Update(float _deltatime)
+	void Update()
 	{
-		ProjList::list.Update(_deltatime);
+		ProjList::list.Update();
 	}
 	void Display(Window& _window)
 	{

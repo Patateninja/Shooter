@@ -9,7 +9,7 @@ class State
 	protected:
 		StateManager* m_StateManager = nullptr;
 		sf::Text m_Text;
-		float m_Timer = 0;
+		float m_InputTimer = 0;
 	public :
 		State() = default;
 		~State() = default;

@@ -34,24 +34,24 @@ class Projectile
 
 		inline void SetToDestroy(bool _set) { this->m_ToDestroy = _set; };
 
-		bool Update(float _deltatime);
+		bool Update();
 		void Display(Window& _window);
 };
 
 class ProjectileList
 {
 	private :
-		std::list<std::unique_ptr<Projectile>> m_List;
+		std::list<std::shared_ptr<Projectile>> m_List;
 	public :
 		ProjectileList();
 		~ProjectileList();
 
-		inline std::list<std::unique_ptr<Projectile>>& GetList() { return this->m_List ; };
+		inline std::list<std::shared_ptr<Projectile>>& GetList() { return this->m_List ; };
 
 		void Add(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range);
 		void Add(Projectile& _proj);
 
-		void Update(float _deltatime);
+		void Update();
 		void Display(Window& _window);
 
 		void Clear();
@@ -61,12 +61,12 @@ class ProjectileList
 
 namespace ProjList
 {
-	std::list<std::unique_ptr<Projectile>>& GetList();
+	std::list<std::shared_ptr<Projectile>>& GetList();
 
 	void Add(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range);
 	void Add(Projectile& _proj);
 
-	void Update(float _deltatime);
+	void Update();
 	void Display(Window& _window);
 
 	void Clear();

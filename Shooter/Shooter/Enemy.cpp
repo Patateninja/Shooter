@@ -40,7 +40,7 @@ Enemy::Enemy(const sf::Vector2f& _startingPos)
 }
 Enemy::~Enemy()
 {
-
+	this->m_IgnoreProj.clear();
 }
 
 void Enemy::Respawn()
@@ -53,18 +53,19 @@ void Enemy::Respawn()
 	this->m_BurnCoolDown = 0.f;
 	this->m_BurningDamage = 0;
 	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_IgnoreProj.clear();
 }
 
-void Enemy::Update(float _deltatime, sf::Vector2f& _playerPos)
+void Enemy::Update(sf::Vector2f& _playerPos)
 {
 	if (this->m_Active)
 	{
-		this->Move(_deltatime, _playerPos);
+		this->Move(_playerPos);
 		this->CheckDamage();
 
 		if (this->m_Burning)
 		{
-			this->m_BurnCoolDown -= _deltatime;
+			this->m_BurnCoolDown -= Time::GetDeltaTime();
 		}
 		if (this->m_BurnCoolDown < 0.f)
 		{
@@ -78,38 +79,42 @@ void Enemy::Display(Window& _window)
 	_window.Draw(this->m_Circle);
 }
 
-void Enemy::Move(float _deltatime, sf::Vector2f& _playerPos)
+void Enemy::Move(sf::Vector2f& _playerPos)
 {
 	this->m_Target = _playerPos;
 	this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed;
 
-	this->m_Position += this->m_Velocity * _deltatime;
+	this->m_Position += this->m_Velocity * Time::GetDeltaTime();
 	this->m_Circle.setPosition(this->m_Position);
 }
 void Enemy::CheckDamage()
 {
-	for (std::unique_ptr<Projectile>& proj : ProjList::GetList())
+	for (std::shared_ptr<Projectile>& proj : ProjList::GetList())
 	{
-		if (this->m_Circle.getGlobalBounds().intersects(proj->GetHitbox()))
+		if (this->m_Circle.getGlobalBounds().intersects(proj->GetHitbox()) && [&](auto _list, std::shared_ptr<Projectile>& _proj) -> bool { for (auto pr : _list) { if (proj == pr.lock()) {return false; } } return true; } (this->m_IgnoreProj, proj))
 		{
-			TakeDamage(*proj);
+			TakeDamage(proj);
 		}
 	}
 }
-void Enemy::TakeDamage(Projectile& _projectile)
+void Enemy::TakeDamage(std::shared_ptr<Projectile>& _projectile)
 {
-	this->m_Hp -= _projectile.GetDamage();
-	
-	if (_projectile.GetType() != PIERCING)
+	this->m_Hp -= _projectile->GetDamage();
+
+	if (_projectile->GetType() != PIERCING)
 	{
-			_projectile.SetToDestroy(true);
+			_projectile->SetToDestroy(true);
+	}
+	else
+	{
+		this->m_IgnoreProj.push_back(_projectile);
 	}
 
-	if (_projectile.GetType() == FLAMMING)
+	if (_projectile->GetType() == FLAMMING)
 	{
 		this->m_Burning = true;
 		this->m_BurnCoolDown = 3.f;
-		this->m_BurningDamage += _projectile.GetDamage();
+		this->m_BurningDamage += _projectile->GetDamage();
 		this->m_Circle.setFillColor(sf::Color(255, 155, 0, 255));
 	}
 
@@ -131,6 +136,7 @@ void Enemy::Die()
 {
 	this->m_Active = false;
 	this->m_Circle.setFillColor(sf::Color(125, 125, 125, 255));
+	this->m_IgnoreProj.clear();
 }
 
 #pragma endregion
@@ -417,11 +423,11 @@ void EnemyList::Clear()
 	this->m_List.clear();
 }
 
-void EnemyList::Update(float _deltatime, sf::Vector2f& _playerPos)
+void EnemyList::Update(sf::Vector2f& _playerPos)
 {
 	for (std::shared_ptr<Enemy>& enemy : this->m_List)
 	{
-		enemy->Update(_deltatime, _playerPos);
+		enemy->Update(_playerPos);
 	}
 }
 void EnemyList::Display(Window& _window)
