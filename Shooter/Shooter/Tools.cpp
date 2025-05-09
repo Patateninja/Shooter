@@ -51,6 +51,11 @@ float Tools::Distance(sf::Vector2f _vect1, sf::Vector2f _vect2)
 	return std::sqrt(std::pow(_vect2.x - _vect1.x, 2) + std::pow(_vect2.y - _vect1.y, 2));
 }
 
+int Tools::ToClosestMultiple(int _val, int _multiple)
+{
+	return _val + std::abs((_val % _multiple) - _multiple);
+}
+
 //////////////////////////////////////////////////
 
 namespace Time

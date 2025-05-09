@@ -28,6 +28,8 @@ namespace Tools
 
 	float Distance(sf::Vector2f _vect1, sf::Vector2f _vect2);
 
+	int ToClosestMultiple(int _val, int _multiple);
+
 	template<typename T, typename U, typename V>
 	V Min(T _val1, U _val2)
 	{

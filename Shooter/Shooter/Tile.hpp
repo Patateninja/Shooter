@@ -26,7 +26,7 @@ class Tile
 
 		inline sf::Vector2f GetCood() { return this->m_Cood; };
 		inline bool GetWalkable() { return this->m_Walkable; };
-		inline bool GetBulleThrough() { return this->m_BulletThrough; };
+		inline bool GetBulletThrough() { return this->m_BulletThrough; };
 		inline TileType GetType() { return this->m_Type; };
 		inline static int GetSize() { return Tile::m_Side; };
 };

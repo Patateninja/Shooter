@@ -42,7 +42,7 @@ Projectile::~Projectile()
 
 }
 
-bool Projectile::Update()
+bool Projectile::Update(TileMap& _map)
 {
 	if (!this->m_ToDestroy)
 	{
@@ -52,16 +52,19 @@ bool Projectile::Update()
 
 		this->m_Circle.setPosition(this->m_Position);
 
-		if (this->m_Distance > this->m_Range)
+		sf::Vector2i vect;
+		vect.x = Tools::ToClosestMultiple(this->m_Position.x, Tile::GetSize());
+		vect.y = Tools::ToClosestMultiple(this->m_Position.y,Tile::GetSize());
+
+יי		Tile tile = _map.GetTile(vect);
+
+		if (this->m_Distance > this->m_Range || !tile.GetBulletThrough())
 		{
 			return true;
 		}
 		return false;
 	}
-	else
-	{
-		return true;
-	}
+	return true;
 }
 
 void Projectile::Display(Window& _window)
@@ -89,11 +92,11 @@ void ProjectileList::Add(Projectile& _proj)
 	this->m_List.push_back(std::make_shared<Projectile>(_proj));
 }
 
-void ProjectileList::Update()
+void ProjectileList::Update(TileMap& _map)
 {
 	for (auto proj = this->m_List.begin(); proj != this->m_List.end(); ++proj)
 	{
-		if ((*proj)->GetToDestroy() || (*proj)->Update())
+		if ((*proj)->GetToDestroy() || (*proj)->Update(_map))
 		{
 			proj = this->m_List.erase(proj);
 			if (proj == this->m_List.end())
@@ -142,9 +145,9 @@ namespace ProjList
 		ProjList::list.Add(_proj);
 	}
 
-	void Update()
+	void Update(TileMap& _map)
 	{
-		ProjList::list.Update();
+		ProjList::list.Update(_map);
 	}
 	void Display(Window& _window)
 	{

@@ -47,13 +47,13 @@ TileMap::TileMap()
 {
 	this->m_Size = sf::Vector2i(0, 0);
 	this->m_RectRenderer = sf::RectangleShape(sf::Vector2f(float(Tile::GetSize()), float(Tile::GetSize())));
-	this->m_RectRenderer.setOrigin(32.f, 32.f);
+	//this->m_RectRenderer.setOrigin(32.f, 32.f);
 }
 TileMap::TileMap(sf::Vector2i _size)
 {
 	this->m_Size = _size;
 	this->m_RectRenderer = sf::RectangleShape(sf::Vector2f(float(Tile::GetSize()), float(Tile::GetSize())));
-	this->m_RectRenderer.setOrigin(32.f, 32.f);
+	//this->m_RectRenderer.setOrigin(32.f, 32.f);
 }
 TileMap::~TileMap()
 {
@@ -62,7 +62,7 @@ TileMap::~TileMap()
 
 void TileMap::Generate(sf::RenderTexture& _rendertexture)
 {
-	for (int i = 0; i < this->m_Size.x * this->m_Size.y; ++i)
+	for (int i = 0; i < this->m_Size.x; ++i)
 	{
 		for (int j = 0; j < this->m_Size.y; ++j)
 		{
@@ -84,7 +84,7 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 		switch (tileIt->GetType())
 		{
 			case WALL :
-				this->m_RectRenderer.setFillColor(sf::Color::Magenta);
+				this->m_RectRenderer.setFillColor(sf::Color::Yellow);
 				break;
 			case FURNITURE :
 				this->m_RectRenderer.setFillColor(sf::Color::Green);
@@ -99,15 +99,16 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 		_rendertexture.draw(this->m_RectRenderer);
 	}
 
+	_rendertexture.display();
 }
 
 Tile& TileMap::GetTile(sf::Vector2i _cood)
 {
-	if (_cood.x <= this->m_Size.x || _cood.y <= this->m_Size.y)
+	if (_cood.x <= this->m_Size.x * Tile::GetSize() && _cood.y <= this->m_Size.y * Tile::GetSize())
 	{
 		for (Tile& tile : this->m_Map)
 		{
-			if (sf::Vector2i(tile.GetCood()) == _cood / Tile::GetSize())
+			if (sf::Vector2i(tile.GetCood()) == _cood)
 			{
 				return tile;
 			}

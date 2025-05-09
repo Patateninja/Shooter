@@ -102,8 +102,8 @@ Game::Game(StateManager* _stateManager)
 	std::cout << "Game Created" << std::endl;
 	this->m_StateManager = _stateManager;
 	this->m_EnemyList = EnemyList();
-	this->m_MapTexture.create(Tile::GetSize() * 100,Tile::GetSize() * 100);
-	this->m_Map = TileMap(sf::Vector2i(100, 100));
+	this->m_MapTexture.create(Tile::GetSize() * 21,Tile::GetSize() * 21);
+	this->m_Map = TileMap(sf::Vector2i(20, 20));
 }
 Game::~Game()
 {
@@ -124,10 +124,10 @@ void Game::Init()
 	this->m_Map.Generate(this->m_MapTexture);
 	this->m_MapSprite.setTexture(this->m_MapTexture.getTexture());
 
-	this->m_EnemyList.Add<Baseliner>(sf::Vector2f(2050.f, 2050.f));
+	/*this->m_EnemyList.Add<Baseliner>(sf::Vector2f(2050.f, 2050.f));
 	this->m_EnemyList.Add<Tank>(sf::Vector2f(2050.f, 1150.f));
 	this->m_EnemyList.Add<Swarmer>(sf::Vector2f(1150.f, 2050.f));
-	this->m_EnemyList.Add<Ranged>(sf::Vector2f(1150.f, 1150.f));
+	this->m_EnemyList.Add<Ranged>(sf::Vector2f(1150.f, 1150.f));*/
 }
 void Game::Update()
 {
@@ -137,7 +137,7 @@ void Game::Update()
 	this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
 
 	this->m_Player.Update(this->m_EnemyList, this->Window());
-	ProjList::Update();
+	ProjList::Update(this->m_Map);
 	this->Window().SetViewCenter(this->m_Player.GetPos());
 
 	this->m_EnemyList.Update(this->m_Player.GetPos());
@@ -153,6 +153,23 @@ void Game::Display()
 	this->ClearWindow();
 
 	this->Draw(this->m_MapSprite);
+
+	for (int i = 0; i < 20; i++)
+	{
+		for (int j = 0; j < 20; j++)
+		{
+			if (!this->m_Map.GetTile(i * 64, j * 64).GetBulletThrough())
+			{
+				sf::RectangleShape rect(sf::Vector2f(64, 64));
+				rect.setPosition(i * 64, j * 64);
+				rect.setFillColor(sf::Color::Transparent);
+				rect.setOutlineThickness(2.f);
+				rect.setOutlineColor(sf::Color::Red);
+				this->Draw(rect);
+			}
+		}
+	}
+
 	ProjList::Display(this->Window());
 	this->m_EnemyList.Display(this->Window());
 	this->m_Player.Display(this->Window());
