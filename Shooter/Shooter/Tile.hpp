@@ -2,6 +2,8 @@
 #include "Window.hpp"
 #include <list>
 
+#define TILESIZE Tile::GetSize()
+
 typedef enum TileType
 {
 	WALL,
@@ -14,6 +16,7 @@ class Tile
 	private :
 		sf::Vector2f m_Cood;
 		TileType m_Type;
+		static int m_Side;
 		bool m_Walkable;
 		bool m_BulletThrough;
 	public :
@@ -25,6 +28,7 @@ class Tile
 		inline bool GetWalkable() { return this->m_Walkable; };
 		inline bool GetBulleThrough() { return this->m_BulletThrough; };
 		inline TileType GetType() { return this->m_Type; };
+		inline static int GetSize() { return Tile::m_Side; };
 };
 
 class TileMap
@@ -32,7 +36,7 @@ class TileMap
 	private :
 		sf::RectangleShape m_RectRenderer;
 		sf::Vector2i m_Size;
-		std::list<std::list<Tile>> m_Grid;
+		std::list<Tile> m_Map;
 	public :
 		TileMap();
 		TileMap(sf::Vector2i _size);

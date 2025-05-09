@@ -2,7 +2,6 @@
 #include "Player.hpp"
 #include "Enemy.hpp"
 #include "Tile.hpp"
-#include <thread>
 
 class StateManager;
 
@@ -54,12 +53,11 @@ class Menu : public State
 class Game : public State
 {
 	private :
+		sf::RenderTexture m_MapTexture;
 		Player m_Player;
 		TileMap m_Map;
-		EnemyList m_EnemyList;
-		std::thread m_MapThread;
-		sf::RenderTexture m_MapTexture;
 		sf::Sprite m_MapSprite;
+		EnemyList m_EnemyList;
 	public :
 		Game(StateManager* _stateManager);
 		~Game();

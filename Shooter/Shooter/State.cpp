@@ -102,7 +102,7 @@ Game::Game(StateManager* _stateManager)
 	std::cout << "Game Created" << std::endl;
 	this->m_StateManager = _stateManager;
 	this->m_EnemyList = EnemyList();
-	this->m_MapTexture.create(6400,6400);
+	this->m_MapTexture.create(Tile::GetSize() * 100,Tile::GetSize() * 100);
 	this->m_Map = TileMap(sf::Vector2i(100, 100));
 }
 Game::~Game()
@@ -128,8 +128,6 @@ void Game::Init()
 	this->m_EnemyList.Add<Tank>(sf::Vector2f(2050.f, 1150.f));
 	this->m_EnemyList.Add<Swarmer>(sf::Vector2f(1150.f, 2050.f));
 	this->m_EnemyList.Add<Ranged>(sf::Vector2f(1150.f, 1150.f));
-
-	//this->m_MapThread = std::thread(&TileMap::Display, std::ref(this->m_Map), std::ref(this->Window()), std::ref(this->m_Player.GetPos()));
 }
 void Game::Update()
 {
@@ -167,10 +165,6 @@ void Game::Display()
 void Game::DeInit()
 {
 	std::cout << "Game DeInit" << std::endl;
-	if (this->m_MapThread.joinable())
-	{
-		this->m_MapThread.join();
-	}
 }
 
 #pragma endregion
