@@ -153,7 +153,6 @@ void Game::Display()
 	this->ClearWindow();
 
 	this->Draw(this->m_MapSprite);
-
 	ProjList::Display(this->Window());
 	this->m_EnemyList.Display(this->Window());
 	this->m_Player.Display(this->Window());
