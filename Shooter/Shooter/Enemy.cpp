@@ -207,8 +207,8 @@ Tank::Tank()
 }
 Tank::Tank(const sf::Vector2f& _startingPos)
 {
-	this->m_Circle = sf::CircleShape(35.f);
-	this->m_Circle.setOrigin(35.f, 35.f);
+	this->m_Circle = sf::CircleShape(30.f);
+	this->m_Circle.setOrigin(30.f, 30.f);
 	this->m_Circle.setFillColor(sf::Color::Red);
 	this->m_Circle.setPosition(_startingPos);
 	this->m_StartingPosition = _startingPos;

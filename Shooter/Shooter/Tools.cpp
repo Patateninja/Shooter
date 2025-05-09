@@ -46,6 +46,11 @@ int Tools::Random(int _max, int _min = 0)
 	return (rand() % _max)  + _min;
 }
 
+float Tools::Distance(sf::Vector2f _vect1, sf::Vector2f _vect2)
+{
+	return std::sqrt(std::pow(_vect2.x - _vect1.x, 2) + std::pow(_vect2.y - _vect1.y, 2));
+}
+
 //////////////////////////////////////////////////
 
 namespace Time

@@ -25,6 +25,20 @@ namespace Tools
 	float DegToRad(float _deg);
 
 	int Random(int _max, int _min);
+
+	float Distance(sf::Vector2f _vect1, sf::Vector2f _vect2);
+
+	template<typename T, typename U, typename V>
+	V Min(T _val1, U _val2)
+	{
+		return V(_val1 < _val2 ? _val1 : _val2);
+	}
+
+	template<typename T, typename U, typename V>
+	V Max(T _val1, U _val2)
+	{
+		return V(_val1 > _val2 ? _val1 : _val2);
+	}
 }
 
 namespace Time

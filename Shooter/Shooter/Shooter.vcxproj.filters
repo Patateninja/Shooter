@@ -91,7 +91,7 @@
       <Filter>Source Files\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Astar.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -132,7 +132,7 @@
       <Filter>Header Files\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Astar.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
