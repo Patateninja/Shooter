@@ -58,7 +58,7 @@ TileMap::~TileMap()
 	this->m_Grid.clear();
 }
 
-void TileMap::Generate()
+void TileMap::Generate(sf::RenderTexture& _rendertexture)
 {
 	for (int i = 0; i < this->m_Size.x; ++i)
 	{
@@ -75,6 +75,32 @@ void TileMap::Generate()
 			}
 		}
 	}
+	_rendertexture.clear(sf::Color::Transparent);
+
+	for (auto tileListIt = this->m_Grid.begin(); tileListIt != this->m_Grid.end(); ++tileListIt)
+	{
+		for (auto tileIt = tileListIt->begin(); tileIt != tileListIt->end(); ++tileIt)
+		{
+			this->m_RectRenderer.setPosition(tileIt->GetCood());
+			switch (tileIt->GetType())
+			{
+				case WALL :
+					this->m_RectRenderer.setFillColor(sf::Color::Magenta);
+					break;
+				case FURNITURE :
+					this->m_RectRenderer.setFillColor(sf::Color::Green);
+					break;
+				case FLOOR :
+					this->m_RectRenderer.setFillColor(sf::Color::Cyan);
+					break;
+				default :
+					m_RectRenderer.setFillColor(sf::Color::White);
+					break;
+			}
+			_rendertexture.draw(this->m_RectRenderer);
+		}
+	}
+
 }
 
 Tile& TileMap::GetTile(sf::Vector2i _cood)
@@ -96,35 +122,6 @@ Tile& TileMap::GetTile(sf::Vector2i _cood)
 Tile& TileMap::GetTile(int _x, int _y)
 {
 	return this->GetTile(sf::Vector2i(_x, _y));
-}
-
-void TileMap::Display(sf::RenderTexture& _rendertexture, sf::Vector2f _playerpos)
-{
-	for (auto tileListIt = this->m_Grid.begin(); tileListIt != this->m_Grid.end(); ++tileListIt)
-	{
-		for (auto tileIt = tileListIt->begin(); tileIt != tileListIt->end(); ++tileIt)
-		{
-			if (Tools::Distance(tileIt->GetCood(), _playerpos) < 1164)
-			{
-				this->m_RectRenderer.setPosition(tileIt->GetCood());
-				switch (tileIt->GetType())
-				{
-				case WALL:
-					this->m_RectRenderer.setFillColor(sf::Color::Magenta);
-					break;
-				case FURNITURE:
-					this->m_RectRenderer.setFillColor(sf::Color::Green);
-					break;
-				case FLOOR:
-					this->m_RectRenderer.setFillColor(sf::Color::Cyan);
-					break;
-				}
-				_rendertexture.draw(this->m_RectRenderer);
-			}
-		}
-	}
-
-	_rendertexture.display();
 }
 
 ////////////////////////////////////////////////////////

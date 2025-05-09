@@ -102,6 +102,7 @@ Game::Game(StateManager* _stateManager)
 	std::cout << "Game Created" << std::endl;
 	this->m_StateManager = _stateManager;
 	this->m_EnemyList = EnemyList();
+	this->m_MapTexture.create(6400,6400);
 	this->m_Map = TileMap(sf::Vector2i(100, 100));
 }
 Game::~Game()
@@ -120,7 +121,8 @@ void Game::Init()
 	this->Window().ResetView();
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 	//this->GetRsc<sf::Music>("Bogus").play();
-	this->m_Map.Generate();
+	this->m_Map.Generate(this->m_MapTexture);
+	this->m_MapSprite.setTexture(this->m_MapTexture.getTexture());
 
 	this->m_EnemyList.Add<Baseliner>(sf::Vector2f(2050.f, 2050.f));
 	this->m_EnemyList.Add<Tank>(sf::Vector2f(2050.f, 1150.f));
@@ -152,8 +154,7 @@ void Game::Display()
 {
 	this->ClearWindow();
 
-	this->m_Map.Display(this->m_MapTexture, this->m_Player.GetPos());
-	this->Draw(this->m_MapTexture);
+	this->Draw(this->m_MapSprite);
 
 	ProjList::Display(this->Window());
 	this->m_EnemyList.Display(this->Window());

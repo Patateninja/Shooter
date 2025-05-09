@@ -38,10 +38,8 @@ class TileMap
 		TileMap(sf::Vector2i _size);
 		~TileMap();
 
-		void Generate();
+		void Generate(sf::RenderTexture& _rendertexture);
 
 		Tile& GetTile(sf::Vector2i _cood);
 		Tile& GetTile(int _x, int _y);
-
-		void Display(sf::RenderTexture& _rendertexture, sf::Vector2f _playerpos);
 };
