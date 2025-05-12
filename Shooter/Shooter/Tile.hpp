@@ -29,6 +29,9 @@ class Tile
 		inline bool GetBulletThrough() { return this->m_BulletThrough; };
 		inline TileType GetType() { return this->m_Type; };
 		inline static int GetSize() { return Tile::m_Side; };
+
+		bool operator==(const Tile& _tile2) const { return this->m_Cood == _tile2.m_Cood; };
+		bool operator!=(const Tile& _tile2) const { return this->m_Cood != _tile2.m_Cood; };
 };
 
 class TileMap
@@ -41,6 +44,8 @@ class TileMap
 		TileMap();
 		TileMap(sf::Vector2i _size);
 		~TileMap();
+
+		inline sf::Vector2i GetSize() { return this->m_Size; };
 
 		void Generate(sf::RenderTexture& _rendertexture);
 
