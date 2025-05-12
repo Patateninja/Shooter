@@ -47,13 +47,13 @@ TileMap::TileMap()
 {
 	this->m_Size = sf::Vector2i(0, 0);
 	this->m_RectRenderer = sf::RectangleShape(sf::Vector2f(float(Tile::GetSize()), float(Tile::GetSize())));
-	//this->m_RectRenderer.setOrigin(32.f, 32.f);
+	this->m_RectRenderer.setOrigin(32.f, 32.f);
 }
 TileMap::TileMap(sf::Vector2i _size)
 {
 	this->m_Size = _size;
 	this->m_RectRenderer = sf::RectangleShape(sf::Vector2f(float(Tile::GetSize()), float(Tile::GetSize())));
-	//this->m_RectRenderer.setOrigin(32.f, 32.f);
+	this->m_RectRenderer.setOrigin(32.f, 32.f);
 }
 TileMap::~TileMap()
 {
