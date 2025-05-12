@@ -47,7 +47,7 @@ void Player::Update(EnemyList& _enemyList, Window& _window)
 			this->m_InputTimer = 0.f;
 			this->m_Shotgun.Load(3);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && this->m_InputTimer > 0.03f)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && this->m_InputTimer > 0.3f)
 		{
 			this->m_InputTimer = 0.f;
 			this->m_Shotgun.Load(4);

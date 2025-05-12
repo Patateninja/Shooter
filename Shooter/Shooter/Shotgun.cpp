@@ -5,7 +5,7 @@
 Shotgun::Shotgun()
 {
 	this->m_Magazine.clear();
-	this->m_MaxCapacity = 40;
+	this->m_MaxCapacity = 4;
 }
 Shotgun::~Shotgun()
 {
