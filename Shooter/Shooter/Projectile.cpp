@@ -6,6 +6,7 @@
 Projectile::Projectile()
 {
 	this->m_Circle = sf::CircleShape(2.5f);
+	this->m_Circle.setOrigin(sf::Vector2f(2.5f, 2.5f));
 	this->m_Position = sf::Vector2f(0.f, 0.f);
 	this->m_Velocity = sf::Vector2f(0.f, 0.f);
 	this->m_Type = CLASSIC;
@@ -17,6 +18,7 @@ Projectile::Projectile()
 Projectile::Projectile(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range)
 {
 	this->m_Circle = sf::CircleShape(2.5f);
+	this->m_Circle.setOrigin(sf::Vector2f(2.5f, 2.5f));
 	this->m_Position = _pos;
 	this->m_Velocity = _vel;
 	this->m_Type = _type;
@@ -52,7 +54,9 @@ bool Projectile::Update(TileMap& _map)
 
 		this->m_Circle.setPosition(this->m_Position);
 
-		if (this->m_Distance > this->m_Range || !_map.GetTile(sf::Vector2i(Tools::ToClosestMultiple(this->m_Position.x + mvt.x, Tile::GetSize()), Tools::ToClosestMultiple(this->m_Position.y + mvt.y, Tile::GetSize()))).GetBulletThrough() || !_map.GetTile(sf::Vector2i(Tools::ToClosestMultiple(this->m_Position.x + mvt.x + 1, Tile::GetSize()), Tools::ToClosestMultiple(this->m_Position.y + mvt.y + 1, Tile::GetSize()))).GetBulletThrough())
+		bool wallcontact = !_map.GetTile(sf::Vector2i(Tools::ToClosestMultiple(this->m_Position.x, Tile::GetSize()), Tools::ToClosestMultiple(this->m_Position.y, Tile::GetSize()))).GetBulletThrough() || !_map.GetTile(sf::Vector2i(Tools::ToClosestMultiple(this->m_Position.x + 1, Tile::GetSize()), Tools::ToClosestMultiple(this->m_Position.y + 1, Tile::GetSize()))).GetBulletThrough();
+
+		if (this->m_Distance > this->m_Range || wallcontact)
 		{
 			return true;
 		}
