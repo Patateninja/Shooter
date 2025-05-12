@@ -53,9 +53,11 @@ class Menu : public State
 class Game : public State
 {
 	private :
+		sf::RenderTexture m_MapTexture;
 		Player m_Player;
-		EnemyList m_EnemyList;
 		TileMap m_Map;
+		sf::Sprite m_MapSprite;
+		EnemyList m_EnemyList;
 	public :
 		Game(StateManager* _stateManager);
 		~Game();

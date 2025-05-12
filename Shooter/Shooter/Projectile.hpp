@@ -1,6 +1,7 @@
 #pragma once
 #include "tools.hpp"
 #include "Window.hpp"
+#include "Tile.hpp"
 #include <list>
 
 typedef enum ProjectileType
@@ -34,7 +35,7 @@ class Projectile
 
 		inline void SetToDestroy(bool _set) { this->m_ToDestroy = _set; };
 
-		bool Update();
+		bool Update(TileMap& _map);
 		void Display(Window& _window);
 };
 
@@ -51,7 +52,7 @@ class ProjectileList
 		void Add(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range);
 		void Add(Projectile& _proj);
 
-		void Update();
+		void Update(TileMap& _map);
 		void Display(Window& _window);
 
 		void Clear();
@@ -66,7 +67,7 @@ namespace ProjList
 	void Add(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range);
 	void Add(Projectile& _proj);
 
-	void Update();
+	void Update(TileMap& _map);
 	void Display(Window& _window);
 
 	void Clear();
