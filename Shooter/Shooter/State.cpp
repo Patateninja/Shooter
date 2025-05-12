@@ -154,22 +154,6 @@ void Game::Display()
 
 	this->Draw(this->m_MapSprite);
 
-	for (int i = 0; i < 20; i++)
-	{
-		for (int j = 0; j < 20; j++)
-		{
-			if (!this->m_Map.GetTile(i * 64, j * 64).GetBulletThrough())
-			{
-				sf::RectangleShape rect(sf::Vector2f(64, 64));
-				rect.setPosition(i * 64, j * 64);
-				rect.setFillColor(sf::Color::Transparent);
-				rect.setOutlineThickness(2.f);
-				rect.setOutlineColor(sf::Color::Red);
-				this->Draw(rect);
-			}
-		}
-	}
-
 	ProjList::Display(this->Window());
 	this->m_EnemyList.Display(this->Window());
 	this->m_Player.Display(this->Window());

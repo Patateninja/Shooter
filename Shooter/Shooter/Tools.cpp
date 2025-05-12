@@ -53,7 +53,13 @@ float Tools::Distance(sf::Vector2f _vect1, sf::Vector2f _vect2)
 
 int Tools::ToClosestMultiple(int _val, int _multiple)
 {
-	return _val + std::abs((_val % _multiple) - _multiple);
+	if (_val < 0)
+	{
+		_multiple = -_multiple;
+	}
+	float valHalf = static_cast<float>(_val) + (static_cast<float>(_multiple) * .5f);
+	int ret = (static_cast<int>(valHalf) / _multiple) * _multiple;
+	return ret;
 }
 
 //////////////////////////////////////////////////
