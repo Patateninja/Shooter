@@ -72,7 +72,8 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 			}
 			else
 			{
-				this->m_Map.push_back(Tile(sf::Vector2f(float(i * Tile::GetSize()), float(j * Tile::GetSize())), TileType(Tools::Random(3,0))));
+				//this->m_Map.push_back(Tile(sf::Vector2f(float(i * Tile::GetSize()), float(j * Tile::GetSize())), TileType(Tools::Random(3, 0))));
+				this->m_Map.push_back(Tile(sf::Vector2f(float(i * Tile::GetSize()), float(j * Tile::GetSize())), TileType(Tools::Random(2,1))));
 			}
 		}
 	}

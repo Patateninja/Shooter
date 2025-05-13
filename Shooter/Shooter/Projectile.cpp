@@ -1,6 +1,8 @@
 #include "Projectile.hpp"
 #include <iostream>
 
+#include "ResourceManager.hpp"
+
 //////////////////////////////////////////////////
 
 Projectile::Projectile()
@@ -44,11 +46,11 @@ Projectile::~Projectile()
 
 }
 
-bool Projectile::Update(TileMap& _map)
+bool Projectile::Update(float _deltatime, TileMap& _map)
 {
 	if (!this->m_ToDestroy)
 	{
-		sf::Vector2f mvt = this->m_Velocity * Time::GetDeltaTime();
+		sf::Vector2f mvt = this->m_Velocity * _deltatime;
 		this->m_Position += mvt;
 		this->m_Distance += Tools::Magnitude(mvt);
 
@@ -68,6 +70,14 @@ bool Projectile::Update(TileMap& _map)
 void Projectile::Display(Window& _window)
 {
 	_window.Draw(this->m_Circle);
+
+
+	sf::VertexArray proj(sf::Lines, 2);
+	proj[0].position = this->m_Position;
+	proj[0].color = sf::Color::Black;
+	proj[1].position = this->m_Velocity + this->m_Position;
+	proj[1].color = sf::Color::Black;
+	_window.Draw(proj);
 }
 
 //////////////////////////////////////////////////
@@ -92,9 +102,11 @@ void ProjectileList::Add(Projectile& _proj)
 
 void ProjectileList::Update(TileMap& _map)
 {
+	float deltatime = Time::GetDeltaTime();
+
 	for (auto proj = this->m_List.begin(); proj != this->m_List.end(); ++proj)
 	{
-		if ((*proj)->GetToDestroy() || (*proj)->Update(_map))
+		if ((*proj)->GetToDestroy() || (*proj)->Update(deltatime, _map))
 		{
 			proj = this->m_List.erase(proj);
 			if (proj == this->m_List.end())

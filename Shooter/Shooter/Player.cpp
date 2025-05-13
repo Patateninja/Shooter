@@ -111,6 +111,25 @@ void Player::Display(Window& _window)
 	lines[1].color = sf::Color::Red;
 	_window.Draw(lines);
 
+
+	int pellets = 5;
+	int spreading = 25;
+	for (int i = 0; i < pellets; ++i)
+	{
+		/*sf::VertexArray proj(sf::Lines, 2);
+		proj[0].position = this->m_Position;
+		proj[0].color = sf::Color::Blue;
+
+		float spread = Tools::DegToRad((spreading / 2.f) - (float(i) * float(spreading / (pellets - 1))));
+		float angle = Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition()))) + spread;
+		
+		proj[1].position = (Tools::AngleToVector(1000, angle) - this->m_Velocity) + this->m_Position;
+		proj[1].color = sf::Color::Blue;
+
+		_window.Draw(proj);*/
+	}
+
+
 	this->m_Shotgun.DisplayMagazine(_window);
 }
 
