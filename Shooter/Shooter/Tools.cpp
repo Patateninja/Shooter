@@ -43,7 +43,7 @@ float Tools::DegToRad(float _deg)
 
 int Tools::Random(int _max, int _min = 0)
 {
-	return (rand() % _max)  + _min;
+	return (rand() % (_max + 1)) + _min;
 }
 
 float Tools::Distance(sf::Vector2f _vect1, sf::Vector2f _vect2)
