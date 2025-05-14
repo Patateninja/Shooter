@@ -41,7 +41,6 @@ class Enemy
 class Baseliner : public Enemy
 {
 	public :
-		Baseliner();
 		Baseliner(const sf::Vector2f& _stratingPos);
 		~Baseliner();
 };
@@ -49,7 +48,6 @@ class Baseliner : public Enemy
 class Tank : public Enemy
 {
 	public:
-		Tank();
 		Tank(const sf::Vector2f& _stratingPos);
 		~Tank();
 };
@@ -57,7 +55,6 @@ class Tank : public Enemy
 class Ranged : public Enemy
 {
 	public:
-		Ranged();
 		Ranged(const sf::Vector2f& _stratingPos);
 		~Ranged();
 };
@@ -65,7 +62,6 @@ class Ranged : public Enemy
 class Swarmer : public Enemy
 {
 	public:
-		Swarmer();
 		Swarmer(const sf::Vector2f& _stratingPos);
 		~Swarmer();
 };
@@ -73,7 +69,6 @@ class Swarmer : public Enemy
 class Shielded : public Enemy
 {
 	public:
-		Shielded();
 		Shielded(const sf::Vector2f& _stratingPos);
 		~Shielded();
 };
@@ -81,7 +76,6 @@ class Shielded : public Enemy
 class RangedShielded : public Enemy
 {
 	public:
-		RangedShielded();
 		RangedShielded(const sf::Vector2f& _stratingPos);
 		~RangedShielded();
 };

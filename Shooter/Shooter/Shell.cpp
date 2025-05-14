@@ -8,7 +8,7 @@ BirdShot::BirdShot()
 	this->m_Range = 400;
 	this->m_Spread = 50;
 	this->m_Pellets = 25;
-	this->m_Velocity = 100.f;
+	this->m_Velocity = 1000.f;
 }
 BirdShot::~BirdShot()
 {

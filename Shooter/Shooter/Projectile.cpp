@@ -74,9 +74,9 @@ void Projectile::Display(Window& _window)
 
 	sf::VertexArray proj(sf::Lines, 2);
 	proj[0].position = this->m_Position;
-	proj[0].color = sf::Color::Black;
-	proj[1].position = this->m_Velocity + this->m_Position;
-	proj[1].color = sf::Color::Black;
+	proj[0].color = sf::Color::Blue;
+	proj[1].position = (this->m_Velocity / 10.f) + this->m_Position;
+	proj[1].color = sf::Color::Blue;
 	_window.Draw(proj);
 }
 

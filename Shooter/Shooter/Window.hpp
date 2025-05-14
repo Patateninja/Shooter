@@ -34,6 +34,7 @@ class Window
 		void Display();
 
 		bool IsOpen();
+		bool HasFocus();
 		bool PollEvent(sf::Event& _event);
 		void Close();
 

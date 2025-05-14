@@ -7,7 +7,7 @@ Player::Player()
 	this->m_Circle = sf::CircleShape(20.f);
 	this->m_Circle.setOrigin(20.f, 20.f);
 	this->m_Circle.setFillColor(sf::Color::Blue);
-	this->m_Position = sf::Vector2f(600.f, 600.f);
+	this->m_Position = sf::Vector2f(640.f, 64.f);
 	this->m_Velocity = sf::Vector2f(0.f, 0.f);
 	this->m_InputTimer = 0.f;
 	this->m_Life = 3;
@@ -57,7 +57,7 @@ void Player::Update(EnemyList& _enemyList, Window& _window)
 	{
 		for (std::shared_ptr<Enemy>& enemy : _enemyList.GetList())
 		{
-			if (enemy->GetActive() && this->m_Circle.getGlobalBounds().intersects(enemy->GetHitbox()))
+			if (enemy->GetActive() && Tools::CircleCollision(this->m_Circle.getGlobalBounds(), enemy->GetHitbox()))
 			{
 				this->Die();
 				_enemyList.Respawn();
@@ -148,7 +148,7 @@ void Player::Die()
 }
 void Player::Respawn()
 {
-	this->m_Position = sf::Vector2f(600.f, 600.f); //Change to stage start pos;
+	this->m_Position = sf::Vector2f(640.f, 64.f); //Change to stage start pos;
 	this->m_CanReload = true;
 	this->m_CanMove = false;
 	ProjList::Clear();

@@ -5,26 +5,22 @@
 
 Enemy::Enemy()
 {
-	this->m_Circle = sf::CircleShape(25.f);
-	this->m_Circle.setOrigin(25.f, 25.f);
-	this->m_Circle.setFillColor(sf::Color::Red);
-	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
-	this->m_Position = sf::Vector2f(0.f, 0.f);
-	this->m_Velocity = sf::Vector2f(0.f, 0.f);
-	this->m_Target = sf::Vector2f(0.f, 0.f);
+	this->m_Circle = sf::CircleShape();
+	this->m_StartingPosition = sf::Vector2f();
+	this->m_Position = sf::Vector2f();
+	this->m_Velocity = sf::Vector2f();
+	this->m_Target = sf::Vector2f();
 	this->m_BurningDamage = 0;
 	this->m_BurnCoolDown = 0.f;
 	this->m_Burning = false;
 	this->m_Active = false;
-	this->m_MaxHp = 50;
-	this->m_Hp = 50;
-	this->m_Speed = 200.f;
+	this->m_MaxHp = 0;
+	this->m_Hp = 0;
+	this->m_Speed = 0.f;
 }
 Enemy::Enemy(const sf::Vector2f& _startingPos)
 {
-	this->m_Circle = sf::CircleShape(25.f);
-	this->m_Circle.setOrigin(25.f, 25.f);
-	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_Circle = sf::CircleShape();
 	this->m_Circle.setPosition(_startingPos);
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
@@ -34,9 +30,9 @@ Enemy::Enemy(const sf::Vector2f& _startingPos)
 	this->m_BurnCoolDown = 0.f;
 	this->m_Burning = false;
 	this->m_Active = false;
-	this->m_MaxHp = 50;
-	this->m_Hp = 50;
-	this->m_Speed = 200.f;
+	this->m_MaxHp = 0;
+	this->m_Hp = 0;
+	this->m_Speed = 0.f;
 }
 Enemy::~Enemy()
 {
@@ -144,23 +140,6 @@ void Enemy::Die()
 #pragma region Enemy_Types
 #pragma region Baseliner
 
-Baseliner::Baseliner()
-{
-	this->m_Circle = sf::CircleShape(20.f);
-	this->m_Circle.setOrigin(20.f, 20.f);
-	this->m_Circle.setFillColor(sf::Color::Red);
-	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
-	this->m_Position = sf::Vector2f(0.f, 0.f);
-	this->m_Velocity = sf::Vector2f(0.f, 0.f);
-	this->m_Target = sf::Vector2f(0.f, 0.f);
-	this->m_BurningDamage = 0;
-	this->m_BurnCoolDown = 0.f;
-	this->m_Burning = false;
-	this->m_Active = false;
-	this->m_MaxHp = 35;
-	this->m_Hp = 35;
-	this->m_Speed = 200.f;
-}
 Baseliner::Baseliner(const sf::Vector2f& _startingPos)
 {
 	this->m_Circle = sf::CircleShape(25.f);
@@ -188,23 +167,6 @@ Baseliner::~Baseliner()
 ////////////////////////////////////////////////////////
 #pragma region Tank
 
-Tank::Tank()
-{
-	this->m_Circle = sf::CircleShape(30.f);
-	this->m_Circle.setOrigin(30.f, 30.f);
-	this->m_Circle.setFillColor(sf::Color::Red);
-	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
-	this->m_Position = sf::Vector2f(0.f, 0.f);
-	this->m_Velocity = sf::Vector2f(0.f, 0.f);
-	this->m_Target = sf::Vector2f(0.f, 0.f);
-	this->m_BurningDamage = 0;
-	this->m_BurnCoolDown = 0.f;
-	this->m_Burning = false;
-	this->m_Active = false;
-	this->m_MaxHp = 75;
-	this->m_Hp = 75;
-	this->m_Speed = 150.f;
-}
 Tank::Tank(const sf::Vector2f& _startingPos)
 {
 	this->m_Circle = sf::CircleShape(30.f);
@@ -232,23 +194,6 @@ Tank::~Tank()
 ////////////////////////////////////////////////////////
 #pragma region Ranged
 
-Ranged::Ranged()
-{
-	this->m_Circle = sf::CircleShape(20.f);
-	this->m_Circle.setOrigin(20.f, 20.f);
-	this->m_Circle.setFillColor(sf::Color::Red);
-	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
-	this->m_Position = sf::Vector2f(0.f, 0.f);
-	this->m_Velocity = sf::Vector2f(0.f, 0.f);
-	this->m_Target = sf::Vector2f(0.f, 0.f);
-	this->m_BurningDamage = 0;
-	this->m_BurnCoolDown = 0.f;
-	this->m_Burning = false;
-	this->m_Active = false;
-	this->m_MaxHp = 50;
-	this->m_Hp = 50;
-	this->m_Speed = 200.f;
-}
 Ranged::Ranged(const sf::Vector2f& _startingPos)
 {
 	this->m_Circle = sf::CircleShape(25.f);
@@ -276,23 +221,6 @@ Ranged::~Ranged()
 ////////////////////////////////////////////////////////
 #pragma region Swarmer
 
-Swarmer::Swarmer()
-{
-	this->m_Circle = sf::CircleShape(10.f);
-	this->m_Circle.setOrigin(10.f, 10.f);
-	this->m_Circle.setFillColor(sf::Color::Red);
-	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
-	this->m_Position = sf::Vector2f(0.f, 0.f);
-	this->m_Velocity = sf::Vector2f(0.f, 0.f);
-	this->m_Target = sf::Vector2f(0.f, 0.f);
-	this->m_BurningDamage = 0;
-	this->m_BurnCoolDown = 0.f;
-	this->m_Burning = false;
-	this->m_Active = false;
-	this->m_MaxHp = 10;
-	this->m_Hp = 10;
-	this->m_Speed = 300.f;
-}
 Swarmer::Swarmer(const sf::Vector2f& _startingPos)
 {
 	this->m_Circle = sf::CircleShape(15.f);
@@ -320,23 +248,6 @@ Swarmer::~Swarmer()
 ////////////////////////////////////////////////////////
 #pragma region Shielded
 
-Shielded::Shielded()
-{
-	this->m_Circle = sf::CircleShape(20.f);
-	this->m_Circle.setOrigin(20.f, 20.f);
-	this->m_Circle.setFillColor(sf::Color::Red);
-	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
-	this->m_Position = sf::Vector2f(0.f, 0.f);
-	this->m_Velocity = sf::Vector2f(0.f, 0.f);
-	this->m_Target = sf::Vector2f(0.f, 0.f);
-	this->m_BurningDamage = 0;
-	this->m_BurnCoolDown = 0.f;
-	this->m_Burning = false;
-	this->m_Active = false;
-	this->m_MaxHp = 40;
-	this->m_Hp = 40;
-	this->m_Speed = 100.f;
-}
 Shielded::Shielded(const sf::Vector2f& _startingPos)
 {
 	this->m_Circle = sf::CircleShape(25.f);
@@ -364,23 +275,6 @@ Shielded::~Shielded()
 ////////////////////////////////////////////////////////
 #pragma region RangedShielded
 
-RangedShielded::RangedShielded()
-{
-	this->m_Circle = sf::CircleShape(20.f);
-	this->m_Circle.setOrigin(20.f, 20.f);
-	this->m_Circle.setFillColor(sf::Color::Red);
-	this->m_StartingPosition = sf::Vector2f(0.f, 0.f);
-	this->m_Position = sf::Vector2f(0.f, 0.f);
-	this->m_Velocity = sf::Vector2f(0.f, 0.f);
-	this->m_Target = sf::Vector2f(0.f, 0.f);
-	this->m_BurningDamage = 0;
-	this->m_BurnCoolDown = 0.f;
-	this->m_Burning = false;
-	this->m_Active = false;
-	this->m_MaxHp = 50;
-	this->m_Hp = 50;
-	this->m_Speed = 100.f;
-}
 RangedShielded::RangedShielded(const sf::Vector2f& _startingPos)
 {
 	this->m_Circle = sf::CircleShape(25.f);

@@ -81,7 +81,7 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 
 	for (auto tileIt = this->m_Map.begin(); tileIt != this->m_Map.end(); ++tileIt)
 	{
-		this->m_RectRenderer.setPosition(tileIt->GetCood());
+		this->m_RectRenderer.setPosition(tileIt->GetCood() + sf::Vector2f(32.f,32.f));
 		switch (tileIt->GetType())
 		{
 			case WALL :

@@ -1,6 +1,7 @@
 #include "Tools.hpp"
 
 //////////////////////////////////////////////////
+#pragma region Tools
 
 float Tools::GetDeltaTime(sf::Clock& _clock)
 {
@@ -43,7 +44,7 @@ float Tools::DegToRad(float _deg)
 
 int Tools::Random(int _max, int _min = 0)
 {
-	return (rand() % (_max + 1)) + _min;
+	return Tools::Min<int,int,int>(_max,(rand() % (_max + 1)) + _min);
 }
 
 float Tools::Distance(sf::Vector2f _vect1, sf::Vector2f _vect2)
@@ -62,6 +63,17 @@ int Tools::ToClosestMultiple(int _val, int _multiple)
 	return ret;
 }
 
+sf::Vector2f Tools::RectCenter(const sf::FloatRect& _rect)
+{
+	return sf::Vector2f((_rect.left + _rect.width / 2.f) , (_rect.top + _rect.height / 2.f));
+}
+
+bool Tools::CircleCollision(const sf::FloatRect& _circlehitbox1, const sf::FloatRect& _circlehitbox2)
+{
+	return std::abs(Tools::Distance(Tools::RectCenter(_circlehitbox1), Tools::RectCenter(_circlehitbox2))) <= (_circlehitbox1.width / 2.f + _circlehitbox2.width / 2.f);
+}
+
+#pragma endregion
 //////////////////////////////////////////////////
 
 namespace Time
