@@ -23,9 +23,35 @@ class Node
 		inline void SetTile(Tile* _tile) { this->m_Tile = _tile; };
 		inline void SetPrev(Node* _prev) { this->m_Prev = _prev; };
 		inline void SetF(int _f) { this->m_Fcost = _f; };
+
+		bool operator==(const Node& _Node2) const { return this->m_Tile == _Node2.m_Tile; };
+		bool operator!=(const Node& _Node2) const { return this->m_Tile != _Node2.m_Tile; };
 };
 
-namespace
+namespace Astar
 {
+	std::list<Tile> Neighbor(Tile& _tile, TileMap& _map);
 
+	template<typename T>
+	bool NotInList(std::list<T> _list, T _element)
+	{
+		for (T& t : _list)
+		{
+			if (t == _element)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	int NodeDist(Node& _node1, Node& _node2);
+
+	int HCost(Node& _current, Node& _end, TileMap& _map);
+
+	int GCost(Node& _current, Node& _start, TileMap& _map);
+
+	int FCost(Node& _current, Node& _start, Node& _end, TileMap& _map);
+
+	std::list<Tile> Pathfinding(Tile& _start, Tile& _end, TileMap& _map);
 }

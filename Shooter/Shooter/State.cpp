@@ -141,7 +141,7 @@ void Game::Update()
 	ProjList::Update(this->m_Map);
 	this->Window().SetViewCenter(this->m_Player.GetPos());
 
-	this->m_EnemyList.Update(this->m_Player.GetPos());
+	this->m_EnemyList.Update(this->m_Player.GetPos(), this->m_Map);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && this->m_InputTimer > 0.2f)
 	{

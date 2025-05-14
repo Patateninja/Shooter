@@ -1,11 +1,13 @@
 #pragma once
 #include "Projectile.hpp"
+#include "Astar.hpp"
 
 class Enemy
 {
 	protected :
 		std::vector<std::weak_ptr<Projectile>> m_IgnoreProj;
 		sf::CircleShape m_Circle;
+		std::list<Tile> m_Path;
 		sf::Vector2f m_StartingPosition;
 		sf::Vector2f m_Position;
 		sf::Vector2f m_Velocity;
@@ -28,10 +30,11 @@ class Enemy
 
 		void Respawn();
 
-		void Update(sf::Vector2f& _playerPos);
+		void Update(sf::Vector2f& _playerPos, TileMap& _map);
 		void Display(Window& _window);
 
-		void Move(sf::Vector2f& _playerPos);
+		void UpdatePath(sf::Vector2f& _playerPos, TileMap& _map);
+		void Move(sf::Vector2f& _playerPos, TileMap& _map);
 		void CheckDamage();
 		void TakeDamage(std::shared_ptr<Projectile>& _projectile);
 		void TakeDamage(int _damage);
@@ -102,7 +105,7 @@ class EnemyList
 		}
 		void Clear();
 
-		void Update(sf::Vector2f& _playerPos);
+		void Update(sf::Vector2f& _playerPos, TileMap& _map);
 		void Display(Window& _window);
 
 		void Activate();

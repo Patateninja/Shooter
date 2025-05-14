@@ -52,11 +52,12 @@ void Enemy::Respawn()
 	this->m_IgnoreProj.clear();
 }
 
-void Enemy::Update(sf::Vector2f& _playerPos)
+void Enemy::Update(sf::Vector2f& _playerPos, TileMap& _map)
 {
 	if (this->m_Active)
 	{
-		this->Move(_playerPos);
+		this->UpdatePath(_playerPos, _map);
+		this->Move(_playerPos, _map);
 		this->CheckDamage();
 
 		if (this->m_Burning)
@@ -75,13 +76,23 @@ void Enemy::Display(Window& _window)
 	_window.Draw(this->m_Circle);
 }
 
-void Enemy::Move(sf::Vector2f& _playerPos)
+
+void Enemy::UpdatePath(sf::Vector2f& _playerPos, TileMap& _map)
 {
-	this->m_Target = _playerPos;
+	this->m_Path = Astar::Pathfinding(_map.GetTile(Tools::ToClosestMultiple(this->m_Position.x, Tile::GetSize()), Tools::ToClosestMultiple(this->m_Position.y, Tile::GetSize())), _map.GetTile(Tools::ToClosestMultiple(_playerPos.x, Tile::GetSize()), Tools::ToClosestMultiple(_playerPos.y, Tile::GetSize())), _map);
+}
+void Enemy::Move(sf::Vector2f& _playerPos, TileMap& _map)
+{
+	this->m_Target = this->m_Path.begin()->GetCood();
 	this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed;
 
 	this->m_Position += this->m_Velocity * Time::GetDeltaTime();
 	this->m_Circle.setPosition(this->m_Position);
+
+	if (_map.GetTile(Tools::ToClosestMultiple(this->m_Position.x, Tile::GetSize()), Tools::ToClosestMultiple(this->m_Position.y, Tile::GetSize())) == *this->m_Path.begin())
+	{
+		this->m_Path.erase(this->m_Path.begin());
+	}
 }
 void Enemy::CheckDamage()
 {
@@ -317,11 +328,11 @@ void EnemyList::Clear()
 	this->m_List.clear();
 }
 
-void EnemyList::Update(sf::Vector2f& _playerPos)
+void EnemyList::Update(sf::Vector2f& _playerPos, TileMap& _map)
 {
 	for (std::shared_ptr<Enemy>& enemy : this->m_List)
 	{
-		enemy->Update(_playerPos);
+		enemy->Update(_playerPos, _map);
 	}
 }
 void EnemyList::Display(Window& _window)

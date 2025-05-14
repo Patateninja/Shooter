@@ -5,7 +5,7 @@
 StateManager::StateManager()
 {
 	RscMana::Init();
-	this->m_Window.Create(sf::VideoMode(1920,1080),"Shooter", sf::Style::Fullscreen);
+	this->m_Window.Create(sf::VideoMode(1920,1080),"Shooter", sf::Style::Default);
 	this->m_CurrentState = new Menu(this);
 	this->m_CurrentState->Init();
 	this->m_InputTimer = 0;
