@@ -87,7 +87,7 @@ void Enemy::CheckDamage()
 {
 	for (std::shared_ptr<Projectile>& proj : ProjList::GetList())
 	{
-		if (this->m_Circle.getGlobalBounds().intersects(proj->GetHitbox()) && [&](auto _list, std::shared_ptr<Projectile>& _proj) -> bool { for (auto pr : _list) { if (proj == pr.lock()) {return false; } } return true; } (this->m_IgnoreProj, proj))
+		if (Tools::CircleCollision(this->m_Circle.getGlobalBounds(), proj->GetHitbox()) && [&](auto _list, std::shared_ptr<Projectile>& _proj) -> bool { for (auto pr : _list) { if (proj == pr.lock()) {return false; } } return true; } (this->m_IgnoreProj, proj))
 		{
 			TakeDamage(proj);
 		}
