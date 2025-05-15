@@ -22,17 +22,17 @@ std::list<Tile> Astar::Neighbor(Tile& _tile, TileMap& _map)
 
 int Astar::NodeDist(Node& _node1, Node& _node2)
 {
-	return Tools::Distance(_node1.GetCood(), _node2.GetCood());
+	return int(Tools::Distance(_node1.GetCood(), _node2.GetCood()));
 }
 
 int Astar::HCost(Node& _current, Node& _end, TileMap& _map)
 {
-	return Tools::Magnitude(_current.GetCood() - _end.GetCood());
+	return int(Tools::Magnitude(_current.GetCood() - _end.GetCood()));
 }
 
 int Astar::GCost(Node& _current, Node& _start, TileMap& _map)
 {
-	return Tools::Magnitude(_start.GetCood() - _current.GetCood());
+	return int(Tools::Magnitude(_start.GetCood() - _current.GetCood()));
 }
 
 int Astar::FCost(Node& _current, Node& _start, Node& _end, TileMap& _map)
@@ -42,10 +42,12 @@ int Astar::FCost(Node& _current, Node& _start, Node& _end, TileMap& _map)
 
 std::list<Tile> Astar::Pathfinding(Tile& _start, Tile& _end, TileMap& _map)
 {
-	Node start = Node();
-	start.SetTile(&_start);
-	Node end = Node();
-	end.SetTile(&_end);
+	debug::InitID();
+
+	Node start = Node(_start);
+	Node end = Node(_end);
+	start.CalculateAllCost(start, end, _map);
+	end.CalculateAllCost(start, end, _map);
 	
 	std::list<Node> toCheck;
 	std::list<Node> checked;
@@ -54,13 +56,13 @@ std::list<Tile> Astar::Pathfinding(Tile& _start, Tile& _end, TileMap& _map)
 	first.SetF(Astar::FCost(start, start, end, _map));
 	toCheck.push_back(first);
 
-	Node current = Node();
+	Node current;
 	do
 	{
 		std::cout << "while loop" << std::endl;
 
-		Node bestNode = Node();
-		bestNode.SetF(10000000000);
+		Node bestNode;
+		bestNode.SetF(10000);
 		for (Node& node : toCheck)
 		{
 			std::cout << "node loop" << std::endl;
@@ -84,25 +86,37 @@ std::list<Tile> Astar::Pathfinding(Tile& _start, Tile& _end, TileMap& _map)
 				}
 			}
 		}
-		current = bestNode;
-		toCheck.remove(current);
+		current = Node(bestNode);
+		for (std::list<Node>::iterator it = toCheck.begin(); it != toCheck.end(); ++it)
+		{
+			if (*it == current)
+			{
+				it = toCheck.erase(it);
+				break;
+			}
+		}
 		checked.push_back(current);
 
-		for (Tile neighbor : Astar::Neighbor(*current.GetTile(), _map))
+		if (current == end)
+		{
+			break;
+		}
+
+		for (Tile& neighbor : Astar::Neighbor(*current.GetTile(), _map))
 		{
 			std::cout << "neighbor loop" << std::endl;
 
-			Node node = Node();
-			node.SetTile(&neighbor);
-			node.SetPrev(&current);
-			if (neighbor.GetWalkable() && Astar::NotInList(checked, node))
+			Node node = Node(neighbor);
+			if (neighbor.GetWalkable() || !Astar::NotInList(checked, node))
 			{
-				if (Astar::NotInList(toCheck, node) || Astar::NodeDist(current, node) < Astar::NodeDist(*node.GetPrev(), node))
+				if (Astar::NotInList(toCheck, node) || node.GetPrev() !=nullptr && (Astar::NodeDist(current, node) < Astar::NodeDist(*node.GetPrev(), node)))
 				{
-					node.SetF(Astar::FCost(node, start, end, _map));
-					node.SetPrev(&current);
-				
-					toCheck.push_back(node);
+					node.CalculateAllCost(start, end, _map);
+					node.SetPrev(new Node(current));
+					if (Astar::NotInList(toCheck, node))
+					{
+						toCheck.push_back(node);
+					}
 				}
 			}
 		}
@@ -110,16 +124,35 @@ std::list<Tile> Astar::Pathfinding(Tile& _start, Tile& _end, TileMap& _map)
 		std::cout << "tocheck size : " << toCheck.size() << std::endl;
 		std::cout << "checked size : " << checked.size() << std::endl;
 
-	} while (*current.GetTile() != _end);
+	} while (current != end);
 
 	std::list<Tile> path;
 
 	current = checked.back();
 	while (current != start)
 	{
+		std::cout << "Unreaveling" << std::endl;
 		path.push_back(*current.GetTile());
 		current = *current.GetPrev();
 	}
 
 	return path;
+}
+
+namespace debug
+{
+	int id;
+
+	void InitID()
+	{
+		debug::id = 0;
+	}
+	int GetID()
+	{
+		return debug::id;
+	}
+	void IDadd()
+	{
+		debug::id++;
+	}
 }

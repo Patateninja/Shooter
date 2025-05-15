@@ -36,6 +36,13 @@ Tile::Tile(sf::Vector2f _pos, TileType _type)
 			break;
 	}
 }
+Tile::Tile(const Tile& _tile)
+{
+	this->m_Cood = _tile.m_Cood;
+	this->m_Type = _tile.m_Type;
+	this->m_Walkable = _tile.m_Walkable;
+	this->m_BulletThrough = _tile.m_BulletThrough;
+}
 Tile::~Tile()
 {
 
@@ -74,6 +81,8 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 			{
 				//this->m_Map.push_back(Tile(sf::Vector2f(float(i * Tile::GetSize()), float(j * Tile::GetSize())), TileType(Tools::Random(2, 0))));
 				
+
+				// Temp //
 				if (i % 2 == 0)
 				{
 					this->m_Map.push_back(Tile(sf::Vector2f(float(i * Tile::GetSize()), float(j * Tile::GetSize())), TileType(Tools::Random(2, 1))));
@@ -82,6 +91,7 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 				{
 					this->m_Map.push_back(Tile(sf::Vector2f(float(i * Tile::GetSize()), float(j * Tile::GetSize())), FLOOR));
 				}
+				//////////
 			}
 		}
 	}

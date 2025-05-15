@@ -102,8 +102,8 @@ Game::Game(StateManager* _stateManager)
 	std::cout << "Game Created" << std::endl;
 	this->m_StateManager = _stateManager;
 	this->m_EnemyList = EnemyList();
-	this->m_MapTexture.create(Tile::GetSize() * 20, Tile::GetSize() * 20);
-	this->m_Map = TileMap(sf::Vector2i(20, 20));
+	this->m_MapTexture.create(Tile::GetSize() * 30, Tile::GetSize() * 30);
+	this->m_Map = TileMap(sf::Vector2i(30, 30));
 }
 Game::~Game()
 {

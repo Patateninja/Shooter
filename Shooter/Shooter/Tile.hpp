@@ -22,6 +22,7 @@ class Tile
 	public :
 		Tile();
 		Tile(sf::Vector2f _pos, TileType);
+		Tile(const Tile& _tile);
 		~Tile();
 
 		inline sf::Vector2f GetCood() { return this->m_Cood; };

@@ -4,7 +4,7 @@
 #include <ctime>
 #include <cstdlib>
 
-constexpr float PI = 3.14159;
+constexpr float PI = 3.14159f;
 
 namespace Tools
 {
