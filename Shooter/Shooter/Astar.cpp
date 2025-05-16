@@ -8,19 +8,19 @@ std::list<Tile> Astar::Neighbor(Node& _node, TileMap& _map)
 
 	if (_node.GetCood().x / Tile::GetSize() != 0.f)
 	{
-		list.push_back(_map.GetTile(sf::Vector2i(_node.GetCood() - sf::Vector2f(Tile::GetSize(), 0.f))));
+		list.push_back(_map.GetTile(sf::Vector2i(_node.GetCood() - sf::Vector2f(float(Tile::GetSize()), 0.f))));
 	}
 	if (_node.GetCood().x / Tile::GetSize() != Tile::GetSize() * (_map.GetSize().x - 1))
 	{
-		list.push_back(_map.GetTile(sf::Vector2i(_node.GetCood() + sf::Vector2f(Tile::GetSize(), 0.f))));
+		list.push_back(_map.GetTile(sf::Vector2i(_node.GetCood() + sf::Vector2f(float(Tile::GetSize()), 0.f))));
 	}
 	if (_node.GetCood().y / Tile::GetSize() != 0.f)
 	{
-		list.push_back(_map.GetTile(sf::Vector2i(_node.GetCood() - sf::Vector2f(0.f, Tile::GetSize()))));
+		list.push_back(_map.GetTile(sf::Vector2i(_node.GetCood() - sf::Vector2f(0.f, float(Tile::GetSize())))));
 	}
 	if (_node.GetCood().y / Tile::GetSize() != Tile::GetSize() * (_map.GetSize().y - 1))
 	{
-		list.push_back(_map.GetTile(sf::Vector2i(_node.GetCood() + sf::Vector2f(0.f, Tile::GetSize()))));
+		list.push_back(_map.GetTile(sf::Vector2i(_node.GetCood() + sf::Vector2f(0.f, float(Tile::GetSize())))));
 	}
 
 	return list;
@@ -59,6 +59,13 @@ int Astar::FCost(Node& _current, Node& _start, Node& _end, TileMap& _map)
 std::list<Tile> Astar::Pathfinding(Tile& _start, Tile& _end, TileMap& _map)
 {
 	std::list<Tile> path;
+
+	if (_start == _end)
+	{
+		path.push_back(_end);
+		return path;
+	}
+
 	Node current = Astar::Astar(_start,_end,_map).back();
 	do
 	{
@@ -72,7 +79,7 @@ std::list<Tile> Astar::Pathfinding(Tile& _start, Tile& _end, TileMap& _map)
 void Astar::BestNode(Node& _node, std::list<Node> _list)
 {
 	Node bestNode;
-	bestNode.SetF(10e12L);
+	bestNode.SetF(int(10e12L));
 	for (Node& node : _list)
 	{
 		std::cout << "Looking for best node" << std::endl;

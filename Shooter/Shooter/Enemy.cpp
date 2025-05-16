@@ -34,7 +34,7 @@ void Enemy::Update(sf::Vector2f& _playerPos, TileMap& _map)
 		if (this->m_PathUdpateCooldown <= 0.f || this->m_Path.empty())
 		{
 			this->UpdatePath(_playerPos, _map);
-			this->m_PathUdpateCooldown = 5.f;
+			this->m_PathUdpateCooldown = 3.f;
 		}
 		else
 		{
@@ -61,7 +61,7 @@ void Enemy::Display(Window& _window)
 
 void Enemy::UpdatePath(sf::Vector2f& _playerPos, TileMap& _map)
 {
-	this->m_Path = Astar::Pathfinding(_map.GetTile(Tools::ToClosestMultiple(this->m_Position.x, Tile::GetSize()), Tools::ToClosestMultiple(this->m_Position.y, Tile::GetSize())), _map.GetTile(Tools::ToClosestMultiple(_playerPos.x, Tile::GetSize()), Tools::ToClosestMultiple(_playerPos.y, Tile::GetSize())), _map);
+	this->m_Path = Astar::Pathfinding(_map.GetTile(this->m_Position.x,this->m_Position.y), _map.GetTile(_playerPos.x, _playerPos.y), _map);
 }
 void Enemy::Move(sf::Vector2f& _playerPos, TileMap& _map)
 {
@@ -71,7 +71,7 @@ void Enemy::Move(sf::Vector2f& _playerPos, TileMap& _map)
 	this->m_Position += this->m_Velocity * Time::GetDeltaTime();
 	this->m_Circle.setPosition(this->m_Position);
 
-	if (_map.GetTile(Tools::ToClosestMultiple(this->m_Position.x, Tile::GetSize()), Tools::ToClosestMultiple(this->m_Position.y, Tile::GetSize())) == this->m_Path.front())
+	if (_map.GetTile(this->m_Position.x,this->m_Position.y) == this->m_Path.front())
 	{
 		this->m_Path.erase(this->m_Path.begin());
 	}

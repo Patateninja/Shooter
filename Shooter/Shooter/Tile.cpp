@@ -123,11 +123,14 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 
 Tile& TileMap::GetTile(sf::Vector2i _cood)
 {
-	if (_cood.x <= this->m_Size.x * Tile::GetSize() && _cood.y <= this->m_Size.y * Tile::GetSize())
+
+	sf::Vector2i ajustedCood(Tools::ToClosestMultiple(_cood.x, Tile::GetSize()), Tools::ToClosestMultiple(_cood.y, Tile::GetSize()));
+
+	if (ajustedCood.x <= this->m_Size.x * Tile::GetSize() && ajustedCood.y <= this->m_Size.y * Tile::GetSize())
 	{
 		for (Tile& tile : this->m_Map)
 		{
-			if (sf::Vector2i(tile.GetCood()) == _cood)
+			if (sf::Vector2i(tile.GetCood()) == ajustedCood)
 			{
 				return tile;
 			}
