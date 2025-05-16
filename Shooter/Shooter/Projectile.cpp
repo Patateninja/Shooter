@@ -1,11 +1,14 @@
 #include "Projectile.hpp"
 #include <iostream>
 
+#include "ResourceManager.hpp"
+
 //////////////////////////////////////////////////
 
 Projectile::Projectile()
 {
 	this->m_Circle = sf::CircleShape(2.5f);
+	this->m_Circle.setOrigin(sf::Vector2f(2.5f, 2.5f));
 	this->m_Position = sf::Vector2f(0.f, 0.f);
 	this->m_Velocity = sf::Vector2f(0.f, 0.f);
 	this->m_Type = CLASSIC;
@@ -17,6 +20,7 @@ Projectile::Projectile()
 Projectile::Projectile(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range)
 {
 	this->m_Circle = sf::CircleShape(2.5f);
+	this->m_Circle.setOrigin(sf::Vector2f(2.5f, 2.5f));
 	this->m_Position = _pos;
 	this->m_Velocity = _vel;
 	this->m_Type = _type;
@@ -42,17 +46,19 @@ Projectile::~Projectile()
 
 }
 
-bool Projectile::Update(TileMap& _map)
+bool Projectile::Update(float _deltatime, TileMap& _map)
 {
 	if (!this->m_ToDestroy)
 	{
-		sf::Vector2f mvt = this->m_Velocity * Time::GetDeltaTime();
+		sf::Vector2f mvt = this->m_Velocity * _deltatime;
 		this->m_Position += mvt;
 		this->m_Distance += Tools::Magnitude(mvt);
 
 		this->m_Circle.setPosition(this->m_Position);
 
-		if (this->m_Distance > this->m_Range || !_map.GetTile(sf::Vector2i(Tools::ToClosestMultiple(this->m_Position.x + mvt.x, Tile::GetSize()), Tools::ToClosestMultiple(this->m_Position.y + mvt.y, Tile::GetSize()))).GetBulletThrough() || !_map.GetTile(sf::Vector2i(Tools::ToClosestMultiple(this->m_Position.x + mvt.x + 1, Tile::GetSize()), Tools::ToClosestMultiple(this->m_Position.y + mvt.y + 1, Tile::GetSize()))).GetBulletThrough())
+		bool wallcontact = !_map.GetTile(sf::Vector2i(Tools::ToClosestMultiple(this->m_Position.x, Tile::GetSize()), Tools::ToClosestMultiple(this->m_Position.y, Tile::GetSize()))).GetBulletThrough() || !_map.GetTile(sf::Vector2i(Tools::ToClosestMultiple(this->m_Position.x + 1, Tile::GetSize()), Tools::ToClosestMultiple(this->m_Position.y + 1, Tile::GetSize()))).GetBulletThrough();
+
+		if (this->m_Distance > this->m_Range || wallcontact)
 		{
 			return true;
 		}
@@ -64,6 +70,14 @@ bool Projectile::Update(TileMap& _map)
 void Projectile::Display(Window& _window)
 {
 	_window.Draw(this->m_Circle);
+
+
+	sf::VertexArray proj(sf::Lines, 2);
+	proj[0].position = this->m_Position;
+	proj[0].color = sf::Color::Blue;
+	proj[1].position = (this->m_Velocity / 10.f) + this->m_Position;
+	proj[1].color = sf::Color::Blue;
+	_window.Draw(proj);
 }
 
 //////////////////////////////////////////////////
@@ -88,9 +102,11 @@ void ProjectileList::Add(Projectile& _proj)
 
 void ProjectileList::Update(TileMap& _map)
 {
+	float deltatime = Time::GetDeltaTime();
+
 	for (auto proj = this->m_List.begin(); proj != this->m_List.end(); ++proj)
 	{
-		if ((*proj)->GetToDestroy() || (*proj)->Update(_map))
+		if ((*proj)->GetToDestroy() || (*proj)->Update(deltatime, _map))
 		{
 			proj = this->m_List.erase(proj);
 			if (proj == this->m_List.end())

@@ -35,7 +35,7 @@ class Projectile
 
 		inline void SetToDestroy(bool _set) { this->m_ToDestroy = _set; };
 
-		bool Update(TileMap& _map);
+		bool Update(float _deltatime, TileMap& _map);
 		void Display(Window& _window);
 };
 

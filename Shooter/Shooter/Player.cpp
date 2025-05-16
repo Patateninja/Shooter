@@ -7,7 +7,7 @@ Player::Player()
 	this->m_Circle = sf::CircleShape(20.f);
 	this->m_Circle.setOrigin(20.f, 20.f);
 	this->m_Circle.setFillColor(sf::Color::Blue);
-	this->m_Position = sf::Vector2f(1600.f, 1600.f);
+	this->m_Position = sf::Vector2f(320.f, 64.f);
 	this->m_Velocity = sf::Vector2f(0.f, 0.f);
 	this->m_InputTimer = 0.f;
 	this->m_Life = 3;
@@ -57,7 +57,7 @@ void Player::Update(EnemyList& _enemyList, Window& _window)
 	{
 		for (std::shared_ptr<Enemy>& enemy : _enemyList.GetList())
 		{
-			if (enemy->GetActive() && this->m_Circle.getGlobalBounds().intersects(enemy->GetHitbox()))
+			if (enemy->GetActive() && Tools::CircleCollision(this->m_Circle.getGlobalBounds(), enemy->GetHitbox()))
 			{
 				this->Die();
 				_enemyList.Respawn();
@@ -111,6 +111,25 @@ void Player::Display(Window& _window)
 	lines[1].color = sf::Color::Red;
 	_window.Draw(lines);
 
+
+	int pellets = 5;
+	int spreading = 25;
+	for (int i = 0; i < pellets; ++i)
+	{
+		/*sf::VertexArray proj(sf::Lines, 2);
+		proj[0].position = this->m_Position;
+		proj[0].color = sf::Color::Blue;
+
+		float spread = Tools::DegToRad((spreading / 2.f) - (float(i) * float(spreading / (pellets - 1))));
+		float angle = Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition()))) + spread;
+		
+		proj[1].position = (Tools::AngleToVector(1000, angle) - this->m_Velocity) + this->m_Position;
+		proj[1].color = sf::Color::Blue;
+
+		_window.Draw(proj);*/
+	}
+
+
 	this->m_Shotgun.DisplayMagazine(_window);
 }
 
@@ -129,7 +148,7 @@ void Player::Die()
 }
 void Player::Respawn()
 {
-	this->m_Position = sf::Vector2f(1600.f, 1600.f); //Change to stage start pos;
+	this->m_Position = sf::Vector2f(320.f, 64.f); //Change to stage start pos;
 	this->m_CanReload = true;
 	this->m_CanMove = false;
 	ProjList::Clear();

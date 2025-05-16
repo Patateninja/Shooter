@@ -16,7 +16,15 @@ int main()
 				statemana.ChangeState<Quit>();
 			}
 		}
-		statemana.Update();
+
+		if (statemana.WindowHasFocus())
+		{
+			statemana.Update();
+		}
+		else
+		{
+			Time::Restart();
+		}
 		statemana.Display();
 	}
 

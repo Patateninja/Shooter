@@ -69,6 +69,10 @@ bool Window::IsOpen()
 { 
 	return this->m_Window.isOpen(); 
 }
+bool Window::HasFocus()
+{
+	return this->m_Window.hasFocus();
+}
 bool Window::PollEvent(sf::Event& _event)
 {
 	return this->m_Window.pollEvent(_event);

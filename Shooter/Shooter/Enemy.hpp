@@ -1,24 +1,27 @@
 #pragma once
 #include "Projectile.hpp"
+#include "Astar.hpp"
 
 class Enemy
 {
 	protected :
 		std::vector<std::weak_ptr<Projectile>> m_IgnoreProj;
 		sf::CircleShape m_Circle;
+		std::list<Tile> m_Path;
 		sf::Vector2f m_StartingPosition;
 		sf::Vector2f m_Position;
 		sf::Vector2f m_Velocity;
 		sf::Vector2f m_Target;
-		int m_MaxHp;
-		int m_Hp;
-		int m_BurningDamage;
-		float m_Speed;
-		float m_BurnCoolDown;
-		bool m_Burning;
-		bool m_Active;
+		int m_MaxHp = 0.f;
+		int m_Hp = 0.f;
+		int m_BurningDamage = 0.f;
+		float m_Speed = 0.f;
+		float m_BurnCooldown = 0.f;
+		float m_PathUdpateCooldown = 0.f;
+		bool m_Burning = false;
+		bool m_Active = false;
 	public :
-		Enemy();
+		Enemy() = default;
 		Enemy(const sf::Vector2f& _stratingPos);
 		~Enemy();
 
@@ -28,10 +31,11 @@ class Enemy
 
 		void Respawn();
 
-		void Update(sf::Vector2f& _playerPos);
+		void Update(sf::Vector2f& _playerPos, TileMap& _map);
 		void Display(Window& _window);
 
-		void Move(sf::Vector2f& _playerPos);
+		void UpdatePath(sf::Vector2f& _playerPos, TileMap& _map);
+		void Move(sf::Vector2f& _playerPos, TileMap& _map);
 		void CheckDamage();
 		void TakeDamage(std::shared_ptr<Projectile>& _projectile);
 		void TakeDamage(int _damage);
@@ -41,7 +45,6 @@ class Enemy
 class Baseliner : public Enemy
 {
 	public :
-		Baseliner();
 		Baseliner(const sf::Vector2f& _stratingPos);
 		~Baseliner();
 };
@@ -49,7 +52,6 @@ class Baseliner : public Enemy
 class Tank : public Enemy
 {
 	public:
-		Tank();
 		Tank(const sf::Vector2f& _stratingPos);
 		~Tank();
 };
@@ -57,7 +59,6 @@ class Tank : public Enemy
 class Ranged : public Enemy
 {
 	public:
-		Ranged();
 		Ranged(const sf::Vector2f& _stratingPos);
 		~Ranged();
 };
@@ -65,7 +66,6 @@ class Ranged : public Enemy
 class Swarmer : public Enemy
 {
 	public:
-		Swarmer();
 		Swarmer(const sf::Vector2f& _stratingPos);
 		~Swarmer();
 };
@@ -73,7 +73,6 @@ class Swarmer : public Enemy
 class Shielded : public Enemy
 {
 	public:
-		Shielded();
 		Shielded(const sf::Vector2f& _stratingPos);
 		~Shielded();
 };
@@ -81,7 +80,6 @@ class Shielded : public Enemy
 class RangedShielded : public Enemy
 {
 	public:
-		RangedShielded();
 		RangedShielded(const sf::Vector2f& _stratingPos);
 		~RangedShielded();
 };
@@ -108,7 +106,7 @@ class EnemyList
 		}
 		void Clear();
 
-		void Update(sf::Vector2f& _playerPos);
+		void Update(sf::Vector2f& _playerPos, TileMap& _map);
 		void Display(Window& _window);
 
 		void Activate();

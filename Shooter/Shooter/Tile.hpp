@@ -2,8 +2,6 @@
 #include "Window.hpp"
 #include <list>
 
-#define TILESIZE Tile::GetSize()
-
 typedef enum TileType
 {
 	WALL,
@@ -22,6 +20,7 @@ class Tile
 	public :
 		Tile();
 		Tile(sf::Vector2f _pos, TileType);
+		Tile(const Tile& _tile);
 		~Tile();
 
 		inline sf::Vector2f GetCood() { return this->m_Cood; };
@@ -29,6 +28,9 @@ class Tile
 		inline bool GetBulletThrough() { return this->m_BulletThrough; };
 		inline TileType GetType() { return this->m_Type; };
 		inline static int GetSize() { return Tile::m_Side; };
+
+		bool operator==(const Tile& _tile2) const { return this->m_Cood == _tile2.m_Cood; };
+		bool operator!=(const Tile& _tile2) const { return this->m_Cood != _tile2.m_Cood; };
 };
 
 class TileMap
@@ -41,6 +43,8 @@ class TileMap
 		TileMap();
 		TileMap(sf::Vector2i _size);
 		~TileMap();
+
+		inline sf::Vector2i GetSize() { return this->m_Size; };
 
 		void Generate(sf::RenderTexture& _rendertexture);
 

@@ -28,7 +28,8 @@ class StateManager
 		}
 
 		Window& GetWindow() { return this->m_Window; };
-		bool WindowIsOpen() { return StateManager::m_Window.IsOpen(); };
+		bool WindowIsOpen() { return this->m_Window.IsOpen(); };
+		bool WindowHasFocus() { return this->m_Window.HasFocus(); };
 
 		void ClearWindow();
 		void Draw(const sf::Drawable& _toDraw);
