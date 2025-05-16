@@ -3,36 +3,10 @@
 ////////////////////////////////////////////////////////
 #pragma region Enemy
 
-Enemy::Enemy()
-{
-	this->m_Circle = sf::CircleShape();
-	this->m_StartingPosition = sf::Vector2f();
-	this->m_Position = sf::Vector2f();
-	this->m_Velocity = sf::Vector2f();
-	this->m_Target = sf::Vector2f();
-	this->m_BurningDamage = 0;
-	this->m_BurnCoolDown = 0.f;
-	this->m_Burning = false;
-	this->m_Active = false;
-	this->m_MaxHp = 0;
-	this->m_Hp = 0;
-	this->m_Speed = 0.f;
-}
 Enemy::Enemy(const sf::Vector2f& _startingPos)
 {
-	this->m_Circle = sf::CircleShape();
-	this->m_Circle.setPosition(_startingPos);
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
-	this->m_Velocity = sf::Vector2f(0.f, 0.f);
-	this->m_Target = sf::Vector2f(0.f, 0.f);
-	this->m_BurningDamage = 0;
-	this->m_BurnCoolDown = 0.f;
-	this->m_Burning = false;
-	this->m_Active = false;
-	this->m_MaxHp = 0;
-	this->m_Hp = 0;
-	this->m_Speed = 0.f;
 }
 Enemy::~Enemy()
 {
@@ -46,28 +20,37 @@ void Enemy::Respawn()
 	this->m_Hp = this->m_MaxHp;
 	this->m_Active = false;
 	this->m_Burning = false;
-	this->m_BurnCoolDown = 0.f;
+	this->m_BurnCooldown = 0.f;
 	this->m_BurningDamage = 0;
 	this->m_Circle.setFillColor(sf::Color::Red);
 	this->m_IgnoreProj.clear();
+	this->m_Path.clear();
 }
 
 void Enemy::Update(sf::Vector2f& _playerPos, TileMap& _map)
 {
 	if (this->m_Active)
 	{
-		this->UpdatePath(_playerPos, _map);
+		if (this->m_PathUdpateCooldown <= 0.f || this->m_Path.empty())
+		{
+			this->UpdatePath(_playerPos, _map);
+			this->m_PathUdpateCooldown = 5.f;
+		}
+		else
+		{
+			this->m_PathUdpateCooldown -= Time::GetDeltaTime();
+		}
 		this->Move(_playerPos, _map);
 		this->CheckDamage();
 
 		if (this->m_Burning)
 		{
-			this->m_BurnCoolDown -= Time::GetDeltaTime();
+			this->m_BurnCooldown -= Time::GetDeltaTime();
 		}
-		if (this->m_BurnCoolDown < 0.f)
+		if (this->m_BurnCooldown < 0.f)
 		{
 			this->TakeDamage(this->m_BurningDamage);
-			this->m_BurnCoolDown = 3.f;
+			this->m_BurnCooldown = 3.f;
 		}
 	}
 }
@@ -76,20 +59,19 @@ void Enemy::Display(Window& _window)
 	_window.Draw(this->m_Circle);
 }
 
-
 void Enemy::UpdatePath(sf::Vector2f& _playerPos, TileMap& _map)
 {
 	this->m_Path = Astar::Pathfinding(_map.GetTile(Tools::ToClosestMultiple(this->m_Position.x, Tile::GetSize()), Tools::ToClosestMultiple(this->m_Position.y, Tile::GetSize())), _map.GetTile(Tools::ToClosestMultiple(_playerPos.x, Tile::GetSize()), Tools::ToClosestMultiple(_playerPos.y, Tile::GetSize())), _map);
 }
 void Enemy::Move(sf::Vector2f& _playerPos, TileMap& _map)
 {
-	this->m_Target = this->m_Path.begin()->GetCood();
+	this->m_Target = this->m_Path.front().GetCood();
 	this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed;
 
 	this->m_Position += this->m_Velocity * Time::GetDeltaTime();
 	this->m_Circle.setPosition(this->m_Position);
 
-	if (_map.GetTile(Tools::ToClosestMultiple(this->m_Position.x, Tile::GetSize()), Tools::ToClosestMultiple(this->m_Position.y, Tile::GetSize())) == *this->m_Path.begin())
+	if (_map.GetTile(Tools::ToClosestMultiple(this->m_Position.x, Tile::GetSize()), Tools::ToClosestMultiple(this->m_Position.y, Tile::GetSize())) == this->m_Path.front())
 	{
 		this->m_Path.erase(this->m_Path.begin());
 	}
@@ -120,7 +102,7 @@ void Enemy::TakeDamage(std::shared_ptr<Projectile>& _projectile)
 	if (_projectile->GetType() == FLAMMING)
 	{
 		this->m_Burning = true;
-		this->m_BurnCoolDown = 3.f;
+		this->m_BurnCooldown = 3.f;
 		this->m_BurningDamage += _projectile->GetDamage();
 		this->m_Circle.setFillColor(sf::Color(255, 155, 0, 255));
 	}
@@ -159,12 +141,6 @@ Baseliner::Baseliner(const sf::Vector2f& _startingPos)
 	this->m_Circle.setPosition(_startingPos);
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
-	this->m_Velocity = sf::Vector2f(0.f, 0.f);
-	this->m_Target = sf::Vector2f(0.f, 0.f);
-	this->m_BurningDamage = 0;
-	this->m_BurnCoolDown = 0.f;
-	this->m_Burning = false;
-	this->m_Active = false;
 	this->m_MaxHp = 35;
 	this->m_Hp = 35;
 	this->m_Speed = 200.f;
@@ -186,12 +162,6 @@ Tank::Tank(const sf::Vector2f& _startingPos)
 	this->m_Circle.setPosition(_startingPos);
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
-	this->m_Velocity = sf::Vector2f(0.f, 0.f);
-	this->m_Target = sf::Vector2f(0.f, 0.f);
-	this->m_BurningDamage = 0;
-	this->m_BurnCoolDown = 0.f;
-	this->m_Burning = false;
-	this->m_Active = false;
 	this->m_MaxHp = 75;
 	this->m_Hp = 75;
 	this->m_Speed = 150.f;
@@ -213,12 +183,6 @@ Ranged::Ranged(const sf::Vector2f& _startingPos)
 	this->m_Circle.setPosition(_startingPos);
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
-	this->m_Velocity = sf::Vector2f(0.f, 0.f);
-	this->m_Target = sf::Vector2f(0.f, 0.f);
-	this->m_BurningDamage = 0;
-	this->m_BurnCoolDown = 0.f;
-	this->m_Burning = false;
-	this->m_Active = false;
 	this->m_MaxHp = 25;
 	this->m_Hp = 25;
 	this->m_Speed = 200.f;
@@ -240,12 +204,6 @@ Swarmer::Swarmer(const sf::Vector2f& _startingPos)
 	this->m_Circle.setPosition(_startingPos);
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
-	this->m_Velocity = sf::Vector2f(0.f, 0.f);
-	this->m_Target = sf::Vector2f(0.f, 0.f);
-	this->m_BurningDamage = 0;
-	this->m_BurnCoolDown = 0.f;
-	this->m_Burning = false;
-	this->m_Active = false;
 	this->m_MaxHp = 10;
 	this->m_Hp = 10;
 	this->m_Speed = 300.f;
@@ -267,12 +225,6 @@ Shielded::Shielded(const sf::Vector2f& _startingPos)
 	this->m_Circle.setPosition(_startingPos);
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
-	this->m_Velocity = sf::Vector2f(0.f, 0.f);
-	this->m_Target = sf::Vector2f(0.f, 0.f);
-	this->m_BurningDamage = 0;
-	this->m_BurnCoolDown = 0.f;
-	this->m_Burning = false;
-	this->m_Active = false;
 	this->m_MaxHp = 35;
 	this->m_Hp = 35;
 	this->m_Speed = 100.f;
@@ -294,12 +246,6 @@ RangedShielded::RangedShielded(const sf::Vector2f& _startingPos)
 	this->m_Circle.setPosition(_startingPos);
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
-	this->m_Velocity = sf::Vector2f(0.f, 0.f);
-	this->m_Target = sf::Vector2f(0.f, 0.f);
-	this->m_BurningDamage = 0;
-	this->m_BurnCoolDown = 0.f;
-	this->m_Burning = false;
-	this->m_Active = false;
 	this->m_MaxHp = 50;
 	this->m_Hp = 50;
 	this->m_Speed = 100.f;

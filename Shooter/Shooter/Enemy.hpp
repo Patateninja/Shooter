@@ -12,15 +12,16 @@ class Enemy
 		sf::Vector2f m_Position;
 		sf::Vector2f m_Velocity;
 		sf::Vector2f m_Target;
-		int m_MaxHp;
-		int m_Hp;
-		int m_BurningDamage;
-		float m_Speed;
-		float m_BurnCoolDown;
-		bool m_Burning;
-		bool m_Active;
+		int m_MaxHp = 0.f;
+		int m_Hp = 0.f;
+		int m_BurningDamage = 0.f;
+		float m_Speed = 0.f;
+		float m_BurnCooldown = 0.f;
+		float m_PathUdpateCooldown = 0.f;
+		bool m_Burning = false;
+		bool m_Active = false;
 	public :
-		Enemy();
+		Enemy() = default;
 		Enemy(const sf::Vector2f& _stratingPos);
 		~Enemy();
 

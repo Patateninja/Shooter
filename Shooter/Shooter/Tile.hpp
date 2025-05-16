@@ -2,8 +2,6 @@
 #include "Window.hpp"
 #include <list>
 
-#define TILESIZE Tile::GetSize()
-
 typedef enum TileType
 {
 	WALL,

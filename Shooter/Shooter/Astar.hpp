@@ -5,7 +5,7 @@ class Node;
 
 namespace Astar
 {
-	std::list<Tile> Neighbor(Tile& _tile, TileMap& _map);
+	std::list<Tile> Neighbor(Node& _tile, TileMap& _map);
 
 	template<typename T>
 	bool NotInList(std::list<T> _list, T _element)
@@ -20,15 +20,17 @@ namespace Astar
 		return true;
 	}
 
+	void RemoveNode(std::list<Node>& _nodelist, Node& _node);
+
 	int NodeDist(Node& _node1, Node& _node2);
 
 	int HCost(Node& _current, Node& _end, TileMap& _map);
-
 	int GCost(Node& _current, Node& _start, TileMap& _map);
-
 	int FCost(Node& _current, Node& _start, Node& _end, TileMap& _map);
 
 	std::list<Tile> Pathfinding(Tile& _start, Tile& _end, TileMap& _map);
+	void BestNode(Node& _node, std::list<Node> _list);
+	std::list<Node> Astar(Tile& _start, Tile& _end, TileMap& _map);
 }
 
 namespace debug
@@ -42,7 +44,7 @@ class Node
 {
 	private :
 		int ID = 0;
-		Node* m_Prev = nullptr;
+		std::shared_ptr<Node> m_Prev = nullptr;
 		std::shared_ptr<Tile> m_Tile = nullptr;
 		int m_Gcost = 0;
 		int m_Hcost = 0;
@@ -75,13 +77,14 @@ class Node
 
 		inline std::shared_ptr<Tile> GetTile() { return this->m_Tile; };
 		inline sf::Vector2f GetCood() { return this->m_Tile->GetCood(); };
-		inline Node* GetPrev() { return this->m_Prev; };
+		inline std::shared_ptr<Node> GetPrev() { return this->m_Prev; };
 		inline int GetG() { return this->m_Gcost; };
 		inline int GetH() { return this->m_Hcost; };
 		inline int GetF() { return this->m_Fcost; };
 
 		inline void SetTile(Tile& _tile) { this->m_Tile = std::make_shared<Tile>(_tile); };
-		inline void SetPrev(Node* _prev) { this->m_Prev = _prev; };
+		inline void SetPrev(Node& _prev) { this->m_Prev = std::make_shared<Node>(_prev); };
+		inline void SetPrev() { this->m_Prev = nullptr; };
 		inline void SetF(int _f) { this->m_Fcost = _f; };
 		inline void CalculateAllCost(Node& _start, Node& _end, TileMap& _map)
 		{

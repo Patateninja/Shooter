@@ -2,22 +2,40 @@
 
 #include <iostream>
 
-std::list<Tile> Astar::Neighbor(Tile& _tile, TileMap& _map)
+std::list<Tile> Astar::Neighbor(Node& _node, TileMap& _map)
 {
 	std::list<Tile> list;
 
-	for (int i = (_tile.GetCood().x != 0 ? 0 : 1); i < (_tile.GetCood().x != _map.GetSize().x * Tile::GetSize() ? 3 : 2); ++i)
+	if (_node.GetCood().x / Tile::GetSize() != 0.f)
 	{
-		for (int j = (_tile.GetCood().y != 0 ? 0 : 1); j < (_tile.GetCood().y != _map.GetSize().y * Tile::GetSize() ? 3 : 2); ++j)
-		{
-			if (_map.GetTile(sf::Vector2i(_tile.GetCood() + sf::Vector2f((i - 1) * Tile::GetSize(), (j - 1)*Tile::GetSize()))) != _tile)
-			{
-				list.push_back(_map.GetTile(sf::Vector2i(_tile.GetCood() + sf::Vector2f((i - 1) * Tile::GetSize(), (j - 1)*Tile::GetSize()))));
-			}
-		}
+		list.push_back(_map.GetTile(sf::Vector2i(_node.GetCood() - sf::Vector2f(Tile::GetSize(), 0.f))));
+	}
+	if (_node.GetCood().x / Tile::GetSize() != Tile::GetSize() * (_map.GetSize().x - 1))
+	{
+		list.push_back(_map.GetTile(sf::Vector2i(_node.GetCood() + sf::Vector2f(Tile::GetSize(), 0.f))));
+	}
+	if (_node.GetCood().y / Tile::GetSize() != 0.f)
+	{
+		list.push_back(_map.GetTile(sf::Vector2i(_node.GetCood() - sf::Vector2f(0.f, Tile::GetSize()))));
+	}
+	if (_node.GetCood().y / Tile::GetSize() != Tile::GetSize() * (_map.GetSize().y - 1))
+	{
+		list.push_back(_map.GetTile(sf::Vector2i(_node.GetCood() + sf::Vector2f(0.f, Tile::GetSize()))));
 	}
 
 	return list;
+}
+
+void Astar::RemoveNode(std::list<Node>& _nodelist, Node& _node)
+{
+	for (std::list<Node>::iterator it = _nodelist.begin(); it != _nodelist.end(); ++it)
+	{
+		if (*it == _node)
+		{
+			it = _nodelist.erase(it);
+			break;
+		}
+	}
 }
 
 int Astar::NodeDist(Node& _node1, Node& _node2)
@@ -27,14 +45,12 @@ int Astar::NodeDist(Node& _node1, Node& _node2)
 
 int Astar::HCost(Node& _current, Node& _end, TileMap& _map)
 {
-	return int(Tools::Magnitude(_current.GetCood() - _end.GetCood()));
+	return int(Tools::Distance(_current.GetCood(), _end.GetCood()));
 }
-
 int Astar::GCost(Node& _current, Node& _start, TileMap& _map)
 {
-	return int(Tools::Magnitude(_start.GetCood() - _current.GetCood()));
+	return int(Tools::Distance(_start.GetCood(), _current.GetCood()));
 }
-
 int Astar::FCost(Node& _current, Node& _start, Node& _end, TileMap& _map)
 {
 	return GCost(_current, _start, _map) + HCost(_current, _end, _map);
@@ -42,77 +58,101 @@ int Astar::FCost(Node& _current, Node& _start, Node& _end, TileMap& _map)
 
 std::list<Tile> Astar::Pathfinding(Tile& _start, Tile& _end, TileMap& _map)
 {
+	std::list<Tile> path;
+	Node current = Astar::Astar(_start,_end,_map).back();
+	do
+	{
+		std::cout << "Unreaveling" << std::endl;
+		path.push_front(*current.GetTile());
+		current = *current.GetPrev();
+	} while (*current.GetTile() != _start);
+
+	return path;
+}
+void Astar::BestNode(Node& _node, std::list<Node> _list)
+{
+	Node bestNode;
+	bestNode.SetF(10e12L);
+	for (Node& node : _list)
+	{
+		std::cout << "Looking for best node" << std::endl;
+
+		if (node.GetF() < bestNode.GetF())
+		{
+			bestNode = node;
+		}
+		else if (node.GetF() == bestNode.GetF())
+		{
+			if (node.GetH() < bestNode.GetH())
+			{
+				bestNode = node;
+			}
+			else if (node.GetH() == bestNode.GetH())
+			{
+				if (bool(Tools::Random(1, 0)))
+				{
+					bestNode = node;
+				}
+			}
+		}
+	}
+
+	std::shared_ptr<Node> tmp = nullptr;
+	if (bestNode.GetPrev())
+	{
+		tmp = bestNode.GetPrev();
+	}
+	_node = bestNode;
+	if (tmp)
+	{
+		_node.SetPrev(*tmp.get());
+	}
+	else
+	{
+		_node.SetPrev();
+	}
+}
+
+std::list<Node> Astar::Astar(Tile& _start, Tile& _end, TileMap& _map)
+{
 	debug::InitID();
+
+	std::list<Node> toCheck;
+	std::list<Node> checked;
 
 	Node start = Node(_start);
 	Node end = Node(_end);
 	start.CalculateAllCost(start, end, _map);
 	end.CalculateAllCost(start, end, _map);
-	
-	std::list<Node> toCheck;
-	std::list<Node> checked;
-
-	Node first = start;
-	first.SetF(Astar::FCost(start, start, end, _map));
-	toCheck.push_back(first);
+	toCheck.push_back(start);
 
 	Node current;
 	do
 	{
 		std::cout << "while loop" << std::endl;
 
-		Node bestNode;
-		bestNode.SetF(10000);
-		for (Node& node : toCheck)
-		{
-			std::cout << "node loop" << std::endl;
+		Astar::BestNode(current, toCheck);
 
-			if (node.GetF() < bestNode.GetF())
-			{
-				bestNode = node;
-			}
-			else if (node.GetF() == bestNode.GetF())
-			{
-				if (node.GetH() < bestNode.GetH())
-				{
-					bestNode = node;
-				}
-				else if (node.GetH() == bestNode.GetH())
-				{
-					if (bool(Tools::Random(1, 0)))
-					{
-						bestNode = node;
-					}
-				}
-			}
-		}
-		current = Node(bestNode);
-		for (std::list<Node>::iterator it = toCheck.begin(); it != toCheck.end(); ++it)
-		{
-			if (*it == current)
-			{
-				it = toCheck.erase(it);
-				break;
-			}
-		}
+		Astar::RemoveNode(toCheck, current);
+		
 		checked.push_back(current);
 
-		if (current == end)
+		/*if (current == end)
 		{
 			break;
-		}
+		}*/
 
-		for (Tile& neighbor : Astar::Neighbor(*current.GetTile(), _map))
+		for (Tile& neighbor : Astar::Neighbor(current, _map))
 		{
 			std::cout << "neighbor loop" << std::endl;
 
 			Node node = Node(neighbor);
-			if (neighbor.GetWalkable() || !Astar::NotInList(checked, node))
+			if (neighbor.GetWalkable() && Astar::NotInList(checked, node))
 			{
-				if (Astar::NotInList(toCheck, node) || node.GetPrev() !=nullptr && (Astar::NodeDist(current, node) < Astar::NodeDist(*node.GetPrev(), node)))
+				if (Astar::NotInList(toCheck, node) || node.GetPrev() != nullptr && (Astar::NodeDist(current, node) < Astar::NodeDist(*node.GetPrev(), node)))
 				{
 					node.CalculateAllCost(start, end, _map);
-					node.SetPrev(new Node(current));
+					node.SetPrev(current);
 					if (Astar::NotInList(toCheck, node))
 					{
 						toCheck.push_back(node);
@@ -126,17 +166,7 @@ std::list<Tile> Astar::Pathfinding(Tile& _start, Tile& _end, TileMap& _map)
 
 	} while (current != end);
 
-	std::list<Tile> path;
-
-	current = checked.back();
-	while (current != start)
-	{
-		std::cout << "Unreaveling" << std::endl;
-		path.push_back(*current.GetTile());
-		current = *current.GetPrev();
-	}
-
-	return path;
+	return checked;
 }
 
 namespace debug
