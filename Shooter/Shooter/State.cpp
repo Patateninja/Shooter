@@ -102,8 +102,8 @@ Game::Game(StateManager* _stateManager)
 	std::cout << "Game Created" << std::endl;
 	this->m_StateManager = _stateManager;
 	this->m_EnemyList = EnemyList();
-	this->m_MapTexture.create(Tile::GetSize() * 10, Tile::GetSize() * 10);
-	this->m_Map = TileMap(sf::Vector2i(10, 10));
+	this->m_MapTexture.create(Tile::GetSize() * 20, Tile::GetSize() * 20);
+	this->m_Map = TileMap(sf::Vector2i(20, 20));
 }
 Game::~Game()
 {
@@ -125,10 +125,10 @@ void Game::Init()
 	this->m_MapSprite.setTexture(this->m_MapTexture.getTexture());
 	this->m_MapSprite.setPosition(-Tile::GetSize() / 2.f, - Tile::GetSize() / 2.f);
 
-	this->m_EnemyList.Add<Baseliner>(sf::Vector2f(64.f, 320.f));
-	//this->m_EnemyList.Add<Tank>(sf::Vector2f(960.f, 1152.f));
-	//this->m_EnemyList.Add<Swarmer>(sf::Vector2f(1152.f, 832.f));
-	//this->m_EnemyList.Add<Ranged>(sf::Vector2f(512.f, 1024.f));
+	this->m_EnemyList.Add<Baseliner>(sf::Vector2f(64.f, 640.f));
+	this->m_EnemyList.Add<Tank>(sf::Vector2f(960.f, 1152.f));
+	this->m_EnemyList.Add<Swarmer>(sf::Vector2f(1152.f, 832.f));
+	this->m_EnemyList.Add<Ranged>(sf::Vector2f(512.f, 1024.f));
 }
 void Game::Update()
 {
