@@ -56,7 +56,7 @@ bool Projectile::Update(float _deltatime, TileMap& _map)
 
 		this->m_Circle.setPosition(this->m_Position);
 
-		bool wallcontact = !_map.GetTile(sf::Vector2i(Tools::ToClosestMultiple(this->m_Position.x, Tile::GetSize()), Tools::ToClosestMultiple(this->m_Position.y, Tile::GetSize()))).GetBulletThrough() || !_map.GetTile(sf::Vector2i(Tools::ToClosestMultiple(this->m_Position.x + 1, Tile::GetSize()), Tools::ToClosestMultiple(this->m_Position.y + 1, Tile::GetSize()))).GetBulletThrough();
+		bool wallcontact = !_map.GetTile(this->m_Position.x, this->m_Position.y).GetBulletThrough() || !_map.GetTile(this->m_Position.x + 1, this->m_Position.y + 1).GetBulletThrough();
 
 		if (this->m_Distance > this->m_Range || wallcontact)
 		{

@@ -102,8 +102,8 @@ Game::Game(StateManager* _stateManager)
 	std::cout << "Game Created" << std::endl;
 	this->m_StateManager = _stateManager;
 	this->m_EnemyList = EnemyList();
-	this->m_MapTexture.create(Tile::GetSize() * 10, Tile::GetSize() * 10);
-	this->m_Map = TileMap(sf::Vector2i(10, 10));
+	this->m_MapTexture.create(Tile::GetSize() * 30, Tile::GetSize() * 30);
+	this->m_Map = TileMap(sf::Vector2i(30, 30));
 }
 Game::~Game()
 {
@@ -125,10 +125,10 @@ void Game::Init()
 	this->m_MapSprite.setTexture(this->m_MapTexture.getTexture());
 	this->m_MapSprite.setPosition(-Tile::GetSize() / 2.f, - Tile::GetSize() / 2.f);
 
-	this->m_EnemyList.Add<Baseliner>(sf::Vector2f(64.f, 320.f));
+	//this->m_EnemyList.Add<Baseliner>(sf::Vector2f(64.f, 640.f));
 	//this->m_EnemyList.Add<Tank>(sf::Vector2f(960.f, 1152.f));
 	//this->m_EnemyList.Add<Swarmer>(sf::Vector2f(1152.f, 832.f));
-	//this->m_EnemyList.Add<Ranged>(sf::Vector2f(512.f, 1024.f));
+	this->m_EnemyList.Add<Shielded>(sf::Vector2f(512.f, 1024.f));
 }
 void Game::Update()
 {
@@ -137,11 +137,12 @@ void Game::Update()
 	this->m_Text.setString(std::to_string(this->m_Player.GetHP()) + " Live(s) / Projectiles : " + std::to_string(ProjList::Size()) + " / " + std::to_string(int(1 / Time::GetDeltaTime())) + " fps");
 	this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
 
-	this->m_Player.Update(this->m_EnemyList, this->Window());
+	this->m_Player.Update(this->m_EnemyList, this->m_Map, this->Window());
+	this->m_EnemyList.Update(this->m_Player.GetPos(), this->m_Map);
+	
 	ProjList::Update(this->m_Map);
 	this->Window().SetViewCenter(this->m_Player.GetPos());
 
-	this->m_EnemyList.Update(this->m_Player.GetPos(), this->m_Map);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && this->m_InputTimer > 0.2f)
 	{
@@ -158,6 +159,15 @@ void Game::Display()
 	ProjList::Display(this->Window());
 	this->m_EnemyList.Display(this->Window());
 	this->m_Player.Display(this->Window());
+
+
+	sf::RectangleShape rect(sf::Vector2f(Tile::GetSize(), Tile::GetSize()));
+	rect.setOrigin(Tile::GetSize() / 2.f, Tile::GetSize() / 2.f);
+	rect.setFillColor(sf::Color::Transparent);
+	rect.setOutlineColor(sf::Color::Blue);
+	rect.setOutlineThickness(2.f);
+	rect.setPosition(this->m_Map.GetTile(sf::Vector2i(this->m_Player.GetPos())).GetCood());
+	this->Draw(rect);
 
 	this->Draw(this->m_Text);
 

@@ -21,7 +21,7 @@ class Player
 		inline sf::Vector2f& GetVel() { return this->m_Velocity; };
 		inline int GetHP() { return this->m_Life; };
 
-		void Update(EnemyList& _enemyList, Window& _window);
+		void Update(EnemyList& _enemyList, TileMap& _map, Window& _window);
 		void Display(Window& _window);
 
 		void Ready();

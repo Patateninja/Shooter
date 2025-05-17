@@ -7,7 +7,7 @@ Player::Player()
 	this->m_Circle = sf::CircleShape(20.f);
 	this->m_Circle.setOrigin(20.f, 20.f);
 	this->m_Circle.setFillColor(sf::Color::Blue);
-	this->m_Position = sf::Vector2f(320.f, 64.f);
+	this->m_Position = sf::Vector2f(576.f, 64.f);
 	this->m_Velocity = sf::Vector2f(0.f, 0.f);
 	this->m_InputTimer = 0.f;
 	this->m_Life = 3;
@@ -19,7 +19,7 @@ Player::~Player()
 
 }
 
-void Player::Update(EnemyList& _enemyList, Window& _window)
+void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 {
 	this->m_InputTimer += Time::GetDeltaTime();
 
@@ -61,6 +61,7 @@ void Player::Update(EnemyList& _enemyList, Window& _window)
 			{
 				this->Die();
 				_enemyList.Respawn();
+				return;
 			}
 		}
 
@@ -68,19 +69,31 @@ void Player::Update(EnemyList& _enemyList, Window& _window)
 		this->m_Velocity.y = 0;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
 		{
-			this->m_Velocity.y = 375;
+			if (_map.GetTile(sf::Vector2i((this->m_Position - sf::Vector2f(0, this->m_Circle.getRadius())) - (sf::Vector2f(0,375) * Time::GetDeltaTime()))).GetWalkable())
+			{
+				this->m_Velocity.y = -375;
+			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
-			this->m_Velocity.y = -375;
+			if (_map.GetTile(sf::Vector2i((this->m_Position + sf::Vector2f(0, this->m_Circle.getRadius())) + (sf::Vector2f(0, 375) * Time::GetDeltaTime()))).GetWalkable())
+			{
+				this->m_Velocity.y = 375;
+			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 		{
-			this->m_Velocity.x = 375;
+			if (_map.GetTile(sf::Vector2i((this->m_Position - sf::Vector2f(this->m_Circle.getRadius(),0)) - (sf::Vector2f(375, 0) * Time::GetDeltaTime()))).GetWalkable())
+			{
+				this->m_Velocity.x = -375;
+			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
-			this->m_Velocity.x = -375;
+			if (_map.GetTile(sf::Vector2i((this->m_Position + sf::Vector2f(this->m_Circle.getRadius(),0)) + (sf::Vector2f(375, 0) * Time::GetDeltaTime()))).GetWalkable())
+			{
+				this->m_Velocity.x = 375;
+			}
 		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->m_InputTimer > 0.75f)
@@ -95,7 +108,8 @@ void Player::Update(EnemyList& _enemyList, Window& _window)
 			_enemyList.Respawn();
 		}
 
-		this->m_Position -= this->m_Velocity * Time::GetDeltaTime();
+		
+		this->m_Position+= this->m_Velocity * Time::GetDeltaTime();
 	}
 
 	this->m_Circle.setPosition(this->m_Position);
@@ -148,7 +162,7 @@ void Player::Die()
 }
 void Player::Respawn()
 {
-	this->m_Position = sf::Vector2f(320.f, 64.f); //Change to stage start pos;
+	this->m_Position = sf::Vector2f(576.f, 64.f); //Change to stage start pos;
 	this->m_CanReload = true;
 	this->m_CanMove = false;
 	ProjList::Clear();
