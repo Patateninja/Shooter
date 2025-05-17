@@ -12,9 +12,29 @@ void Shield::Udpate(bool _active, sf::Vector2f _pos, float _angle)
 	this->SetActive(_active);
 	this->SetPos(_pos);
 	this->SetAngle(_angle);
+
+	this->CheckContact();
 }
 
 void Shield::Display(Window& _window)
 {
 	_window.Draw(this->m_Rect);
+
+	sf::RectangleShape hitbox(this->m_Rect.getGlobalBounds().getSize());
+	hitbox.setFillColor(sf::Color::Transparent);
+	hitbox.setOutlineColor(sf::Color::White);
+	hitbox.setOutlineThickness(1.f);
+	hitbox.setPosition(this->m_Rect.getGlobalBounds().getPosition());
+	_window.Draw(hitbox);
+}
+
+void Shield::CheckContact()
+{
+	for (std::shared_ptr<Projectile>& proj : ProjList::GetList())
+	{
+		if (this->m_Rect.getGlobalBounds().intersects(proj->GetHitbox()) && proj->GetType() != PIERCING)
+		{
+			proj->SetToDestroy(true);
+		}
+	}
 }
