@@ -61,11 +61,12 @@ void Menu::Init()
 void Menu::Update()
 {
 	this->m_InputTimer += Time::GetDeltaTime();
+	this->m_Text.setString("Menu\nPress Enter to continue\nPress Escape to exit game");
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && this->m_InputTimer > 0.2f)
 	{
 		this->m_InputTimer = 0.f;
-		this->ChangeState<Game>();
+		this->ChangeState<Upgrade>();
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && this->m_InputTimer > 0.2f)
 	{
@@ -83,7 +84,6 @@ void Menu::Display()
 {
 	this->ClearWindow();
 
-	this->m_Text.setString("Menu, Press Enter to continue");
 	this->Draw(this->m_Text);
 
 	this->DisplayWindow();
@@ -101,9 +101,6 @@ Game::Game(StateManager* _stateManager)
 {
 	std::cout << "Game Created" << std::endl;
 	this->m_StateManager = _stateManager;
-	this->m_EnemyList = EnemyList();
-	this->m_MapTexture.create(Tile::GetSize() * 30, Tile::GetSize() * 30);
-	this->m_Map = TileMap(sf::Vector2i(30, 30));
 }
 Game::~Game()
 {
@@ -121,53 +118,40 @@ void Game::Init()
 	this->Window().ResetView();
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 	//this->GetRsc<sf::Music>("Bogus").play();
-	this->m_Map.Generate(this->m_MapTexture);
-	this->m_MapSprite.setTexture(this->m_MapTexture.getTexture());
-	this->m_MapSprite.setPosition(-Tile::GetSize() / 2.f, - Tile::GetSize() / 2.f);
-
-	//this->m_EnemyList.Add<Baseliner>(sf::Vector2f(64.f, 640.f));
-	//this->m_EnemyList.Add<Tank>(sf::Vector2f(960.f, 1152.f));
-	//this->m_EnemyList.Add<Swarmer>(sf::Vector2f(1152.f, 832.f));
-	this->m_EnemyList.Add<Shielded>(sf::Vector2f(512.f, 1024.f));
+	
+	this->m_Stage.SetNum(1);
+	this->m_Stage.Init();
 }
 void Game::Update()
 {
 	this->m_InputTimer += Time::GetDeltaTime();
 
-	this->m_Text.setString(std::to_string(this->m_Player.GetHP()) + " Live(s) / Projectiles : " + std::to_string(ProjList::Size()) + " / " + std::to_string(int(1 / Time::GetDeltaTime())) + " fps");
+	this->m_Text.setString("Stage : " + std::to_string(this->m_Stage.GetNum()) + " / " + std::to_string(this->m_Player.GetHP()) + " Live(s) / Projectiles : " + std::to_string(ProjList::Size()) + " / " + std::to_string(int(1 / Time::GetDeltaTime())) + " fps");
 	this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
 
-	this->m_Player.Update(this->m_EnemyList, this->m_Map, this->Window());
-	this->m_EnemyList.Update(this->m_Player.GetPos(), this->m_Map);
-	
-	ProjList::Update(this->m_Map);
+	this->m_Player.Update(this->m_Stage.GetEnemies(), this->m_Stage.GetMap(), this->Window());
+	this->m_Stage.Update(this->m_Player);
+	ProjList::Update(this->m_Stage.GetMap());
 	this->Window().SetViewCenter(this->m_Player.GetPos());
-
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && this->m_InputTimer > 0.2f)
 	{
 		this->m_InputTimer = 0.f;
 		this->ChangeState<Menu>();
 	}
+	if (this->m_Player.GetHP() == 0)
+	{
+		this->ChangeState<Upgrade>();
+	}
 }
 void Game::Display()
 {
 	this->ClearWindow();
 
-	this->Draw(this->m_MapSprite);
+	this->m_Stage.Display(this->Window());
 
 	ProjList::Display(this->Window());
-	this->m_EnemyList.Display(this->Window());
 	this->m_Player.Display(this->Window());
-
-
-	sf::RectangleShape rect(sf::Vector2f(Tile::GetSize(), Tile::GetSize()));
-	rect.setOrigin(Tile::GetSize() / 2.f, Tile::GetSize() / 2.f);
-	rect.setFillColor(sf::Color::Transparent);
-	rect.setOutlineColor(sf::Color::Blue);
-	rect.setOutlineThickness(2.f);
-	rect.setPosition(this->m_Map.GetTile(sf::Vector2i(this->m_Player.GetPos())).GetCood());
-	this->Draw(rect);
 
 	this->Draw(this->m_Text);
 
@@ -180,44 +164,63 @@ void Game::DeInit()
 
 #pragma endregion
 ////////////////////////////////////////////////////////
-#pragma region  EndGame
+#pragma region Upgrade
 
-EndGame::EndGame(StateManager* _stateManager)
+Upgrade::Upgrade(StateManager* _stateManager)
 {
-	std::cout << "EndGame Created" << std::endl;
+	std::cout << "Upgrade Created" << std::endl;
 	this->m_StateManager = _stateManager;
 }
-EndGame::~EndGame()
+Upgrade::~Upgrade()
 {
-	std::cout << "EndGame Deleted" << std::endl;
+	std::cout << "Upgrade Deleted" << std::endl;
 }
 
-void EndGame::Deletor()
+void Upgrade::Deletor()
 {
-	this->~EndGame();
+	this->~Upgrade();
 }
 
-void EndGame::Init()
+void Upgrade::Init()
 {
-	std::cout << "EndGame Init" << std::endl;
+	std::cout << "Upgrade Init" << std::endl;
 	this->Window().ResetView();
+	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 }
-void EndGame::Update()
+void Upgrade::Update()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+	this->m_InputTimer += Time::GetDeltaTime();
+	this->m_Text.setString("Upgrade Menu\nPress Enter to launch a new game\nPress Escape to go back to Menu");
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && this->m_InputTimer > 0.2f)
 	{
+		this->m_InputTimer = 0.f;
+		this->ChangeState<Game>();
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && this->m_InputTimer > 0.2f)
+	{
+		this->m_InputTimer = 0.f;
 		this->ChangeState<Menu>();
 	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F11) && this->m_InputTimer > 0.5f)
+	{
+		this->m_InputTimer = 0.f;
+		this->Window().ToggleFullscreen();
+	}
+
 }
-void EndGame::Display()
+void Upgrade::Display()
 {
 	this->ClearWindow();
 
+	this->Draw(this->m_Text);
+
 	this->DisplayWindow();
 }
-void EndGame::DeInit()
+void Upgrade::DeInit()
 {
-	std::cout << "EndGame DeInit" << std::endl;
+	std::cout << "Upgrade DeInit" << std::endl;
 }
 
 #pragma endregion

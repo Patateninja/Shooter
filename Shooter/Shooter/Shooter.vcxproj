@@ -148,6 +148,7 @@
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shield.cpp" />
     <ClCompile Include="Shotgun.cpp" />
+    <ClCompile Include="Stage.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Projectile.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="ResourceManager.hpp" />
     <ClInclude Include="Shield.hpp" />
     <ClInclude Include="Shotgun.hpp" />
+    <ClInclude Include="Stage.hpp" />
     <ClInclude Include="StateManager.hpp" />
     <ClInclude Include="Projectile.hpp" />
     <ClInclude Include="Shell.hpp" />

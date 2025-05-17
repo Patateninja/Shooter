@@ -290,6 +290,18 @@ void EnemyList::Clear()
 	this->m_List.clear();
 }
 
+bool EnemyList::AllDead()
+{
+	for (std::shared_ptr<Enemy>& enemy : this->m_List)
+	{
+		if (enemy->GetHP() > 0)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 void EnemyList::Update(sf::Vector2f& _playerPos, TileMap& _map)
 {
 	for (std::shared_ptr<Enemy>& enemy : this->m_List)

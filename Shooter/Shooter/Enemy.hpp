@@ -26,6 +26,7 @@ class Enemy
 		Enemy(const sf::Vector2f& _stratingPos);
 		~Enemy();
 
+		inline int GetHP() { return this->m_Hp; };
 		inline sf::FloatRect GetHitbox() { return this->m_Circle.getGlobalBounds(); };
 		inline bool GetActive() { return this->m_Active; };
 		inline void SetActive(bool _input) { this->m_Active = _input; };
@@ -111,6 +112,8 @@ class EnemyList
 			this->m_List.push_back(std::make_unique<Enemy>(_enemy));
 		}
 		void Clear();
+
+		bool AllDead();
 
 		void Update(sf::Vector2f& _playerPos, TileMap& _map);
 		void Display(Window& _window);
