@@ -12,18 +12,20 @@ Projectile::Projectile()
 	this->m_Position = sf::Vector2f(0.f, 0.f);
 	this->m_Velocity = sf::Vector2f(0.f, 0.f);
 	this->m_Type = CLASSIC;
+	this->m_Team = PLAYER;
 	this->m_Damage = 0;
 	this->m_Range = 0;
 	this->m_Distance = 0.f;
 	this->m_ToDestroy = false;
 }
-Projectile::Projectile(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range)
+Projectile::Projectile(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range, Team _team)
 {
 	this->m_Circle = sf::CircleShape(5.f);
 	this->m_Circle.setOrigin(sf::Vector2f(5.f, 5.f));
 	this->m_Position = _pos;
 	this->m_Velocity = _vel;
 	this->m_Type = _type;
+	this->m_Team = _team;
 	switch (this->m_Type)
 	{
 		case FLAMMING :
@@ -33,7 +35,7 @@ Projectile::Projectile(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _typ
 			this->m_Circle.setFillColor(sf::Color::Magenta);
 			break;
 		case CLASSIC :
-			this->m_Circle.setFillColor(sf::Color::White);
+			this->m_Circle.setFillColor(sf::Color::Yellow);
 			break;
 	}
 	this->m_Damage = _dmg;
@@ -70,13 +72,6 @@ bool Projectile::Update(float _deltatime, TileMap& _map)
 void Projectile::Display(Window& _window)
 {
 	_window.Draw(this->m_Circle);
-
-	sf::VertexArray proj(sf::Lines, 2);
-	proj[0].position = this->m_Position;
-	proj[0].color = sf::Color::Blue;
-	proj[1].position = (this->m_Velocity / 10.f) + this->m_Position;
-	proj[1].color = sf::Color::Blue;
-	_window.Draw(proj);
 }
 
 //////////////////////////////////////////////////
@@ -90,9 +85,9 @@ ProjectileList::~ProjectileList()
 	this->Clear();
 }
 
-void ProjectileList::Add(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range)
+void ProjectileList::Add(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range, Team _team)
 {
-	this->m_List.push_back(std::make_shared<Projectile>(_pos, _vel, _type, _dmg, _range));
+	this->m_List.push_back(std::make_shared<Projectile>(_pos, _vel, _type, _dmg, _range, _team));
 }
 void ProjectileList::Add(Projectile& _proj)
 {
@@ -145,9 +140,9 @@ namespace ProjList
 		return ProjList::list.GetList();
 	}
 
-	void Add(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range)
+	void Add(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range, Team _team)
 	{
-		ProjList::list.Add(_pos, _vel, _type, _dmg, _range);
+		ProjList::list.Add(_pos, _vel, _type, _dmg, _range, _team);
 	}
 	void Add(Projectile& _proj)
 	{

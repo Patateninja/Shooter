@@ -26,6 +26,7 @@ class Enemy
 		Enemy(const sf::Vector2f& _stratingPos);
 		~Enemy();
 
+		inline int GetHP() { return this->m_Hp; };
 		inline sf::FloatRect GetHitbox() { return this->m_Circle.getGlobalBounds(); };
 		inline bool GetActive() { return this->m_Active; };
 		inline void SetActive(bool _input) { this->m_Active = _input; };
@@ -59,9 +60,16 @@ class Tank : public Enemy
 
 class Ranged : public Enemy
 {
+	private :
+		float m_ShootTimer;
 	public:
 		Ranged(const sf::Vector2f& _stratingPos);
 		~Ranged();
+
+		void Update(sf::Vector2f& _playerPos, TileMap& _map) override;
+
+		bool CanShoot(sf::Vector2f _playerPos);
+		void Shoot(sf::Vector2f& _playerPos);
 };
 
 class Swarmer : public Enemy
@@ -111,6 +119,8 @@ class EnemyList
 			this->m_List.push_back(std::make_unique<Enemy>(_enemy));
 		}
 		void Clear();
+
+		bool AllDead();
 
 		void Update(sf::Vector2f& _playerPos, TileMap& _map);
 		void Display(Window& _window);

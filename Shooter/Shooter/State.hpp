@@ -1,7 +1,7 @@
 #pragma once
 #include "Player.hpp"
 #include "Enemy.hpp"
-#include "Tile.hpp"
+#include "Stage.hpp"
 
 class StateManager;
 
@@ -53,11 +53,8 @@ class Menu : public State
 class Game : public State
 {
 	private :
-		sf::RenderTexture m_MapTexture;
 		Player m_Player;
-		TileMap m_Map;
-		sf::Sprite m_MapSprite;
-		EnemyList m_EnemyList;
+		Stage m_Stage;
 	public :
 		Game(StateManager* _stateManager);
 		~Game();
@@ -70,13 +67,13 @@ class Game : public State
 		void DeInit() override;
 };
 
-class EndGame : public State
+class Upgrade : public State
 {
 	private :
 
 	public :
-		EndGame(StateManager* _stateManager);
-		~EndGame();
+		Upgrade(StateManager* _stateManager);
+		~Upgrade();
 
 		void Deletor() override;
 
