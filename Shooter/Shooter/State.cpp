@@ -125,10 +125,10 @@ void Game::Init()
 	this->m_MapSprite.setTexture(this->m_MapTexture.getTexture());
 	this->m_MapSprite.setPosition(-Tile::GetSize() / 2.f, - Tile::GetSize() / 2.f);
 
-	this->m_EnemyList.Add<Baseliner>(sf::Vector2f(64.f, 640.f));
-	this->m_EnemyList.Add<Tank>(sf::Vector2f(960.f, 1152.f));
-	this->m_EnemyList.Add<Swarmer>(sf::Vector2f(1152.f, 832.f));
-	this->m_EnemyList.Add<Ranged>(sf::Vector2f(512.f, 1024.f));
+	//this->m_EnemyList.Add<Baseliner>(sf::Vector2f(64.f, 640.f));
+	//this->m_EnemyList.Add<Tank>(sf::Vector2f(960.f, 1152.f));
+	//this->m_EnemyList.Add<Swarmer>(sf::Vector2f(1152.f, 832.f));
+	this->m_EnemyList.Add<Shielded>(sf::Vector2f(512.f, 1024.f));
 }
 void Game::Update()
 {

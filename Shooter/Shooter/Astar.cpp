@@ -69,7 +69,6 @@ std::list<Tile> Astar::Pathfinding(Tile& _start, Tile& _end, TileMap& _map)
 	Node current = Astar::Astar(_start,_end,_map).back();
 	do
 	{
-		std::cout << "Unreaveling" << std::endl;
 		path.push_front(*current.GetTile());
 		current = *current.GetPrev();
 	} while (*current.GetTile() != _start);
@@ -82,8 +81,6 @@ void Astar::BestNode(Node& _node, std::list<Node> _list)
 	bestNode.SetF(int(10e12L));
 	for (Node& node : _list)
 	{
-		std::cout << "Looking for best node" << std::endl;
-
 		if (node.GetF() < bestNode.GetF())
 		{
 			bestNode = node;
@@ -122,8 +119,6 @@ void Astar::BestNode(Node& _node, std::list<Node> _list)
 
 std::list<Node> Astar::Astar(Tile& _start, Tile& _end, TileMap& _map)
 {
-	debug::InitID();
-
 	std::list<Node> toCheck;
 	std::list<Node> checked;
 
@@ -136,23 +131,17 @@ std::list<Node> Astar::Astar(Tile& _start, Tile& _end, TileMap& _map)
 	Node current;
 	do
 	{
-		std::cout << "while loop" << std::endl;
-
 		Astar::BestNode(current, toCheck);
-
 		Astar::RemoveNode(toCheck, current);
-		
 		checked.push_back(current);
 
-		/*if (current == end)
+		if (current == end)
 		{
 			break;
-		}*/
+		}
 
 		for (Tile& neighbor : Astar::Neighbor(current, _map))
 		{
-			std::cout << "neighbor loop" << std::endl;
-
 			Node node = Node(neighbor);
 			if (neighbor.GetWalkable() && Astar::NotInList(checked, node))
 			{
@@ -167,29 +156,7 @@ std::list<Node> Astar::Astar(Tile& _start, Tile& _end, TileMap& _map)
 				}
 			}
 		}
-
-		std::cout << "tocheck size : " << toCheck.size() << std::endl;
-		std::cout << "checked size : " << checked.size() << std::endl;
-
 	} while (current != end);
 
 	return checked;
-}
-
-namespace debug
-{
-	int id;
-
-	void InitID()
-	{
-		debug::id = 0;
-	}
-	int GetID()
-	{
-		return debug::id;
-	}
-	void IDadd()
-	{
-		debug::id++;
-	}
 }

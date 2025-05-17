@@ -228,11 +228,27 @@ Shielded::Shielded(const sf::Vector2f& _startingPos)
 	this->m_MaxHp = 35;
 	this->m_Hp = 35;
 	this->m_Speed = 100.f;
+
+	this->m_Shield = std::make_unique<Shield>(this->m_Position);
 }
 Shielded::~Shielded()
 {
 
 }
+
+void Shielded::Update(sf::Vector2f& _playerPos, TileMap& _map)
+{
+	Enemy::Update(_playerPos,_map);
+
+	this->m_Shield->Udpate(this->m_Active, this->m_Position, Tools::RadToDeg(Tools::VectorToAngle(this->m_Target - this->m_Position)));
+}
+
+void Shielded::Display(Window& _window)
+{
+	Enemy::Display(_window);
+	this->m_Shield->Display(_window);
+}
+
 
 #pragma endregion
 ////////////////////////////////////////////////////////

@@ -42,6 +42,12 @@ namespace Tools
 		return V(_val1 > _val2 ? _val1 : _val2);
 	}
 
+	template<typename T>
+	int Sign(T _val)
+	{
+		return (_val < 0 ? -1 : 1);
+	}
+
 	sf::Vector2f RectCenter(const sf::FloatRect& _rect);
 
 	bool CircleCollision(const sf::FloatRect& _circlehitbox1, const sf::FloatRect& _circlehitbox2);

@@ -1,6 +1,7 @@
 #pragma once
 #include "Projectile.hpp"
 #include "Astar.hpp"
+#include "Shield.hpp"
 
 class Enemy
 {
@@ -31,8 +32,8 @@ class Enemy
 
 		void Respawn();
 
-		void Update(sf::Vector2f& _playerPos, TileMap& _map);
-		void Display(Window& _window);
+		virtual void Update(sf::Vector2f& _playerPos, TileMap& _map);
+		virtual void Display(Window& _window);
 
 		void UpdatePath(sf::Vector2f& _playerPos, TileMap& _map);
 		void Move(sf::Vector2f& _playerPos, TileMap& _map);
@@ -72,9 +73,14 @@ class Swarmer : public Enemy
 
 class Shielded : public Enemy
 {
+	private :
+		std::unique_ptr<Shield> m_Shield;
 	public:
 		Shielded(const sf::Vector2f& _stratingPos);
 		~Shielded();
+
+		void Update(sf::Vector2f& _playerPos, TileMap& _map) override;
+		void Display(Window& _window) override;
 };
 
 class RangedShielded : public Enemy

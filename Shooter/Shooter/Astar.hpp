@@ -33,37 +33,22 @@ namespace Astar
 	std::list<Node> Astar(Tile& _start, Tile& _end, TileMap& _map);
 }
 
-namespace debug
-{
-	void InitID();
-	int GetID();
-	void IDadd();
-}
-
 class Node
 {
 	private :
-		int ID = 0;
 		std::shared_ptr<Node> m_Prev = nullptr;
 		std::shared_ptr<Tile> m_Tile = nullptr;
 		int m_Gcost = 0;
 		int m_Hcost = 0;
 		int m_Fcost = 0;
 	public :
-		Node()
-		{
-			this->ID = debug::GetID();
-			debug::IDadd();
-		}
+		Node() = default;
 		Node(Tile& _tile)
 		{
-			this->ID = debug::GetID();
-			debug::IDadd();
 			this->m_Tile = std::make_shared<Tile>(_tile);
 		};
 		Node(const Node& _node)
 		{
-			this->ID = _node.ID;
 			this->m_Prev = _node.m_Prev;
 			this->m_Tile = std::make_shared<Tile>(*_node.m_Tile);
 			this->m_Gcost = _node.m_Gcost;
