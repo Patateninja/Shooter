@@ -61,7 +61,7 @@ void Menu::Init()
 void Menu::Update()
 {
 	this->m_InputTimer += Time::GetDeltaTime();
-	this->m_Text.setString("Menu\nPress Enter to continue\nPress Escape to exit game");
+	this->m_Text.setString("Main Menu\nPress Enter to continue\nPress Escape to exit game");
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && this->m_InputTimer > 0.2f)
 	{
