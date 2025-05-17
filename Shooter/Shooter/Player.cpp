@@ -27,9 +27,12 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && this->m_InputTimer > 0.3f)
 		{
-			this->m_InputTimer = 0.f;
-			this->Ready();
-			_enemyList.Activate();
+			if (!this->m_Shotgun.Empty())
+			{
+				this->m_InputTimer = 0.f;
+				this->Ready();
+				_enemyList.Activate();
+			}
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && this->m_InputTimer > 0.3f)
@@ -109,7 +112,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 		}
 
 		
-		this->m_Position+= this->m_Velocity * Time::GetDeltaTime();
+		this->m_Position += Tools::AngleToVector((Tools::Magnitude(this->m_Velocity) == 0.f ? 0.f : 350.f), Tools::VectorToAngle(this->m_Velocity)) * Time::GetDeltaTime();
 	}
 
 	this->m_Circle.setPosition(this->m_Position);
@@ -125,35 +128,13 @@ void Player::Display(Window& _window)
 	lines[1].color = sf::Color::Red;
 	_window.Draw(lines);
 
-
-	int pellets = 5;
-	int spreading = 25;
-	for (int i = 0; i < pellets; ++i)
-	{
-		/*sf::VertexArray proj(sf::Lines, 2);
-		proj[0].position = this->m_Position;
-		proj[0].color = sf::Color::Blue;
-
-		float spread = Tools::DegToRad((spreading / 2.f) - (float(i) * float(spreading / (pellets - 1))));
-		float angle = Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition()))) + spread;
-		
-		proj[1].position = (Tools::AngleToVector(1000, angle) - this->m_Velocity) + this->m_Position;
-		proj[1].color = sf::Color::Blue;
-
-		_window.Draw(proj);*/
-	}
-
-
 	this->m_Shotgun.DisplayMagazine(_window);
 }
 
 void Player::Ready()
 {
-	if (true) //Shotgun Not Empty & Other Conditions
-	{
-		this->m_CanMove = true;
-		this->m_CanReload = false;
-	}
+	this->m_CanMove = true;
+	this->m_CanReload = false;
 }
 void Player::Die()
 {

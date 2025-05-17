@@ -1,5 +1,6 @@
 #pragma once
 #include "Window.hpp"
+#include "Projectile.hpp"
 
 class Shield
 {
@@ -17,4 +18,6 @@ class Shield
 
 		void Udpate(bool _active, sf::Vector2f _pos, float _angle);
 		void Display(Window& _window);
+
+		void CheckContact();
 };

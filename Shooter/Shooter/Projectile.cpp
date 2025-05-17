@@ -7,8 +7,8 @@
 
 Projectile::Projectile()
 {
-	this->m_Circle = sf::CircleShape(2.5f);
-	this->m_Circle.setOrigin(sf::Vector2f(2.5f, 2.5f));
+	this->m_Circle = sf::CircleShape(5.f);
+	this->m_Circle.setOrigin(sf::Vector2f(5.f, 5.f));
 	this->m_Position = sf::Vector2f(0.f, 0.f);
 	this->m_Velocity = sf::Vector2f(0.f, 0.f);
 	this->m_Type = CLASSIC;
@@ -19,8 +19,8 @@ Projectile::Projectile()
 }
 Projectile::Projectile(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range)
 {
-	this->m_Circle = sf::CircleShape(2.5f);
-	this->m_Circle.setOrigin(sf::Vector2f(2.5f, 2.5f));
+	this->m_Circle = sf::CircleShape(5.f);
+	this->m_Circle.setOrigin(sf::Vector2f(5.f, 5.f));
 	this->m_Position = _pos;
 	this->m_Velocity = _vel;
 	this->m_Type = _type;
@@ -70,7 +70,6 @@ bool Projectile::Update(float _deltatime, TileMap& _map)
 void Projectile::Display(Window& _window)
 {
 	_window.Draw(this->m_Circle);
-
 
 	sf::VertexArray proj(sf::Lines, 2);
 	proj[0].position = this->m_Position;

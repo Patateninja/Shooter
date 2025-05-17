@@ -1,8 +1,6 @@
 #pragma once
-#include "tools.hpp"
-#include "Window.hpp"
 #include "Tile.hpp"
-#include <list>
+#include "Window.hpp"
 
 typedef enum ProjectileType
 {
