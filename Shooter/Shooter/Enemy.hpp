@@ -60,9 +60,16 @@ class Tank : public Enemy
 
 class Ranged : public Enemy
 {
+	private :
+		float m_ShootTimer;
 	public:
 		Ranged(const sf::Vector2f& _stratingPos);
 		~Ranged();
+
+		void Update(sf::Vector2f& _playerPos, TileMap& _map) override;
+
+		bool CanShoot(sf::Vector2f _playerPos);
+		void Shoot(sf::Vector2f& _playerPos);
 };
 
 class Swarmer : public Enemy

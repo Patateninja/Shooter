@@ -80,7 +80,7 @@ void Enemy::CheckDamage()
 {
 	for (std::shared_ptr<Projectile>& proj : ProjList::GetList())
 	{
-		if (Tools::CircleCollision(this->m_Circle.getGlobalBounds(), proj->GetHitbox()) && [&](auto _list, std::shared_ptr<Projectile>& _proj) -> bool { for (auto pr : _list) { if (proj == pr.lock()) {return false; } } return true; } (this->m_IgnoreProj, proj))
+		if (Tools::CircleCollision(this->m_Circle.getGlobalBounds(), proj->GetHitbox()) && proj->GetTeam() == PLAYER && [&](auto _list, std::shared_ptr<Projectile>& _proj) -> bool { for (auto pr : _list) { if (proj == pr.lock()) { return false; } } return true; } (this->m_IgnoreProj, proj))
 		{
 			TakeDamage(proj);
 		}
@@ -186,10 +186,37 @@ Ranged::Ranged(const sf::Vector2f& _startingPos)
 	this->m_MaxHp = 25;
 	this->m_Hp = 25;
 	this->m_Speed = 250.f;
+	this->m_ShootTimer = 3.f;
 }
 Ranged::~Ranged()
 {
 
+}
+
+void Ranged::Update(sf::Vector2f& _playerPos, TileMap& _map)
+{
+	Enemy::Update(_playerPos, _map);
+	if (this->m_Active && this->CanShoot(_playerPos))
+	{
+		this->Shoot(_playerPos);
+	}
+}
+
+bool Ranged::CanShoot(sf::Vector2f _playerPos)
+{
+	return (Tools::Distance(this->m_Position, _playerPos) < 128.f)
+}
+void Ranged::Shoot(sf::Vector2f& _playerPos)
+{
+	if (this->m_ShootTimer <= 0.f)
+	{
+		ProjList::Add(this->m_Position, Tools::AngleToVector(1000, Tools::VectorToAngle(_playerPos- this->m_Position)), CLASSIC, 1, 1000, ENEMY);
+		this->m_ShootTimer = 3.f;
+	}
+	else
+	{
+		this->m_ShootTimer -= Time::GetDeltaTime();
+	}
 }
 
 #pragma endregion
