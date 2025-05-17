@@ -27,6 +27,7 @@ class Enemy
 		Enemy(const sf::Vector2f& _stratingPos);
 		~Enemy();
 
+		inline sf::Vector2f GetPos() { return this->m_Position; };
 		inline int GetHP() { return this->m_Hp; };
 		inline sf::FloatRect GetHitbox() { return this->m_Circle.getGlobalBounds(); };
 		inline bool GetActive() { return this->m_Active; };
@@ -37,6 +38,7 @@ class Enemy
 		virtual void Update(sf::Vector2f& _playerPos, TileMap& _map);
 		virtual void Display(Window& _window);
 
+		bool PlayerInSight(sf::Vector2f _playerPos, TileMap& _map);
 		void UpdatePath(sf::Vector2f& _playerPos, TileMap& _map);
 		void Move(sf::Vector2f& _playerPos, TileMap& _map);
 		void CheckDamage();
@@ -69,7 +71,6 @@ class Ranged : public Enemy
 
 		void Update(sf::Vector2f& _playerPos, TileMap& _map) override;
 
-		bool Aimable(sf::Vector2f _playerPos);
 		bool CanShoot(sf::Vector2f _playerPos);
 		void Shoot(sf::Vector2f& _playerPos);
 };

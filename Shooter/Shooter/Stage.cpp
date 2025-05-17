@@ -26,10 +26,10 @@ void Stage::SpawnEnemies()
 	}
 	else if (this->m_Num % 3 == 1)
 	{
-		this->m_EnemyList.Add<Tank>(sf::Vector2f(64.f, 640.f));
+		//this->m_EnemyList.Add<Tank>(sf::Vector2f(64.f, 640.f));
 		this->m_EnemyList.Add<Ranged>(sf::Vector2f(960.f, 1152.f));
-		this->m_EnemyList.Add<Ranged>(sf::Vector2f(1216, 832.f));
-		this->m_EnemyList.Add<Tank>(sf::Vector2f(576.f, 1024.f));
+		//this->m_EnemyList.Add<Ranged>(sf::Vector2f(1216, 832.f));
+		//this->m_EnemyList.Add<Tank>(sf::Vector2f(576.f, 1024.f));
 	}
 	else
 	{
