@@ -16,6 +16,7 @@ class Enemy
 		int m_MaxHp = 0.f;
 		int m_Hp = 0.f;
 		int m_BurningDamage = 0.f;
+		float m_AttackRange = 0.f;
 		float m_Speed = 0.f;
 		float m_BurnCooldown = 0.f;
 		float m_PathUdpateCooldown = 0.f;
@@ -68,6 +69,7 @@ class Ranged : public Enemy
 
 		void Update(sf::Vector2f& _playerPos, TileMap& _map) override;
 
+		bool Aimable(sf::Vector2f _playerPos);
 		bool CanShoot(sf::Vector2f _playerPos);
 		void Shoot(sf::Vector2f& _playerPos);
 };

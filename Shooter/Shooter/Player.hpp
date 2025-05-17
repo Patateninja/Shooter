@@ -24,6 +24,8 @@ class Player
 		void Update(EnemyList& _enemyList, TileMap& _map, Window& _window);
 		void Display(Window& _window);
 
+		bool CheckDamage();
+
 		void Ready();
 		void Die();
 		void Respawn();

@@ -40,7 +40,10 @@ void Enemy::Update(sf::Vector2f& _playerPos, TileMap& _map)
 		{
 			this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 		}
-		this->Move(_playerPos, _map);
+		if (Tools::Distance(this->m_Position, _playerPos) > this->m_AttackRange)
+		{
+			this->Move(_playerPos, _map);
+		}
 		this->CheckDamage();
 
 		if (this->m_Burning)
@@ -183,6 +186,7 @@ Ranged::Ranged(const sf::Vector2f& _startingPos)
 	this->m_Circle.setPosition(_startingPos);
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
+	this->m_AttackRange = Tile::GetSize() * 7.f;
 	this->m_MaxHp = 25;
 	this->m_Hp = 25;
 	this->m_Speed = 250.f;
@@ -202,9 +206,13 @@ void Ranged::Update(sf::Vector2f& _playerPos, TileMap& _map)
 	}
 }
 
+bool Ranged::Aimable(sf::Vector2f _playerPos)
+{	
+	return true;
+}
 bool Ranged::CanShoot(sf::Vector2f _playerPos)
 {
-	return (Tools::Distance(this->m_Position, _playerPos) < 128.f)
+	return (Tools::Distance(this->m_Position, _playerPos) < Tile::GetSize() * 7 && this->Aimable(_playerPos));
 }
 void Ranged::Shoot(sf::Vector2f& _playerPos)
 {
