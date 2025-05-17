@@ -34,7 +34,7 @@ void Enemy::Update(sf::Vector2f& _playerPos, TileMap& _map)
 		if (this->m_PathUdpateCooldown <= 0.f || this->m_Path.empty())
 		{
 			this->UpdatePath(_playerPos, _map);
-			this->m_PathUdpateCooldown = 0.5f;
+			this->m_PathUdpateCooldown = 0.75f;
 		}
 		else
 		{
@@ -143,7 +143,7 @@ Baseliner::Baseliner(const sf::Vector2f& _startingPos)
 	this->m_Position = _startingPos;
 	this->m_MaxHp = 35;
 	this->m_Hp = 35;
-	this->m_Speed = 200.f;
+	this->m_Speed = 250.f;
 }
 Baseliner::~Baseliner()
 {
@@ -164,7 +164,7 @@ Tank::Tank(const sf::Vector2f& _startingPos)
 	this->m_Position = _startingPos;
 	this->m_MaxHp = 75;
 	this->m_Hp = 75;
-	this->m_Speed = 150.f;
+	this->m_Speed = 200.f;
 }
 Tank::~Tank()
 {
@@ -185,7 +185,7 @@ Ranged::Ranged(const sf::Vector2f& _startingPos)
 	this->m_Position = _startingPos;
 	this->m_MaxHp = 25;
 	this->m_Hp = 25;
-	this->m_Speed = 200.f;
+	this->m_Speed = 250.f;
 }
 Ranged::~Ranged()
 {
@@ -206,7 +206,7 @@ Swarmer::Swarmer(const sf::Vector2f& _startingPos)
 	this->m_Position = _startingPos;
 	this->m_MaxHp = 10;
 	this->m_Hp = 10;
-	this->m_Speed = 300.f;
+	this->m_Speed = 400.f;
 }
 Swarmer::~Swarmer()
 {
@@ -227,7 +227,7 @@ Shielded::Shielded(const sf::Vector2f& _startingPos)
 	this->m_Position = _startingPos;
 	this->m_MaxHp = 35;
 	this->m_Hp = 35;
-	this->m_Speed = 100.f;
+	this->m_Speed = 150.f;
 
 	this->m_Shield = std::make_unique<Shield>(this->m_Position);
 }
@@ -264,7 +264,7 @@ RangedShielded::RangedShielded(const sf::Vector2f& _startingPos)
 	this->m_Position = _startingPos;
 	this->m_MaxHp = 50;
 	this->m_Hp = 50;
-	this->m_Speed = 100.f;
+	this->m_Speed = 150.f;
 }
 RangedShielded::~RangedShielded()
 {

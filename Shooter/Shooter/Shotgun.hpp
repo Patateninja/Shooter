@@ -11,6 +11,8 @@ class Shotgun
 		Shotgun();
 		~Shotgun();
 
+		inline bool Empty() { return this->m_Magazine.empty(); };
+
 		void DisplayMagazine(Window& _window);
 
 		void Load(int _input);

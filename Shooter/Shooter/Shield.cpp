@@ -13,7 +13,10 @@ void Shield::Udpate(bool _active, sf::Vector2f _pos, float _angle)
 	this->SetPos(_pos);
 	this->SetAngle(_angle);
 
-	this->CheckContact();
+	if (this->m_Active)
+	{
+		this->CheckContact();
+	}
 }
 
 void Shield::Display(Window& _window)
