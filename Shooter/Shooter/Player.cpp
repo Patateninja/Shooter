@@ -4,11 +4,16 @@
 
 Player::Player()
 {
+	this->m_Text.setFont(RscMana::Get<sf::Font>("Mono"));
 	this->m_Circle = sf::CircleShape(20.f);
 	this->m_Circle.setOrigin(20.f, 20.f);
 	this->m_Circle.setFillColor(sf::Color::Blue);
 	this->m_Position = sf::Vector2f(576.f, 64.f);
 	this->m_Velocity = sf::Vector2f(0.f, 0.f);
+	this->m_MaxAmmo = 15.f;
+	this->m_BuckShot = this->m_MaxAmmo;
+	this->m_DragonBreath = this->m_MaxAmmo;
+	this->m_Slug = this->m_MaxAmmo;
 	this->m_InputTimer = 0.f;
 	this->m_Life = 3;
 	this->m_CanMove = false;
@@ -35,29 +40,37 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 			}
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && this->m_InputTimer > 0.3f)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && !this->m_Shotgun.Full() && this->m_InputTimer > 0.3f)
 		{
 			this->m_InputTimer = 0.f;
 			this->m_Shotgun.Load(1);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && this->m_InputTimer > 0.3f)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && !this->m_Shotgun.Full() && this->m_BuckShot != 0 && this->m_InputTimer > 0.3f)
 		{
 			this->m_InputTimer = 0.f;
+			--this->m_BuckShot;
 			this->m_Shotgun.Load(2);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && this->m_InputTimer > 0.3f)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && !this->m_Shotgun.Full() && this->m_DragonBreath != 0 && this->m_InputTimer > 0.3f)
 		{
 			this->m_InputTimer = 0.f;
+			--this->m_DragonBreath;
 			this->m_Shotgun.Load(3);
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && this->m_InputTimer > 0.3f)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && !this->m_Shotgun.Full() && this->m_Slug != 0 && this->m_InputTimer > 0.3f)
 		{
 			this->m_InputTimer = 0.f;
+			--this->m_Slug;
 			this->m_Shotgun.Load(4);
 		}
+
+		this->m_Text.setString("- Birdshot : \u221E \n- Buckshot : " + std::to_string(this->m_BuckShot) + "\n- DragonBreath : " + std::to_string(this->m_DragonBreath) + "\n- Slug : " + std::to_string(this->m_Slug));
+		this->m_Text.setPosition(_window.RelativePos(sf::Vector2f(10.f, 110.f)));
 	}
 	else if (this->m_CanMove)
 	{
+		this->m_Text.setPosition(_window.RelativePos(sf::Vector2f(10.f, 110.f)));
+
 		for (std::shared_ptr<Enemy>& enemy : _enemyList.GetList())
 		{
 			if (enemy->GetActive() && Tools::CircleCollision(this->m_Circle.getGlobalBounds(), enemy->GetHitbox()))
@@ -127,6 +140,8 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 void Player::Display(Window& _window)
 {
 	_window.Draw(this->m_Circle);
+
+	_window.Draw(this->m_Text);
 
 	sf::VertexArray lines(sf::Lines, 2);
 	lines[0].position = this->m_Position;

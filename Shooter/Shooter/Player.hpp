@@ -5,12 +5,17 @@
 class Player
 {
 	private :
+		sf::Text m_Text;
 		sf::CircleShape m_Circle;
 		sf::Vector2f m_Position;
 		sf::Vector2f m_Velocity;
 		Shotgun m_Shotgun;
 		float m_InputTimer;
 		int m_Life;
+		int m_MaxAmmo;
+		int m_BuckShot;
+		int m_DragonBreath;
+		int m_Slug;
 		bool m_CanMove;
 		bool m_CanReload;
 	public :

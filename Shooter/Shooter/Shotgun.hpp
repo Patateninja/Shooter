@@ -12,6 +12,7 @@ class Shotgun
 		~Shotgun();
 
 		inline bool Empty() { return this->m_Magazine.empty(); };
+		inline bool Full() { return this->m_Magazine.size() == this->m_MaxCapacity; }
 
 		void DisplayMagazine(Window& _window);
 
