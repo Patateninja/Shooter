@@ -35,6 +35,7 @@ void StateManager::DisplayWindow()
 void StateManager::Update()
 {
 	Time::UpdateTime();
+	Time::Restart();
 
 	this->m_InputTimer += Time::GetDeltaTime();
 
@@ -45,8 +46,6 @@ void StateManager::Update()
 	}
 
 	this->m_CurrentState->Update();
-
-	Time::Restart();
 }
 void StateManager::Display()
 {
