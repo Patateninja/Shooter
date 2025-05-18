@@ -99,6 +99,9 @@
     <ClCompile Include="Stage.cpp">
       <Filter>Source Files\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Colors.cpp">
+      <Filter>Source Files\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tools.hpp">
@@ -145,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="Stage.hpp">
       <Filter>Header Files\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Colors.hpp">
+      <Filter>Header Files\Tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

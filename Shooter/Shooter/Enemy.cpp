@@ -40,7 +40,7 @@ void Enemy::Update(sf::Vector2f& _playerPos, TileMap& _map)
 		{
 			this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 		}
-		this->m_ProjectileOrigin = this->m_Position + Tools::AngleToVector(15.f, Tools::VectorToAngle(_playerPos - this->m_Position) + Tools::DegToRad(90));
+		this->m_ProjectileOrigin = this->m_Position + Tools::AngleToVector(20.f, Tools::VectorToAngle(_playerPos - this->m_Position) + Tools::DegToRad(90));
 		if (Tools::Distance(this->m_Position, _playerPos) > this->m_AttackRange || !this->PlayerInSight(_playerPos,_map))
 		{
 			this->Move(_playerPos, _map);
@@ -120,7 +120,7 @@ void Enemy::TakeDamage(std::shared_ptr<Projectile>& _projectile)
 		this->m_Burning = true;
 		this->m_BurnCooldown = 3.f;
 		this->m_BurningDamage += _projectile->GetDamage();
-		this->m_Circle.setFillColor(sf::Color(255, 155, 0, 255));
+		this->m_Circle.setFillColor(Color::Flamming);
 	}
 
 	if (this->m_Hp <= 0)
@@ -140,7 +140,7 @@ void Enemy::TakeDamage(int _damage)
 void Enemy::Die()
 {
 	this->m_Active = false;
-	this->m_Circle.setFillColor(sf::Color(125, 125, 125, 255));
+	this->m_Circle.setFillColor(Color::Grey);
 	this->m_IgnoreProj.clear();
 }
 

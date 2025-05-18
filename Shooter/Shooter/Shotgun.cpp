@@ -16,7 +16,7 @@ void Shotgun::DisplayMagazine(Window& _window)
 {
 	sf::RectangleShape bg(sf::Vector2f(1135.f, 100.f));
 	bg.setPosition(_window.RelativePos(sf::Vector2f(10.f, 10.f)));
-	bg.setFillColor(sf::Color(100, 100, 100, 255));
+	bg.setFillColor(Color::Grey);
 	_window.Draw(bg);
 
 	for (int i = 0; i < this->m_Magazine.size(); ++i)
@@ -26,7 +26,7 @@ void Shotgun::DisplayMagazine(Window& _window)
 
 		if (dynamic_cast<BirdShot*>(this->m_Magazine[i].get()))
 		{
-			shell.setFillColor(sf::Color(0, 255, 0, 255));
+			shell.setFillColor(sf::Color::Green);
 		}
 		else if (dynamic_cast<BuckShot*>(this->m_Magazine[i].get()))
 		{
@@ -34,11 +34,11 @@ void Shotgun::DisplayMagazine(Window& _window)
 		}
 		else if (dynamic_cast<DragonBreath*>(this->m_Magazine[i].get()))
 		{
-			shell.setFillColor(sf::Color(255, 125, 0, 255));
+			shell.setFillColor(Color::Flamming);
 		}
 		else if (dynamic_cast<Slug*>(this->m_Magazine[i].get()))
 		{
-			shell.setFillColor(sf::Color(255, 255, 0, 255));
+			shell.setFillColor(sf::Color::Yellow);
 		}
 
 		_window.Draw(shell);
