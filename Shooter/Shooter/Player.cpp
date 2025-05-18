@@ -64,7 +64,8 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 			this->m_Shotgun.Load(4);
 		}
 
-		this->m_Text.setString("- Birdshot : \u221E \n- Buckshot : " + std::to_string(this->m_BuckShot) + "\n- DragonBreath : " + std::to_string(this->m_DragonBreath) + "\n- Slug : " + std::to_string(this->m_Slug));
+		sf::String infinite(L"\u221E");
+		this->m_Text.setString("- Birdshot : " + infinite + " \n- Buckshot : " + std::to_string(this->m_BuckShot) + "\n- DragonBreath : " + std::to_string(this->m_DragonBreath) + "\n- Slug : " + std::to_string(this->m_Slug));
 		this->m_Text.setPosition(_window.RelativePos(sf::Vector2f(10.f, 110.f)));
 	}
 	else if (this->m_CanMove)

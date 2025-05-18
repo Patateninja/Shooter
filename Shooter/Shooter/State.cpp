@@ -126,7 +126,7 @@ void Game::Update()
 {
 	this->m_InputTimer += Time::GetDeltaTime();
 
-	this->m_Text.setString("Stage : " + std::to_string(this->m_Stage.GetNum()) + " / " + std::to_string(this->m_Player.GetHP()) + " Live(s) / Projectiles : " + std::to_string(ProjList::Size()) + " / " + std::to_string(int(1 / Time::GetDeltaTime())) + " fps");
+	this->m_Text.setString("Stage : " + std::to_string(this->m_Stage.GetNum()) + " / " + std::to_string(this->m_Player.GetHP()) + " Live(s) / " + std::to_string(int(1 / Time::GetDeltaTime())) + " fps");
 	this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
 
 	this->m_Player.Update(this->m_Stage.GetEnemies(), this->m_Stage.GetMap(), this->Window());
