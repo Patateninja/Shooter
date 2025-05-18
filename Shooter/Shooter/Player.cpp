@@ -64,8 +64,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 			this->m_Shotgun.Load(4);
 		}
 
-		sf::String infinite(L"\u221E");
-		this->m_Text.setString("- Birdshot : " + infinite + " \n- Buckshot : " + std::to_string(this->m_BuckShot) + "\n- DragonBreath : " + std::to_string(this->m_DragonBreath) + "\n- Slug : " + std::to_string(this->m_Slug));
+		this->m_Text.setString("- Birdshot : " + this->infinite + " \n- Buckshot : " + std::to_string(this->m_BuckShot) + "\n- DragonBreath : " + std::to_string(this->m_DragonBreath) + "\n- Slug : " + std::to_string(this->m_Slug));
 		this->m_Text.setPosition(_window.RelativePos(sf::Vector2f(10.f, 110.f)));
 	}
 	else if (this->m_CanMove)
@@ -95,28 +94,28 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 		{
 			if (_map.GetTile(sf::Vector2i((this->m_Position - sf::Vector2f(0, this->m_Circle.getRadius())) - (sf::Vector2f(0,375) * Time::GetDeltaTime()))).GetWalkable())
 			{
-				this->m_Velocity.y = -375;
+				this->m_Velocity.y = -1;
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
 			if (_map.GetTile(sf::Vector2i((this->m_Position + sf::Vector2f(0, this->m_Circle.getRadius())) + (sf::Vector2f(0, 375) * Time::GetDeltaTime()))).GetWalkable())
 			{
-				this->m_Velocity.y = 375;
+				this->m_Velocity.y = 1;
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 		{
 			if (_map.GetTile(sf::Vector2i((this->m_Position - sf::Vector2f(this->m_Circle.getRadius(),0)) - (sf::Vector2f(375, 0) * Time::GetDeltaTime()))).GetWalkable())
 			{
-				this->m_Velocity.x = -375;
+				this->m_Velocity.x = -1;
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
 			if (_map.GetTile(sf::Vector2i((this->m_Position + sf::Vector2f(this->m_Circle.getRadius(),0)) + (sf::Vector2f(375, 0) * Time::GetDeltaTime()))).GetWalkable())
 			{
-				this->m_Velocity.x = 375;
+				this->m_Velocity.x = 1;
 			}
 		}
 
