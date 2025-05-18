@@ -29,6 +29,7 @@ class Enemy
 		~Enemy();
 
 		inline sf::Vector2f GetPos() { return this->m_Position; };
+		inline sf::Vector2f GetProjOrigin() { return this->m_ProjectileOrigin; };
 		inline int GetHP() { return this->m_Hp; };
 		inline sf::FloatRect GetHitbox() { return this->m_Circle.getGlobalBounds(); };
 		inline bool GetActive() { return this->m_Active; };
@@ -97,9 +98,18 @@ class Shielded : public Enemy
 
 class RangedShielded : public Enemy
 {
+	private:
+		float m_ShootTimer;
+		std::unique_ptr<Shield> m_Shield;
 	public:
 		RangedShielded(const sf::Vector2f& _stratingPos);
 		~RangedShielded();
+
+		void Update(sf::Vector2f& _playerPos, TileMap& _map) override;
+		void Display(Window& _window) override;
+
+		bool CanShoot(sf::Vector2f _playerPos);
+		void Shoot(sf::Vector2f& _playerPos);
 };
 
 class EnemyList

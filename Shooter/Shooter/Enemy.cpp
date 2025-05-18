@@ -146,7 +146,7 @@ void Enemy::Die()
 
 #pragma endregion
 ////////////////////////////////////////////////////////
-#pragma region Enemy_Types
+#pragma region Enemy Types
 #pragma region Baseliner
 
 Baseliner::Baseliner(const sf::Vector2f& _startingPos)
@@ -306,13 +306,51 @@ RangedShielded::RangedShielded(const sf::Vector2f& _startingPos)
 	this->m_Circle.setPosition(_startingPos);
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
+	this->m_AttackRange = Tile::GetSize() * 7.f;
 	this->m_MaxHp = 50;
 	this->m_Hp = 50;
 	this->m_Speed = 150.f;
+	this->m_ShootTimer = 1.5f;
+
+	this->m_Shield = std::make_unique<Shield>(this->m_Position);
 }
 RangedShielded::~RangedShielded()
 {
 
+}
+
+void RangedShielded::Update(sf::Vector2f& _playerPos, TileMap& _map)
+{
+	Enemy::Update(_playerPos, _map);
+
+	if (this->m_Active && this->CanShoot(_playerPos))
+	{
+		this->Shoot(_playerPos);
+	}
+
+	this->m_Shield->Udpate(this->m_Active, this->m_Position, Tools::RadToDeg(Tools::VectorToAngle(this->m_Target - this->m_Position)));
+}
+void RangedShielded::Display(Window& _window)
+{
+	Enemy::Display(_window);
+	this->m_Shield->Display(_window);
+}
+
+bool RangedShielded::CanShoot(sf::Vector2f _playerPos)
+{
+	return (Tools::Distance(this->m_ProjectileOrigin, _playerPos) < m_AttackRange);
+}
+void RangedShielded::Shoot(sf::Vector2f& _playerPos)
+{
+	if (this->m_ShootTimer <= 0.f)
+	{
+		ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin)), CLASSIC, 1, 1000, ENEMY);
+		this->m_ShootTimer = 1.5f;
+	}
+	else
+	{
+		this->m_ShootTimer -= Time::GetDeltaTime();
+	}
 }
 
 #pragma endregion

@@ -35,7 +35,7 @@ void Shield::CheckContact()
 {
 	for (std::shared_ptr<Projectile>& proj : ProjList::GetList())
 	{
-		if (this->m_Rect.getGlobalBounds().intersects(proj->GetHitbox()) && proj->GetType() != PIERCING)
+		if (proj->GetTeam() == PLAYER && this->m_Rect.getGlobalBounds().intersects(proj->GetHitbox()) && proj->GetType() != PIERCING)
 		{
 			proj->SetToDestroy(true);
 		}
