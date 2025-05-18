@@ -2,6 +2,7 @@
 #include "Projectile.hpp"
 #include "Astar.hpp"
 #include "Shield.hpp"
+#include <ranges>
 
 class Enemy
 {
@@ -143,4 +144,5 @@ class EnemyList
 		void Respawn();
 
 		inline int Size() { return int(this->m_List.size()); };
+		inline int Alive() { int i = 0; for (std::shared_ptr<Enemy>& enemy : this->m_List) { if (enemy->GetHP() > 0) { ++i; } } return i; }
 };

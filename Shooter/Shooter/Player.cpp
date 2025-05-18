@@ -70,6 +70,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 	else if (this->m_CanMove)
 	{
 		this->m_Text.setPosition(_window.RelativePos(sf::Vector2f(10.f, 110.f)));
+		this->m_Text.setString("Remaining : " + std::to_string(_enemyList.Alive()));
 
 		for (std::shared_ptr<Enemy>& enemy : _enemyList.GetList())
 		{
