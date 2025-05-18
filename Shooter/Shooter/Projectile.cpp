@@ -26,18 +26,7 @@ Projectile::Projectile(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _typ
 	this->m_Velocity = _vel;
 	this->m_Type = _type;
 	this->m_Team = _team;
-	switch (this->m_Type)
-	{
-		case FLAMMING :
-			this->m_Circle.setFillColor(sf::Color::Red);
-			break;
-		case PIERCING :
-			this->m_Circle.setFillColor(sf::Color::Magenta);
-			break;
-		case CLASSIC :
-			this->m_Circle.setFillColor(sf::Color::Yellow);
-			break;
-	}
+	this->m_Circle.setFillColor(sf::Color::Red);	
 	this->m_Damage = _dmg;
 	this->m_Range = _range;
 	this->m_Distance = 0.f;

@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include "Colors.hpp"
 #include <cmath>
 #include <ctime>
 #include <cstdlib>
@@ -56,6 +57,7 @@ namespace Tools
 namespace Time
 {
 	void Init();
+	void UpdateTime();
 	float GetDeltaTime();
 	sf::Time Restart();
 }

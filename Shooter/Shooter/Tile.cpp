@@ -103,13 +103,13 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 		switch (tileIt->GetType())
 		{
 			case WALL :
-				this->m_RectRenderer.setFillColor(sf::Color::Yellow);
+				this->m_RectRenderer.setFillColor(Color::Wall);
 				break;
 			case FURNITURE :
-				this->m_RectRenderer.setFillColor(sf::Color::Green);
+				this->m_RectRenderer.setFillColor(Color::Furniture);
 				break;
 			case FLOOR :
-				this->m_RectRenderer.setFillColor(sf::Color::Cyan);
+				this->m_RectRenderer.setFillColor(Color::Flooring);
 				break;
 			default :
 				m_RectRenderer.setFillColor(sf::Color::White);

@@ -153,6 +153,23 @@ void Game::Display()
 	ProjList::Display(this->Window());
 	this->m_Player.Display(this->Window());
 
+	/// temp ///
+	for (std::shared_ptr<Enemy>& enemy : this->m_Stage.GetEnemies().GetList())
+	{
+		sf::VertexArray sight(sf::Lines, 2);
+		for (int i = 1; i <= int(Tools::Distance(this->m_Player.GetPos(), enemy->GetProjOrigin()) + 1); ++i)
+		{
+			Tile tile = this->m_Stage.GetMap().GetTile(sf::Vector2i(Tools::Normalize(this->m_Player.GetPos() - enemy->GetProjOrigin()) * float(i)) + sf::Vector2i(enemy->GetProjOrigin()));
+			sight[0].position = enemy->GetProjOrigin();
+			sight[0].color = (tile.GetType() == WALL ? sf::Color::Red : sf::Color::Green);
+			sight[1].position = tile.GetCood();
+			sight[1].color = (tile.GetType() == WALL ? sf::Color::Red : sf::Color::Green);
+			this->Draw(sight);
+		}
+	}
+	///////////
+
+
 	this->Draw(this->m_Text);
 
 	this->DisplayWindow();

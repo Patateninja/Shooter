@@ -68,6 +68,13 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 			}
 		}
 
+		if (this->CheckDamage())
+		{
+			this->Die();
+			_enemyList.Respawn();
+			return;
+		}
+
 		this->m_Velocity.x = 0;
 		this->m_Velocity.y = 0;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
@@ -129,6 +136,19 @@ void Player::Display(Window& _window)
 	_window.Draw(lines);
 
 	this->m_Shotgun.DisplayMagazine(_window);
+}
+
+bool Player::CheckDamage()
+{
+	for (std::shared_ptr<Projectile>& proj : ProjList::GetList())
+	{
+		if (Tools::CircleCollision(this->m_Circle.getGlobalBounds(), proj->GetHitbox()) && proj->GetTeam() == ENEMY)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void Player::Ready()

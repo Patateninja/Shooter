@@ -5,6 +5,7 @@
 StateManager::StateManager()
 {
 	RscMana::Init();
+	Time::Init();
 	this->m_Window.Create(sf::VideoMode(1920,1080),"Shooter", sf::Style::Default);
 	this->m_CurrentState = new Menu(this);
 	this->m_CurrentState->Init();
@@ -33,6 +34,8 @@ void StateManager::DisplayWindow()
 
 void StateManager::Update()
 {
+	Time::UpdateTime();
+
 	this->m_InputTimer += Time::GetDeltaTime();
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F11) && this->m_InputTimer > 0.5f)
