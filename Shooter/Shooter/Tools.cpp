@@ -79,15 +79,22 @@ bool Tools::CircleCollision(const sf::FloatRect& _circlehitbox1, const sf::Float
 namespace Time
 {
 	sf::Clock time;
+	float deltaTime;
 
 	void Init()
 	{
 		Time::time = sf::Clock();
+		Time::deltaTime = 0.f;
+	}
+
+	void UpdateTime()
+	{
+		Time::deltaTime = Tools::GetDeltaTime(Time::time);
 	}
 
 	float GetDeltaTime()
 	{
-		return Tools::GetDeltaTime(Time::time);
+		return Time::deltaTime;
 	}
 
 	sf::Time Restart()

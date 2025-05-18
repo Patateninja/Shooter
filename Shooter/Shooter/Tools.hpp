@@ -56,6 +56,7 @@ namespace Tools
 namespace Time
 {
 	void Init();
+	void UpdateTime();
 	float GetDeltaTime();
 	sf::Time Restart();
 }

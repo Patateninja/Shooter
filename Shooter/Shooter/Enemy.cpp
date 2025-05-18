@@ -66,8 +66,7 @@ bool Enemy::PlayerInSight(sf::Vector2f _playerPos, TileMap& _map)
 {
 	for (int i = 1; i <= int(Tools::Distance(_playerPos, this->m_Position)); ++i)
 	{
-		Tile tile = _map.GetTile(sf::Vector2i(Tools::Normalize(_playerPos - this->m_Position) * float(i)) + sf::Vector2i(this->m_Position));
-		if (tile.GetType() == WALL)
+		if (_map.GetTile(sf::Vector2i(Tools::Normalize(_playerPos - this->m_Position) * float(i)) + sf::Vector2i(this->m_Position)).GetType() == WALL)
 		{
 			return false;
 		}
@@ -203,7 +202,7 @@ Ranged::Ranged(const sf::Vector2f& _startingPos)
 	this->m_MaxHp = 25;
 	this->m_Hp = 25;
 	this->m_Speed = 250.f;
-	this->m_ShootTimer = 3.f;
+	this->m_ShootTimer = 1.5f;
 }
 Ranged::~Ranged()
 {
