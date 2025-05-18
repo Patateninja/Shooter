@@ -11,6 +11,7 @@ class Enemy
 		std::list<Tile> m_Path;
 		sf::Vector2f m_StartingPosition;
 		sf::Vector2f m_Position;
+		sf::Vector2f m_ProjectileOrigin;
 		sf::Vector2f m_Velocity;
 		sf::Vector2f m_Target;
 		int m_MaxHp = 0.f;

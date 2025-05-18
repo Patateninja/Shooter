@@ -40,6 +40,7 @@ void Enemy::Update(sf::Vector2f& _playerPos, TileMap& _map)
 		{
 			this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 		}
+		this->m_ProjectileOrigin = this->m_Position + Tools::AngleToVector(15.f, Tools::VectorToAngle(_playerPos - this->m_Position) + Tools::DegToRad(90));
 		if (Tools::Distance(this->m_Position, _playerPos) > this->m_AttackRange || !this->PlayerInSight(_playerPos,_map))
 		{
 			this->Move(_playerPos, _map);
@@ -64,9 +65,9 @@ void Enemy::Display(Window& _window)
 
 bool Enemy::PlayerInSight(sf::Vector2f _playerPos, TileMap& _map)
 {
-	for (int i = 1; i <= int(Tools::Distance(_playerPos, this->m_Position)); ++i)
+	for (int i = 1; i <= int(Tools::Distance(_playerPos, this->m_ProjectileOrigin)); ++i)
 	{
-		if (_map.GetTile(sf::Vector2i(Tools::Normalize(_playerPos - this->m_Position) * float(i)) + sf::Vector2i(this->m_Position)).GetType() == WALL)
+		if (_map.GetTile(sf::Vector2i(Tools::Normalize(_playerPos - this->m_ProjectileOrigin) * float(i)) + sf::Vector2i(this->m_ProjectileOrigin)).GetType() == WALL)
 		{
 			return false;
 		}
@@ -220,14 +221,14 @@ void Ranged::Update(sf::Vector2f& _playerPos, TileMap& _map)
 
 bool Ranged::CanShoot(sf::Vector2f _playerPos)
 {
-	return (Tools::Distance(this->m_Position, _playerPos) < Tile::GetSize() * 7);
+	return (Tools::Distance(this->m_ProjectileOrigin, _playerPos) < m_AttackRange);
 }
 void Ranged::Shoot(sf::Vector2f& _playerPos)
 {
 	if (this->m_ShootTimer <= 0.f)
 	{
-		ProjList::Add(this->m_Position, Tools::AngleToVector(1000, Tools::VectorToAngle(_playerPos- this->m_Position)), CLASSIC, 1, 1000, ENEMY);
-		this->m_ShootTimer = 3.f;
+		ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin)), CLASSIC, 1, 1000, ENEMY);
+		this->m_ShootTimer = 1.5f;
 	}
 	else
 	{
