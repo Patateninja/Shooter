@@ -9,8 +9,8 @@ Stage::Stage(int _num)
 
 void Stage::GenerateMap()
 {
-	this->m_MapTexture.create(Tile::GetSize() * 30, Tile::GetSize() * 30);
-	this->m_TileMap = TileMap(sf::Vector2i(30, 30));
+	this->m_MapTexture.create(Tile::GetSize() * 40, Tile::GetSize() * 40);
+	this->m_TileMap = TileMap(sf::Vector2i(40, 40));
 	this->m_TileMap.Generate(this->m_MapTexture);
 	this->m_MapSprite.setTexture(this->m_MapTexture.getTexture());
 	this->m_MapSprite.setPosition(-Tile::GetSize() / 2.f, -Tile::GetSize() / 2.f);
