@@ -73,12 +73,6 @@ void Menu::Update()
 		this->m_InputTimer = 0.f;
 		this->ChangeState<Quit>();
 	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F11) && this->m_InputTimer > 0.5f)
-	{
-		this->m_InputTimer = 0.f;
-		this->Window().ToggleFullscreen();
-	}
 }
 void Menu::Display()
 {
@@ -126,13 +120,16 @@ void Game::Update()
 {
 	this->m_InputTimer += Time::GetDeltaTime();
 
-	this->m_Text.setString("Stage : " + std::to_string(this->m_Stage.GetNum()) + " / " + std::to_string(this->m_Player.GetHP()) + " Live(s) / Projectiles : " + std::to_string(ProjList::Size()) + " / " + std::to_string(int(1 / Time::GetDeltaTime())) + " fps");
+	this->m_Text.setString("Stage : " + std::to_string(this->m_Stage.GetNum()) + " / " + std::to_string(this->m_Player.GetHP()) + " Live(s) / " + std::to_string(int(1 / Time::GetDeltaTime())) + " fps");
 	this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
 
 	this->m_Player.Update(this->m_Stage.GetEnemies(), this->m_Stage.GetMap(), this->Window());
 	this->m_Stage.Update(this->m_Player);
 	ProjList::Update(this->m_Stage.GetMap());
-	this->Window().SetViewCenter(this->m_Player.GetPos());
+
+	this->m_Cam.Update(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
+
+	//this->Window().SetViewCenter(this->m_Player.GetPos());
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && this->m_InputTimer > 0.2f)
 	{
@@ -202,13 +199,6 @@ void Upgrade::Update()
 		this->m_InputTimer = 0.f;
 		this->ChangeState<Menu>();
 	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::F11) && this->m_InputTimer > 0.5f)
-	{
-		this->m_InputTimer = 0.f;
-		this->Window().ToggleFullscreen();
-	}
-
 }
 void Upgrade::Display()
 {
@@ -250,6 +240,8 @@ void Option::Init()
 }
 void Option::Update()
 {
+	this->m_Text.setString("Option\nPress Backspace to return to Menu");
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace))
 	{
 		this->ChangeState<Menu>();
@@ -259,7 +251,6 @@ void Option::Display()
 {
 	this->ClearWindow();
 
-	this->m_Text.setString("Option\nPress Backspace to return to Menu");
 	this->Draw(this->m_Text);
 
 	this->DisplayWindow();

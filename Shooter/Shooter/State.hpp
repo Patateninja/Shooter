@@ -2,6 +2,8 @@
 #include "Player.hpp"
 #include "Enemy.hpp"
 #include "Stage.hpp"
+#include "Camera.hpp" 
+
 
 class StateManager;
 
@@ -55,6 +57,7 @@ class Game : public State
 	private :
 		Player m_Player;
 		Stage m_Stage;
+		Camera m_Cam;
 	public :
 		Game(StateManager* _stateManager);
 		~Game();
