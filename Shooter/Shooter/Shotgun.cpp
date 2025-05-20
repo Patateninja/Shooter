@@ -5,7 +5,7 @@
 Shotgun::Shotgun()
 {
 	this->m_Magazine.clear();
-	this->m_MaxCapacity = 4;
+	this->m_DefaultCapacity = 4;
 }
 Shotgun::~Shotgun()
 {
@@ -14,54 +14,57 @@ Shotgun::~Shotgun()
 
 void Shotgun::DisplayMagazine(Window& _window)
 {
-	sf::RectangleShape bg(sf::Vector2f(555.f, 50.f));
-	bg.setPosition(_window.RelativePos(sf::Vector2f(10.f, 10.f)));
-	bg.setFillColor(Color::Grey);
-	_window.Draw(bg);
+	this->m_Renderer.setSize(sf::Vector2f((this->m_DefaultCapacity + this->m_MagazineAttachement.GetCapacity()) * 125.f + 55.f, 50.f));
+	this->m_Renderer.setTexture(nullptr);
+	this->m_Renderer.setPosition(_window.RelativePos(sf::Vector2f(10.f, 10.f)));
+	this->m_Renderer.setFillColor(Color::Grey);
+	_window.Draw(this->m_Renderer);
 
 	for (int i = 0; i < this->m_Magazine.size(); ++i)
 	{
-		sf::RectangleShape shell(sf::Vector2f(125.f, 37.5f));
-		shell.setPosition(_window.RelativePos(sf::Vector2f(i * 125.f + (i + 1) * 12.5f + 5.f, 16.25f)));
+		this->m_Renderer.setSize(sf::Vector2f(125.f, 37.5f));
+		this->m_Renderer.setPosition(_window.RelativePos(sf::Vector2f(i * 125.f + (i + 1) * 12.5f + 5.f, 16.25f)));
+		this->m_Renderer.setTexture(nullptr);
+		this->m_Renderer.setFillColor(sf::Color::White);
 
 		if (dynamic_cast<BirdShot*>(this->m_Magazine[i].get()))
 		{
-			shell.setFillColor(sf::Color::Green);
+			this->m_Renderer.setFillColor(sf::Color::Green);
 		}
 		else if (dynamic_cast<BuckShot*>(this->m_Magazine[i].get()))
 		{
-			shell.setTexture(&RscMana::Get<sf::Texture>("Red_Shell"));
+			this->m_Renderer.setTexture(&RscMana::Get<sf::Texture>("Red_Shell"));
 		}
 		else if (dynamic_cast<DragonBreath*>(this->m_Magazine[i].get()))
 		{
-			shell.setFillColor(Color::Flamming);
+			this->m_Renderer.setFillColor(Color::Flamming);
 		}
 		else if (dynamic_cast<Slug*>(this->m_Magazine[i].get()))
 		{
-			shell.setFillColor(sf::Color::Yellow);
+			this->m_Renderer.setFillColor(sf::Color::Yellow);
 		}
 
-		_window.Draw(shell);
+		_window.Draw(this->m_Renderer);
 	}
 }
 
 void Shotgun::Load(int _input)
 {
-	if (this->m_Magazine.size() < this->m_MaxCapacity)
+	if (this->m_Magazine.size() < this->m_DefaultCapacity + this->m_MagazineAttachement.GetCapacity())
 	{
 		switch (_input)
 		{
-			case 1:
-				this->m_Magazine.push_back(std::make_unique<BirdShot>());
+			case 1 :
+				this->m_Magazine.push_back(std::make_unique<BirdShot>(this->m_MuzzleAttachement.GetSpreadMod(), this->m_MuzzleAttachement.GetRangeMod(), this->m_MuzzleAttachement.GetVelocityMod()));
 				break;
-			case 2:
-				this->m_Magazine.push_back(std::make_unique<BuckShot>());
+			case 2 :
+				this->m_Magazine.push_back(std::make_unique<BuckShot>(this->m_MuzzleAttachement.GetSpreadMod(), this->m_MuzzleAttachement.GetRangeMod(), this->m_MuzzleAttachement.GetVelocityMod()));
 				break;
-			case 3:
-				this->m_Magazine.push_back(std::make_unique<DragonBreath>());
+			case 3 :
+				this->m_Magazine.push_back(std::make_unique<DragonBreath>(this->m_MuzzleAttachement.GetSpreadMod(), this->m_MuzzleAttachement.GetRangeMod(), this->m_MuzzleAttachement.GetVelocityMod()));
 				break;
-			case 4:
-				this->m_Magazine.push_back(std::make_unique<Slug>());
+			case 4 :
+				this->m_Magazine.push_back(std::make_unique<Slug>(this->m_MuzzleAttachement.GetSpreadMod(), this->m_MuzzleAttachement.GetRangeMod(), this->m_MuzzleAttachement.GetVelocityMod()));
 				break;
 		}
 	}

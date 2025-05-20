@@ -113,7 +113,7 @@ void Game::Init()
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 	//this->GetRsc<sf::Music>("Bogus").play();
 	
-	this->m_Stage.SetNum(1);
+	this->m_Stage.SetNum(3);
 	this->m_Stage.Init();
 }
 void Game::Update()

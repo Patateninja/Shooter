@@ -19,7 +19,7 @@ class Shell
 class BirdShot : public Shell
 {
 	public :
-		BirdShot();
+		BirdShot(float _spread, float _range, float _velocity);
 		~BirdShot();
 
 		void Shot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel, Window& _window) override;
@@ -28,7 +28,7 @@ class BirdShot : public Shell
 class BuckShot : public Shell
 {
 	public :
-		BuckShot();
+		BuckShot(float _spread, float _range, float _velocity);
 		~BuckShot();
 
 		void Shot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel, Window& _window) override;
@@ -37,7 +37,7 @@ class BuckShot : public Shell
 class DragonBreath : public Shell
 {
 	public :
-		DragonBreath();
+		DragonBreath(float _spread, float _range, float _velocity);
 		~DragonBreath();
 
 		void Shot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel, Window& _window) override;
@@ -46,7 +46,7 @@ class DragonBreath : public Shell
 class Slug : public Shell
 {
 	public :
-		Slug();
+		Slug(float _spread, float _range, float _velocity);
 		~Slug();
 
 		void Shot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel, Window& _window) override;
