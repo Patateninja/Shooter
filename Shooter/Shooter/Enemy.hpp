@@ -31,6 +31,7 @@ class Enemy
 		Enemy(const sf::Vector2f& _stratingPos);
 		~Enemy();
 
+		inline float GetRange() { return this->m_AttackRange; };
 		inline sf::Vector2f GetPos() { return this->m_Position; };
 		inline sf::Vector2f GetProjOrigin() { return this->m_ProjectileOrigin; };
 		inline int GetHP() { return this->m_Hp; };
