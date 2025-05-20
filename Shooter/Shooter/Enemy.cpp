@@ -65,11 +65,14 @@ void Enemy::Display(Window& _window)
 
 bool Enemy::PlayerInSight(sf::Vector2f _playerPos, TileMap& _map)
 {
-	for (int i = 1; i <= int(Tools::Distance(_playerPos, this->m_ProjectileOrigin)); ++i)
+	if (Tools::Distance(_playerPos, this->m_ProjectileOrigin) / Tile::GetSize() < this->m_AttackRange)
 	{
-		if (_map.GetTile(sf::Vector2i(Tools::Normalize(_playerPos - this->m_ProjectileOrigin) * float(i)) + sf::Vector2i(this->m_ProjectileOrigin)).GetType() == WALL)
+		for (int i = 1; i <= int(Tools::Distance(_playerPos, this->m_ProjectileOrigin)); ++i)
 		{
-			return false;
+			if (_map.GetTile(sf::Vector2i(Tools::Normalize(_playerPos - this->m_ProjectileOrigin) * float(i)) + sf::Vector2i(this->m_ProjectileOrigin)).GetType() == WALL)
+			{
+				return false;
+			}
 		}
 	}
 
@@ -77,7 +80,10 @@ bool Enemy::PlayerInSight(sf::Vector2f _playerPos, TileMap& _map)
 }
 void Enemy::UpdatePath(sf::Vector2f& _playerPos, TileMap& _map)
 {
-	this->m_Path = Astar::Pathfinding(_map.GetTile(this->m_Position.x,this->m_Position.y), _map.GetTile(_playerPos.x, _playerPos.y), _map);
+	auto future = std::async(Astar::Pathfinding, std::ref(_map.GetTile(this->m_Position.x, this->m_Position.y)), std::ref(_map.GetTile(_playerPos.x, _playerPos.y)), std::ref(_map));
+	this->m_Path = future.get();
+	
+	//this->m_Path = Astar::Pathfinding(_map.GetTile(this->m_Position.x,this->m_Position.y), _map.GetTile(_playerPos.x, _playerPos.y), _map);
 }
 void Enemy::Move(sf::Vector2f& _playerPos, TileMap& _map)
 {

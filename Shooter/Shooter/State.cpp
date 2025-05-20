@@ -129,8 +129,6 @@ void Game::Update()
 
 	this->m_Cam.Update(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
 
-	//this->Window().SetViewCenter(this->m_Player.GetPos());
-
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && this->m_InputTimer > 0.2f)
 	{
 		this->m_InputTimer = 0.f;
