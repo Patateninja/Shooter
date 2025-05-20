@@ -1,60 +1,82 @@
 #pragma once
-#include "tools.hpp"
+#include "Tile.hpp"
 #include "Window.hpp"
-#include <list>
 
 typedef enum ProjectileType
 {
 	CLASSIC,
 	FLAMMING,
 	PIERCING,
-};
+} ProjectileType;
+
+typedef enum Team
+{
+	PLAYER,
+	ENEMY,
+} Team;
 
 class Projectile
 {
 	private :
-		sf::CircleShape m_circle;
-		sf::Vector2f m_position;
-		sf::Vector2f m_velocity;
+		sf::CircleShape m_Circle;
+		sf::Vector2f m_Position;
+		sf::Vector2f m_Velocity;
 		ProjectileType m_Type;
-		int m_damage;
-		int m_range;
-		float m_distance;
+		Team m_Team;
+		int m_Damage;
+		int m_Range;
+		float m_Distance;
+		bool m_ToDestroy;
 	public :
 		Projectile();
-		Projectile(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range);
+		Projectile(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range, Team _team);
 		~Projectile();
 
-		inline sf::Vector2f GetPos() { return this->m_position; };
+		inline sf::Vector2f GetPos() { return this->m_Position; };
+		inline sf::FloatRect GetHitbox() { return this->m_Circle.getGlobalBounds(); };
+		inline int GetDamage() { return this->m_Damage; };
+		inline bool GetToDestroy() { return this->m_ToDestroy; };
+		inline ProjectileType GetType() { return this->m_Type; };
+		inline Team GetTeam() { return this->m_Team; };
 
-		bool Update(float _deltatime);
-		void Display(Window& _win);
+		inline void SetToDestroy(bool _set) { this->m_ToDestroy = _set; };
+
+		bool Update(float _deltatime, TileMap& _map);
+		void Display(Window& _window);
 };
 
 class ProjectileList
 {
 	private :
-		std::list<std::unique_ptr<Projectile>> m_list;
+		std::list<std::shared_ptr<Projectile>> m_List;
 	public :
 		ProjectileList();
 		~ProjectileList();
 
-		void Add(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range);
+		inline std::list<std::shared_ptr<Projectile>>& GetList() { return this->m_List ; };
+
+		void Add(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range, Team _team);
 		void Add(Projectile& _proj);
 
-		void Update(float _deltatime);
-		void Display(Window& _win);
+		void Update(TileMap& _map);
+		void Display(Window& _window);
 
-		int Size() { return this->m_list.size(); };
+		void Clear();
+
+		int Size() { return int(this->m_List.size()); };
 };
 
 namespace ProjList
 {
-	void Add(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range);
+	std::list<std::shared_ptr<Projectile>>& GetList();
+
+	void Add(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range, Team _team);
 	void Add(Projectile& _proj);
 
-	void Update(float _deltatime);
+	void Update(TileMap& _map);
 	void Display(Window& _window);
+
+	void Clear();
 
 	int Size();
 }

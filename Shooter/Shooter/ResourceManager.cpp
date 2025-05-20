@@ -6,7 +6,11 @@ ResourceManager::ResourceManager()
 }
 ResourceManager::~ResourceManager()
 {
-	this->m_RessourcesStorage.clear();
+	while (!this->m_RessourcesStorage.empty())
+	{
+		this->m_RessourcesStorage.begin()->second->Deletor();
+		this->m_RessourcesStorage.erase(this->m_RessourcesStorage.begin());
+	}
 }
 
 void ResourceManager::Init()
@@ -14,7 +18,7 @@ void ResourceManager::Init()
 	std::string path = "..\\Resources\\";
 
 	//Fonts
-	this->Add<sf::Font>("Ubuntu", path + "Fonts\\Ubuntu.ttf");
+	this->Add<sf::Font>("Mono", path + "Fonts\\Mono_Regular.ttf");
 
 	//Textures
 	this->Add<sf::Texture>("Red_Shell", path + "Textures\\Red_Shell.png");
@@ -24,4 +28,24 @@ void ResourceManager::Init()
 
 	//BGM
 	this->Add<sf::Music>("Bogus", path + "BGM\\Bogus.ogg");
+}
+
+namespace RscMana
+{
+	ResourceManager rscm;
+
+	void Init()
+	{
+		RscMana::rscm.Init();
+	}
+
+	void AddWrapped(std::string _name, RSC* _rsc) {
+		RscMana::rscm.GetMap().insert(std::make_pair(_name, _rsc));
+	}
+
+	RSC* GetWrapped(std::string _name)
+	{
+		return RscMana::rscm.GetMap()[_name];
+	}
+	
 }

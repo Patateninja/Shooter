@@ -11,8 +11,13 @@ class Shotgun
 		Shotgun();
 		~Shotgun();
 
-		void DisplayMagazine(Window& _window, ResourceManager& _rscmana);
+		inline bool Empty() { return this->m_Magazine.empty(); };
+		inline bool Full() { return this->m_Magazine.size() == this->m_MaxCapacity; }
+
+		void DisplayMagazine(Window& _window);
 
 		void Load(int _input);
-		void Shoot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel);
+		void Shoot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel, Window& _window);
+
+		void EmptyMagazine();
 };

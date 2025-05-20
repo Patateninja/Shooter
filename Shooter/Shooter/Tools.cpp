@@ -1,6 +1,7 @@
 #include "Tools.hpp"
 
 //////////////////////////////////////////////////
+#pragma region Tools
 
 float Tools::GetDeltaTime(sf::Clock& _clock)
 {
@@ -39,6 +40,67 @@ float Tools::RadToDeg(float _rad)
 float Tools::DegToRad(float _deg)
 {
 	return (_deg * (PI / 180));
+}
+
+int Tools::Random(int _max, int _min = 0)
+{
+	return Tools::Min<int,int,int>(_max,(rand() % (_max + 1)) + _min);
+}
+
+float Tools::Distance(sf::Vector2f _vect1, sf::Vector2f _vect2)
+{
+	return std::sqrt(std::pow(_vect2.x - _vect1.x, 2) + std::pow(_vect2.y - _vect1.y, 2));
+}
+
+int Tools::ToClosestMultiple(int _val, int _multiple)
+{
+	if (_val < 0)
+	{
+		_multiple = -_multiple;
+	}
+	float valHalf = static_cast<float>(_val) + (static_cast<float>(_multiple) * .5f);
+	int ret = (static_cast<int>(valHalf) / _multiple) * _multiple;
+	return ret;
+}
+
+sf::Vector2f Tools::RectCenter(const sf::FloatRect& _rect)
+{
+	return sf::Vector2f((_rect.left + _rect.width / 2.f) , (_rect.top + _rect.height / 2.f));
+}
+
+bool Tools::CircleCollision(const sf::FloatRect& _circlehitbox1, const sf::FloatRect& _circlehitbox2)
+{
+	return std::abs(Tools::Distance(Tools::RectCenter(_circlehitbox1), Tools::RectCenter(_circlehitbox2))) <= (_circlehitbox1.width / 2.f + _circlehitbox2.width / 2.f);
+}
+
+#pragma endregion
+//////////////////////////////////////////////////
+
+namespace Time
+{
+	sf::Clock time;
+	float deltaTime;
+
+	void Init()
+	{
+		Time::time = sf::Clock();
+		Time::deltaTime = 0.f;
+	}
+
+	void UpdateTime()
+	{
+		Time::deltaTime = Tools::GetDeltaTime(Time::time);
+	}
+
+	float GetDeltaTime()
+	{
+		return Time::deltaTime;
+	}
+
+	sf::Time Restart()
+	{
+		return Time::time.restart();
+	}
 }
 
 //////////////////////////////////////////////////

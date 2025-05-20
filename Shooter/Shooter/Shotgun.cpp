@@ -9,36 +9,36 @@ Shotgun::Shotgun()
 }
 Shotgun::~Shotgun()
 {
-	this->m_Magazine.clear();
+	this->EmptyMagazine();
 }
 
-void Shotgun::DisplayMagazine(Window& _window, ResourceManager& _rscmana)
+void Shotgun::DisplayMagazine(Window& _window)
 {
 	sf::RectangleShape bg(sf::Vector2f(1135.f, 100.f));
-	bg.setPosition(sf::Vector2f(10.f, 10.f));
-	bg.setFillColor(sf::Color(100, 100, 100, 255));
+	bg.setPosition(_window.RelativePos(sf::Vector2f(10.f, 10.f)));
+	bg.setFillColor(Color::Grey);
 	_window.Draw(bg);
 
 	for (int i = 0; i < this->m_Magazine.size(); ++i)
 	{
 		sf::RectangleShape shell(sf::Vector2f(250.f, 75.f));
-		shell.setPosition(sf::Vector2f(i * 250.f + (i + 1) * 25.f + 10.f, 22.5f));
+		shell.setPosition(_window.RelativePos(sf::Vector2f(i * 250.f + (i + 1) * 25.f + 10.f, 22.5f)));
 
 		if (dynamic_cast<BirdShot*>(this->m_Magazine[i].get()))
 		{
-			shell.setFillColor(sf::Color(0, 255, 0, 255));
+			shell.setFillColor(sf::Color::Green);
 		}
 		else if (dynamic_cast<BuckShot*>(this->m_Magazine[i].get()))
 		{
-			shell.setTexture(&_rscmana.Get<sf::Texture>("Red_Shell"));
+			shell.setTexture(&RscMana::Get<sf::Texture>("Red_Shell"));
 		}
 		else if (dynamic_cast<DragonBreath*>(this->m_Magazine[i].get()))
 		{
-			shell.setFillColor(sf::Color(255, 125, 0, 255));
+			shell.setFillColor(Color::Flamming);
 		}
 		else if (dynamic_cast<Slug*>(this->m_Magazine[i].get()))
 		{
-			shell.setFillColor(sf::Color(255, 255, 0, 255));
+			shell.setFillColor(sf::Color::Yellow);
 		}
 
 		_window.Draw(shell);
@@ -66,13 +66,24 @@ void Shotgun::Load(int _input)
 		}
 	}
 }
-void Shotgun::Shoot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel)
+void Shotgun::Shoot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel, Window& _window)
 {
 	if (!this->m_Magazine.empty())
 	{
-		this->m_Magazine.front()->Shot(_playerPos, _playerVel);
+		RscMana::Get<sf::Sound>("Shot").play();
+		this->m_Magazine.front()->Shot(_playerPos, _playerVel, _window);
 		this->m_Magazine.erase(this->m_Magazine.begin());
 	}
+}
+
+void Shotgun::EmptyMagazine()
+{
+	for (std::unique_ptr<Shell>& shell : this->m_Magazine)
+	{
+		shell.release();
+	}
+
+	this->m_Magazine.clear();
 }
 
 //////////////////////////////////////////////////

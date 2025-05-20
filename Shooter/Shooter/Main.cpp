@@ -2,6 +2,8 @@
 
 int main()
 {
+	srand(unsigned int(time(nullptr)));
+
 	StateManager statemana;
 	sf::Event event;
 
@@ -11,10 +13,18 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 			{
-				statemana.GetWindow().Close();
+				statemana.ChangeState<Quit>();
 			}
 		}
-		statemana.Update();
+
+		if (statemana.WindowHasFocus())
+		{
+			statemana.Update();
+		}
+		else
+		{
+			Time::Restart();
+		}
 		statemana.Display();
 	}
 

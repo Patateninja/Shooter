@@ -4,11 +4,11 @@
 
 class StateManager
 {
-	private:
+	private :
 		Window m_Window;
-		ResourceManager* m_ResourceManager;
 		State* m_CurrentState;
-	public:
+		float m_InputTimer;
+	public :
 		StateManager();
 		~StateManager();
 
@@ -19,19 +19,20 @@ class StateManager
 		State* ChangeState()
 		{
 			StateManager::m_CurrentState->DeInit();
-			StateManager::m_CurrentState;
+			StateManager::m_CurrentState->Deletor();
 
-			StateManager::m_CurrentState = new T(this, this->m_ResourceManager);
+			StateManager::m_CurrentState = new T(this);
 			StateManager::m_CurrentState->Init();
 
 			return StateManager::m_CurrentState;
 		}
 
 		Window& GetWindow() { return this->m_Window; };
-		bool WindowIsOpen() { return StateManager::m_Window.IsOpen(); };
+		bool WindowIsOpen() { return this->m_Window.IsOpen(); };
+		bool WindowHasFocus() { return this->m_Window.HasFocus(); };
 
 		void ClearWindow();
-		void Draw(sf::Drawable& _toDraw);
+		void Draw(const sf::Drawable& _toDraw);
 		void DisplayWindow();
 
 		void Update();

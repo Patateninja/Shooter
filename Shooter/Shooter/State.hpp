@@ -1,30 +1,34 @@
 #pragma once
 #include "Player.hpp"
+#include "Enemy.hpp"
+#include "Stage.hpp"
+#include "Camera.hpp" 
+
 
 class StateManager;
 
 class State
 {
-	protected:
+	protected :
 		StateManager* m_StateManager = nullptr;
-		ResourceManager* m_ResourceManager = nullptr;
-		sf::Clock m_Clock;
-		static bool m_GameResult;
-	public:
+		sf::Text m_Text;
+		float m_InputTimer = 0;
+	public :
 		State() = default;
 		~State() = default;
 
+		virtual void Deletor() = 0;
+
+		Window& Window();
 		void ClearWindow();
-		void Draw(sf::Drawable& _toDraw);
+		void Draw(const sf::Drawable& _toDraw);
 		void DisplayWindow();
 
 		template <typename T>
 		State* ChangeState();
 
 		template<typename T>
-		T& GetRsc(std::string _name);
-
-		Window& Window();
+		T& GetRsc(const std::string& _name);
 
 		virtual void Init() = 0;
 		virtual void Update() = 0;
@@ -34,11 +38,13 @@ class State
 
 class Menu : public State
 {
-	private:
+	private :
 
-	public:
-		Menu(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
+	public :
+		Menu(StateManager* _stateManager);
 		~Menu();
+
+		void Deletor() override;
 
 		void Init() override;
 		void Update() override;
@@ -48,13 +54,15 @@ class Menu : public State
 
 class Game : public State
 {
-	private:
+	private :
 		Player m_Player;
-		float m_SpawnTimer;
-		float m_Deltatime;
-	public:
-		Game(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
+		Stage m_Stage;
+		Camera m_Cam;
+	public :
+		Game(StateManager* _stateManager);
 		~Game();
+
+		void Deletor() override;
 
 		void Init() override;
 		void Update() override;
@@ -62,13 +70,15 @@ class Game : public State
 		void DeInit() override;
 };
 
-class EndGame : public State
+class Upgrade : public State
 {
-	private:
+	private :
 
-	public:
-		EndGame(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
-		~EndGame();
+	public :
+		Upgrade(StateManager* _stateManager);
+		~Upgrade();
+
+		void Deletor() override;
 
 		void Init() override;
 		void Update() override;
@@ -78,11 +88,13 @@ class EndGame : public State
 
 class Option : public State
 {
-	private:
+	private :
 
-	public:
-		Option(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
+	public :
+		Option(StateManager* _stateManager);
 		~Option();
+
+		void Deletor() override;
 
 		void Init() override;
 		void Update() override;
@@ -92,11 +104,13 @@ class Option : public State
 
 class Quit : public State
 {
-	private:
+	private :
 
-	public:
-		Quit(StateManager* _stateManager, ResourceManager* m_ResourceManager = nullptr);
+	public :
+		Quit(StateManager* _stateManager);
 		~Quit();
+
+		void Deletor() override;
 
 		void Init() override;
 		void Update() override;

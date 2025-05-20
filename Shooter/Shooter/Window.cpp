@@ -6,11 +6,11 @@ View::View()
 {
 	this->m_View = sf::View();
 }
-View::View(sf::Vector2f _center, sf::Vector2f _size)
+View::View(const sf::Vector2f& _center, const sf::Vector2f& _size)
 {
 	this->m_View = sf::View(_center,_size);
 }
-View::View(sf::View _view)
+View::View(const sf::View& _view)
 {
 	this->m_View = _view;
 }
@@ -24,6 +24,7 @@ View::~View()
 Window::Window()
 {
 	this->m_Window.create(sf::VideoMode(1920, 1080), "Shooter", sf::Style::Fullscreen);
+	this->m_View.SetSize(this->m_Window.getDefaultView().getSize());
 	this->m_Fullscreen = true;
 }
 Window::~Window()
@@ -43,14 +44,25 @@ void Window::ToggleFullscreen()
 }
 void Window::SetView(View _view)
 {
-	this->m_Window.setView(_view.GetView());
+	this->m_View = _view;
+	this->m_Window.setView(this->m_View.GetView());
+}
+void Window::SetViewCenter(const sf::Vector2f& _center)
+{
+	this->m_View.SetCenter(_center);
+	this->m_Window.setView(this->m_View.GetView());
+}
+void Window::ResetView()
+{
+	this->m_View.GetView() = this->m_Window.getDefaultView();
+	this->m_Window.setView(this->m_Window.getDefaultView());
 }
 
 void Window::Clear()
 {
 	this->m_Window.clear();
 }
-void Window::Draw(sf::Drawable& _drawable)
+void Window::Draw(const sf::Drawable& _drawable)
 {
 	this->m_Window.draw(_drawable);
 }
@@ -62,6 +74,10 @@ void Window::Display()
 bool Window::IsOpen()
 { 
 	return this->m_Window.isOpen(); 
+}
+bool Window::HasFocus()
+{
+	return this->m_Window.hasFocus();
 }
 bool Window::PollEvent(sf::Event& _event)
 {
