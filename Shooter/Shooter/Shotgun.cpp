@@ -14,15 +14,15 @@ Shotgun::~Shotgun()
 
 void Shotgun::DisplayMagazine(Window& _window)
 {
-	sf::RectangleShape bg(sf::Vector2f(1135.f, 100.f));
+	sf::RectangleShape bg(sf::Vector2f(555.f, 50.f));
 	bg.setPosition(_window.RelativePos(sf::Vector2f(10.f, 10.f)));
 	bg.setFillColor(Color::Grey);
 	_window.Draw(bg);
 
 	for (int i = 0; i < this->m_Magazine.size(); ++i)
 	{
-		sf::RectangleShape shell(sf::Vector2f(250.f, 75.f));
-		shell.setPosition(_window.RelativePos(sf::Vector2f(i * 250.f + (i + 1) * 25.f + 10.f, 22.5f)));
+		sf::RectangleShape shell(sf::Vector2f(125.f, 37.5f));
+		shell.setPosition(_window.RelativePos(sf::Vector2f(i * 125.f + (i + 1) * 12.5f + 5.f, 16.25f)));
 
 		if (dynamic_cast<BirdShot*>(this->m_Magazine[i].get()))
 		{

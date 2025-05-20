@@ -11,7 +11,7 @@ class Stage
 		TileMap m_TileMap;
 		sf::Sprite m_MapSprite;
 		EnemyList m_EnemyList;
-		int m_Num = 1;
+		int m_Num = 3;
 	public :
 		Stage() = default;
 		Stage(int _num);

@@ -15,7 +15,7 @@ Player::Player()
 	this->m_DragonBreath = this->m_MaxAmmo;
 	this->m_Slug = this->m_MaxAmmo;
 	this->m_InputTimer = 0.f;
-	this->m_Life = 3;
+	this->m_Life = 5;
 	this->m_CanMove = false;
 	this->m_CanReload = true;
 }
