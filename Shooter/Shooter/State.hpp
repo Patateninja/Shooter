@@ -3,7 +3,7 @@
 #include "Enemy.hpp"
 #include "Stage.hpp"
 #include "Camera.hpp" 
-
+#include "Shop.hpp"
 
 class StateManager;
 
@@ -73,7 +73,8 @@ class Game : public State
 class Upgrade : public State
 {
 	private :
-
+		int m_PlayerLevel = 0;
+		Shop m_Shop;
 	public :
 		Upgrade(StateManager* _stateManager);
 		~Upgrade();

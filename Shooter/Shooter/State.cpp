@@ -180,12 +180,34 @@ void Upgrade::Init()
 {
 	std::cout << "Upgrade Init" << std::endl;
 	this->Window().ResetView();
+	this->m_Shop = Shop(0);
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 }
 void Upgrade::Update()
 {
 	this->m_InputTimer += Time::GetDeltaTime();
 	this->m_Text.setString("Upgrade Menu\nPress Enter to launch a new game\nPress Escape to go back to Menu");
+
+	this->m_Shop.Update();
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add) && this->m_InputTimer > 0.2f)
+	{
+		this->m_InputTimer = 0.f;
+		if (this->m_PlayerLevel < 35)
+		{
+			++this->m_PlayerLevel;
+			this->m_Shop.SetLevel(this->m_PlayerLevel);
+		}
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract) && this->m_InputTimer > 0.2f)
+	{
+		this->m_InputTimer = 0.f;
+		if (this->m_PlayerLevel > 0)
+		{
+			--this->m_PlayerLevel;
+			this->m_Shop.SetLevel(this->m_PlayerLevel);
+		}
+	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && this->m_InputTimer > 0.2f)
 	{
@@ -203,6 +225,7 @@ void Upgrade::Display()
 	this->ClearWindow();
 
 	this->Draw(this->m_Text);
+	this->m_Shop.Display(this->Window());
 
 	this->DisplayWindow();
 }

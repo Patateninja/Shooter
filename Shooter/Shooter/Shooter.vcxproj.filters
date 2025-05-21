@@ -49,6 +49,12 @@
     <Filter Include="Header Files\Stage">
       <UniqueIdentifier>{8ec46b4b-32d8-4022-8aed-32c75eafa7df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Upgrades">
+      <UniqueIdentifier>{84611a02-5032-4c52-8eba-89f0cac563a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Upgrades">
+      <UniqueIdentifier>{9994483c-9924-44f7-b6be-83a6d8ae159a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -102,6 +108,18 @@
     <ClCompile Include="Colors.cpp">
       <Filter>Source Files\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Attachment.cpp">
+      <Filter>Source Files\Upgrades</Filter>
+    </ClCompile>
+    <ClCompile Include="Shop.cpp">
+      <Filter>Source Files\Upgrades</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tools.hpp">
@@ -150,6 +168,18 @@
       <Filter>Header Files\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Colors.hpp">
+      <Filter>Header Files\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Attachment.hpp">
+      <Filter>Header Files\Upgrades</Filter>
+    </ClInclude>
+    <ClInclude Include="Shop.hpp">
+      <Filter>Header Files\Upgrades</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.hpp">
+      <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.hpp">
       <Filter>Header Files\Tools</Filter>
     </ClInclude>
   </ItemGroup>

@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="Astar.cpp" />
     <ClCompile Include="Attachment.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Colors.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shield.cpp" />
+    <ClCompile Include="Shop.cpp" />
     <ClCompile Include="Shotgun.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="StateManager.cpp" />
@@ -166,6 +168,7 @@
   <ItemGroup>
     <ClInclude Include="Astar.hpp" />
     <ClInclude Include="Attachment.hpp" />
+    <ClInclude Include="Button.hpp" />
     <ClInclude Include="Camera.hpp" />
     <ClInclude Include="Colors.hpp" />
     <ClInclude Include="Enemy.hpp" />
@@ -173,6 +176,7 @@
     <ClInclude Include="Resource.hpp" />
     <ClInclude Include="ResourceManager.hpp" />
     <ClInclude Include="Shield.hpp" />
+    <ClInclude Include="Shop.hpp" />
     <ClInclude Include="Shotgun.hpp" />
     <ClInclude Include="Stage.hpp" />
     <ClInclude Include="StateManager.hpp" />

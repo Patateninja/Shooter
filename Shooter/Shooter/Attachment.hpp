@@ -9,6 +9,11 @@ class Attachment
 	public :
 		Attachment() = default;
 		~Attachment() = default;
+
+		virtual void foo() {};
+
+		inline std::string& GetName() { return this->m_Name; }
+		inline int GetUnlockLevel() { return this->m_UnlockLevel; }
 };
 
 class Muzzle : public Attachment
