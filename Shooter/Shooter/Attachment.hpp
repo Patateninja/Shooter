@@ -25,6 +25,7 @@ class Muzzle : public Attachment
 	public :
 		Muzzle();
 		Muzzle(std::string _name, int _level, float _spread, float _velocity, float _range);
+		Muzzle(const Muzzle& _muzzle);
 		~Muzzle() = default;
 
 		inline float GetSpreadMod() { return this->m_SpreadModifier; }
@@ -39,6 +40,7 @@ class Magazine : public Attachment
 	public :
 		Magazine();
 		Magazine(std::string _name, int _level, int _capacity);
+		Magazine(const Magazine& _magazine);
 		~Magazine() = default;
 
 		inline int GetCapacity() { return this->m_Capacity; }
@@ -54,6 +56,7 @@ class Grip : public Attachment
 	public :
 		Grip();
 		Grip(std::string _name, int _level, float _aim, float _recoil, float _rof);
+		Grip(const Grip& _grip);
 		~Grip() = default;
 
 		inline float GetAimMod() { return this->m_AimSpeedModifier; }
@@ -70,6 +73,7 @@ class Stock : public Attachment
 	public  :
 		Stock();
 		Stock(std::string _name, int _level, float _aim, float _recoil, float _walk);
+		Stock(const Stock& _stock);
 		~Stock() = default;
 
 		inline float GetAimMod() { return this->m_AimSpeedModifier; }

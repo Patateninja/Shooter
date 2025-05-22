@@ -154,6 +154,7 @@
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shield.cpp" />
     <ClCompile Include="Shop.cpp" />
+    <ClCompile Include="ShopButton.cpp" />
     <ClCompile Include="Shotgun.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="StateManager.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="ResourceManager.hpp" />
     <ClInclude Include="Shield.hpp" />
     <ClInclude Include="Shop.hpp" />
+    <ClInclude Include="ShopButton.hpp" />
     <ClInclude Include="Shotgun.hpp" />
     <ClInclude Include="Stage.hpp" />
     <ClInclude Include="StateManager.hpp" />

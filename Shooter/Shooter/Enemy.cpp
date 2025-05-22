@@ -34,7 +34,7 @@ void Enemy::Update(sf::Vector2f& _playerPos, TileMap& _map)
 		if (this->m_PathUdpateCooldown <= 0.f || this->m_Path.empty())
 		{
 			this->UpdatePath(_playerPos, _map);
-			this->m_PathUdpateCooldown = 0.75f;
+			this->m_PathUdpateCooldown = 1.f;
 		}
 		else
 		{

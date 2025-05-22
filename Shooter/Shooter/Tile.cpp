@@ -136,6 +136,8 @@ Tile& TileMap::GetTile(sf::Vector2i _cood)
 			}
 		}
 	}
+
+	return this->GetTile(this->m_Size.x * Tile::GetSize(), this->m_Size.y * Tile::GetSize());
 }
 Tile& TileMap::GetTile(int _x, int _y)
 {

@@ -1,12 +1,13 @@
 #pragma once
 #include "Attachment.hpp"
-#include "Button.hpp"
+#include "ShopButton.hpp"
 
 class Shop
 {
 	private :
 		int m_PlayerLevel;
-		std::list<std::pair<AttachmentButton, Attachment*>> m_AttachementsList;
+		std::list<AttachmentButton> m_AttachementsList;
+		std::list<EquipmentButton> m_EquipmentList;
 		Muzzle m_EquipedMuzzle;
 		Grip m_EquipedGrip;
 		Stock m_EquipedStock;
@@ -17,6 +18,9 @@ class Shop
 		~Shop() = default;
 
 		void LockItem();
+
+		void AddAttachment();
+		void AddEquipement();
 
 		void Update();
 		void Display(Window& _window);
