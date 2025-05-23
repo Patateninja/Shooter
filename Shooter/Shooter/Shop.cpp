@@ -91,6 +91,17 @@ void Shop::LockItem()
 	}
 }
 
+void Shop::AddAttachment(std::string& _buttonName, sf::Vector2f& _buttonPos, std::string& _textureName, sf::Vector2f _buttonSize, Attachment& _attachment)
+{
+	this->m_AttachementsList.push_back(AttachmentButton(_buttonName, _buttonPos, _buttonSize, &RscMana::Get<sf::Texture>(_textureName)));
+	this->m_AttachementsList.back().Bind(_attachment);
+}
+void Shop::AddEquipement(std::string& _buttonName, sf::Vector2f& _buttonPos, std::string& _textureName, sf::Vector2f _buttonSize, Equipment& _equipment)
+{
+	this->m_EquipmentList.push_back(EquipmentButton(_buttonName, _buttonPos, _buttonSize, &RscMana::Get<sf::Texture>(_textureName)));
+	this->m_EquipmentList.back().Bind(_equipment);
+}
+
 void Shop::Update()
 {
 	this->LockItem(); //Move to constructor after debug
