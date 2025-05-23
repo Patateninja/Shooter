@@ -123,6 +123,9 @@
     <ClCompile Include="ShopButton.cpp">
       <Filter>Source Files\Upgrades</Filter>
     </ClCompile>
+    <ClCompile Include="Equipement.cpp">
+      <Filter>Source Files\Upgrades</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tools.hpp">
@@ -186,6 +189,9 @@
       <Filter>Header Files\Tools</Filter>
     </ClInclude>
     <ClInclude Include="ShopButton.hpp">
+      <Filter>Header Files\Upgrades</Filter>
+    </ClInclude>
+    <ClInclude Include="Equipement.hpp">
       <Filter>Header Files\Upgrades</Filter>
     </ClInclude>
   </ItemGroup>

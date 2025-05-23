@@ -7,68 +7,67 @@ Shop::Shop()
 Shop::Shop(int _lvl)
 {
 	this->m_PlayerLevel = _lvl;
+	this->m_Text.setFont(RscMana::Get<sf::Font>("Mono"));
 
-	this->m_EquipedMuzzle = Muzzle("Default Muzzle"    , 0, 1.f, 1.f, 1.f);
-	this->m_EquipedGrip =   Grip("Default Grip"        , 0, 1.f, 1.f, 1.f);
-	this->m_EquipedStock =  Stock("Default Stock"      , 0, 1.f, 1.f, 1.f);
-	this->m_EquipedMag =    Magazine("Default Magazine", 0, 1);
+	this->m_EquipedMuzzle = Muzzle("Default Muzzle", 0, 1.f, 1.f, 1.f);
+	this->m_EquipedGrip = Grip("Default Grip", 0, 1.f, 1.f, 1.f);
+	this->m_EquipedStock = Stock("Default Stock", 0, 1.f, 1.f, 1.f);
+	this->m_EquipedMag = Magazine("Default Magazine", 0, 0);
+	this->m_EquipedArmor = Armor("None", 0, 0, 1.f);
+	this->m_EquipedAmmoStash = AmmoStash("Ammo Pouch", 0, 0);
 
 	sf::Vector2f buttonsize(250.f, 75.f);
 
 	#pragma region Muzzle
-	this->m_AttachementsList.push_back(AttachmentButton(std::string("Default"),      sf::Vector2f(10.f, 150.f),  buttonsize, nullptr));
-	Muzzle("Default Muzzle", 0, 1.f, 1.f, 1.f);
-	this->m_AttachementsList.push_back(AttachmentButton(std::string("Choke Muzzle"), sf::Vector2f(280.f, 150.f), buttonsize, nullptr));
-	Muzzle("Choke Muzzle", 3, 0.5f, 1.3f, 1.2f);
-	this->m_AttachementsList.push_back(AttachmentButton(std::string("Muzzle Brake"), sf::Vector2f(550.f, 150.f), buttonsize, nullptr));
-	Muzzle("Muzzle Brake"  , 10, 0.7f, 1.2f, 1.5f);
-	this->m_AttachementsList.push_back(AttachmentButton(std::string("Sawed Off"),    sf::Vector2f(820.f, 150.f), buttonsize, nullptr));
-	Muzzle("Sawed Off", 20, 2.f, 1.2f, 0.5f);
+	this->AddAttachment(std::string("Default"), sf::Vector2f(10.f, 200.f), buttonsize, "Placeholder", new Muzzle("Default Muzzle", 0, 1.f, 1.f, 1.f));
+	this->AddAttachment(std::string("Choke Muzzle"), sf::Vector2f(280.f, 200.f), buttonsize, "Placeholder", new Muzzle("Choke Muzzle", 3, 0.5f, 1.3f, 1.2f));
+	this->AddAttachment(std::string("Muzzle Brake"), sf::Vector2f(550.f, 200.f), buttonsize, "Placeholder", new Muzzle("Muzzle Brake", 10, 0.7f, 1.2f, 1.5f));
+	this->AddAttachment(std::string("Sawed Off"), sf::Vector2f(820.f, 200.f), buttonsize, "Placeholder", new Muzzle("Sawed Off", 20, 2.f, 1.2f, 0.5f));
 	#pragma endregion
 
 	#pragma region Grip
-	this->m_AttachementsList.push_back(AttachmentButton(std::string("Default"),         sf::Vector2f(10.f, 250.f),  buttonsize, nullptr));
-	Grip("Default Grip", 0, 1.f, 1.f, 1.f);
-	this->m_AttachementsList.push_back(AttachmentButton(std::string("Vertical Grip"),   sf::Vector2f(280.f, 250.f), buttonsize, nullptr));
-	Grip("Vertical Grip"  , 4 , 1.5f , 0.85f, 1.1f);
-	this->m_AttachementsList.push_back(AttachmentButton(std::string("Horizontal Grip"), sf::Vector2f(550.f, 250.f), buttonsize, nullptr));
-	Grip("Horizontal Grip", 9 , 1.1f , 0.5f , 1.15f);
-	this->m_AttachementsList.push_back(AttachmentButton(std::string("Speed Grip"),      sf::Vector2f(820.f, 250.f), buttonsize, nullptr));
-	Grip("Speed Grip"     , 18, 1.15f, 0.9f , 1.5f);
+	this->AddAttachment(std::string("Default"), sf::Vector2f(10.f, 300.f), buttonsize, "Placeholder", new Grip("Default Grip", 0, 1.f, 1.f, 1.f));
+	this->AddAttachment(std::string("Vertical Grip"), sf::Vector2f(280.f, 300.f), buttonsize, "Placeholder", new Grip("Vertical Grip", 4, 1.5f, 0.85f, 1.1f));
+	this->AddAttachment(std::string("Horizontal Grip"), sf::Vector2f(550.f, 300.f), buttonsize, "Placeholder", new Grip("Horizontal Grip", 9, 1.1f, 0.5f, 1.15f));
+	this->AddAttachment(std::string("Speed Grip"), sf::Vector2f(820.f, 300.f), buttonsize, "Placeholder", new Grip("Speed Grip", 18, 1.15f, 0.9f, 1.5f));
 	#pragma endregion
 
 	#pragma region Stock
-	this->m_AttachementsList.push_back(AttachmentButton(std::string("Default"),             sf::Vector2f(10.f, 350.f),  buttonsize, nullptr));
-	Stock("Default Stock"      , 0 , 1.f  , 1.f  , 1.f);
-	this->m_AttachementsList.push_back(AttachmentButton(std::string("Light Recon Stock"),   sf::Vector2f(280.f, 350.f), buttonsize, nullptr));
-	Stock("Light Recon Stock"  , 5 , 1.25f, 0.85f, 1.1f);
-	this->m_AttachementsList.push_back(AttachmentButton(std::string("Heavy Assault Stock"), sf::Vector2f(550.f, 350.f), buttonsize, nullptr));
-	Stock("Heavy Assault Stock", 8 , 0.9f , 0.5f , 1.f);
-	this->m_AttachementsList.push_back(AttachmentButton(std::string("No Stock"),            sf::Vector2f(820.f, 350.f), buttonsize, nullptr));
-	Stock("No Stock"           , 26, 2.f  , 1.5f , 1.25f);
+	this->AddAttachment(std::string("Default"), sf::Vector2f(10.f, 400.f), buttonsize, "Placeholder", new Stock("Default Stock", 0, 1.f, 1.f, 1.f));
+	this->AddAttachment(std::string("Light Recon Stock"), sf::Vector2f(280.f, 400.f), buttonsize, "Placeholder", new Stock("Light Recon Stock", 5, 1.25f, 0.85f, 1.1f));
+	this->AddAttachment(std::string("Heavy Assault Stock"), sf::Vector2f(550.f, 400.f), buttonsize, "Placeholder", new Stock("Heavy Assault Stock", 8, 0.9f, 0.5f, 1.f));
+	this->AddAttachment(std::string("No Stock"), sf::Vector2f(820.f, 400.f), buttonsize, "Placeholder", new Stock("No Stock", 26, 2.f, 1.5f, 1.25f));
 	#pragma endregion
 
 	#pragma region Magazine
-	this->m_AttachementsList.push_back(AttachmentButton(std::string("Default"),       sf::Vector2f(10.f, 450.f),  buttonsize, nullptr));
-	Magazine("Default Magazine", 0 , 1);
-	this->m_AttachementsList.push_back(AttachmentButton(std::string("6 Shell Tube"),  sf::Vector2f(280.f, 450.f), buttonsize, nullptr));
-	Magazine("6 Shell Tube"    , 6 , 2);
-	this->m_AttachementsList.push_back(AttachmentButton(std::string("8 Shell Tube"),  sf::Vector2f(550.f, 450.f), buttonsize, nullptr));
-	Magazine("8 Shell Tube"    , 14, 4);
-	this->m_AttachementsList.push_back(AttachmentButton(std::string("12 Shell Drum"), sf::Vector2f(820.f, 450.f), buttonsize, nullptr));
-	Magazine("12 Shell Drum"   , 29, 8);
+	this->AddAttachment(std::string("Default"), sf::Vector2f(10.f, 500.f), buttonsize, "Placeholder", new Magazine("Default Magazine", 0, 0));
+	this->AddAttachment(std::string("6 Shell Tube"), sf::Vector2f(280.f, 500.f), buttonsize, "Placeholder", new Magazine("6 Shell Tube", 6, 2));
+	this->AddAttachment(std::string("8 Shell Tube"), sf::Vector2f(550.f, 500.f), buttonsize, "Placeholder", new Magazine("8 Shell Tube", 14, 4));
+	this->AddAttachment(std::string("12 Shell Drum"), sf::Vector2f(820.f, 500.f), buttonsize, "Placeholder", new Magazine("12 Shell Drum", 29, 8));
 	#pragma endregion
 
 	#pragma region Armor
-
+	this->AddEquipment(std::string("None"), sf::Vector2f(10.f, 650.f), buttonsize, "Placeholder", new Armor("None", 0, 0, 1.f));
+	this->AddEquipment(std::string("Flak Vest"), sf::Vector2f(280.f, 650.f), buttonsize, "Placeholder", new Armor("Flak Vest", 2, 1, 1.f));
+	this->AddEquipment(std::string("Marine Armor"), sf::Vector2f(550.f, 650.f), buttonsize, "Placeholder", new Armor("Marine Armor", 7, 2, 1.f));
+	this->AddEquipment(std::string("Recon Armor"), sf::Vector2f(820.f, 650.f), buttonsize, "Placeholder", new Armor("Recon Armor", 16, 3, 1.2f));
+	this->AddEquipment(std::string("Juggernaut Armor"), sf::Vector2f(1090.f, 650.f), buttonsize, "Placeholder", new Armor("Jugernaut Armor", 32, 6, 1.2f));
 	#pragma 
+
+	#pragma region AmmoStash
+	this->AddEquipment(std::string("Ammo Pouch"), sf::Vector2f(10.f, 750.f), buttonsize, "Placeholder", new AmmoStash("Ammo Pouch", 0, 0));
+	this->AddEquipment(std::string("Ammo Belt"), sf::Vector2f(280.f, 750.f), buttonsize, "Placeholder", new AmmoStash("Ammo Belt", 1, 5));
+	this->AddEquipment(std::string("Bandolier"), sf::Vector2f(550.f, 750.f), buttonsize, "Placeholder", new AmmoStash("Bandolier", 12, 10));
+	this->AddEquipment(std::string("Satchel"), sf::Vector2f(820.f, 750.f), buttonsize, "Placeholder", new AmmoStash("Satchel", 23, 20));
+	this->AddEquipment(std::string("Tactical Backpack"), sf::Vector2f(1090.f, 750.f), buttonsize, "Placeholder", new AmmoStash("Tactical Backpack", 35, 40));
+	#pragma endregion
 }
 
 void Shop::LockItem()
 {
 	for (AttachmentButton& button : this->m_AttachementsList)
 	{
-		if (button.Get().GetUnlockLevel() > this->m_PlayerLevel)
+		if (button.Get()->GetUnlockLevel() > this->m_PlayerLevel)
 		{
 			button.Lock();
 		}
@@ -80,7 +79,7 @@ void Shop::LockItem()
 	
 	for (EquipmentButton& button : this->m_EquipmentList)
 	{
-		if (button.Get().GetUnlockedLevel() > this->m_PlayerLevel)
+		if (button.Get()->GetUnlockLevel() > this->m_PlayerLevel)
 		{
 			button.Lock();
 		}
@@ -91,25 +90,27 @@ void Shop::LockItem()
 	}
 }
 
-void Shop::AddAttachment(std::string& _buttonName, sf::Vector2f& _buttonPos, std::string& _textureName, sf::Vector2f _buttonSize, Attachment& _attachment)
+template <typename T>
+void Shop::AddAttachment(std::string _buttonName, sf::Vector2f _buttonPos, sf::Vector2f _buttonSize, std::string _textureName, T* _attachment)
 {
 	this->m_AttachementsList.push_back(AttachmentButton(_buttonName, _buttonPos, _buttonSize, &RscMana::Get<sf::Texture>(_textureName)));
-	this->m_AttachementsList.back().Bind(_attachment);
+	this->m_AttachementsList.back().Bind(*_attachment);
 }
-void Shop::AddEquipement(std::string& _buttonName, sf::Vector2f& _buttonPos, std::string& _textureName, sf::Vector2f _buttonSize, Equipment& _equipment)
+template<typename T>
+void Shop::AddEquipment(std::string _buttonName, sf::Vector2f _buttonPos, sf::Vector2f _buttonSize, std::string _textureName, T* _equipment)
 {
 	this->m_EquipmentList.push_back(EquipmentButton(_buttonName, _buttonPos, _buttonSize, &RscMana::Get<sf::Texture>(_textureName)));
-	this->m_EquipmentList.back().Bind(_equipment);
+	this->m_EquipmentList.back().Bind(*_equipment);
 }
 
 void Shop::Update()
 {
 	this->LockItem(); //Move to constructor after debug
 
-
 	for (AttachmentButton& button : this->m_AttachementsList)
 	{
-		if (button.Get().GetName() != this->m_EquipedGrip.GetName() && button.Get().GetName() != this->m_EquipedMag.GetName() && button.Get().GetName() != this->m_EquipedMuzzle.GetName() && button.Get().GetName() != this->m_EquipedStock.GetName())
+		std::string currentName = button.Get()->GetName();
+		if (currentName != this->m_EquipedGrip.GetName() && currentName != this->m_EquipedMag.GetName() && currentName != this->m_EquipedMuzzle.GetName() && currentName != this->m_EquipedStock.GetName())
 		{
 			button.SetActive(false);
 		}
@@ -133,45 +134,94 @@ void Shop::Update()
 		}
 		else if (this->m_EquipedMag.GetUnlockLevel() > this->m_PlayerLevel)
 		{
-			this->m_EquipedMag = Magazine("Default Magazine", 0, 1);
+			this->m_EquipedMag = Magazine("Default Magazine", 0, 0);
 		}
 		////////////
 
-		if (button.Update(button.Get().GetUnlockLevel()))
+		if (button.Update(button.Get()->GetUnlockLevel()))
 		{
-			if (dynamic_cast<Muzzle*>(&button.Get()))
+			if (dynamic_cast<Muzzle*>(button.Get()))
 			{
-				this->m_EquipedMuzzle = *dynamic_cast<Muzzle*>(&button.Get());
+				this->m_EquipedMuzzle = *dynamic_cast<Muzzle*>(button.Get());
 			}
-			else if(dynamic_cast<Grip*>(&button.Get()))
+			else if (dynamic_cast<Grip*>(button.Get()))
 			{
-				this->m_EquipedGrip = *dynamic_cast<Grip*>(&button.Get());
+				this->m_EquipedGrip = *dynamic_cast<Grip*>(button.Get());
 			}
-			else if (dynamic_cast<Stock*>(&button.Get()))
+			else if (dynamic_cast<Stock*>(button.Get()))
 			{
-				this->m_EquipedStock = *dynamic_cast<Stock*>(&button.Get());
+				this->m_EquipedStock = *dynamic_cast<Stock*>(button.Get());
 			}
-			else if (dynamic_cast<Magazine*>(&button.Get()))
+			else if (dynamic_cast<Magazine*>(button.Get()))
 			{
-				this->m_EquipedMag = *dynamic_cast<Magazine*>(&button.Get());
+				this->m_EquipedMag = *dynamic_cast<Magazine*>(button.Get());
 			}
 		}
 	}
+	for (EquipmentButton& button : this->m_EquipmentList)
+	{
+		std::string currentName = button.Get()->GetName();
+		if (currentName != this->m_EquipedArmor.GetName() && currentName != this->m_EquipedAmmoStash.GetName())
+		{
+			button.SetActive(false);
+		}
+		else
+		{
+			button.SetActive(true);
+		}
+
+		/// Temp ///
+		if (this->m_EquipedArmor.GetUnlockLevel() > this->m_PlayerLevel)
+		{
+			this->m_EquipedArmor = Armor("None", 0, 0, 1.f);
+		}
+		else if (this->m_EquipedAmmoStash.GetUnlockLevel() > this->m_PlayerLevel)
+		{
+			this->m_EquipedAmmoStash = AmmoStash("Ammo Pouch", 0, 0);
+		}
+		////////////
+
+		if (button.Update(button.Get()->GetUnlockLevel()))
+		{
+			if (dynamic_cast<Armor*>(button.Get()))
+			{
+				this->m_EquipedArmor = *dynamic_cast<Armor*>(button.Get());
+			}
+			else if (dynamic_cast<AmmoStash*>(button.Get()))
+			{
+				this->m_EquipedAmmoStash = *dynamic_cast<AmmoStash*>(button.Get());
+			}
+		}
+	}
+	
 }
 
 void Shop::Display(Window& _window)
 {
-
+	this->m_Text.setString("Attachment");
+	this->m_Text.setPosition(sf::Vector2f(10.f,150));
+	_window.Draw(this->m_Text);
 	for (AttachmentButton& button : this->m_AttachementsList)
 	{
 		button.Display(_window);
 	}
 
-	sf::Text txt("Player Level : " + std::to_string(this->m_PlayerLevel)
-				+ "\nGrip : " + this->m_EquipedGrip.GetName()
-				+ "\nStock : " + this->m_EquipedStock.GetName()
-				+ "\nMagazine : " + this->m_EquipedMag.GetName()
-				+ "\nMuzzle : " + this->m_EquipedMuzzle.GetName() + "\n", RscMana::Get<sf::Font>("Mono"));
-	txt.setPosition(sf::Vector2f(10.f, 550.f));
-	_window.Draw(txt);
+
+	this->m_Text.setString("Equipment");
+	this->m_Text.setPosition(sf::Vector2f(10.f,600.f));
+	_window.Draw(this->m_Text);
+	for (EquipmentButton& button : this->m_EquipmentList)
+	{
+		button.Display(_window);
+	}
+
+	this->m_Text.setString("Player Level : " + std::to_string(this->m_PlayerLevel)
+							+ "\nMuzzle : " + this->m_EquipedMuzzle.GetName()
+							+ "\nGrip : " + this->m_EquipedGrip.GetName()
+							+ "\nStock : " + this->m_EquipedStock.GetName()
+							+ "\nMagazine : " + this->m_EquipedMag.GetName()
+							+ "\nArmor : " + this->m_EquipedArmor.GetName()
+							+ "\nAmmo Stash : " + this->m_EquipedAmmoStash.GetName());
+	this->m_Text.setPosition(sf::Vector2f(1200.f, 10.f));
+	_window.Draw(this->m_Text);
 }

@@ -70,14 +70,19 @@ AttachmentButton::AttachmentButton(std::string _str, sf::Vector2f _pos, sf::Vect
 
 void AttachmentButton::Bind(Attachment& _attachment)
 {
-	this->m_Attachement = _attachment;
+	this->m_Attachement = &_attachment;
 }
 
 //////////////////////////////////////////////////
 
+EquipmentButton::EquipmentButton(std::string _str, sf::Vector2f _pos, sf::Vector2f _size, sf::Texture* _texture)
+{
+	this->ShopButton::ShopButton(_str, _pos, _size, _texture);
+}
+
 void EquipmentButton::Bind(Equipment& _equipment)
 {
-	this->m_Equipment = _equipment;
+	this->m_Equipment = &_equipment;
 }
 
 //////////////////////////////////////////////////

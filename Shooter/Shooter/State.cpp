@@ -113,7 +113,7 @@ void Game::Init()
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 	//this->GetRsc<sf::Music>("Bogus").play();
 	
-	this->m_Stage.SetNum(3);
+	this->m_Stage.SetNum(1);
 	this->m_Stage.Init();
 }
 void Game::Update()
@@ -208,6 +208,13 @@ void Upgrade::Update()
 			this->m_Shop.SetLevel(this->m_PlayerLevel);
 		}
 	}
+
+	this->m_Muzzle = this->m_Shop.GetMuzzle();
+	this->m_Grip = this->m_Shop.GetGrip();
+	this->m_Stock = this->m_Shop.GetStock();
+	this->m_Magazine = this->m_Shop.GetMagazine();
+	this->m_Armor = this->m_Shop.GetArmor();
+	this->m_AmmoStash = this->m_Shop.GetAmmoStash();
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && this->m_InputTimer > 0.2f)
 	{

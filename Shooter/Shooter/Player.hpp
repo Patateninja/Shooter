@@ -1,6 +1,7 @@
 #pragma once
 #include "Shotgun.hpp"
 #include "Enemy.hpp"
+#include "Equipement.hpp"
 
 class Player
 {
@@ -11,6 +12,8 @@ class Player
 		sf::Vector2f m_Velocity;
 		sf::String infinite = L"\u221E";
 		Shotgun m_Shotgun;
+		Armor m_Armor;
+		AmmoStash m_AmmoStash;
 		float m_InputTimer;
 		int m_Life;
 		int m_MaxAmmo;
@@ -22,6 +25,10 @@ class Player
 	public :
 		Player();
 		~Player();
+
+		void ModifyShotgun(Muzzle& _muzzle, Grip _grip, Magazine _magazine, Stock _stock);
+
+		void Equip(Armor& _armor, AmmoStash& _ammoStash);
 
 		inline sf::Vector2f& GetPos() { return this->m_Position; };
 		inline sf::Vector2f& GetVel() { return this->m_Velocity; };

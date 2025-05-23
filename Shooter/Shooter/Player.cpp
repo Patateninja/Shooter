@@ -24,6 +24,17 @@ Player::~Player()
 
 }
 
+void Player::ModifyShotgun(Muzzle& _muzzle, Grip _grip, Magazine _magazine, Stock _stock)
+{
+	this->m_Shotgun.Modify(_muzzle, _grip, _magazine, _stock);
+}
+
+void Player::Equip(Armor& _armor, AmmoStash& _ammoStash)
+{
+	this->m_Armor = _armor;
+	this->m_AmmoStash = _ammoStash;
+}
+
 void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 {
 	this->m_InputTimer += Time::GetDeltaTime();

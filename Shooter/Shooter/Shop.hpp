@@ -10,6 +10,8 @@ class Shop
 		Grip m_EquipedGrip;
 		Stock m_EquipedStock;
 		Magazine m_EquipedMag;
+		Armor m_EquipedArmor;
+		AmmoStash m_EquipedAmmoStash;
 		std::list<AttachmentButton> m_AttachementsList;
 		std::list<EquipmentButton> m_EquipmentList;
 		int m_PlayerLevel;
@@ -20,11 +22,20 @@ class Shop
 
 		void LockItem();
 
-		void AddAttachment(std::string& _buttonName, sf::Vector2f& _buttonPos, std::string& _textureName, sf::Vector2f _buttonSize, Attachment& _attachment);
-		void AddEquipement(std::string& _buttonName, sf::Vector2f& _buttonPos, std::string& _textureName, sf::Vector2f _buttonSize, Equipment& _equipment);
+		template<typename T>
+		void AddAttachment(std::string _buttonName, sf::Vector2f _buttonPos, sf::Vector2f _buttonSize, std::string _textureName, T* _attachment);
+		template<typename T>
+		void AddEquipment(std::string _buttonName, sf::Vector2f _buttonPos, sf::Vector2f _buttonSize, std::string _textureName, T* _equipment);;
 
 		void Update();
 		void Display(Window& _window);
 
 		void SetLevel(int _lvl) { this->m_PlayerLevel = _lvl; }
+
+		inline Muzzle GetMuzzle() { return this->m_EquipedMuzzle; }
+		inline Grip GetGrip() { return this->m_EquipedGrip; }
+		inline Stock GetStock() { return this->m_EquipedStock; }
+		inline Magazine GetMagazine() { return this->m_EquipedMag; }
+		inline Armor GetArmor() { return this->m_EquipedArmor; }
+		inline AmmoStash GetAmmoStash() { return this->m_EquipedAmmoStash; }
 };

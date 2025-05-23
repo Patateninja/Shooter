@@ -13,6 +13,14 @@ class State
 		StateManager* m_StateManager = nullptr;
 		sf::Text m_Text;
 		float m_InputTimer = 0;
+
+		Muzzle m_Muzzle;
+		Grip m_Grip;
+		Stock m_Stock;
+		Magazine m_Magazine;
+		Armor m_Armor;
+		AmmoStash m_AmmoStash;
+		
 	public :
 		State() = default;
 		~State() = default;

@@ -12,6 +12,14 @@ Shotgun::~Shotgun()
 	this->EmptyMagazine();
 }
 
+void Shotgun::Modify(Muzzle& _muzzle, Grip _grip, Magazine _magazine, Stock _stock)
+{
+	this->m_MuzzleAttachement = _muzzle;
+	this->m_GripAttachement = _grip;
+	this->m_MagazineAttachement = _magazine;
+	this->m_Stock = _stock;
+}
+
 void Shotgun::DisplayMagazine(Window& _window)
 {
 	this->m_Renderer.setSize(sf::Vector2f((this->m_DefaultCapacity + this->m_MagazineAttachement.GetCapacity()) * 125.f + 55.f, 50.f));

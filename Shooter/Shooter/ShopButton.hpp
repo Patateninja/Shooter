@@ -1,12 +1,7 @@
 #pragma once
 #include "Button.hpp"
 #include "Attachment.hpp"
-
-class Equipment
-{
-	public :
-		int GetUnlockedLevel() { return 0; }
-};
+#include "Equipement.hpp"
 
 class ShopButton : public Button
 {
@@ -27,24 +22,26 @@ class ShopButton : public Button
 class AttachmentButton : public ShopButton
 {
 	private :
-		Attachment m_Attachement;
+		Attachment* m_Attachement = nullptr;
 	public :
 		AttachmentButton() = default;
 		AttachmentButton(std::string _str, sf::Vector2f _pos, sf::Vector2f _size, sf::Texture* _texture);
 		~AttachmentButton() = default;
 
 		void Bind(Attachment& _attachment);
-		Attachment& Get() { return this->m_Attachement; }
+
+		Attachment* Get() { return this->m_Attachement; }
 };
 
 class EquipmentButton : public ShopButton
 {
 	private:
-		Equipment m_Equipment;
+		Equipment* m_Equipment;
 	public:
 		EquipmentButton() = default;
+		EquipmentButton(std::string _str, sf::Vector2f _pos, sf::Vector2f _size, sf::Texture* _texture);
 		~EquipmentButton() = default;
 
 		void Bind(Equipment& _equipment);
-		Equipment& Get() { return this->m_Equipment; }
+		Equipment* Get() { return this->m_Equipment; }
 };
