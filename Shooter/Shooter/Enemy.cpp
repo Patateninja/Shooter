@@ -144,6 +144,7 @@ void Enemy::TakeDamage(int _damage)
 void Enemy::Die()
 {
 	this->m_Active = false;
+	Level::GainXP(this->m_Hp * 100);
 	this->m_Circle.setFillColor(Color::Grey);
 	this->m_IgnoreProj.clear();
 }

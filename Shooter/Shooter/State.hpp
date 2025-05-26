@@ -14,12 +14,12 @@ class State
 		sf::Text m_Text;
 		float m_InputTimer = 0;
 
-		Muzzle m_Muzzle;
-		Grip m_Grip;
-		Stock m_Stock;
-		Magazine m_Magazine;
-		Armor m_Armor;
-		AmmoStash m_AmmoStash;
+		static Muzzle m_Muzzle;
+		static Grip m_Grip;
+		static Stock m_Stock;
+		static Magazine m_Magazine;
+		static Armor m_Armor;
+		static AmmoStash m_AmmoStash;
 		
 	public :
 		State() = default;

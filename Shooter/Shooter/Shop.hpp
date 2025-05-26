@@ -1,11 +1,14 @@
 #pragma once
 #include "Attachment.hpp"
 #include "ShopButton.hpp"
+#include "Xp.hpp"
 
 class Shop
 {
 	private :
 		sf::Text m_Text;
+		sf::Text m_PopUpText;
+		sf::RectangleShape m_PopUpRect;
 		Muzzle m_EquipedMuzzle;
 		Grip m_EquipedGrip;
 		Stock m_EquipedStock;
@@ -14,10 +17,12 @@ class Shop
 		AmmoStash m_EquipedAmmoStash;
 		std::list<AttachmentButton> m_AttachementsList;
 		std::list<EquipmentButton> m_EquipmentList;
+		std::string m_PopUpString;
 		int m_PlayerLevel;
+		bool m_PopUp = false;
 	public :
 		Shop();
-		Shop(int _lvl);
+		Shop(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammostash);
 		~Shop() = default;
 
 		void LockItem();

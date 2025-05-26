@@ -20,7 +20,7 @@ class Shotgun
 		void Modify(Muzzle& _muzzle, Grip _grip, Magazine _magazine, Stock _stock);
 
 		inline bool Empty() { return this->m_Magazine.empty(); };
-		inline bool Full() { return this->m_Magazine.size() >= this->m_DefaultCapacity; }
+		inline bool Full() { return this->m_Magazine.size() >= this->m_DefaultCapacity + this->m_MagazineAttachement.GetCapacity(); }
 		inline float GetWalkSpeedMultiplier() { return this->m_Stock.GetWalkMod(); }
 		inline float GetAimSpeedMultiplier() { return this->m_Stock.GetAimMod() * this->m_GripAttachement.GetAimMod(); }
 

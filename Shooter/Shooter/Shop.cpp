@@ -4,17 +4,17 @@ Shop::Shop()
 {
 	this->m_PlayerLevel = 0;
 }
-Shop::Shop(int _lvl)
+Shop::Shop(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammostash)
 {
 	this->m_PlayerLevel = _lvl;
 	this->m_Text.setFont(RscMana::Get<sf::Font>("Mono"));
 
-	this->m_EquipedMuzzle = Muzzle("Default Muzzle", 0, 1.f, 1.f, 1.f);
-	this->m_EquipedGrip = Grip("Default Grip", 0, 1.f, 1.f, 1.f);
-	this->m_EquipedStock = Stock("Default Stock", 0, 1.f, 1.f, 1.f);
-	this->m_EquipedMag = Magazine("Default Magazine", 0, 0);
-	this->m_EquipedArmor = Armor("None", 0, 0, 1.f);
-	this->m_EquipedAmmoStash = AmmoStash("Ammo Pouch", 0, 0);
+	this->m_EquipedMuzzle = _muzzle;
+	this->m_EquipedGrip = _grip;
+	this->m_EquipedStock = _stock;
+	this->m_EquipedMag = _magazine;
+	this->m_EquipedArmor = _armor;
+	this->m_EquipedAmmoStash = _ammostash;
 
 	sf::Vector2f buttonsize(250.f, 75.f);
 
@@ -52,7 +52,7 @@ Shop::Shop(int _lvl)
 	this->AddEquipment(std::string("Marine Armor"), sf::Vector2f(550.f, 650.f), buttonsize, "Placeholder", new Armor("Marine Armor", 7, 2, 1.f));
 	this->AddEquipment(std::string("Recon Armor"), sf::Vector2f(820.f, 650.f), buttonsize, "Placeholder", new Armor("Recon Armor", 16, 3, 1.2f));
 	this->AddEquipment(std::string("Juggernaut Armor"), sf::Vector2f(1090.f, 650.f), buttonsize, "Placeholder", new Armor("Jugernaut Armor", 32, 6, 1.2f));
-	#pragma 
+	#pragma endregion
 
 	#pragma region AmmoStash
 	this->AddEquipment(std::string("Ammo Pouch"), sf::Vector2f(10.f, 750.f), buttonsize, "Placeholder", new AmmoStash("Ammo Pouch", 0, 0));
@@ -61,10 +61,19 @@ Shop::Shop(int _lvl)
 	this->AddEquipment(std::string("Satchel"), sf::Vector2f(820.f, 750.f), buttonsize, "Placeholder", new AmmoStash("Satchel", 23, 20));
 	this->AddEquipment(std::string("Tactical Backpack"), sf::Vector2f(1090.f, 750.f), buttonsize, "Placeholder", new AmmoStash("Tactical Backpack", 35, 40));
 	#pragma endregion
+
+	this->m_PopUpRect = sf::RectangleShape(sf::Vector2f(250.f, 125.f));
+	this->m_PopUpRect.setFillColor(Color::DarkGrey);
+	this->m_PopUpRect.setOutlineColor(Color::Grey);
+	this->m_PopUpRect.setOutlineThickness(5.f);
+	this->m_PopUpText.setFont(RscMana::Get<sf::Font>("Mono"));
+	this->m_PopUpText.setCharacterSize(20.f);
 }
 
 void Shop::LockItem()
 {
+	this->m_PopUp = false;
+
 	for (AttachmentButton& button : this->m_AttachementsList)
 	{
 		if (button.Get()->GetUnlockLevel() > this->m_PlayerLevel)
@@ -74,6 +83,42 @@ void Shop::LockItem()
 		else
 		{
 			button.Unlock();
+		}
+
+		if (button.Hover())
+		{
+			this->m_PopUpRect.setPosition(button.Pos() + sf::Vector2f(250.f, 0));
+			this->m_PopUpText.setPosition(this->m_PopUpRect.getPosition() + sf::Vector2f(5.f, 5.f));
+			this->m_PopUp = true;
+
+			if (dynamic_cast<Muzzle*>(button.Get()))
+			{
+				this->m_PopUpString = button.Get()->GetName()
+					+ "\nSpread : " + (dynamic_cast<Muzzle*>(button.Get())->GetSpreadMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Muzzle*>(button.Get())->GetSpreadMod())) + "%"
+					+ "\nRange : " + (dynamic_cast<Muzzle*>(button.Get())->GetRangeMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Muzzle*>(button.Get())->GetRangeMod())) + "%"
+					+ "\nBullet Speed : " + (dynamic_cast<Muzzle*>(button.Get())->GetVelocityMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Muzzle*>(button.Get())->GetVelocityMod())) + "%";
+			}
+			else if (dynamic_cast<Grip*>(button.Get()))
+			{
+				this->m_PopUpString = button.Get()->GetName()
+					+ "\nAccuracy : " + (dynamic_cast<Grip*>(button.Get())->GetAimMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Grip*>(button.Get())->GetAimMod())) + "%"
+					+ "\nRecoil : " + (dynamic_cast<Grip*>(button.Get())->GetRecoilMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Grip*>(button.Get())->GetRecoilMod())) + "%"
+					+ "\nRate of fire : " + (dynamic_cast<Grip*>(button.Get())->GetROFMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Grip*>(button.Get())->GetROFMod())) + "%";
+			}
+			else if (dynamic_cast<Stock*>(button.Get()))
+			{
+				this->m_PopUpString = button.Get()->GetName()
+					+ "\nAccuracy : " + (dynamic_cast<Stock*>(button.Get())->GetAimMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Stock*>(button.Get())->GetAimMod())) + "%"
+					+ "\nRecoil : " + (dynamic_cast<Stock*>(button.Get())->GetRecoilMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Stock*>(button.Get())->GetRecoilMod())) + "%"
+					+ "\nWalking Speed : " + (dynamic_cast<Stock*>(button.Get())->GetWalkMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Stock*>(button.Get())->GetWalkMod())) + "%";
+			}
+			else if (dynamic_cast<Magazine*>(button.Get()))
+			{
+				this->m_PopUpString = button.Get()->GetName()
+					+ "\nCapacity : " + (std::to_string(dynamic_cast<Magazine*>(button.Get())->GetCapacity()));
+			}
+
+			this->m_PopUpText.setString(this->m_PopUpString);
 		}
 	}
 	
@@ -86,6 +131,27 @@ void Shop::LockItem()
 		else
 		{
 			button.Unlock();
+		}
+
+		if (button.Hover())
+		{
+			this->m_PopUpRect.setPosition(button.Pos() + sf::Vector2f(250.f, 0));
+			this->m_PopUpText.setPosition(this->m_PopUpRect.getPosition() + sf::Vector2f(5.f, 5.f));
+			this->m_PopUp = true;
+
+			if (dynamic_cast<Armor*>(button.Get()))
+			{
+				this->m_PopUpString = button.Get()->GetName()
+					+ "\nLife : " + (std::to_string(dynamic_cast<Armor*>(button.Get())->GetLife()))
+					+ "\nWalk Speed : " + (dynamic_cast<Armor*>(button.Get())->GetWalkSpeedMod() > 1 ? "+" : "") + (std::to_string(int(dynamic_cast<Armor*>(button.Get())->GetWalkSpeedMod() - 1) * 100));
+			}
+			else if (dynamic_cast<AmmoStash*>(button.Get()))
+			{
+				this->m_PopUpString = button.Get()->GetName()
+					+ "\nCapacity : " + (std::to_string(dynamic_cast<AmmoStash*>(button.Get())->GetCapacity()));
+			}
+
+			this->m_PopUpText.setString(this->m_PopUpString);
 		}
 	}
 }
@@ -215,7 +281,7 @@ void Shop::Display(Window& _window)
 		button.Display(_window);
 	}
 
-	this->m_Text.setString("Player Level : " + std::to_string(this->m_PlayerLevel)
+	this->m_Text.setString("Player Level : " + std::to_string(this->m_PlayerLevel) + "[" + std::to_string(Level::GetXp()) + "]"
 							+ "\nMuzzle : " + this->m_EquipedMuzzle.GetName()
 							+ "\nGrip : " + this->m_EquipedGrip.GetName()
 							+ "\nStock : " + this->m_EquipedStock.GetName()
@@ -224,4 +290,10 @@ void Shop::Display(Window& _window)
 							+ "\nAmmo Stash : " + this->m_EquipedAmmoStash.GetName());
 	this->m_Text.setPosition(sf::Vector2f(1200.f, 10.f));
 	_window.Draw(this->m_Text);
+
+	if (this->m_PopUp)
+	{
+		_window.Draw(this->m_PopUpRect);
+		_window.Draw(this->m_PopUpText);
+	}
 }

@@ -126,6 +126,9 @@
     <ClCompile Include="Equipement.cpp">
       <Filter>Source Files\Upgrades</Filter>
     </ClCompile>
+    <ClCompile Include="Xp.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tools.hpp">
@@ -193,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="Equipement.hpp">
       <Filter>Header Files\Upgrades</Filter>
+    </ClInclude>
+    <ClInclude Include="Xp.hpp">
+      <Filter>Header Files\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

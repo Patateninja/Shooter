@@ -2,6 +2,7 @@
 #include "Projectile.hpp"
 #include "Astar.hpp"
 #include "Shield.hpp"
+#include "Xp.hpp"
 #include <thread>
 #include <future>
 

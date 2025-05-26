@@ -13,6 +13,7 @@ ShopButton::ShopButton(std::string _str, sf::Vector2f _pos, sf::Vector2f _size, 
 	this->m_Rect.setSize(_size);
 	this->m_Rect.setTexture(_texture);
 	this->m_Active = false;
+
 }
 
 bool ShopButton::Update(int _linkedAttachementLvl)
@@ -66,7 +67,6 @@ AttachmentButton::AttachmentButton(std::string _str, sf::Vector2f _pos, sf::Vect
 {
 	this->ShopButton::ShopButton(_str, _pos, _size, _texture);
 }
-
 
 void AttachmentButton::Bind(Attachment& _attachment)
 {

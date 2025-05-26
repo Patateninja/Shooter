@@ -2,6 +2,15 @@
 #include "StateManager.hpp"
 
 ////////////////////////////////////////////////////////
+
+Muzzle State::m_Muzzle = Muzzle("Default Muzzle", 0, 1.f, 1.f, 1.f);
+Grip State::m_Grip = Grip("Default Grip", 0, 1.f, 1.f, 1.f);
+Stock State::m_Stock = Stock("Default Stock", 0, 1.f, 1.f, 1.f);
+Magazine State::m_Magazine = Magazine("Default Magazine", 0, 0);
+Armor State::m_Armor = Armor("None", 0, 0, 1.f);
+AmmoStash State::m_AmmoStash = AmmoStash("Ammo Pouch", 0, 0);
+
+////////////////////////////////////////////////////////
 #pragma region State
 
 Window& State::Window()
@@ -113,6 +122,8 @@ void Game::Init()
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 	//this->GetRsc<sf::Music>("Bogus").play();
 	
+	this->m_Player.Equip(State::m_Armor, State::m_AmmoStash);
+	this->m_Player.ModifyShotgun(State::m_Muzzle, State::m_Grip, State::m_Magazine, State::m_Stock);
 	this->m_Stage.SetNum(1);
 	this->m_Stage.Init();
 }
@@ -180,7 +191,7 @@ void Upgrade::Init()
 {
 	std::cout << "Upgrade Init" << std::endl;
 	this->Window().ResetView();
-	this->m_Shop = Shop(0);
+	this->m_Shop = Shop(Level::GetLvl(), State::m_Muzzle, State::m_Grip, State::m_Stock, State::m_Magazine,	State::m_Armor, State::m_AmmoStash);
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 }
 void Upgrade::Update()
@@ -195,7 +206,8 @@ void Upgrade::Update()
 		this->m_InputTimer = 0.f;
 		if (this->m_PlayerLevel < 35)
 		{
-			++this->m_PlayerLevel;
+			Level::GainXP(69);
+			this->m_PlayerLevel = Level::GetLvl();
 			this->m_Shop.SetLevel(this->m_PlayerLevel);
 		}
 	}
@@ -209,12 +221,12 @@ void Upgrade::Update()
 		}
 	}
 
-	this->m_Muzzle = this->m_Shop.GetMuzzle();
-	this->m_Grip = this->m_Shop.GetGrip();
-	this->m_Stock = this->m_Shop.GetStock();
-	this->m_Magazine = this->m_Shop.GetMagazine();
-	this->m_Armor = this->m_Shop.GetArmor();
-	this->m_AmmoStash = this->m_Shop.GetAmmoStash();
+	State::m_Muzzle = this->m_Shop.GetMuzzle();
+	State::m_Grip = this->m_Shop.GetGrip();
+	State::m_Stock = this->m_Shop.GetStock();
+	State::m_Magazine = this->m_Shop.GetMagazine();
+	State::m_Armor = this->m_Shop.GetArmor();
+	State::m_AmmoStash = this->m_Shop.GetAmmoStash();
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && this->m_InputTimer > 0.2f)
 	{

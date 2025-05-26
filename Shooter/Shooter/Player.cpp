@@ -33,11 +33,22 @@ void Player::Equip(Armor& _armor, AmmoStash& _ammoStash)
 {
 	this->m_Armor = _armor;
 	this->m_AmmoStash = _ammoStash;
+
+	this->m_Life += this->m_Armor.GetLife();
+	this->m_MaxAmmo += this->m_AmmoStash.GetCapacity();
 }
 
 void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 {
 	this->m_InputTimer += Time::GetDeltaTime();
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::T) && this->m_InputTimer > 0.3f)
+	{
+		if (!this->m_Shotgun.Empty())
+		{
+			this->m_InputTimer = 0.f;
+		}
+	}
 
 	if (this->m_CanReload)
 	{
