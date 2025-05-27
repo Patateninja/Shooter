@@ -83,7 +83,7 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 				
 
 				// Temp //
-				if (i % 2 == 0 && j != 1)
+				if (i % 8 == 0 && j != 1)
 				{
 					this->m_Map.push_back(Tile(sf::Vector2f(float(i * Tile::GetSize()), float(j * Tile::GetSize())), TileType(Tools::Random(2, 0))));
 				}

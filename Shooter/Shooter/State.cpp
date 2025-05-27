@@ -201,26 +201,6 @@ void Upgrade::Update()
 
 	this->m_Shop.Update();
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add) && this->m_InputTimer > 0.2f)
-	{
-		this->m_InputTimer = 0.f;
-		if (this->m_PlayerLevel < 35)
-		{
-			Level::GainXP(69);
-			this->m_PlayerLevel = Level::GetLvl();
-			this->m_Shop.SetLevel(this->m_PlayerLevel);
-		}
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Subtract) && this->m_InputTimer > 0.2f)
-	{
-		this->m_InputTimer = 0.f;
-		if (this->m_PlayerLevel > 0)
-		{
-			--this->m_PlayerLevel;
-			this->m_Shop.SetLevel(this->m_PlayerLevel);
-		}
-	}
-
 	State::m_Muzzle = this->m_Shop.GetMuzzle();
 	State::m_Grip = this->m_Shop.GetGrip();
 	State::m_Stock = this->m_Shop.GetStock();
@@ -237,6 +217,20 @@ void Upgrade::Update()
 	{
 		this->m_InputTimer = 0.f;
 		this->ChangeState<Menu>();
+	}
+
+
+
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add) && this->m_InputTimer > 0.2f)
+	{
+		this->m_InputTimer = 0.f;
+		if (this->m_PlayerLevel < 35)
+		{
+			Level::GainXP(28510);
+			this->m_PlayerLevel = Level::GetLvl();
+			this->m_Shop.SetLevel(this->m_PlayerLevel);
+		}
 	}
 }
 void Upgrade::Display()

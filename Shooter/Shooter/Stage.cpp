@@ -24,14 +24,14 @@ void Stage::SpawnEnemies()
 		this->m_EnemyList.Add<Ranged>(sf::Vector2f(960.f, 1152.f));
 		this->m_EnemyList.Add<Ranged>(sf::Vector2f(384.f, 1280.f));
 		this->m_EnemyList.Add<Ranged>(sf::Vector2f(960.f, 1152.f));
-		this->m_EnemyList.Add<Ranged>(sf::Vector2f(1216, 832.f));
+		this->m_EnemyList.Add<Ranged>(sf::Vector2f(1216.f, 832.f));
 		this->m_EnemyList.Add<RangedShielded>(sf::Vector2f(576.f, 1024.f));
 		//this->m_EnemyList.Add<Tank>(sf::Vector2f(1344.f, 384.f));
 	}
 	else if (this->m_Num % 3 == 1)
 	{
 		this->m_EnemyList.Add<Shielded>(sf::Vector2f(1216, 832.f));
-		this->m_EnemyList.Add<Baseliner>(sf::Vector2f(576.f, 1024.f));
+		//this->m_EnemyList.Add<Baseliner>(sf::Vector2f(576.f, 1024.f));
 	}
 	else
 	{

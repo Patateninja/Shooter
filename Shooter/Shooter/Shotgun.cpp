@@ -5,7 +5,8 @@
 Shotgun::Shotgun()
 {
 	this->m_Magazine.clear();
-	this->m_DefaultCapacity = 4;
+	this->m_DefaultCapacity = 40;
+	this->m_Recoil = 1.f;
 }
 Shotgun::~Shotgun()
 {
@@ -18,6 +19,18 @@ void Shotgun::Modify(Muzzle& _muzzle, Grip _grip, Magazine _magazine, Stock _sto
 	this->m_GripAttachement = _grip;
 	this->m_MagazineAttachement = _magazine;
 	this->m_Stock = _stock;
+}
+
+void Shotgun::ReduceRecoil()
+{
+	if (this->m_Recoil > 1)
+	{
+		this->m_Recoil -= Time::GetDeltaTime() * 0.3f;
+	}
+	else
+	{
+		this->m_Recoil = 1;
+	}
 }
 
 void Shotgun::DisplayMagazine(Window& _window)
@@ -82,7 +95,12 @@ void Shotgun::Shoot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel, Window& 
 	if (!this->m_Magazine.empty())
 	{
 		RscMana::Get<sf::Sound>("Shot").play();
-		this->m_Magazine.front()->Shot(_playerPos, _playerVel, _window);
+		this->m_Magazine.front()->Shot(_playerPos, _playerVel, this->m_Recoil, _window);
+		this->m_Recoil += 0.5 * this->GetRecoilModifier();
+		if (this->m_Recoil > 2.f)
+		{
+			this->m_Recoil = 2.f;
+		}
 		this->m_Magazine.erase(this->m_Magazine.begin());
 	}
 }

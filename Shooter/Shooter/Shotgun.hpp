@@ -13,6 +13,7 @@ class Shotgun
 		Grip m_GripAttachement;
 		Magazine m_MagazineAttachement;
 		Stock m_Stock;
+		float m_Recoil;
 	public :
 		Shotgun();
 		~Shotgun();
@@ -23,6 +24,12 @@ class Shotgun
 		inline bool Full() { return this->m_Magazine.size() >= this->m_DefaultCapacity + this->m_MagazineAttachement.GetCapacity(); }
 		inline float GetWalkSpeedMultiplier() { return this->m_Stock.GetWalkMod(); }
 		inline float GetAimSpeedMultiplier() { return this->m_Stock.GetAimMod() * this->m_GripAttachement.GetAimMod(); }
+		inline float GetRoFMultiplier() { return this->m_GripAttachement.GetROFMod(); }
+		inline float GetRecoilModifier() { return this->m_GripAttachement.GetRecoilMod() * this->m_Stock.GetRecoilMod(); }
+
+		void ReduceRecoil();
+		
+		float Recoil() { return this->m_Recoil; }
 
 		void DisplayMagazine(Window& _window);
 

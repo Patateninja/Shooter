@@ -10,7 +10,7 @@ Player::Player()
 	this->m_Circle.setFillColor(sf::Color::Blue);
 	this->m_Position = sf::Vector2f(576.f, 64.f);
 	this->m_Velocity = sf::Vector2f(0.f, 0.f);
-	this->m_MaxAmmo = 15.f;
+	this->m_MaxAmmo = 5.f;
 	this->m_BuckShot = this->m_MaxAmmo;
 	this->m_DragonBreath = this->m_MaxAmmo;
 	this->m_Slug = this->m_MaxAmmo;
@@ -36,11 +36,14 @@ void Player::Equip(Armor& _armor, AmmoStash& _ammoStash)
 
 	this->m_Life += this->m_Armor.GetLife();
 	this->m_MaxAmmo += this->m_AmmoStash.GetCapacity();
+	this->m_BuckShot = this->m_MaxAmmo;
+	this->m_DragonBreath = this->m_MaxAmmo;
+	this->m_Slug = this->m_MaxAmmo;
 }
 
 void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 {
-	this->m_InputTimer += Time::GetDeltaTime();
+	this->m_InputTimer += Time::GetDeltaTime() * this->m_Shotgun.GetRoFMultiplier();
 
 	if (this->m_CanReload)
 	{
@@ -85,6 +88,8 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 	{
 		this->m_Text.setPosition(_window.RelativePos(sf::Vector2f(10.f, 110.f)));
 		this->m_Text.setString("Remaining : " + std::to_string(_enemyList.Alive()));
+
+		this->m_Shotgun.ReduceRecoil();
 
 		for (std::shared_ptr<Enemy>& enemy : _enemyList.GetList())
 		{
@@ -157,6 +162,22 @@ void Player::Display(Window& _window)
 	lines[1].position = Tools::AngleToVector(200.f, Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0,0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition())))) + this->m_Position;
 	lines[1].color = sf::Color::Red;
 	_window.Draw(lines);
+
+	if (!this->m_Shotgun.Empty())
+	{
+		sf::VertexArray cone(sf::Lines, 4);
+		cone[0].position = this->m_Position;
+		cone[0].color = sf::Color::Blue;
+		cone[1].position = Tools::AngleToVector(200.f, Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition()))) - Tools::DegToRad(this->m_Shotgun.GetShells().front()->GetSpread() / 2) * this->m_Shotgun.Recoil()) + this->m_Position;
+		cone[1].color = sf::Color::Blue;
+
+		cone[2].position = this->m_Position;
+		cone[2].color = sf::Color::Green; 
+		cone[3].position = Tools::AngleToVector(200.f, Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition()))) + Tools::DegToRad(this->m_Shotgun.GetShells().front()->GetSpread() / 2) * this->m_Shotgun.Recoil()) + this->m_Position;
+		cone[3].color = sf::Color::Green;
+	
+		_window.Draw(cone);
+	}
 
 	this->m_Shotgun.DisplayMagazine(_window);
 }
