@@ -76,7 +76,7 @@ void Shotgun::ReduceRecoil()
 
 void Shotgun::DisplayMagazine(Window& _window)
 {
-	this->m_Renderer.setSize(sf::Vector2f((this->m_DefaultCapacity + this->m_MagazineAttachement.GetCapacity()) * 125.f + 55.f, 50.f));
+	this->m_Renderer.setSize(sf::Vector2f((this->m_DefaultCapacity + this->m_MagazineAttachement.GetCapacity()) * 135.f , 50.f));
 	this->m_Renderer.setTexture(nullptr);
 	this->m_Renderer.setPosition(_window.RelativePos(sf::Vector2f(10.f, 10.f)));
 	this->m_Renderer.setFillColor(Color::Grey);
