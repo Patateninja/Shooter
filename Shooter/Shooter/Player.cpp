@@ -4,41 +4,18 @@
 
 Player::Player()
 {
-	this->m_Text.setFont(RscMana::Get<sf::Font>("Mono"));
 	this->m_Circle = sf::CircleShape(20.f);
+	this->m_Position = sf::Vector2f(576.f, 64.f);
+}
+
+void Player::Init(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _stock, Armor& _armor, AmmoStash& _ammoStash)
+{
 	this->m_Circle.setOrigin(20.f, 20.f);
 	this->m_Circle.setFillColor(sf::Color::Blue);
-	this->m_Position = sf::Vector2f(576.f, 64.f);
-	this->m_Velocity = sf::Vector2f(0.f, 0.f);
-	this->m_MaxAmmo = 5.f;
-	this->m_BuckShot = this->m_MaxAmmo;
-	this->m_DragonBreath = this->m_MaxAmmo;
-	this->m_Slug = this->m_MaxAmmo;
-	this->m_InputTimer = 0.f;
-	this->m_Life = 5;
-	this->m_CanMove = false;
-	this->m_CanReload = true;
-}
-Player::~Player()
-{
+	this->m_Text.setFont(RscMana::Get<sf::Font>("Mono"));
 
-}
-
-void Player::ModifyShotgun(Muzzle& _muzzle, Grip _grip, Magazine _magazine, Stock _stock)
-{
-	this->m_Shotgun.Modify(_muzzle, _grip, _magazine, _stock);
-}
-
-void Player::Equip(Armor& _armor, AmmoStash& _ammoStash)
-{
-	this->m_Armor = _armor;
-	this->m_AmmoStash = _ammoStash;
-
-	this->m_Life += this->m_Armor.GetLife();
-	this->m_MaxAmmo += this->m_AmmoStash.GetCapacity();
-	this->m_BuckShot = this->m_MaxAmmo;
-	this->m_DragonBreath = this->m_MaxAmmo;
-	this->m_Slug = this->m_MaxAmmo;
+	this->ModifyShotgun(_muzzle, _grip, _magazine, _stock);
+	this->Equip(_armor, _ammoStash);
 }
 
 void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
@@ -112,7 +89,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 		this->m_Velocity.y = 0;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
 		{
-			if (_map.GetTile(sf::Vector2i((this->m_Position - sf::Vector2f(0, this->m_Circle.getRadius())) - (sf::Vector2f(0,375) * Time::GetDeltaTime()))).GetWalkable())
+			if (_map.GetTile(sf::Vector2i((this->m_Position - sf::Vector2f(0, this->m_Circle.getRadius())) - (sf::Vector2f(0, 375) * Time::GetDeltaTime()))).GetWalkable())
 			{
 				this->m_Velocity.y = -1;
 			}
@@ -126,25 +103,25 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 		{
-			if (_map.GetTile(sf::Vector2i((this->m_Position - sf::Vector2f(this->m_Circle.getRadius(),0)) - (sf::Vector2f(375, 0) * Time::GetDeltaTime()))).GetWalkable())
+			if (_map.GetTile(sf::Vector2i((this->m_Position - sf::Vector2f(this->m_Circle.getRadius(), 0)) - (sf::Vector2f(375, 0) * Time::GetDeltaTime()))).GetWalkable())
 			{
 				this->m_Velocity.x = -1;
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
-			if (_map.GetTile(sf::Vector2i((this->m_Position + sf::Vector2f(this->m_Circle.getRadius(),0)) + (sf::Vector2f(375, 0) * Time::GetDeltaTime()))).GetWalkable())
+			if (_map.GetTile(sf::Vector2i((this->m_Position + sf::Vector2f(this->m_Circle.getRadius(), 0)) + (sf::Vector2f(375, 0) * Time::GetDeltaTime()))).GetWalkable())
 			{
 				this->m_Velocity.x = 1;
 			}
 		}
-		
+
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->m_InputTimer > 0.75f)
 		{
 			this->m_InputTimer = 0.f;
 			this->m_Shotgun.Shoot(this->m_Position, this->m_Velocity, _window);
 		}
-		
+
 		this->m_Position += Tools::AngleToVector((Tools::Magnitude(this->m_Velocity) == 0.f ? 0.f : 350.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier())), Tools::VectorToAngle(this->m_Velocity)) * Time::GetDeltaTime();
 	}
 
@@ -156,30 +133,30 @@ void Player::Display(Window& _window)
 
 	_window.Draw(this->m_Text);
 
-	sf::VertexArray lines(sf::Lines, 2);
+	sf::VertexArray lines(sf::Lines, 4);
 	lines[0].position = this->m_Position;
 	lines[0].color = sf::Color::Red;
-	lines[1].position = Tools::AngleToVector(200.f, Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0,0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition())))) + this->m_Position;
+	lines[1].position = Tools::AngleToVector(200.f, Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition())))) + this->m_Position;
 	lines[1].color = sf::Color::Red;
 	_window.Draw(lines);
 
-	if (!this->m_Shotgun.Empty())
-	{
-		sf::VertexArray cone(sf::Lines, 4);
-		cone[0].position = this->m_Position;
-		cone[0].color = sf::Color::Blue;
-		cone[1].position = Tools::AngleToVector(200.f, Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition()))) - Tools::DegToRad(this->m_Shotgun.GetShells().front()->GetSpread() / 2) * this->m_Shotgun.Recoil()) + this->m_Position;
-		cone[1].color = sf::Color::Blue;
-
-		cone[2].position = this->m_Position;
-		cone[2].color = sf::Color::Green; 
-		cone[3].position = Tools::AngleToVector(200.f, Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition()))) + Tools::DegToRad(this->m_Shotgun.GetShells().front()->GetSpread() / 2) * this->m_Shotgun.Recoil()) + this->m_Position;
-		cone[3].color = sf::Color::Green;
-	
-		_window.Draw(cone);
-	}
-
 	this->m_Shotgun.DisplayMagazine(_window);
+}
+
+void Player::ModifyShotgun(Muzzle& _muzzle, Grip&_grip, Magazine&_magazine, Stock& _stock)
+{
+	this->m_Shotgun.Modify(_muzzle, _grip, _magazine, _stock);
+}
+void Player::Equip(Armor& _armor, AmmoStash& _ammoStash)
+{
+	this->m_Armor = _armor;
+	this->m_AmmoStash = _ammoStash;
+
+	this->m_Life += this->m_Armor.GetLife();
+	this->m_MaxAmmo += this->m_AmmoStash.GetCapacity();
+	this->m_BuckShot = this->m_MaxAmmo;
+	this->m_DragonBreath = this->m_MaxAmmo;
+	this->m_Slug = this->m_MaxAmmo;
 }
 
 bool Player::CheckDamage()
@@ -210,8 +187,10 @@ void Player::Respawn()
 	this->m_Position = sf::Vector2f(576.f, 64.f); //Change to stage start pos;
 	this->m_CanReload = true;
 	this->m_CanMove = false;
+
 	ProjList::Clear();
-	for (std::unique_ptr<Shell>& shell : this->m_Shotgun.GetShells())
+
+	for (const std::unique_ptr<Shell>& shell : this->m_Shotgun.GetShells())
 	{
 		if (dynamic_cast<BuckShot*>(shell.get()))
 		{
@@ -235,6 +214,7 @@ void Player::Respawn()
 			}
 		}
 	}
+
 	this->m_Shotgun.EmptyMagazine();
 }
 

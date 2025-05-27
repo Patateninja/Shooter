@@ -122,8 +122,8 @@ void Game::Init()
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 	//this->GetRsc<sf::Music>("Bogus").play();
 	
-	this->m_Player.Equip(State::m_Armor, State::m_AmmoStash);
-	this->m_Player.ModifyShotgun(State::m_Muzzle, State::m_Grip, State::m_Magazine, State::m_Stock);
+	this->m_Player.Init(State::m_Muzzle, State::m_Grip, State::m_Magazine, State::m_Stock, State::m_Armor, State::m_AmmoStash);
+
 	this->m_Stage.SetNum(1);
 	this->m_Stage.Init();
 }
@@ -155,10 +155,8 @@ void Game::Display()
 	this->ClearWindow();
 
 	this->m_Stage.Display(this->Window());
-
 	ProjList::Display(this->Window());
 	this->m_Player.Display(this->Window());
-
 	this->Draw(this->m_Text);
 
 	this->DisplayWindow();
