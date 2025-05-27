@@ -50,8 +50,8 @@ Shop::Shop(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _mag
 	this->AddEquipment(std::string("None"), sf::Vector2f(10.f, 650.f), buttonsize, "Placeholder", new Armor("None", 0, 0, 1.f));
 	this->AddEquipment(std::string("Flak Vest"), sf::Vector2f(280.f, 650.f), buttonsize, "Placeholder", new Armor("Flak Vest", 2, 1, 1.f));
 	this->AddEquipment(std::string("Marine Armor"), sf::Vector2f(550.f, 650.f), buttonsize, "Placeholder", new Armor("Marine Armor", 7, 2, 1.f));
-	this->AddEquipment(std::string("Recon Armor"), sf::Vector2f(820.f, 650.f), buttonsize, "Placeholder", new Armor("Recon Armor", 16, 3, 1.2f));
-	this->AddEquipment(std::string("Juggernaut Armor"), sf::Vector2f(1090.f, 650.f), buttonsize, "Placeholder", new Armor("Jugernaut Armor", 32, 6, 1.2f));
+	this->AddEquipment(std::string("Recon Armor"), sf::Vector2f(820.f, 650.f), buttonsize, "Placeholder", new Armor("Recon Armor", 16, 3, 1.25f));
+	this->AddEquipment(std::string("Juggernaut Armor"), sf::Vector2f(1090.f, 650.f), buttonsize, "Placeholder", new Armor("Jugernaut Armor", 32, 6, 0.5f));
 	#pragma endregion
 
 	#pragma region AmmoStash
@@ -62,7 +62,7 @@ Shop::Shop(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _mag
 	this->AddEquipment(std::string("Tactical Backpack"), sf::Vector2f(1090.f, 750.f), buttonsize, "Placeholder", new AmmoStash("Tactical Backpack", 35, 40));
 	#pragma endregion
 
-	this->m_PopUpRect = sf::RectangleShape(sf::Vector2f(250.f, 125.f));
+	this->m_PopUpRect = sf::RectangleShape(sf::Vector2f(250.f, 120.f));
 	this->m_PopUpRect.setFillColor(Color::DarkGrey);
 	this->m_PopUpRect.setOutlineColor(Color::Grey);
 	this->m_PopUpRect.setOutlineThickness(5.f);
@@ -85,9 +85,9 @@ void Shop::LockItem()
 			button.Unlock();
 		}
 
-		if (button.Hover())
+		if (button.Hover() && button.Get()->GetUnlockLevel() <= this->m_PlayerLevel)
 		{
-			this->m_PopUpRect.setPosition(button.Pos() + sf::Vector2f(250.f, 0));
+			this->m_PopUpRect.setPosition(button.Pos() + sf::Vector2f(260.f, 0));
 			this->m_PopUpText.setPosition(this->m_PopUpRect.getPosition() + sf::Vector2f(5.f, 5.f));
 			this->m_PopUp = true;
 
@@ -133,9 +133,9 @@ void Shop::LockItem()
 			button.Unlock();
 		}
 
-		if (button.Hover())
+		if (button.Hover() && button.Get()->GetUnlockLevel() <= this->m_PlayerLevel)
 		{
-			this->m_PopUpRect.setPosition(button.Pos() + sf::Vector2f(250.f, 0));
+			this->m_PopUpRect.setPosition(button.Pos() + sf::Vector2f(260.f, 0));
 			this->m_PopUpText.setPosition(this->m_PopUpRect.getPosition() + sf::Vector2f(5.f, 5.f));
 			this->m_PopUp = true;
 
@@ -143,7 +143,7 @@ void Shop::LockItem()
 			{
 				this->m_PopUpString = button.Get()->GetName()
 					+ "\nLife : " + (std::to_string(dynamic_cast<Armor*>(button.Get())->GetLife()))
-					+ "\nWalk Speed : " + (dynamic_cast<Armor*>(button.Get())->GetWalkSpeedMod() > 1 ? "+" : "") + (std::to_string(int(dynamic_cast<Armor*>(button.Get())->GetWalkSpeedMod() - 1) * 100));
+					+ "\nWalk Speed : " + (dynamic_cast<Armor*>(button.Get())->GetWalkSpeedMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Armor*>(button.Get())->GetWalkSpeedMod())) + "%";
 			}
 			else if (dynamic_cast<AmmoStash*>(button.Get()))
 			{

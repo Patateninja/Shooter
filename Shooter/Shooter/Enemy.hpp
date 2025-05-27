@@ -27,6 +27,7 @@ class Enemy
 		float m_PathUdpateCooldown = 0.f;
 		bool m_Burning = false;
 		bool m_Active = false;
+		bool m_SeePlayer = false;
 	public :
 		Enemy() = default;
 		Enemy(const sf::Vector2f& _stratingPos);

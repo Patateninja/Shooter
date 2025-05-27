@@ -41,9 +41,10 @@ void Enemy::Update(sf::Vector2f& _playerPos, TileMap& _map)
 			this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 		}
 		this->m_ProjectileOrigin = this->m_Position + Tools::AngleToVector(20.f, Tools::VectorToAngle(_playerPos - this->m_Position) + Tools::DegToRad(90));
-		if (Tools::Distance(this->m_Position, _playerPos) > this->m_AttackRange || !this->PlayerInSight(_playerPos,_map))
+		if (Tools::Distance(this->m_Position, _playerPos) > this->m_AttackRange || !this->m_SeePlayer)
 		{
 			this->Move(_playerPos, _map);
+			this->m_SeePlayer = this->PlayerInSight(_playerPos, _map);
 		}
 		this->CheckDamage();
 
@@ -65,11 +66,11 @@ void Enemy::Display(Window& _window)
 
 bool Enemy::PlayerInSight(sf::Vector2f _playerPos, TileMap& _map)
 {
-	if (Tools::Distance(_playerPos, this->m_ProjectileOrigin) - 128 < this->m_AttackRange)
+	if (Tools::Distance(_playerPos, this->m_ProjectileOrigin) - 64 < this->m_AttackRange)
 	{
-		for (int i = 1; i <= int(Tools::Distance(_playerPos, this->m_ProjectileOrigin) / Tile::GetSize()) * 16; ++i)
+		for (int i = 1; i <= int(Tools::Distance(_playerPos, this->m_ProjectileOrigin) / Tile::GetSize()) * 64; ++i)
 		{
-			if (_map.GetTile(sf::Vector2i(Tools::Normalize(_playerPos - this->m_ProjectileOrigin) * float(i * Tile::GetSize() / 16.f)) + sf::Vector2i(this->m_ProjectileOrigin)).GetType() == WALL)
+			if (_map.GetTile(sf::Vector2i(Tools::Normalize(_playerPos - this->m_ProjectileOrigin) * float(i * Tile::GetSize() / 64.f)) + sf::Vector2i(this->m_ProjectileOrigin)).GetType() == WALL)
 			{
 				return false;
 			}
@@ -144,7 +145,7 @@ void Enemy::TakeDamage(int _damage)
 void Enemy::Die()
 {
 	this->m_Active = false;
-	Level::GainXP(this->m_Hp * 100);
+	Level::GainXP(this->m_MaxHp);
 	this->m_Circle.setFillColor(Color::Grey);
 	this->m_IgnoreProj.clear();
 }
@@ -232,7 +233,7 @@ void Ranged::Shoot(sf::Vector2f& _playerPos)
 {
 	if (this->m_ShootTimer <= 0.f)
 	{
-		ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin)), CLASSIC, 1, 1000, ENEMY);
+		ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin) + Tools::Random(5, -5)), CLASSIC, 1, 1000, ENEMY);
 		this->m_ShootTimer = 1.5f;
 	}
 	else
@@ -349,7 +350,7 @@ void RangedShielded::Shoot(sf::Vector2f& _playerPos)
 {
 	if (this->m_ShootTimer <= 0.f)
 	{
-		ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin)), CLASSIC, 1, 1000, ENEMY);
+		ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin) + Tools::Random(5,-5)), CLASSIC, 1, 1000, ENEMY);
 		this->m_ShootTimer = 1.5f;
 	}
 	else

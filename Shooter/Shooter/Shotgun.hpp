@@ -29,5 +29,6 @@ class Shotgun
 		void Load(int _input);
 		void Shoot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel, Window& _window);
 
+		std::vector<std::unique_ptr<Shell>>& GetShells() { return this->m_Magazine; };
 		void EmptyMagazine();
 };

@@ -42,14 +42,6 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 {
 	this->m_InputTimer += Time::GetDeltaTime();
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::T) && this->m_InputTimer > 0.3f)
-	{
-		if (!this->m_Shotgun.Empty())
-		{
-			this->m_InputTimer = 0.f;
-		}
-	}
-
 	if (this->m_CanReload)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && this->m_InputTimer > 0.3f)
@@ -141,21 +133,14 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 				this->m_Velocity.x = 1;
 			}
 		}
-
+		
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->m_InputTimer > 0.75f)
 		{
 			this->m_InputTimer = 0.f;
 			this->m_Shotgun.Shoot(this->m_Position, this->m_Velocity, _window);
 		}
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-		{
-			this->Respawn();
-			_enemyList.Respawn();
-		}
-
 		
-		this->m_Position += Tools::AngleToVector((Tools::Magnitude(this->m_Velocity) == 0.f ? 0.f : 350.f), Tools::VectorToAngle(this->m_Velocity)) * Time::GetDeltaTime();
+		this->m_Position += Tools::AngleToVector((Tools::Magnitude(this->m_Velocity) == 0.f ? 0.f : 350.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier())), Tools::VectorToAngle(this->m_Velocity)) * Time::GetDeltaTime();
 	}
 
 	this->m_Circle.setPosition(this->m_Position);
@@ -205,6 +190,30 @@ void Player::Respawn()
 	this->m_CanReload = true;
 	this->m_CanMove = false;
 	ProjList::Clear();
+	for (std::unique_ptr<Shell>& shell : this->m_Shotgun.GetShells())
+	{
+		if (dynamic_cast<BuckShot*>(shell.get()))
+		{
+			if (this->m_BuckShot < this->m_MaxAmmo + this->m_AmmoStash.GetCapacity())
+			{
+				++this->m_BuckShot;
+			}
+		}
+		else if (dynamic_cast<DragonBreath*>(shell.get()))
+		{
+			if (this->m_DragonBreath < this->m_MaxAmmo + this->m_AmmoStash.GetCapacity())
+			{
+				++this->m_DragonBreath;
+			}
+		}
+		else if (dynamic_cast<Slug*>(shell.get()))
+		{
+			if (this->m_Slug < this->m_MaxAmmo + this->m_AmmoStash.GetCapacity())
+			{
+				++this->m_Slug;
+			}
+		}
+	}
 	this->m_Shotgun.EmptyMagazine();
 }
 

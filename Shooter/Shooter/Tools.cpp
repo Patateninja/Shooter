@@ -70,7 +70,7 @@ float Tools::ToPercent(float _float)
 
 int Tools::ToRoundPercent(float _float)
 {
-	return Tools::ToClosestMultiple((_float - 1) * 100, 1);
+	return std::round((_float - 1) * 100);
 }
 
 sf::Vector2f Tools::RectCenter(const sf::FloatRect& _rect)
