@@ -277,7 +277,7 @@ Shielded::Shielded(const sf::Vector2f& _startingPos)
 	this->m_Position = _startingPos;
 	this->m_MaxHp = 35;
 	this->m_Hp = 35;
-	this->m_Speed = 150.f;
+	this->m_Speed = 0.f;
 
 	this->m_Shield = std::make_unique<Shield>(this->m_Position);
 }

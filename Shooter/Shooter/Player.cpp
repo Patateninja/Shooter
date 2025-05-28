@@ -66,6 +66,31 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 		this->m_Text.setPosition(_window.RelativePos(sf::Vector2f(10.f, 110.f)));
 		this->m_Text.setString("Remaining : " + std::to_string(_enemyList.Alive()));
 
+		float targetAngle = Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition())));
+		if (this->m_Angle < targetAngle)
+		{
+			if (this->m_Angle - targetAngle > 90)
+			{
+				this->m_Angle = 5;
+			}
+			this->m_Angle += Tools::Min<float,float,float>(Tools::DegToRad(1.f) * Time::GetDeltaTime(), std::abs(targetAngle) * Time::GetDeltaTime()) * 90.f;
+		}
+		if (this->m_Angle > targetAngle)
+		{
+			this->m_Angle -= Tools::Min<float, float, float>(Tools::DegToRad(1.f) * Time::GetDeltaTime(), std::abs(targetAngle) * Time::GetDeltaTime()) * 90.f;
+		}
+
+		if (this->m_Angle < -2 * PI)
+		{
+			this->m_Angle = 2 * PI;
+		}
+		else if (this->m_Angle > 2 * PI)
+		{
+			this->m_Angle = -2 * PI;
+		}
+
+		this->m_Circle.setRotation(Tools::RadToDeg(this->m_Angle));
+
 		this->m_Shotgun.ReduceRecoil();
 
 		for (std::shared_ptr<Enemy>& enemy : _enemyList.GetList())
@@ -138,6 +163,10 @@ void Player::Display(Window& _window)
 	lines[0].color = sf::Color::Red;
 	lines[1].position = Tools::AngleToVector(200.f, Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition())))) + this->m_Position;
 	lines[1].color = sf::Color::Red;
+	lines[2].position = this->m_Position;
+	lines[2].color = sf::Color::Green;
+	lines[3].position = Tools::AngleToVector(200.f, this->m_Angle) + this->m_Position;
+	lines[3].color = sf::Color::Green;
 	_window.Draw(lines);
 
 	this->m_Shotgun.DisplayMagazine(_window);
