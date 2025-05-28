@@ -63,6 +63,16 @@ int Tools::ToClosestMultiple(int _val, int _multiple)
 	return ret;
 }
 
+float Tools::ToPercent(float _float)
+{
+	return ((_float - 1) * 100);
+}
+
+int Tools::ToRoundPercent(float _float)
+{
+	return std::round((_float - 1) * 100);
+}
+
 sf::Vector2f Tools::RectCenter(const sf::FloatRect& _rect)
 {
 	return sf::Vector2f((_rect.left + _rect.width / 2.f) , (_rect.top + _rect.height / 2.f));

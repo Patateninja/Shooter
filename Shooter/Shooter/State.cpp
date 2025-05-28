@@ -2,6 +2,15 @@
 #include "StateManager.hpp"
 
 ////////////////////////////////////////////////////////
+
+Muzzle State::m_Muzzle = Muzzle("Default Muzzle", 0, 1.f, 1.f, 1.f);
+Grip State::m_Grip = Grip("Default Grip", 0, 1.f, 1.f, 1.f);
+Stock State::m_Stock = Stock("Default Stock", 0, 1.f, 1.f, 1.f);
+Magazine State::m_Magazine = Magazine("Default Magazine", 0, 0);
+Armor State::m_Armor = Armor("None", 0, 0, 1.f);
+AmmoStash State::m_AmmoStash = AmmoStash("Ammo Pouch", 0, 0);
+
+////////////////////////////////////////////////////////
 #pragma region State
 
 Window& State::Window()
@@ -113,7 +122,9 @@ void Game::Init()
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 	//this->GetRsc<sf::Music>("Bogus").play();
 	
-	this->m_Stage.SetNum(3);
+	this->m_Player.Init(State::m_Muzzle, State::m_Grip, State::m_Magazine, State::m_Stock, State::m_Armor, State::m_AmmoStash);
+
+	this->m_Stage.SetNum(1);
 	this->m_Stage.Init();
 }
 void Game::Update()
@@ -144,10 +155,8 @@ void Game::Display()
 	this->ClearWindow();
 
 	this->m_Stage.Display(this->Window());
-
 	ProjList::Display(this->Window());
 	this->m_Player.Display(this->Window());
-
 	this->Draw(this->m_Text);
 
 	this->DisplayWindow();
@@ -180,12 +189,22 @@ void Upgrade::Init()
 {
 	std::cout << "Upgrade Init" << std::endl;
 	this->Window().ResetView();
+	this->m_Shop = Shop(Level::GetLvl(), State::m_Muzzle, State::m_Grip, State::m_Stock, State::m_Magazine,	State::m_Armor, State::m_AmmoStash);
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 }
 void Upgrade::Update()
 {
 	this->m_InputTimer += Time::GetDeltaTime();
 	this->m_Text.setString("Upgrade Menu\nPress Enter to launch a new game\nPress Escape to go back to Menu");
+
+	this->m_Shop.Update();
+
+	State::m_Muzzle = this->m_Shop.GetMuzzle();
+	State::m_Grip = this->m_Shop.GetGrip();
+	State::m_Stock = this->m_Shop.GetStock();
+	State::m_Magazine = this->m_Shop.GetMagazine();
+	State::m_Armor = this->m_Shop.GetArmor();
+	State::m_AmmoStash = this->m_Shop.GetAmmoStash();
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && this->m_InputTimer > 0.2f)
 	{
@@ -197,12 +216,27 @@ void Upgrade::Update()
 		this->m_InputTimer = 0.f;
 		this->ChangeState<Menu>();
 	}
+
+
+
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add) && this->m_InputTimer > 0.2f)
+	{
+		this->m_InputTimer = 0.f;
+		if (this->m_PlayerLevel < 35)
+		{
+			Level::GainXP(28510);
+			this->m_PlayerLevel = Level::GetLvl();
+			this->m_Shop.SetLevel(this->m_PlayerLevel);
+		}
+	}
 }
 void Upgrade::Display()
 {
 	this->ClearWindow();
 
 	this->Draw(this->m_Text);
+	this->m_Shop.Display(this->Window());
 
 	this->DisplayWindow();
 }

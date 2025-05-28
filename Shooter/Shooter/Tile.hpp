@@ -1,5 +1,6 @@
 #pragma once
 #include "Window.hpp"
+#include "ResourceManager.hpp"
 #include <list>
 
 typedef enum TileType

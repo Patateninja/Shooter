@@ -3,7 +3,7 @@
 #include "Enemy.hpp"
 #include "Stage.hpp"
 #include "Camera.hpp" 
-
+#include "Shop.hpp"
 
 class StateManager;
 
@@ -13,6 +13,14 @@ class State
 		StateManager* m_StateManager = nullptr;
 		sf::Text m_Text;
 		float m_InputTimer = 0;
+
+		static Muzzle m_Muzzle;
+		static Grip m_Grip;
+		static Stock m_Stock;
+		static Magazine m_Magazine;
+		static Armor m_Armor;
+		static AmmoStash m_AmmoStash;
+		
 	public :
 		State() = default;
 		~State() = default;
@@ -73,7 +81,8 @@ class Game : public State
 class Upgrade : public State
 {
 	private :
-
+		int m_PlayerLevel = 0;
+		Shop m_Shop;
 	public :
 		Upgrade(StateManager* _stateManager);
 		~Upgrade();

@@ -27,23 +27,24 @@ void Enemy::Respawn()
 	this->m_Path.clear();
 }
 
-void Enemy::Update(sf::Vector2f& _playerPos, TileMap& _map)
+void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 {
 	if (this->m_Active)
 	{
 		if (this->m_PathUdpateCooldown <= 0.f || this->m_Path.empty())
 		{
 			this->UpdatePath(_playerPos, _map);
-			this->m_PathUdpateCooldown = 0.75f;
+			this->m_PathUdpateCooldown = 1.f;
 		}
 		else
 		{
 			this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 		}
 		this->m_ProjectileOrigin = this->m_Position + Tools::AngleToVector(20.f, Tools::VectorToAngle(_playerPos - this->m_Position) + Tools::DegToRad(90));
-		if (Tools::Distance(this->m_Position, _playerPos) > this->m_AttackRange || !this->PlayerInSight(_playerPos,_map))
+		if (Tools::Distance(this->m_Position, _playerPos) > this->m_AttackRange || !this->m_SeePlayer)
 		{
 			this->Move(_playerPos, _map);
+			this->m_SeePlayer = this->PlayerInSight(_playerPos, _map);
 		}
 		this->CheckDamage();
 
@@ -63,13 +64,13 @@ void Enemy::Display(Window& _window)
 	_window.Draw(this->m_Circle);
 }
 
-bool Enemy::PlayerInSight(sf::Vector2f _playerPos, TileMap& _map)
+bool Enemy::PlayerInSight(const sf::Vector2f& _playerPos, TileMap& _map)
 {
-	if (Tools::Distance(_playerPos, this->m_ProjectileOrigin) - 128 < this->m_AttackRange)
+	if (Tools::Distance(_playerPos, this->m_ProjectileOrigin) - 64 < this->m_AttackRange)
 	{
-		for (int i = 1; i <= int(Tools::Distance(_playerPos, this->m_ProjectileOrigin) / Tile::GetSize()) * 16; ++i)
+		for (int i = 1; i <= int(Tools::Distance(_playerPos, this->m_ProjectileOrigin)); ++i)
 		{
-			if (_map.GetTile(sf::Vector2i(Tools::Normalize(_playerPos - this->m_ProjectileOrigin) * float(i * Tile::GetSize() / 16.f)) + sf::Vector2i(this->m_ProjectileOrigin)).GetType() == WALL)
+			if (_map.GetTile(sf::Vector2i(Tools::Normalize(_playerPos - this->m_ProjectileOrigin) * float(i)) + sf::Vector2i(this->m_ProjectileOrigin)).GetType() == WALL)
 			{
 				return false;
 			}
@@ -78,12 +79,12 @@ bool Enemy::PlayerInSight(sf::Vector2f _playerPos, TileMap& _map)
 
 	return true;
 }
-void Enemy::UpdatePath(sf::Vector2f& _playerPos, TileMap& _map)
+void Enemy::UpdatePath(const sf::Vector2f& _playerPos, TileMap& _map)
 {
 	auto future = std::async(Astar::Pathfinding, std::ref(_map.GetTile(this->m_Position.x, this->m_Position.y)), std::ref(_map.GetTile(_playerPos.x, _playerPos.y)), std::ref(_map));
 	this->m_Path = future.get();
 }
-void Enemy::Move(sf::Vector2f& _playerPos, TileMap& _map)
+void Enemy::Move(const sf::Vector2f& _playerPos, TileMap& _map)
 {
 	this->m_Target = this->m_Path.front().GetCood();
 	this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed;
@@ -102,7 +103,7 @@ void Enemy::CheckDamage()
 	{
 		if (Tools::CircleCollision(this->m_Circle.getGlobalBounds(), proj->GetHitbox()) && proj->GetTeam() == PLAYER && [&](auto _list, std::shared_ptr<Projectile>& _proj) -> bool { for (auto pr : _list) { if (proj == pr.lock()) { return false; } } return true; } (this->m_IgnoreProj, proj))
 		{
-			TakeDamage(proj);
+			this->TakeDamage(proj);
 		}
 	}
 }
@@ -144,6 +145,7 @@ void Enemy::TakeDamage(int _damage)
 void Enemy::Die()
 {
 	this->m_Active = false;
+	Level::GainXP(this->m_MaxHp);
 	this->m_Circle.setFillColor(Color::Grey);
 	this->m_IgnoreProj.clear();
 }
@@ -214,7 +216,7 @@ Ranged::~Ranged()
 
 }
 
-void Ranged::Update(sf::Vector2f& _playerPos, TileMap& _map)
+void Ranged::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 {
 	Enemy::Update(_playerPos, _map);
 	if (this->m_Active && this->CanShoot(_playerPos))
@@ -227,11 +229,11 @@ bool Ranged::CanShoot(sf::Vector2f _playerPos)
 {
 	return (Tools::Distance(this->m_ProjectileOrigin, _playerPos) < m_AttackRange);
 }
-void Ranged::Shoot(sf::Vector2f& _playerPos)
+void Ranged::Shoot(const sf::Vector2f& _playerPos)
 {
 	if (this->m_ShootTimer <= 0.f)
 	{
-		ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin)), CLASSIC, 1, 1000, ENEMY);
+		ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin) + Tools::DegToRad(Tools::Random(5, -5))), CLASSIC, 1, 1000, ENEMY);
 		this->m_ShootTimer = 1.5f;
 	}
 	else
@@ -284,7 +286,7 @@ Shielded::~Shielded()
 
 }
 
-void Shielded::Update(sf::Vector2f& _playerPos, TileMap& _map)
+void Shielded::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 {
 	Enemy::Update(_playerPos,_map);
 
@@ -323,7 +325,7 @@ RangedShielded::~RangedShielded()
 
 }
 
-void RangedShielded::Update(sf::Vector2f& _playerPos, TileMap& _map)
+void RangedShielded::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 {
 	Enemy::Update(_playerPos, _map);
 
@@ -340,15 +342,15 @@ void RangedShielded::Display(Window& _window)
 	this->m_Shield->Display(_window);
 }
 
-bool RangedShielded::CanShoot(sf::Vector2f _playerPos)
+bool RangedShielded::CanShoot(const sf::Vector2f& _playerPos)
 {
 	return (Tools::Distance(this->m_ProjectileOrigin, _playerPos) < m_AttackRange);
 }
-void RangedShielded::Shoot(sf::Vector2f& _playerPos)
+void RangedShielded::Shoot(const sf::Vector2f& _playerPos)
 {
 	if (this->m_ShootTimer <= 0.f)
 	{
-		ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin)), CLASSIC, 1, 1000, ENEMY);
+		ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin) + Tools::DegToRad(Tools::Random(5,-5))), CLASSIC, 1, 1000, ENEMY);
 		this->m_ShootTimer = 1.5f;
 	}
 	else
@@ -388,7 +390,7 @@ bool EnemyList::AllDead()
 	return true;
 }
 
-void EnemyList::Update(sf::Vector2f& _playerPos, TileMap& _map)
+void EnemyList::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 {
 	for (std::shared_ptr<Enemy>& enemy : this->m_List)
 	{
