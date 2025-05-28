@@ -88,7 +88,7 @@ namespace ProjList
 {
 	ProjectileList list;
 
-	const std::list<std::shared_ptr<Projectile>>& GetList()
+	std::list<std::shared_ptr<Projectile>>& GetList()
 	{
 		return ProjList::list.GetList();
 	}

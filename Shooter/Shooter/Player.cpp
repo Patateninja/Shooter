@@ -161,7 +161,7 @@ void Player::Equip(Armor& _armor, AmmoStash& _ammoStash)
 
 bool Player::CheckDamage()
 {
-	for (std::shared_ptr<Projectile>& proj : ProjList::GetList())
+	for (const std::shared_ptr<Projectile>& proj : ProjList::GetList())
 	{
 		if (Tools::CircleCollision(this->m_Circle.getGlobalBounds(), proj->GetHitbox()) && proj->GetTeam() == ENEMY)
 		{

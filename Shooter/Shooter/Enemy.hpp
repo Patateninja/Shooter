@@ -28,6 +28,7 @@ class Enemy
 		bool m_Burning = false;
 		bool m_Active = false;
 		bool m_SeePlayer = false;
+
 	public :
 		Enemy() = default;
 		Enemy(const sf::Vector2f& _stratingPos);
@@ -43,12 +44,12 @@ class Enemy
 
 		void Respawn();
 
-		virtual void Update(sf::Vector2f& _playerPos, TileMap& _map);
+		virtual void Update(const sf::Vector2f& _playerPos, TileMap& _map);
 		virtual void Display(Window& _window);
 
-		bool PlayerInSight(sf::Vector2f _playerPos, TileMap& _map);
-		void UpdatePath(sf::Vector2f& _playerPos, TileMap& _map);
-		void Move(sf::Vector2f& _playerPos, TileMap& _map);
+		bool PlayerInSight(const sf::Vector2f& _playerPos, TileMap& _map);
+		void UpdatePath(const sf::Vector2f& _playerPos, TileMap& _map);
+		void Move(const sf::Vector2f& _playerPos, TileMap& _map);
 		void CheckDamage();
 		void TakeDamage(std::shared_ptr<Projectile>& _projectile);
 		void TakeDamage(int _damage);
@@ -77,10 +78,10 @@ class Ranged : public Enemy
 		Ranged(const sf::Vector2f& _stratingPos);
 		~Ranged();
 
-		void Update(sf::Vector2f& _playerPos, TileMap& _map) override;
+		void Update(const sf::Vector2f& _playerPos, TileMap& _map) override;
 
-		bool CanShoot(sf::Vector2f _playerPos);
-		void Shoot(sf::Vector2f& _playerPos);
+		bool CanShoot(const sf::Vector2f _playerPos);
+		void Shoot(const sf::Vector2f& _playerPos);
 };
 
 class Swarmer : public Enemy
@@ -98,7 +99,7 @@ class Shielded : public Enemy
 		Shielded(const sf::Vector2f& _stratingPos);
 		~Shielded();
 
-		void Update(sf::Vector2f& _playerPos, TileMap& _map) override;
+		void Update(const sf::Vector2f& _playerPos, TileMap& _map) override;
 		void Display(Window& _window) override;
 };
 
@@ -111,11 +112,11 @@ class RangedShielded : public Enemy
 		RangedShielded(const sf::Vector2f& _stratingPos);
 		~RangedShielded();
 
-		void Update(sf::Vector2f& _playerPos, TileMap& _map) override;
+		void Update(const sf::Vector2f& _playerPos, TileMap& _map) override;
 		void Display(Window& _window) override;
 
-		bool CanShoot(sf::Vector2f _playerPos);
-		void Shoot(sf::Vector2f& _playerPos);
+		bool CanShoot(const sf::Vector2f& _playerPos);
+		void Shoot(const sf::Vector2f& _playerPos);
 };
 
 class EnemyList
@@ -142,7 +143,7 @@ class EnemyList
 
 		bool AllDead();
 
-		void Update(sf::Vector2f& _playerPos, TileMap& _map);
+		void Update(const sf::Vector2f& _playerPos, TileMap& _map);
 		void Display(Window& _window);
 
 		void Activate();

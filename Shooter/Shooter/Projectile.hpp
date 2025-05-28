@@ -54,7 +54,7 @@ class ProjectileList
 		ProjectileList() = default;
 		~ProjectileList();
 
-		inline const std::list<std::shared_ptr<Projectile>>& GetList() { return this->m_List ; }
+		inline std::list<std::shared_ptr<Projectile>>& GetList() { return this->m_List ; }
 		inline const int GetSize() { return int(this->m_List.size()); }
 
 		void Update(TileMap& _map);
@@ -66,8 +66,8 @@ class ProjectileList
 
 namespace ProjList
 {
-	inline const std::list<std::shared_ptr<Projectile>>& GetList();
-	inline const int GetSize();
+	std::list<std::shared_ptr<Projectile>>& GetList();
+	const int GetSize();
 
 	void Update(TileMap& _map);
 	void Display(Window& _window);
