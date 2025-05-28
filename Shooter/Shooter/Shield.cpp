@@ -18,7 +18,6 @@ void Shield::Udpate(bool _active, sf::Vector2f _pos, float _angle)
 		this->CheckContact();
 	}
 }
-
 void Shield::Display(Window& _window)
 {
 	_window.Draw(this->m_Rect);

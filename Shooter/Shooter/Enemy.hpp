@@ -74,6 +74,7 @@ class Ranged : public Enemy
 {
 	private :
 		float m_ShootTimer;
+
 	public:
 		Ranged(const sf::Vector2f& _stratingPos);
 		~Ranged();
@@ -95,6 +96,7 @@ class Shielded : public Enemy
 {
 	private :
 		std::unique_ptr<Shield> m_Shield;
+
 	public:
 		Shielded(const sf::Vector2f& _stratingPos);
 		~Shielded();
@@ -108,6 +110,7 @@ class RangedShielded : public Enemy
 	private:
 		float m_ShootTimer;
 		std::unique_ptr<Shield> m_Shield;
+
 	public:
 		RangedShielded(const sf::Vector2f& _stratingPos);
 		~RangedShielded();
