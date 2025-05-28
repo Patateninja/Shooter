@@ -44,7 +44,7 @@ void Shotgun::Shoot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel, Window& 
 		this->m_Magazine.front()->Shot(_playerPos, _playerVel, this->m_Recoil, _window);
 		this->m_Magazine.erase(this->m_Magazine.begin());
 
-		this->m_Recoil += 0.5 * this->GetRecoilModifier();
+		this->m_Recoil += 0.5f * this->GetRecoilModifier();
 		if (this->m_Recoil > 2.f)
 		{
 			this->m_Recoil = 2.f;

@@ -67,7 +67,7 @@ Shop::Shop(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _mag
 	this->m_PopUpRect.setOutlineColor(Color::Grey);
 	this->m_PopUpRect.setOutlineThickness(5.f);
 	this->m_PopUpText.setFont(RscMana::Get<sf::Font>("Mono"));
-	this->m_PopUpText.setCharacterSize(20.f);
+	this->m_PopUpText.setCharacterSize(20);
 }
 
 void Shop::LockItem()

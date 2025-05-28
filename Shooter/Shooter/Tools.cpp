@@ -26,7 +26,7 @@ sf::Vector2f Tools::AngleToVector(float const _len, float const _angle)
 
 float Tools::Magnitude(sf::Vector2f const _vect)
 {
-	return std::sqrt(std::pow(_vect.x, 2.0) + std::pow(_vect.y, 2.0));
+	return float(std::sqrt(std::pow(_vect.x, 2.0) + std::pow(_vect.y, 2.0)));
 }
 sf::Vector2f Tools::Normalize(sf::Vector2f const _vect)
 {
@@ -49,7 +49,7 @@ int Tools::Random(int _max, int _min = 0)
 
 float Tools::Distance(sf::Vector2f _vect1, sf::Vector2f _vect2)
 {
-	return std::sqrt(std::pow(_vect2.x - _vect1.x, 2) + std::pow(_vect2.y - _vect1.y, 2));
+	return float(std::sqrt(std::pow(_vect2.x - _vect1.x, 2) + std::pow(_vect2.y - _vect1.y, 2)));
 }
 
 int Tools::ToClosestMultiple(int _val, int _multiple)
@@ -70,7 +70,7 @@ float Tools::ToPercent(float _float)
 
 int Tools::ToRoundPercent(float _float)
 {
-	return std::round((_float - 1) * 100);
+	return int(std::round((_float - 1) * 100));
 }
 
 sf::Vector2f Tools::RectCenter(const sf::FloatRect& _rect)

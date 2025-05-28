@@ -18,9 +18,9 @@ class Enemy
 		sf::Vector2f m_ProjectileOrigin;
 		sf::Vector2f m_Velocity;
 		sf::Vector2f m_Target;
-		int m_MaxHp = 0.f;
-		int m_Hp = 0.f;
-		int m_BurningDamage = 0.f;
+		int m_MaxHp = 0;
+		int m_Hp = 0;
+		int m_BurningDamage = 0;
 		float m_AttackRange = 0.f;
 		float m_Speed = 0.f;
 		float m_BurnCooldown = 0.f;
