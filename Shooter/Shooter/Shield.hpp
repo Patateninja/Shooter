@@ -11,7 +11,8 @@ class Shield
 		Shield(sf::Vector2f _pos);
 		~Shield() = default;
 
-		inline bool GetActive() { return this->m_Active; };
+		inline const bool GetActive() const { return this->m_Active; };
+		
 		inline void SetActive(bool _active) { this->m_Active = _active; };
 		inline void SetPos(sf::Vector2f _pos) { this->m_Rect.setPosition(_pos); };
 		inline void SetAngle(float _angle) { this->m_Rect.setRotation(_angle); };
