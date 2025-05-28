@@ -81,7 +81,7 @@ bool Enemy::PlayerInSight(const sf::Vector2f& _playerPos, TileMap& _map)
 }
 void Enemy::UpdatePath(const sf::Vector2f& _playerPos, TileMap& _map)
 {
-	auto future = std::async(Astar::Pathfinding, std::ref(_map.GetTile(this->m_Position.x, this->m_Position.y)), std::ref(_map.GetTile(_playerPos.x, _playerPos.y)), std::ref(_map));
+	auto future = std::async(Astar::Pathfinding, std::ref(_map.GetTile(int(this->m_Position.x), int(this->m_Position.y))), std::ref(_map.GetTile(int(_playerPos.x), int(_playerPos.y))), std::ref(_map));
 	this->m_Path = future.get();
 }
 void Enemy::Move(const sf::Vector2f& _playerPos, TileMap& _map)
@@ -92,7 +92,7 @@ void Enemy::Move(const sf::Vector2f& _playerPos, TileMap& _map)
 	this->m_Position += this->m_Velocity * Time::GetDeltaTime();
 	this->m_Circle.setPosition(this->m_Position);
 
-	if (_map.GetTile(this->m_Position.x,this->m_Position.y) == this->m_Path.front())
+	if (_map.GetTile(int(this->m_Position.x), int(this->m_Position.y)) == this->m_Path.front())
 	{
 		this->m_Path.erase(this->m_Path.begin());
 	}
@@ -233,7 +233,7 @@ void Ranged::Shoot(const sf::Vector2f& _playerPos)
 {
 	if (this->m_ShootTimer <= 0.f)
 	{
-		ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin) + Tools::DegToRad(Tools::Random(5, -5))), CLASSIC, 1, 1000, ENEMY);
+		ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000.f, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin) + Tools::DegToRad(float(Tools::Random(5, -5)))), CLASSIC, 1, 1000, ENEMY);
 		this->m_ShootTimer = 1.5f;
 	}
 	else
@@ -350,7 +350,7 @@ void RangedShielded::Shoot(const sf::Vector2f& _playerPos)
 {
 	if (this->m_ShootTimer <= 0.f)
 	{
-		ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin) + Tools::DegToRad(Tools::Random(5,-5))), CLASSIC, 1, 1000, ENEMY);
+		ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000.f, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin) + Tools::DegToRad(float(Tools::Random(5,-5)))), CLASSIC, 1, 1000, ENEMY);
 		this->m_ShootTimer = 1.5f;
 	}
 	else

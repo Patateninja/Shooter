@@ -24,7 +24,7 @@ bool Projectile::Update(float _deltatime, TileMap& _map)
 
 		this->m_Circle.setPosition(this->m_Position);
 
-		if (this->m_Distance > this->m_Range || !_map.GetTile(this->m_Position.x, this->m_Position.y).GetBulletThrough() || !_map.GetTile(this->m_Position.x + 1, this->m_Position.y + 1).GetBulletThrough())
+		if (this->m_Distance > this->m_Range || !_map.GetTile(int(this->m_Position.x), int(this->m_Position.y)).GetBulletThrough() || !_map.GetTile(int(this->m_Position.x + 1), int(this->m_Position.y + 1)).GetBulletThrough())
 		{
 			return true;
 		}
