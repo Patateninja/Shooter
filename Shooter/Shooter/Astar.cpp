@@ -1,8 +1,34 @@
 #include "Astar.hpp"
 
-#include <iostream>
+////////////////////////////////////////////////////////
 
-std::list<Tile> Astar::Neighbor(Node& _node, TileMap& _map)
+Node::Node(const Tile& _tile)
+{
+	this->m_Tile = std::make_shared<Tile>(_tile);
+}
+Node::Node(const Node& _node)
+{
+	this->m_Prev = _node.m_Prev;
+	this->m_Tile = std::make_shared<Tile>(*_node.m_Tile);
+	this->m_Gcost = _node.m_Gcost;
+	this->m_Hcost = _node.m_Hcost;
+	this->m_Fcost = _node.m_Fcost;
+}
+Node::~Node()
+{
+	this->m_Tile.reset();
+}
+
+void Node::CalculateAllCost(const Node& _start, const Node& _end, const TileMap& _map)
+{
+	this->m_Hcost = Astar::HCost(*this, _end, _map);
+	this->m_Gcost = Astar::GCost(*this, _start, _map);
+	this->m_Fcost = this->m_Hcost + this->m_Gcost;
+}
+
+////////////////////////////////////////////////////////
+
+const std::list<Tile> Astar::Neighbor(Node& _node, TileMap& _map)
 {
 	std::list<Tile> list;
 
@@ -43,15 +69,15 @@ int Astar::NodeDist(Node& _node1, Node& _node2)
 	return int(Tools::Distance(_node1.GetCood(), _node2.GetCood()));
 }
 
-int Astar::HCost(Node& _current, Node& _end, TileMap& _map)
+const int Astar::HCost(const Node& _current, const  Node& _end, const TileMap& _map)
 {
 	return int(Tools::Distance(_current.GetCood(), _end.GetCood()));
 }
-int Astar::GCost(Node& _current, Node& _start, TileMap& _map)
+const int Astar::GCost(const Node& _current, const Node& _start, const TileMap& _map)
 {
 	return int(Tools::Distance(_start.GetCood(), _current.GetCood()));
 }
-int Astar::FCost(Node& _current, Node& _start, Node& _end, TileMap& _map)
+const int Astar::FCost(const Node& _current, const Node& _start, const Node& _end, const TileMap& _map)
 {
 	return GCost(_current, _start, _map) + HCost(_current, _end, _map);
 }
@@ -78,7 +104,7 @@ std::list<Tile> Astar::Pathfinding(Tile& _start, Tile& _end, TileMap& _map)
 void Astar::BestNode(Node& _node, std::list<Node> _list)
 {
 	Node bestNode;
-	bestNode.SetF(int(10e12L));
+	bestNode.SetF(int(2147483647));
 	for (Node& node : _list)
 	{
 		if (node.GetF() < bestNode.GetF())
@@ -140,7 +166,7 @@ std::list<Node> Astar::Astar(Tile& _start, Tile& _end, TileMap& _map)
 			break;
 		}
 
-		for (Tile& neighbor : Astar::Neighbor(current, _map))
+		for (const Tile& neighbor : Astar::Neighbor(current, _map))
 		{
 			Node node = Node(neighbor);
 			if (neighbor.GetWalkable() && Astar::NotInList(checked, node))
@@ -160,3 +186,5 @@ std::list<Node> Astar::Astar(Tile& _start, Tile& _end, TileMap& _map)
 
 	return checked;
 }
+
+////////////////////////////////////////////////////////

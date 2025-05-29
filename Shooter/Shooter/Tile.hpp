@@ -1,5 +1,6 @@
 #pragma once
 #include "Window.hpp"
+#include "ResourceManager.hpp"
 #include <list>
 
 typedef enum TileType
@@ -23,10 +24,10 @@ class Tile
 		Tile(const Tile& _tile);
 		~Tile();
 
-		inline sf::Vector2f GetCood() { return this->m_Cood; };
-		inline bool GetWalkable() { return this->m_Walkable; };
-		inline bool GetBulletThrough() { return this->m_BulletThrough; };
-		inline TileType GetType() { return this->m_Type; };
+		inline sf::Vector2f GetCood() const { return this->m_Cood; };
+		inline bool GetWalkable() const { return this->m_Walkable; };
+		inline bool GetBulletThrough() const { return this->m_BulletThrough; };
+		inline TileType GetType() const { return this->m_Type; };
 		inline static int GetSize() { return Tile::m_Side; };
 
 		bool operator==(const Tile& _tile2) const { return this->m_Cood == _tile2.m_Cood; };

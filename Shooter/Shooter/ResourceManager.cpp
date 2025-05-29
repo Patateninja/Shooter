@@ -18,10 +18,11 @@ void ResourceManager::Init()
 	std::string path = "..\\Resources\\";
 
 	//Fonts
-	this->Add<sf::Font>("Mono", path + "Fonts\\monof55.ttf");
+	this->Add<sf::Font>("Mono", path + "Fonts\\Mono_Regular.ttf");
 
 	//Textures
 	this->Add<sf::Texture>("Red_Shell", path + "Textures\\Red_Shell.png");
+	this->Add<sf::Texture>("Placeholder", path + "Textures\\Placeholder.png");
 
 	//SFX
 	this->Add<sf::Sound>("Shot", path + "SFX\\Shot.ogg");

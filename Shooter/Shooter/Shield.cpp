@@ -18,7 +18,6 @@ void Shield::Udpate(bool _active, sf::Vector2f _pos, float _angle)
 		this->CheckContact();
 	}
 }
-
 void Shield::Display(Window& _window)
 {
 	_window.Draw(this->m_Rect);
@@ -33,7 +32,7 @@ void Shield::Display(Window& _window)
 
 void Shield::CheckContact()
 {
-	for (std::shared_ptr<Projectile>& proj : ProjList::GetList())
+	for (const std::shared_ptr<Projectile>& proj : ProjList::GetList())
 	{
 		if (proj->GetTeam() == PLAYER && this->m_Rect.getGlobalBounds().intersects(proj->GetHitbox()) && proj->GetType() != PIERCING)
 		{

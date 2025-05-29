@@ -31,6 +31,10 @@ namespace Tools
 
 	int ToClosestMultiple(int _val, int _multiple);
 
+	float ToPercent(float _float);
+	
+	int ToRoundPercent(float _float);
+
 	template<typename T, typename U, typename V>
 	V Min(T _val1, U _val2)
 	{
