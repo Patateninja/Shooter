@@ -35,8 +35,8 @@ Shop::Shop(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _mag
 	#pragma region Stock
 	this->AddAttachment(std::string("Default"), sf::Vector2f(10.f, 400.f), buttonsize, "Placeholder", new Stock("Default Stock", 0, 1.f, 1.f, 1.f));
 	this->AddAttachment(std::string("Light Recon Stock"), sf::Vector2f(280.f, 400.f), buttonsize, "Placeholder", new Stock("Light Recon Stock", 5, 1.25f, 0.85f, 1.1f));
-	this->AddAttachment(std::string("Heavy Assault Stock"), sf::Vector2f(550.f, 400.f), buttonsize, "Placeholder", new Stock("Heavy Assault Stock", 8, 0.9f, 0.5f, 1.f));
-	this->AddAttachment(std::string("No Stock"), sf::Vector2f(820.f, 400.f), buttonsize, "Placeholder", new Stock("No Stock", 26, 2.f, 1.5f, 1.25f));
+	this->AddAttachment(std::string("Heavy Assault Stock"), sf::Vector2f(550.f, 400.f), buttonsize, "Placeholder", new Stock("Heavy Assault Stock", 8, 0.9f, 0.5f, 0.9f));
+	this->AddAttachment(std::string("No Stock"), sf::Vector2f(820.f, 400.f), buttonsize, "Placeholder", new Stock("No Stock", 26, 0.5f, 1.5f, 1.5f));
 	#pragma endregion
 
 	#pragma region Magazine
@@ -101,14 +101,14 @@ void Shop::LockItem()
 			else if (dynamic_cast<Grip*>(button.Get()))
 			{
 				this->m_PopUpString = button.Get()->GetName()
-					+ "\nAccuracy : " + (dynamic_cast<Grip*>(button.Get())->GetAimMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Grip*>(button.Get())->GetAimMod())) + "%"
+					+ "\nAccuracy : " + (dynamic_cast<Grip*>(button.Get())->GetAccuracyMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Grip*>(button.Get())->GetAccuracyMod())) + "%"
 					+ "\nRecoil : " + (dynamic_cast<Grip*>(button.Get())->GetRecoilMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Grip*>(button.Get())->GetRecoilMod())) + "%"
 					+ "\nRate of fire : " + (dynamic_cast<Grip*>(button.Get())->GetROFMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Grip*>(button.Get())->GetROFMod())) + "%";
 			}
 			else if (dynamic_cast<Stock*>(button.Get()))
 			{
 				this->m_PopUpString = button.Get()->GetName()
-					+ "\nAccuracy : " + (dynamic_cast<Stock*>(button.Get())->GetAimMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Stock*>(button.Get())->GetAimMod())) + "%"
+					+ "\nAccuracy : " + (dynamic_cast<Stock*>(button.Get())->GetAccuracyMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Stock*>(button.Get())->GetAccuracyMod())) + "%"
 					+ "\nRecoil : " + (dynamic_cast<Stock*>(button.Get())->GetRecoilMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Stock*>(button.Get())->GetRecoilMod())) + "%"
 					+ "\nWalking Speed : " + (dynamic_cast<Stock*>(button.Get())->GetWalkMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Stock*>(button.Get())->GetWalkMod())) + "%";
 			}

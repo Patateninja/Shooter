@@ -36,12 +36,12 @@ void Shotgun::Load(int _input)
 		}
 	}
 }
-void Shotgun::Shoot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel, Window& _window)
+void Shotgun::Shoot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel, float _playerAngle, Window& _window)
 {
 	if (!this->m_Magazine.empty())
 	{
 		RscMana::Get<sf::Sound>("Shot").play();
-		this->m_Magazine.front()->Shot(_playerPos, _playerVel, this->m_Recoil, _window);
+		this->m_Magazine.front()->Shot(_playerPos, _playerVel, _playerAngle + Tools::DegToRad(Tools::Random(10,-5) / this->GetAccuracyMultiplier()), this->m_Recoil, _window);
 		this->m_Magazine.erase(this->m_Magazine.begin());
 
 		this->m_Recoil += 0.5f * this->GetRecoilModifier();

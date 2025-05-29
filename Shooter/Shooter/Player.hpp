@@ -14,6 +14,7 @@ class Player
 		sf::String infinite = L"\u221E"; //Either put on the texture or move to an other file
 		sf::Vector2f m_Position;
 		sf::Vector2f m_Velocity;
+		float m_Angle = 0.f;
 		float m_InputTimer = 0.f;
 		int m_Life = 3;
 		int m_MaxAmmo = 5;
@@ -29,9 +30,9 @@ class Player
 
 		void Init(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _stock, Armor& _armor, AmmoStash& _ammoStash);
 
-		inline const sf::Vector2f& GetPos() { return this->m_Position; };
-		inline const sf::Vector2f& GetVel() { return this->m_Velocity; };
-		inline const int GetHP() { return this->m_Life; };
+		inline const sf::Vector2f& GetPos() const { return this->m_Position; }
+		inline const sf::Vector2f& GetVel() const { return this->m_Velocity; }
+		inline const int GetHP() const { return this->m_Life; }
 
 		void Update(EnemyList& _enemyList, TileMap& _map, Window& _window);
 		void Display(Window& _window);
