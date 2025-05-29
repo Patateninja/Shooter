@@ -32,12 +32,12 @@ class Projectile
 		Projectile(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range, Team _team);
 		~Projectile() = default;
 
-		inline const sf::Vector2f GetPos() { return this->m_Position; }
-		inline const sf::FloatRect GetHitbox() { return this->m_Circle.getGlobalBounds(); }
-		inline const ProjectileType GetType() { return this->m_Type; }
-		inline const Team GetTeam() { return this->m_Team; }
-		inline const int GetDamage() { return this->m_Damage; }
-		inline const bool GetToDestroy() { return this->m_ToDestroy; }
+		inline const sf::Vector2f GetPos() const { return this->m_Position; }
+		inline const sf::FloatRect GetHitbox() const { return this->m_Circle.getGlobalBounds(); }
+		inline const ProjectileType GetType() const { return this->m_Type; }
+		inline const Team GetTeam() const { return this->m_Team; }
+		inline const int GetDamage() const { return this->m_Damage; }
+		inline const bool GetToDestroy() const { return this->m_ToDestroy; }
 
 		inline void SetToDestroy(bool _set) { this->m_ToDestroy = _set; }
 

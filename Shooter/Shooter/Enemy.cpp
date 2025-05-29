@@ -34,6 +34,7 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 		if (this->m_PathUdpateCooldown <= 0.f || this->m_Path.empty())
 		{
 			this->UpdatePath(_playerPos, _map);
+			this->m_SeePlayer = this->PlayerInSight(_playerPos, _map);
 			this->m_PathUdpateCooldown = 1.f;
 		}
 		else
@@ -44,7 +45,6 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 		if (Tools::Distance(this->m_Position, _playerPos) > this->m_AttackRange || !this->m_SeePlayer)
 		{
 			this->Move(_playerPos, _map);
-			this->m_SeePlayer = this->PlayerInSight(_playerPos, _map);
 		}
 		this->CheckDamage();
 

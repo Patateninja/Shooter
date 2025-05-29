@@ -14,7 +14,7 @@ class Shell
 		Shell() = default;
 		~Shell() = default;
 
-		virtual void Shot(sf::Vector2f _playerPos, sf::Vector2f _playerVel, float _recoil, Window& _window) = 0;
+		virtual void Shot(sf::Vector2f _playerPos, sf::Vector2f _playerVel, float _playerAngle, float _recoil, Window& _window) = 0;
 };
 
 class BirdShot : public Shell
@@ -23,7 +23,7 @@ class BirdShot : public Shell
 		BirdShot(float _spread, float _range, float _velocity);
 		~BirdShot() = default;
 
-		void Shot(sf::Vector2f _playerPos, sf::Vector2f _playerVel, float _recoil, Window& _window) override;
+		void Shot(sf::Vector2f _playerPos, sf::Vector2f _playerVel, float _playerAngle, float _recoil, Window& _window) override;
 };
 
 class BuckShot : public Shell
@@ -32,7 +32,7 @@ class BuckShot : public Shell
 		BuckShot(float _spread, float _range, float _velocity);
 		~BuckShot() = default;
 
-		void Shot(sf::Vector2f _playerPos, sf::Vector2f _playerVel, float _recoil, Window& _window) override;
+		void Shot(sf::Vector2f _playerPos, sf::Vector2f _playerVel, float _playerAngle, float _recoil, Window& _window) override;
 };
 
 class DragonBreath : public Shell
@@ -41,7 +41,7 @@ class DragonBreath : public Shell
 		DragonBreath(float _spread, float _range, float _velocity);
 		~DragonBreath() = default;
 
-		void Shot(sf::Vector2f _playerPos, sf::Vector2f _playerVel, float _recoil, Window& _window) override;
+		void Shot(sf::Vector2f _playerPos, sf::Vector2f _playerVel, float _playerAngle, float _recoil, Window& _window) override;
 };
 
 class Slug : public Shell
@@ -50,5 +50,5 @@ class Slug : public Shell
 		Slug(float _spread, float _range, float _velocity);
 		~Slug() = default;
 
-		void Shot(sf::Vector2f _playerPos, sf::Vector2f _playerVel, float _recoil, Window& _window) override;
+		void Shot(sf::Vector2f _playerPos, sf::Vector2f _playerVel, float _playerAngle, float _recoil, Window& _window) override;
 };

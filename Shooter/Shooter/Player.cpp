@@ -66,29 +66,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 		this->m_Text.setPosition(_window.RelativePos(sf::Vector2f(10.f, 110.f)));
 		this->m_Text.setString("Remaining : " + std::to_string(_enemyList.Alive()));
 
-		float targetAngle = Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition())));
-		if (this->m_Angle < targetAngle)
-		{
-			if (this->m_Angle - targetAngle > 90)
-			{
-				this->m_Angle = 5;
-			}
-			this->m_Angle += Tools::Min<float,float,float>(Tools::DegToRad(1.f) * Time::GetDeltaTime(), std::abs(targetAngle) * Time::GetDeltaTime()) * 90.f;
-		}
-		if (this->m_Angle > targetAngle)
-		{
-			this->m_Angle -= Tools::Min<float, float, float>(Tools::DegToRad(1.f) * Time::GetDeltaTime(), std::abs(targetAngle) * Time::GetDeltaTime()) * 90.f;
-		}
-
-		if (this->m_Angle < -2 * PI)
-		{
-			this->m_Angle = 2 * PI;
-		}
-		else if (this->m_Angle > 2 * PI)
-		{
-			this->m_Angle = -2 * PI;
-		}
-
+		this->m_Angle = Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition())));
 		this->m_Circle.setRotation(Tools::RadToDeg(this->m_Angle));
 
 		this->m_Shotgun.ReduceRecoil();
@@ -144,7 +122,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->m_InputTimer > 0.75f)
 		{
 			this->m_InputTimer = 0.f;
-			this->m_Shotgun.Shoot(this->m_Position, this->m_Velocity, _window);
+			this->m_Shotgun.Shoot(this->m_Position, this->m_Velocity, this->m_Angle, _window);
 		}
 
 		this->m_Position += Tools::AngleToVector((Tools::Magnitude(this->m_Velocity) == 0.f ? 0.f : 350.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier())), Tools::VectorToAngle(this->m_Velocity)) * Time::GetDeltaTime();
@@ -158,15 +136,11 @@ void Player::Display(Window& _window)
 
 	_window.Draw(this->m_Text);
 
-	sf::VertexArray lines(sf::Lines, 4);
+	sf::VertexArray lines(sf::Lines, 2);
 	lines[0].position = this->m_Position;
 	lines[0].color = sf::Color::Red;
-	lines[1].position = Tools::AngleToVector(200.f, Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition())))) + this->m_Position;
+	lines[1].position = Tools::AngleToVector(200.f, this->m_Angle) + this->m_Position;
 	lines[1].color = sf::Color::Red;
-	lines[2].position = this->m_Position;
-	lines[2].color = sf::Color::Green;
-	lines[3].position = Tools::AngleToVector(200.f, this->m_Angle) + this->m_Position;
-	lines[3].color = sf::Color::Green;
 	_window.Draw(lines);
 
 	this->m_Shotgun.DisplayMagazine(_window);
@@ -214,6 +188,7 @@ void Player::Die()
 void Player::Respawn()
 {
 	this->m_Position = sf::Vector2f(576.f, 64.f); //Change to stage start pos;
+	this->m_Angle = 0.f;
 	this->m_CanReload = true;
 	this->m_CanMove = false;
 
