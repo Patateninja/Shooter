@@ -2,17 +2,29 @@
 #include "Window.hpp"
 #include "Player.hpp"
 #include "Tile.hpp"
-//#include "Bonus.hpp"
-//#include "Boost.hpp"
 
-class Boost;
-class Bonus;
+typedef enum Boost
+{
+	MEDKIT,
+	AMMOBOX,
+	XP,
+} Boost;
+
+typedef enum Bonus
+{
+	COFFEE,
+	VEST,
+	BMG50,
+} Bonus;
 
 class Crate
 {
 	protected :
+		sf::Text m_Text = sf::Text("E",RscMana::Get<sf::Font>("Mono"));
 		sf::RectangleShape m_Rect = sf::RectangleShape(sf::Vector2f(float(Tile::GetSize()), float(Tile::GetSize())));
 		sf::Vector2f m_Pos;
+		bool m_PlayerClose = false;
+		bool m_Opened = false;
 
 	public :
 		Crate() = default;
@@ -27,25 +39,29 @@ class Crate
 class BoostCrate : public Crate
 {
 	private :
-		std::unique_ptr<Boost> m_Boost = nullptr;
+		Boost m_Boost;
 
 	public :
 		BoostCrate() = default;
 		BoostCrate(sf::Vector2f _pos, bool _canBeHealth, bool _canBeAmmo);
-		BoostCrate() = default;
+		~BoostCrate() = default;
 
 		void Update(Player& _player) override;
+
+		void Delete() override;
 };
 
 class BonusCrate : public Crate
 {
-	private:
-		std::unique_ptr<Boost> m_Boost = nullptr;
+	private :
+		Bonus m_Bonus;
 
 	public:
 		BonusCrate() = default;
 		BonusCrate(sf::Vector2f _pos);
-		BonusCrate() = default;
+		~BonusCrate() = default;
 
 		void Update(Player& _player) override;
+
+		void Delete() override;
 };

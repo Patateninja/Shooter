@@ -18,7 +18,7 @@ void Player::Init(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _sto
 	this->Equip(_armor, _ammoStash);
 }
 
-void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
+void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& _window)
 {
 	this->m_InputTimer += Time::GetDeltaTime() * this->m_Shotgun.GetRoFMultiplier();
 
@@ -37,25 +37,53 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && !this->m_Shotgun.Full() && this->m_InputTimer > 0.3f)
 		{
 			this->m_InputTimer = 0.f;
-			this->m_Shotgun.Load(1);
+			if (!this->m_Got50BMG)
+			{
+				this->m_Shotgun.Load(1);
+			}
+			else
+			{
+				this->m_Shotgun.Load(5);
+			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && !this->m_Shotgun.Full() && this->m_BuckShot != 0 && this->m_InputTimer > 0.3f)
 		{
 			this->m_InputTimer = 0.f;
-			--this->m_BuckShot;
-			this->m_Shotgun.Load(2);
+			if (!this->m_Got50BMG)
+			{
+				--this->m_BuckShot;
+				this->m_Shotgun.Load(2);
+			}
+			else
+			{
+				this->m_Shotgun.Load(5);
+			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && !this->m_Shotgun.Full() && this->m_DragonBreath != 0 && this->m_InputTimer > 0.3f)
 		{
 			this->m_InputTimer = 0.f;
-			--this->m_DragonBreath;
-			this->m_Shotgun.Load(3);
+			if (!this->m_Got50BMG)
+			{
+				--this->m_DragonBreath;
+				this->m_Shotgun.Load(3);
+			}
+			else
+			{
+				this->m_Shotgun.Load(5);
+			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && !this->m_Shotgun.Full() && this->m_Slug != 0 && this->m_InputTimer > 0.3f)
 		{
 			this->m_InputTimer = 0.f;
-			--this->m_Slug;
-			this->m_Shotgun.Load(4);
+			if (!this->m_Got50BMG) 
+			{
+				--this->m_Slug;
+				this->m_Shotgun.Load(4);
+			}
+			else
+			{
+				this->m_Shotgun.Load(5);
+			}
 		}
 
 		this->m_Text.setString("- Birdshot : " + this->infinite + " \n- Buckshot : " + std::to_string(this->m_BuckShot) + "\n- DragonBreath : " + std::to_string(this->m_DragonBreath) + "\n- Slug : " + std::to_string(this->m_Slug));
@@ -77,6 +105,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 			{
 				this->Die();
 				_enemyList.Respawn();
+				_cam.NewTarget(_window, this->m_Position, _map.GetSize());
 				return;
 			}
 		}
@@ -125,7 +154,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Window& _window)
 			this->m_Shotgun.Shoot(this->m_Position, this->m_Velocity, this->m_Angle, _window);
 		}
 
-		this->m_Position += Tools::AngleToVector((Tools::Magnitude(this->m_Velocity) == 0.f ? 0.f : 350.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier())), Tools::VectorToAngle(this->m_Velocity)) * Time::GetDeltaTime();
+		this->m_Position += Tools::AngleToVector((Tools::Magnitude(this->m_Velocity) == 0.f ? 0.f : 350.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier()) + int(this->m_Caffeinated) * 100), Tools::VectorToAngle(this->m_Velocity)) * Time::GetDeltaTime();
 	}
 
 	this->m_Circle.setPosition(this->m_Position);
@@ -220,6 +249,29 @@ void Player::Respawn()
 	}
 
 	this->m_Shotgun.EmptyMagazine();
+}
+
+void Player::Refill()
+{
+	this->m_BuckShot = this->m_MaxAmmo;
+	this->m_DragonBreath = this->m_MaxAmmo;
+	this->m_Slug = this->m_MaxAmmo;
+}
+void Player::Heal()
+{
+	++this->m_Life;
+}
+void Player::AddVest()
+{
+	++this->m_Vest;
+}
+void Player::Coffee(bool _coffee)
+{
+	this->m_Caffeinated = _coffee;
+}
+void Player::BMG50(bool _bmg)
+{
+	this->m_Got50BMG = _bmg;
 }
 
 ////////////////////////////////////////////////////////

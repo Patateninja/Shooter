@@ -1,17 +1,19 @@
 #pragma once
-#include "Window.hpp"
-#include "Tile.hpp"
-#include "Enemy.hpp"
 #include "Player.hpp"
+#include "Crate.hpp"
+#include "Camera.hpp"
 
 class Stage
 {
 	private :
 		sf::RenderTexture m_MapTexture;
+		sf::Text m_Text;
 		TileMap m_TileMap;
 		sf::Sprite m_MapSprite;
 		EnemyList m_EnemyList;
+		Crate* m_Crate = nullptr;
 		int m_Num = 0;
+
 	public :
 		Stage() = default;
 		Stage(int _num);
@@ -19,13 +21,14 @@ class Stage
 
 		inline EnemyList& GetEnemies() { return this->m_EnemyList; };
 		inline TileMap& GetMap() { return this->m_TileMap; };
-		inline int GetNum() { return this->m_Num; };
+		inline const int GetNum() const { return this->m_Num; };
+		
 		inline void SetNum(int _num) { this->m_Num = _num; };
 
 		void GenerateMap();
 		void SpawnEnemies();
 
 		void Init();
-		void Update(Player& _playerpos);
+		void Update(Player& _playerpos, Camera& _cam, Window& _window);
 		void Display(Window& _window);
 };

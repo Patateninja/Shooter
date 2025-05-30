@@ -55,6 +55,12 @@
     <Filter Include="Header Files\Upgrades">
       <UniqueIdentifier>{9994483c-9924-44f7-b6be-83a6d8ae159a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Bonus &amp; Boost">
+      <UniqueIdentifier>{b454dae4-87f9-459c-a6ae-cb9e8cb400ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Bonus &amp; Boost">
+      <UniqueIdentifier>{23555b60-e102-41ab-a7ed-215c00ff7ce4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -129,6 +135,9 @@
     <ClCompile Include="Xp.cpp">
       <Filter>Source Files\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Crate.cpp">
+      <Filter>Source Files\Bonus &amp; Boost</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tools.hpp">
@@ -199,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="Xp.hpp">
       <Filter>Header Files\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Crate.hpp">
+      <Filter>Header Files\Bonus &amp; Boost</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

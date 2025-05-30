@@ -5,6 +5,7 @@ Stage::Stage(int _num)
 	this->m_Num = _num;
 	this->GenerateMap();
 	this->SpawnEnemies();
+	this->m_Text.setFont(RscMana::Get<sf::Font>("Mono"));
 }
 
 void Stage::GenerateMap()
@@ -14,6 +15,15 @@ void Stage::GenerateMap()
 	this->m_TileMap.Generate(this->m_MapTexture);
 	this->m_MapSprite.setTexture(this->m_MapTexture.getTexture());
 	this->m_MapSprite.setPosition(-Tile::GetSize() / 2.f, -Tile::GetSize() / 2.f);
+
+	if (bool(Tools::Random(1, 0)))
+	{
+		this->m_Crate = new BonusCrate(sf::Vector2f(2432.f, 2432.f));
+	}
+	else
+	{
+		this->m_Crate = new BoostCrate(sf::Vector2f(2432.f, 2432.f),true,true);
+	}
 }
 void Stage::SpawnEnemies()
 {
@@ -46,20 +56,48 @@ void Stage::Init()
 {
 	this->GenerateMap();
 	this->SpawnEnemies();
+	this->m_Text.setFont(RscMana::Get<sf::Font>("Mono"));
 }
-void Stage::Update(Player& _player)
+void Stage::Update(Player& _player, Camera& _cam, Window& _window)
 {
 	this->m_EnemyList.Update(_player.GetPos(), this->m_TileMap);
+	this->m_Crate->Update(_player);
 	if (this->m_EnemyList.AllDead())
 	{
-		++this->m_Num;
-		this->m_EnemyList.Clear();
-		this->Init();
-		_player.Respawn();
+		this->m_Text.setString("     Stage Clear.	\n Press Enter To continue");
+		this->m_Text.setCharacterSize(60.f);
+		this->m_Text.setPosition(_window.GetViewCenter() - (this->m_Text.getGlobalBounds().getSize() / 2.f));
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+		{
+			++this->m_Num;
+			this->m_EnemyList.Clear();
+			this->Init();
+			_player.Respawn();
+			_cam.NewTarget(_window, _player.GetPos(), this->m_TileMap.GetSize());
+		}
+	}
+
+	if (_player.GetMoving())
+	{
+		_cam.NewTarget(_window, _player.GetPos(), this->m_TileMap.GetSize());
+	}
+	else
+	{
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+		{
+			_cam.NewTarget(_window, _window.RelativePos(sf::Mouse::getPosition()), this->m_TileMap.GetSize());
+		}
 	}
 }
 void Stage::Display(Window& _window)
 {
 	_window.Draw(this->m_MapSprite);
 	this->m_EnemyList.Display(_window);
+	this->m_Crate->Display(_window);
+	 
+	if (this->m_EnemyList.AllDead())
+	{
+		_window.Draw(this->m_Text);
+	}
 }
