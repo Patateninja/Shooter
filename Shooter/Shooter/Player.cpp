@@ -103,10 +103,18 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 		{
 			if (enemy->GetActive() && Tools::CircleCollision(this->m_Circle.getGlobalBounds(), enemy->GetHitbox()))
 			{
-				this->Die();
-				_enemyList.Respawn();
-				_cam.NewTarget(_window, this->m_Position, _map.GetSize());
-				return;
+				if (this->m_Vest == 0)
+				{
+					this->Die();
+					_enemyList.Respawn();
+					_cam.NewTarget(_window, this->m_Position, _map.GetSize());
+					return;
+				}
+				else
+				{
+					enemy->Die();
+					--this->m_Vest;
+				}
 			}
 		}
 

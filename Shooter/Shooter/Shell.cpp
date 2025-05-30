@@ -77,3 +77,19 @@ void Slug::Shot(sf::Vector2f _playerpos, sf::Vector2f _playerVel, float _playerA
 }
 
 //////////////////////////////////////////////////
+
+BMG::BMG(float _spread, float _range, float _velocity)
+{
+	this->m_Damage = 1000;
+	this->m_Range = int(10000 * _range);
+	this->m_Spread = 0;
+	this->m_Pellets = 1;
+	this->m_Velocity = 6000.f * _velocity;
+}
+
+void BMG::Shot(sf::Vector2f _playerpos, sf::Vector2f _playerVel, float _playerAngle, float _recoil, Window& _window)
+{
+	ProjList::Add(_playerpos, Tools::AngleToVector(this->m_Velocity, _playerAngle) - _playerVel, PIERCING, this->m_Damage, this->m_Range, PLAYER);
+}
+
+//////////////////////////////////////////////////
