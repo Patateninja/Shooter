@@ -66,6 +66,8 @@ class Game : public State
 		Player m_Player;
 		Stage m_Stage;
 		Camera m_Cam;
+		PopUp* m_PopUp = nullptr;
+
 	public :
 		Game(StateManager* _stateManager);
 		~Game();

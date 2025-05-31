@@ -5,7 +5,6 @@ Stage::Stage(int _num)
 	this->m_Num = _num;
 	this->GenerateMap();
 	this->SpawnEnemies();
-	this->m_Text.setFont(RscMana::Get<sf::Font>("Mono"));
 }
 
 void Stage::GenerateMap()
@@ -56,7 +55,6 @@ void Stage::Init()
 {
 	this->GenerateMap();
 	this->SpawnEnemies();
-	this->m_Text.setFont(RscMana::Get<sf::Font>("Mono"));
 }
 void Stage::Update(Player& _player, Camera& _cam, Window& _window)
 {
@@ -64,14 +62,13 @@ void Stage::Update(Player& _player, Camera& _cam, Window& _window)
 	this->m_Crate->Update(_player);
 	if (this->m_EnemyList.AllDead())
 	{
-		this->m_Text.setString("     Stage Clear.	\n Press Enter To continue");
-		this->m_Text.setCharacterSize(60.f);
-		this->m_Text.setPosition(_window.GetViewCenter() - (this->m_Text.getGlobalBounds().getSize() / 2.f));
-
+		this->m_ReadyToMoveOn = true;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 		{
 			++this->m_Num;
 			this->m_EnemyList.Clear();
+			this->m_ReadyToMoveOn = false;
+			delete this->m_Crate;
 			this->Init();
 			_player.Respawn();
 			_cam.NewTarget(_window, _player.GetPos(), this->m_TileMap.GetSize());
@@ -95,9 +92,4 @@ void Stage::Display(Window& _window)
 	_window.Draw(this->m_MapSprite);
 	this->m_EnemyList.Display(_window);
 	this->m_Crate->Display(_window);
-	 
-	if (this->m_EnemyList.AllDead())
-	{
-		_window.Draw(this->m_Text);
-	}
 }

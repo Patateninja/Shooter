@@ -140,8 +140,22 @@ void Game::Update()
 	this->m_Stage.Update(this->m_Player, this->m_Cam, this->Window());
 	ProjList::Update(this->m_Stage.GetMap());
 
-
 	this->m_Cam.Update(this->Window());
+
+	if (this->m_Stage.GetMoveOn())
+	{
+		if (!this->m_PopUp)
+		{
+			this->m_PopUp = new PopUp(this->Window().GetViewCenter() - sf::Vector2f(400.f, 200.f), sf::Vector2f(800.f,400.f),"Stage Cleared\nPress Enter to continue");
+		}
+	}
+	else
+	{
+		if (this->m_PopUp)
+		{
+			delete this->m_PopUp;
+		}
+	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && this->m_InputTimer > 0.2f)
 	{
@@ -161,6 +175,12 @@ void Game::Display()
 	ProjList::Display(this->Window());
 	this->m_Player.Display(this->Window());
 	this->Draw(this->m_Text);
+
+	if (this->m_PopUp)
+	{
+		this->m_PopUp->Display(this->Window());
+		this->m_PopUp = nullptr;
+	}
 
 	this->DisplayWindow();
 }
