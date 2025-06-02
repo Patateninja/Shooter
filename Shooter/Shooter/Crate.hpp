@@ -1,7 +1,7 @@
 #pragma once
-#include "Window.hpp"
 #include "Player.hpp"
 #include "Tile.hpp"
+#include "BonusPopUp.hpp"
 
 typedef enum Boost
 {
@@ -32,7 +32,7 @@ class Crate
 
 		virtual void Delete() = 0;
 
-		virtual void Update(Player& _player) = 0;
+		virtual void Update(Player& _player, BonusPopUp*& _popUp) = 0;
 		void Display(Window& _window);
 };
 
@@ -46,7 +46,7 @@ class BoostCrate : public Crate
 		BoostCrate(sf::Vector2f _pos, bool _canBeHealth, bool _canBeAmmo);
 		~BoostCrate() = default;
 
-		void Update(Player& _player) override;
+		void Update(Player& _player, BonusPopUp*& _popUp) override;
 
 		void Delete() override;
 };
@@ -61,7 +61,7 @@ class BonusCrate : public Crate
 		BonusCrate(sf::Vector2f _pos);
 		~BonusCrate() = default;
 
-		void Update(Player& _player) override;
+		void Update(Player& _player, BonusPopUp*& _popUp) override;
 
 		void Delete() override;
 };

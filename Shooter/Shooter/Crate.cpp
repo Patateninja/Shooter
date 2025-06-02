@@ -36,7 +36,7 @@ BoostCrate::BoostCrate(sf::Vector2f _pos, bool _canBeHealth, bool _canBeAmmo)
 	}
 }
 
-void BoostCrate::Update(Player& _player)
+void BoostCrate::Update(Player& _player, BonusPopUp*& _popUp)
 {
 	if (Tools::Distance(this->m_Pos, _player.GetPos()) < Tile::GetSize() * 2 && !this->m_Opened)
 	{
@@ -53,14 +53,18 @@ void BoostCrate::Update(Player& _player)
 			{
 				case MEDKIT :
 					_player.Heal();
+					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "MedKit");
 					break;
 				case AMMOBOX :
 					_player.Refill();
+					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "Ammo Box");
 					break;
 				case XP :
 					Level::GainXP(250);
+					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "XP");
 					break;
 				default :
+					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "Somehow another thing");
 					break;
 			}
 		}
@@ -101,13 +105,11 @@ void BoostCrate::Delete()
 	this->~BoostCrate();
 }
 
-void BonusCrate::Update(Player& _player)
+void BonusCrate::Update(Player& _player, BonusPopUp*& _popUp)
 {
 	if (Tools::Distance(this->m_Pos, _player.GetPos()) < Tile::GetSize() * 2 && !this->m_Opened)
 	{
 		this->m_PlayerClose = true;
-		
-		//Input PopUp
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 		{
@@ -118,14 +120,18 @@ void BonusCrate::Update(Player& _player)
 			{
 				case COFFEE :
 					_player.Coffee(true);
+					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "Coffee");
 					break;
 				case VEST :
 					_player.AddVest();
+					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "Vest");
 					break;
 				case BMG50 :
 					_player.BMG50(true);
+					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), ".50 BMG");
 					break;
 				default :
+					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "Somehow another thing");
 					break;
 			}
 		}	

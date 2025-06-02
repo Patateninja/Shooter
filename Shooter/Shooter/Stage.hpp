@@ -2,7 +2,7 @@
 #include "Player.hpp"
 #include "Crate.hpp"
 #include "Camera.hpp"
-#include "PopUp.hpp"
+#include "BonusPopUp.hpp"
 
 class Stage
 {
@@ -31,6 +31,6 @@ class Stage
 		void SpawnEnemies();
 
 		void Init();
-		void Update(Player& _playerpos, Camera& _cam, Window& _window);
+		void Update(Player& _playerpos, Camera& _cam, BonusPopUp*& _popUp, Window& _window);
 		void Display(Window& _window);
 };

@@ -147,6 +147,9 @@
     <ClCompile Include="PopUp.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="BonusPopUp.cpp">
+      <Filter>Source Files\Bonus &amp; Boost</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tools.hpp">
@@ -223,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="PopUp.hpp">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="BonusPopUp.hpp">
+      <Filter>Header Files\Bonus &amp; Boost</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

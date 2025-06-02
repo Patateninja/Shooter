@@ -17,11 +17,11 @@ void Stage::GenerateMap()
 
 	if (bool(Tools::Random(1, 0)))
 	{
-		this->m_Crate = new BonusCrate(sf::Vector2f(2432.f, 2432.f));
+		this->m_Crate = new BonusCrate(sf::Vector2f(128.f, 128.f));
 	}
 	else
 	{
-		this->m_Crate = new BoostCrate(sf::Vector2f(2432.f, 2432.f),true,true);
+		this->m_Crate = new BoostCrate(sf::Vector2f(128.f, 128.f),true,true);
 	}
 }
 void Stage::SpawnEnemies()
@@ -56,10 +56,10 @@ void Stage::Init()
 	this->GenerateMap();
 	this->SpawnEnemies();
 }
-void Stage::Update(Player& _player, Camera& _cam, Window& _window)
+void Stage::Update(Player& _player, Camera& _cam, BonusPopUp*& _popUp, Window& _window)
 {
 	this->m_EnemyList.Update(_player.GetPos(), this->m_TileMap);
-	this->m_Crate->Update(_player);
+	this->m_Crate->Update(_player, _popUp);
 	if (this->m_EnemyList.AllDead())
 	{
 		this->m_ReadyToMoveOn = true;
