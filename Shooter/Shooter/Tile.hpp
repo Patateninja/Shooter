@@ -18,6 +18,7 @@ class Tile
 		static int m_Side;
 		bool m_Walkable;
 		bool m_BulletThrough;
+
 	public :
 		Tile();
 		Tile(sf::Vector2f _pos, TileType);

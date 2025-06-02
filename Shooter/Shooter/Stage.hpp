@@ -14,6 +14,9 @@ class Stage
 		Crate* m_Crate = nullptr;
 		int m_Num = 0;
 		bool m_ReadyToMoveOn = false;
+		bool m_GiveCoffee = false;
+		bool m_GiveBMG = false;
+		bool m_GiveVest = false;
 
 	public :
 		Stage() = default;

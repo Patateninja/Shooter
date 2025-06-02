@@ -229,6 +229,9 @@ void Player::Respawn()
 	this->m_CanReload = true;
 	this->m_CanMove = false;
 
+	this->m_Caffeinated = false;
+	this->m_Got50BMG = false;
+
 	ProjList::Clear();
 
 	for (const std::unique_ptr<Shell>& shell : this->m_Shotgun.GetShells())

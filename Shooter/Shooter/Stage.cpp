@@ -71,6 +71,19 @@ void Stage::Update(Player& _player, Camera& _cam, BonusPopUp*& _popUp, Window& _
 			delete this->m_Crate;
 			this->Init();
 			_player.Respawn();
+			if (this->m_GiveCoffee)
+			{
+				_player.Coffee(true);
+			}
+			if (this->m_GiveBMG)
+			{
+				_player.BMG50(true);
+			}
+			if (this->m_GiveVest)
+			{
+				_player.AddVest();
+			}
+
 			_cam.NewTarget(_window, _player.GetPos(), this->m_TileMap.GetSize());
 		}
 	}
