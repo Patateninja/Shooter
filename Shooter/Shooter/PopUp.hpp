@@ -15,6 +15,6 @@ class PopUp
 		PopUp(sf::Vector2f _pos, sf::Vector2f _size, std::string _text);
 		~PopUp() = default;
 
-		void Update();
+		void Update(Window& _window);
 		void Display(Window& _window);
 };

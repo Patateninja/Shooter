@@ -144,9 +144,13 @@ void Game::Update()
 
 	if (this->m_Stage.GetMoveOn())
 	{
-		if (!this->m_PopUp)
+		if (this->m_PopUp == nullptr)
 		{
 			this->m_PopUp = new PopUp(this->Window().GetViewCenter() - sf::Vector2f(400.f, 200.f), sf::Vector2f(800.f,400.f),"Stage Cleared\nPress Enter to continue");
+		}
+		else
+		{
+			this->m_PopUp->Update(this->Window());
 		}
 	}
 	else
@@ -154,6 +158,7 @@ void Game::Update()
 		if (this->m_PopUp)
 		{
 			delete this->m_PopUp;
+			this->m_PopUp = nullptr;
 		}
 	}
 
@@ -179,7 +184,6 @@ void Game::Display()
 	if (this->m_PopUp)
 	{
 		this->m_PopUp->Display(this->Window());
-		this->m_PopUp = nullptr;
 	}
 
 	this->DisplayWindow();
@@ -220,7 +224,7 @@ void Upgrade::Update()
 	this->m_InputTimer += Time::GetDeltaTime();
 	this->m_Text.setString("Upgrade Menu\nPress Enter to launch a new game\nPress Escape to go back to Menu");
 
-	this->m_Shop.Update();
+	this->m_Shop.Update(this->Window());
 
 	State::m_Muzzle = this->m_Shop.GetMuzzle();
 	State::m_Grip = this->m_Shop.GetGrip();

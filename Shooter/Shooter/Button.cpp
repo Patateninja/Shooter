@@ -22,11 +22,12 @@ bool Button::Clicked()
 	return false;
 }
 
-bool Button::Update(int)
+bool Button::Update(Window& _window, int _unused)
 {
-	if (this->m_Rect.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition())))
+	if (this->m_Rect.getGlobalBounds().contains(_window.RelativePos(sf::Mouse::getPosition())))
 	{
 		this->m_Rect.setFillColor(Color::LightGrey);
+		this->m_Text.setFillColor(sf::Color::Blue);
 	}
 	else
 	{

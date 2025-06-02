@@ -16,7 +16,7 @@ ShopButton::ShopButton(std::string _str, sf::Vector2f _pos, sf::Vector2f _size, 
 
 }
 
-bool ShopButton::Update(int _linkedAttachementLvl)
+bool ShopButton::Update(Window& _window, int _linkedAttachementLvl)
 {
 	if (this->m_Locked)
 	{
@@ -27,7 +27,7 @@ bool ShopButton::Update(int _linkedAttachementLvl)
 		this->m_Text.setString(this->m_Memory);
 	}
 
-	if (Button::Update(_linkedAttachementLvl))
+	if (Button::Update(_window, 0))
 	{
 		this->m_Active = true;
 		return true;

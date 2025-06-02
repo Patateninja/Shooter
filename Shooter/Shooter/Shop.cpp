@@ -169,7 +169,7 @@ void Shop::AddEquipment(std::string _buttonName, sf::Vector2f _buttonPos, sf::Ve
 	this->m_EquipmentList.back().Bind(*_equipment);
 }
 
-void Shop::Update()
+void Shop::Update(Window& _window)
 {
 	this->LockItem(); //Move to constructor after debug
 
@@ -204,7 +204,7 @@ void Shop::Update()
 		}
 		////////////
 
-		if (button.Update(button.Get()->GetUnlockLevel()))
+		if (button.Update(_window, button.Get()->GetUnlockLevel()))
 		{
 			if (dynamic_cast<Muzzle*>(button.Get()))
 			{
@@ -247,7 +247,7 @@ void Shop::Update()
 		}
 		////////////
 
-		if (button.Update(button.Get()->GetUnlockLevel()))
+		if (button.Update(_window, button.Get()->GetUnlockLevel()))
 		{
 			if (dynamic_cast<Armor*>(button.Get()))
 			{

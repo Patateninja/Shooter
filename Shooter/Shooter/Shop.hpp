@@ -32,7 +32,7 @@ class Shop
 		template<typename T>
 		void AddEquipment(std::string _buttonName, sf::Vector2f _buttonPos, sf::Vector2f _buttonSize, std::string _textureName, T* _equipment);;
 
-		void Update();
+		void Update(Window& _window);
 		void Display(Window& _window);
 
 		void SetLevel(int _lvl) { this->m_PlayerLevel = _lvl; }
