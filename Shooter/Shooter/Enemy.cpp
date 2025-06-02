@@ -66,7 +66,7 @@ void Enemy::Display(Window& _window)
 
 bool Enemy::PlayerInSight(const sf::Vector2f& _playerPos, TileMap& _map)
 {
-	if (Tools::Distance(_playerPos, this->m_ProjectileOrigin) - 64 < this->m_AttackRange)
+	if (Tools::Distance(_playerPos, this->m_ProjectileOrigin) - 128 < this->m_AttackRange)
 	{
 		for (int i = 1; i <= int(Tools::Distance(_playerPos, this->m_ProjectileOrigin)); ++i)
 		{

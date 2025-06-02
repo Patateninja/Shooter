@@ -37,6 +37,7 @@ class Player
 		inline const sf::Vector2f& GetPos() const { return this->m_Position; }
 		inline const sf::Vector2f& GetVel() const { return this->m_Velocity; }
 		inline const int GetHP() const { return this->m_Life; }
+		inline const int GetVest() const { return this->m_Vest; }
 		inline const bool GetMoving() const { return this->m_CanMove; }
 
 		inline void SetTimer(float _timer) { this->m_InputTimer = _timer; }
