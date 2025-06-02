@@ -36,7 +36,7 @@ BoostCrate::BoostCrate(sf::Vector2f _pos, bool _canBeHealth, bool _canBeAmmo)
 	}
 }
 
-void BoostCrate::Update(Player& _player, BonusPopUp*& _popUp)
+void BoostCrate::Update(Player& _player, bool& _coffe, bool& _bmg, bool& _vest, BonusPopUp*& _popUp)
 {
 	if (Tools::Distance(this->m_Pos, _player.GetPos()) < Tile::GetSize() * 2 && !this->m_Opened)
 	{
@@ -105,7 +105,7 @@ void BoostCrate::Delete()
 	this->~BoostCrate();
 }
 
-void BonusCrate::Update(Player& _player, BonusPopUp*& _popUp)
+void BonusCrate::Update(Player& _player, bool& _coffee, bool& _bmg, bool& _vest, BonusPopUp*& _popUp)
 {
 	if (Tools::Distance(this->m_Pos, _player.GetPos()) < Tile::GetSize() * 2 && !this->m_Opened)
 	{
@@ -119,15 +119,15 @@ void BonusCrate::Update(Player& _player, BonusPopUp*& _popUp)
 			switch (this->m_Bonus)
 			{
 				case COFFEE :
-					_player.Coffee(true);
+					_coffee = true;
 					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "Coffee");
 					break;
 				case VEST :
-					_player.AddVest();
+					_vest = true;;
 					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "Vest");
 					break;
 				case BMG50 :
-					_player.BMG50(true);
+					_bmg = true;
 					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), ".50 BMG");
 					break;
 				default :
