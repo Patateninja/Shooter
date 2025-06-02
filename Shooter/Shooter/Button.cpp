@@ -39,7 +39,7 @@ bool Button::Update(Window& _window, int _unused)
 		this->m_Rect.setFillColor(Color::Grey);
 	}
 
-	return this->Clicked();
+	return this->Clicked(_window);
 }
 
 void Button::Display(Window& _window)

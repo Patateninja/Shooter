@@ -39,6 +39,8 @@ class Player
 		inline const int GetHP() const { return this->m_Life; }
 		inline const bool GetMoving() const { return this->m_CanMove; }
 
+		inline void SetTimer(float _timer) { this->m_InputTimer = _timer; }
+
 		void Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& _window);
 		void Display(Window& _window);
 

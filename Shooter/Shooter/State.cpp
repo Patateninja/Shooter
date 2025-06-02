@@ -152,6 +152,21 @@ void Game::Update()
 			this->m_InputTimer = 0.f;
 			this->m_Paused = false;
 		}
+
+		if (this->m_BonusPopUp)
+		{
+			this->m_BonusPopUp->Update(this->Window());
+			this->m_Paused = true;
+
+			if (this->m_BonusPopUp->GetToDelete())
+			{
+				delete this->m_BonusPopUp;
+				this->m_BonusPopUp = nullptr;
+				this->m_Paused = false;
+			}
+		}
+
+		this->m_Player.SetTimer(0.f);
 	}
 	else
 	{
@@ -184,26 +199,18 @@ void Game::Update()
 			}
 		}
 
-
-
-
-
-
 		if (this->m_BonusPopUp)
 		{
 			this->m_BonusPopUp->Update(this->Window());
+			this->m_Paused = true;
 
 			if (this->m_BonusPopUp->GetToDelete())
 			{
 				delete this->m_BonusPopUp;
 				this->m_BonusPopUp = nullptr;
+				this->m_Paused = false;
 			}
 		}
-
-
-
-
-
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && this->m_InputTimer > 0.2f)
 		{
@@ -226,6 +233,16 @@ void Game::Display()
 		ProjList::Display(this->Window());
 		this->m_Player.Display(this->Window());
 		this->Draw(this->m_Text);
+
+		if (this->m_StagePopUp)
+		{
+			this->m_StagePopUp->Display(this->Window());
+		}
+
+		if (this->m_BonusPopUp)
+		{
+			this->m_BonusPopUp->Display(this->Window());
+		}
 	}
 	else
 	{
