@@ -62,7 +62,9 @@ void Stage::Update(Player& _player, Camera& _cam, BonusPopUp*& _popUp, Window& _
 	this->m_Crate->Update(_player, this->m_GiveCoffee, this->m_GiveBMG, this->m_GiveVest, _popUp);
 	if (this->m_EnemyList.AllDead())
 	{
+		ProjList::Clear();
 		this->m_ReadyToMoveOn = true;
+
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 		{
 			++this->m_Num;

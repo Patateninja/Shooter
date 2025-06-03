@@ -4,6 +4,14 @@
 #include "Equipement.hpp"
 #include "Camera.hpp"
 
+typedef enum Direction
+{
+	UP,
+	RIGHT,
+	DOWN,
+	LEFT,
+};
+
 class Player
 {
 	private :
@@ -47,6 +55,8 @@ class Player
 
 		void ModifyShotgun(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _stock);
 		void Equip(Armor& _armor, AmmoStash& _ammoStash);
+
+		bool CheckWallCollision(TileMap& _map, Direction _direction);
 
 		bool CheckDamage();
 

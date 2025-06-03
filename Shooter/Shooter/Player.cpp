@@ -133,28 +133,28 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 		this->m_Velocity.y = 0;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
 		{
-			if (_map.GetTile(sf::Vector2i((this->m_Position - sf::Vector2f(0, this->m_Circle.getRadius())) - (sf::Vector2f(0, 375) * Time::GetDeltaTime()))).GetWalkable())
+			if (this->CheckWallCollision(_map,UP))
 			{
 				this->m_Velocity.y = -1;
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
-			if (_map.GetTile(sf::Vector2i((this->m_Position + sf::Vector2f(0, this->m_Circle.getRadius())) + (sf::Vector2f(0, 375) * Time::GetDeltaTime()))).GetWalkable())
+			if (this->CheckWallCollision(_map, DOWN))
 			{
 				this->m_Velocity.y = 1;
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 		{
-			if (_map.GetTile(sf::Vector2i((this->m_Position - sf::Vector2f(this->m_Circle.getRadius(), 0)) - (sf::Vector2f(375, 0) * Time::GetDeltaTime()))).GetWalkable())
+			if (this->CheckWallCollision(_map, LEFT))
 			{
 				this->m_Velocity.x = -1;
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
-			if (_map.GetTile(sf::Vector2i((this->m_Position + sf::Vector2f(this->m_Circle.getRadius(), 0)) + (sf::Vector2f(375, 0) * Time::GetDeltaTime()))).GetWalkable())
+			if (this->CheckWallCollision(_map, RIGHT))
 			{
 				this->m_Velocity.x = 1;
 			}
@@ -201,6 +201,79 @@ void Player::Equip(Armor& _armor, AmmoStash& _ammoStash)
 	this->m_BuckShot = this->m_MaxAmmo;
 	this->m_DragonBreath = this->m_MaxAmmo;
 	this->m_Slug = this->m_MaxAmmo;
+}
+
+bool Player::CheckWallCollision(TileMap& _map, Direction _direction)
+{
+	sf::Vector2f PlayerTopRight  = this->m_Position + sf::Vector2f(-this->m_Circle.getRadius(), this->m_Circle.getRadius());
+	sf::Vector2f PlayerDownRight = this->m_Position + sf::Vector2f(this->m_Circle.getRadius(), this->m_Circle.getRadius());
+	sf::Vector2f PlayerTopLeft   = this->m_Position + sf::Vector2f(-this->m_Circle.getRadius(), -this->m_Circle.getRadius());
+	sf::Vector2f PlayerDownLeft  = this->m_Position + sf::Vector2f(this->m_Circle.getRadius(), -this->m_Circle.getRadius());
+
+	switch (_direction)
+	{
+		case UP :
+		{
+			sf::Vector2f mvt = (sf::Vector2f(0, -375) * Time::GetDeltaTime());
+			if (_map.GetTile(sf::Vector2i(PlayerTopRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerTopLeft + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownLeft + mvt)).GetWalkable())
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+			break;
+		}
+		case RIGHT :
+		{
+			sf::Vector2f mvt = (sf::Vector2f(375, 0) * Time::GetDeltaTime());
+			if (_map.GetTile(sf::Vector2i(PlayerTopRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerTopLeft + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownLeft + mvt)).GetWalkable())
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+			break;
+		}
+		case DOWN :
+		{
+			sf::Vector2f mvt = (sf::Vector2f(0, 375) * Time::GetDeltaTime());
+			if (_map.GetTile(sf::Vector2i(PlayerTopRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerTopLeft + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownLeft + mvt)).GetWalkable())
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+			break;
+		}
+		case LEFT :
+		{
+			sf::Vector2f mvt = (sf::Vector2f(-375,0) * Time::GetDeltaTime());
+			if (_map.GetTile(sf::Vector2i(PlayerTopRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerTopLeft + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownLeft + mvt)).GetWalkable())
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+			break;
+		}
+		default :
+		{
+			return false;
+			break;
+		}
+	}
 }
 
 bool Player::CheckDamage()
