@@ -6,6 +6,7 @@ void LoadMenu::Update(int& _buckshot, int& _dragonbreath, int& _slug, bool _bmg,
 
 	this->m_InputTimer += Time::GetDeltaTime();
 
+	this->m_Text.setCharacterSize(50);
 	this->m_Text.setString(this->infinite + "\n" + std::to_string(_buckshot) + "\n" + std::to_string(_dragonbreath) + "\n" + std::to_string(_slug));
 
 	if (this->m_BirdShot.Update(_window, 0) && !_shotgun.Full() && this->m_InputTimer > 0.5f)

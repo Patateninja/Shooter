@@ -133,7 +133,11 @@ void Player::Display(Window& _window)
 	lines[1].color = sf::Color::Red;
 	_window.Draw(lines);
 
-	this->m_LoadMenu.Display(_window);
+	if (this->m_CanReload)
+	{
+		this->m_LoadMenu.Display(_window);
+	}
+
 	this->m_Shotgun.DisplayMagazine(_window);
 }
 
