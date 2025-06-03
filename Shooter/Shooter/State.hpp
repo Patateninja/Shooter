@@ -4,6 +4,7 @@
 #include "Stage.hpp"
 #include "Camera.hpp" 
 #include "Shop.hpp"
+#include "BonusPopUp.hpp"
 
 class StateManager;
 
@@ -47,7 +48,9 @@ class State
 class Menu : public State
 {
 	private :
-
+		Button m_Play;
+		Button m_Option;
+		Button m_Quit;
 	public :
 		Menu(StateManager* _stateManager);
 		~Menu();
@@ -66,6 +69,10 @@ class Game : public State
 		Player m_Player;
 		Stage m_Stage;
 		Camera m_Cam;
+		PopUp* m_StagePopUp = nullptr;
+		BonusPopUp* m_BonusPopUp = nullptr;
+		bool m_Paused = false;
+
 	public :
 		Game(StateManager* _stateManager);
 		~Game();
@@ -81,8 +88,11 @@ class Game : public State
 class Upgrade : public State
 {
 	private :
+		Button m_Menu;
+		Button m_Play;
 		int m_PlayerLevel = 0;
 		Shop m_Shop;
+
 	public :
 		Upgrade(StateManager* _stateManager);
 		~Upgrade();

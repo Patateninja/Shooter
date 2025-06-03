@@ -66,7 +66,7 @@ void Enemy::Display(Window& _window)
 
 bool Enemy::PlayerInSight(const sf::Vector2f& _playerPos, TileMap& _map)
 {
-	if (Tools::Distance(_playerPos, this->m_ProjectileOrigin) - 64 < this->m_AttackRange)
+	if (Tools::Distance(_playerPos, this->m_ProjectileOrigin) - 128 < this->m_AttackRange)
 	{
 		for (int i = 1; i <= int(Tools::Distance(_playerPos, this->m_ProjectileOrigin)); ++i)
 		{
@@ -227,7 +227,7 @@ void Ranged::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 
 bool Ranged::CanShoot(sf::Vector2f _playerPos)
 {
-	return (Tools::Distance(this->m_ProjectileOrigin, _playerPos) < m_AttackRange);
+	return (Tools::Distance(this->m_ProjectileOrigin, _playerPos) -128 < m_AttackRange);
 }
 void Ranged::Shoot(const sf::Vector2f& _playerPos)
 {
@@ -312,7 +312,7 @@ RangedShielded::RangedShielded(const sf::Vector2f& _startingPos)
 	this->m_Circle.setPosition(_startingPos);
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
-	this->m_AttackRange = Tile::GetSize() * 7.f;
+	this->m_AttackRange = Tile::GetSize() * 5.f;
 	this->m_MaxHp = 50;
 	this->m_Hp = 50;
 	this->m_Speed = 150.f;
@@ -344,7 +344,7 @@ void RangedShielded::Display(Window& _window)
 
 bool RangedShielded::CanShoot(const sf::Vector2f& _playerPos)
 {
-	return (Tools::Distance(this->m_ProjectileOrigin, _playerPos) < m_AttackRange);
+	return (Tools::Distance(this->m_ProjectileOrigin, _playerPos) - 128 < m_AttackRange);
 }
 void RangedShielded::Shoot(const sf::Vector2f& _playerPos)
 {

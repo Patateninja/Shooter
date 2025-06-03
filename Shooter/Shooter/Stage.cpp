@@ -14,6 +14,15 @@ void Stage::GenerateMap()
 	this->m_TileMap.Generate(this->m_MapTexture);
 	this->m_MapSprite.setTexture(this->m_MapTexture.getTexture());
 	this->m_MapSprite.setPosition(-Tile::GetSize() / 2.f, -Tile::GetSize() / 2.f);
+
+	if (bool(Tools::Random(1, 0)))
+	{
+		this->m_Crate = new BonusCrate(sf::Vector2f(128.f, 128.f));
+	}
+	else
+	{
+		this->m_Crate = new BoostCrate(sf::Vector2f(128.f, 128.f),true,true);
+	}
 }
 void Stage::SpawnEnemies()
 {
@@ -47,19 +56,67 @@ void Stage::Init()
 	this->GenerateMap();
 	this->SpawnEnemies();
 }
-void Stage::Update(Player& _player)
+void Stage::Update(Player& _player, Camera& _cam, BonusPopUp*& _popUp, Window& _window)
 {
 	this->m_EnemyList.Update(_player.GetPos(), this->m_TileMap);
+	this->m_Crate->Update(_player, this->m_GiveCoffee, this->m_GiveBMG, this->m_GiveVest, _popUp);
 	if (this->m_EnemyList.AllDead())
 	{
-		++this->m_Num;
-		this->m_EnemyList.Clear();
-		this->Init();
-		_player.Respawn();
+		this->m_ReadyToMoveOn = true;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+		{
+			++this->m_Num;
+			this->m_EnemyList.Clear();
+			this->m_ReadyToMoveOn = false;
+			delete this->m_Crate;
+			this->Init();
+			_player.Respawn();
+			if (this->m_GiveCoffee)
+			{
+				_player.Coffee(true);
+			}
+			else
+			{
+				_player.Coffee(false);
+			}
+
+			if (this->m_GiveBMG)
+			{
+				_player.BMG50(true);
+			}
+			else
+			{
+				_player.BMG50(false);
+			}
+
+			if (this->m_GiveVest)
+			{
+				_player.AddVest();
+			}
+
+			this->m_GiveCoffee = false;
+			this->m_GiveBMG = false;
+			this->m_GiveVest = false;
+
+			_cam.NewTarget(_window, _player.GetPos(), this->m_TileMap.GetSize());
+		}
+	}
+
+	if (_player.GetMoving())
+	{
+		_cam.NewTarget(_window, _player.GetPos(), this->m_TileMap.GetSize());
+	}
+	else
+	{
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+		{
+			_cam.NewTarget(_window, _window.RelativePos(sf::Mouse::getPosition()), this->m_TileMap.GetSize());
+		}
 	}
 }
 void Stage::Display(Window& _window)
 {
 	_window.Draw(this->m_MapSprite);
 	this->m_EnemyList.Display(_window);
+	this->m_Crate->Display(_window);
 }

@@ -13,7 +13,7 @@ class Shotgun
 		Magazine m_MagazineAttachement;
 		std::vector<std::unique_ptr<Shell>> m_Magazine;
 		float m_Recoil = 1.f;
-		int m_DefaultCapacity = 40;
+		int m_DefaultCapacity = 4;
 
 	public :
 		Shotgun() = default;

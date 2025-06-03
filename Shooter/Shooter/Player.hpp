@@ -2,6 +2,7 @@
 #include "Shotgun.hpp"
 #include "Enemy.hpp"
 #include "Equipement.hpp"
+#include "Camera.hpp"
 
 class Player
 {
@@ -16,13 +17,16 @@ class Player
 		sf::Vector2f m_Velocity;
 		float m_Angle = 0.f;
 		float m_InputTimer = 0.f;
-		int m_Life = 3;
+		int m_Life = 30;
+		int m_Vest = 0;
 		int m_MaxAmmo = 5;
 		int m_BuckShot = 5;
 		int m_DragonBreath = 5;
 		int m_Slug = 5;
 		bool m_CanMove = false;
 		bool m_CanReload = true;
+		bool m_Caffeinated = false;
+		bool m_Got50BMG = false;
 
 	public :
 		Player();
@@ -33,8 +37,12 @@ class Player
 		inline const sf::Vector2f& GetPos() const { return this->m_Position; }
 		inline const sf::Vector2f& GetVel() const { return this->m_Velocity; }
 		inline const int GetHP() const { return this->m_Life; }
+		inline const int GetVest() const { return this->m_Vest; }
+		inline const bool GetMoving() const { return this->m_CanMove; }
 
-		void Update(EnemyList& _enemyList, TileMap& _map, Window& _window);
+		inline void SetTimer(float _timer) { this->m_InputTimer = _timer; }
+
+		void Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& _window);
 		void Display(Window& _window);
 
 		void ModifyShotgun(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _stock);
@@ -45,4 +53,10 @@ class Player
 		void Ready();
 		void Die();
 		void Respawn();
+
+		void Refill();
+		void Heal();
+		void AddVest();
+		void Coffee(bool _coffee);
+		void BMG50(bool _bmg);
 };

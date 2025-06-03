@@ -13,11 +13,13 @@ class Button
 		Button(std::string _str, sf::Vector2f _pos, sf::Vector2f _size, sf::Texture* _texture);
 		~Button() = default;
 
-		bool Clicked();
+		void SetPosition(sf::Vector2f _pos);
+
+		bool Clicked(Window& _window);
 
 		inline void Lock() { this->m_Locked = true; }
 		inline void Unlock() { this->m_Locked = false; }
 
-		virtual bool Update(int);
+		virtual bool Update(Window& _window, int _unused);
 		virtual void Display(Window& _window);
 };

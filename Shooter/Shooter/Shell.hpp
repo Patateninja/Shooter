@@ -52,3 +52,12 @@ class Slug : public Shell
 
 		void Shot(sf::Vector2f _playerPos, sf::Vector2f _playerVel, float _playerAngle, float _recoil, Window& _window) override;
 };
+
+class BMG : public Shell
+{
+public:
+	BMG(float _spread, float _range, float _velocity);
+	~BMG() = default;
+
+	void Shot(sf::Vector2f _playerPos, sf::Vector2f _playerVel, float _playerAngle, float _recoil, Window& _window) override;
+};

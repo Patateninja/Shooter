@@ -145,12 +145,15 @@
   <ItemGroup>
     <ClCompile Include="Astar.cpp" />
     <ClCompile Include="Attachment.cpp" />
+    <ClCompile Include="BonusPopUp.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Colors.cpp" />
+    <ClCompile Include="Crate.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Equipement.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PopUp.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shield.cpp" />
@@ -171,12 +174,15 @@
   <ItemGroup>
     <ClInclude Include="Astar.hpp" />
     <ClInclude Include="Attachment.hpp" />
+    <ClInclude Include="BonusPopUp.hpp" />
     <ClInclude Include="Button.hpp" />
     <ClInclude Include="Camera.hpp" />
     <ClInclude Include="Colors.hpp" />
+    <ClInclude Include="Crate.hpp" />
     <ClInclude Include="Enemy.hpp" />
     <ClInclude Include="Equipement.hpp" />
     <ClInclude Include="Player.hpp" />
+    <ClInclude Include="PopUp.hpp" />
     <ClInclude Include="Resource.hpp" />
     <ClInclude Include="ResourceManager.hpp" />
     <ClInclude Include="Shield.hpp" />

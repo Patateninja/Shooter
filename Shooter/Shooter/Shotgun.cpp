@@ -33,6 +33,8 @@ void Shotgun::Load(int _input)
 			case 4 :
 				this->m_Magazine.push_back(std::make_unique<Slug>(this->m_MuzzleAttachement.GetSpreadMod(), this->m_MuzzleAttachement.GetRangeMod(), this->m_MuzzleAttachement.GetVelocityMod()));
 				break;
+			case 5 :
+				this->m_Magazine.push_back(std::make_unique<BMG>(this->m_MuzzleAttachement.GetSpreadMod(), this->m_MuzzleAttachement.GetRangeMod(), this->m_MuzzleAttachement.GetVelocityMod()));
 		}
 	}
 }
@@ -104,6 +106,10 @@ void Shotgun::DisplayMagazine(Window& _window)
 		else if (dynamic_cast<Slug*>(this->m_Magazine[i].get()))
 		{
 			this->m_Renderer.setFillColor(sf::Color::Yellow);
+		}
+		else if (dynamic_cast<BMG*>(this->m_Magazine[i].get()))
+		{
+			this->m_Renderer.setFillColor(sf::Color::Cyan);
 		}
 
 		_window.Draw(this->m_Renderer);
