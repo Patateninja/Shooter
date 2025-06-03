@@ -64,7 +64,7 @@ void BoostCrate::Update(Player& _player, bool& _coffe, bool& _bmg, bool& _vest, 
 					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "XP");
 					break;
 				default :
-					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "Somehow another thing");
+					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "Somehow another thing (This is worrysome)");
 					break;
 			}
 		}
@@ -131,7 +131,7 @@ void BonusCrate::Update(Player& _player, bool& _coffee, bool& _bmg, bool& _vest,
 					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), ".50 BMG");
 					break;
 				default :
-					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "Somehow another thing");
+					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "Somehow another thing (This is worrysome)");
 					break;
 			}
 		}	
