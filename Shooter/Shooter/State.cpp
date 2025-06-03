@@ -68,7 +68,7 @@ void Menu::Init()
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 	this->m_Text.setString("BREACH");
 	this->m_Text.setPosition(10.f, 5.f);
-	this->m_Text.setCharacterSize(120.f);
+	this->m_Text.setCharacterSize(120);
 
 	this->m_Play = Button("Play", sf::Vector2f(25.f, 200.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
 	this->m_Quit = Button("Quit", sf::Vector2f(25.f, 300.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));

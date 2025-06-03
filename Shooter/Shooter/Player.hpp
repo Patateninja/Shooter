@@ -17,7 +17,7 @@ class Player
 		sf::Vector2f m_Velocity;
 		float m_Angle = 0.f;
 		float m_InputTimer = 0.f;
-		int m_Life = 3;
+		int m_Life = 30;
 		int m_Vest = 0;
 		int m_MaxAmmo = 5;
 		int m_BuckShot = 5;

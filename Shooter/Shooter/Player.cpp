@@ -86,13 +86,16 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 			}
 		}
 
-		this->m_Text.setString("- Birdshot : " + this->infinite + " \n- Buckshot : " + std::to_string(this->m_BuckShot) + "\n- DragonBreath : " + std::to_string(this->m_DragonBreath) + "\n- Slug : " + std::to_string(this->m_Slug));
+		this->m_Text.setString("- Birdshot : " + this->infinite + " \n- Buckshot : " + std::to_string(this->m_BuckShot) + "\n- DragonBreath : " + std::to_string(this->m_DragonBreath) + "\n- Slug : " + std::to_string(this->m_Slug) + "\nCoffee : " + (this->m_Caffeinated ? "true" : "false")
+			+ "\nBMG : " + (this->m_Got50BMG ? "true" : "false"));
 		this->m_Text.setPosition(_window.RelativePos(sf::Vector2f(10.f, 110.f)));
 	}
 	else if (this->m_CanMove)
 	{
 		this->m_Text.setPosition(_window.RelativePos(sf::Vector2f(10.f, 110.f)));
-		this->m_Text.setString("Remaining : " + std::to_string(_enemyList.Alive()));
+		this->m_Text.setString("Remaining : " + std::to_string(_enemyList.Alive())
+								+ "\nCoffee : " + (this->m_Caffeinated ? "true" : "false")
+								+ "\nBMG : " + (this->m_Got50BMG ? "true" : "false"));
 
 		this->m_Angle = Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition())));
 		this->m_Circle.setRotation(Tools::RadToDeg(this->m_Angle));
@@ -112,7 +115,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 				}
 				else
 				{
-					enemy->Die();
+					enemy->TakeDamage(10000);
 					--this->m_Vest;
 				}
 			}
@@ -122,6 +125,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 		{
 			this->Die();
 			_enemyList.Respawn();
+			_cam.NewTarget(_window, this->m_Position, _map.GetSize());
 			return;
 		}
 
@@ -203,9 +207,14 @@ bool Player::CheckDamage()
 {
 	for (const std::shared_ptr<Projectile>& proj : ProjList::GetList())
 	{
-		if (Tools::CircleCollision(this->m_Circle.getGlobalBounds(), proj->GetHitbox()) && proj->GetTeam() == ENEMY)
+		if (this->m_Vest <= 0 && Tools::CircleCollision(this->m_Circle.getGlobalBounds(), proj->GetHitbox()) && proj->GetTeam() == ENEMY)
 		{
 			return true;
+		}
+		else if(Tools::CircleCollision(this->m_Circle.getGlobalBounds(), proj->GetHitbox()) && proj->GetTeam() == ENEMY)
+		{
+			proj->SetToDestroy(true);
+			--this->m_Vest;
 		}
 	}
 
@@ -228,9 +237,6 @@ void Player::Respawn()
 	this->m_Angle = 0.f;
 	this->m_CanReload = true;
 	this->m_CanMove = false;
-
-	this->m_Caffeinated = false;
-	this->m_Got50BMG = false;
 
 	ProjList::Clear();
 

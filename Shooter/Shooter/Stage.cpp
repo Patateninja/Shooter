@@ -59,7 +59,7 @@ void Stage::Init()
 void Stage::Update(Player& _player, Camera& _cam, BonusPopUp*& _popUp, Window& _window)
 {
 	this->m_EnemyList.Update(_player.GetPos(), this->m_TileMap);
-	this->m_Crate->Update(_player, _popUp);
+	this->m_Crate->Update(_player, this->m_GiveCoffee, this->m_GiveBMG, this->m_GiveVest, _popUp);
 	if (this->m_EnemyList.AllDead())
 	{
 		this->m_ReadyToMoveOn = true;
@@ -75,14 +75,28 @@ void Stage::Update(Player& _player, Camera& _cam, BonusPopUp*& _popUp, Window& _
 			{
 				_player.Coffee(true);
 			}
+			else
+			{
+				_player.Coffee(false);
+			}
+
 			if (this->m_GiveBMG)
 			{
 				_player.BMG50(true);
 			}
+			else
+			{
+				_player.BMG50(false);
+			}
+
 			if (this->m_GiveVest)
 			{
 				_player.AddVest();
 			}
+
+			this->m_GiveCoffee = false;
+			this->m_GiveBMG = false;
+			this->m_GiveVest = false;
 
 			_cam.NewTarget(_window, _player.GetPos(), this->m_TileMap.GetSize());
 		}
