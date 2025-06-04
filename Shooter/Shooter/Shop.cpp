@@ -8,6 +8,7 @@ Shop::~Shop()
 		{
 			delete attachment.Get();
 		}
+		attachment.~AttachmentButton();
 	}
 	this->m_AttachementsList.clear();
 	
@@ -17,6 +18,8 @@ Shop::~Shop()
 		{
 			delete equipment.Get();
 		}
+
+		equipment.~EquipmentButton();
 	}
 	this->m_EquipmentList.clear();
 }
