@@ -147,7 +147,7 @@ void Game::Update()
 			this->m_InputTimer = 0.f;
 			this->ChangeState<Menu>();
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->m_InputTimer > 0.2f)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && this->m_InputTimer > 0.2f)
 		{
 			this->m_InputTimer = 0.f;
 			this->m_Paused = false;
@@ -174,8 +174,22 @@ void Game::Update()
 		this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
 
 		this->m_Player.Update(this->m_Stage.GetEnemies(), this->m_Stage.GetMap(), this->m_Cam, this->Window());
-		this->m_Stage.Update(this->m_Player, this->m_Cam, this->m_BonusPopUp ,this->Window());
-		ProjList::Update(this->m_Stage.GetMap());
+		
+		if (this->m_Player.GetMoving())
+		{
+			ProjList::Update(this->m_Stage.GetMap());
+			this->m_Stage.Update(this->m_Player, this->m_Cam, this->m_BonusPopUp, this->Window());
+			this->m_Cam.NewTarget(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
+		}
+		else
+		{
+			this->m_ReloadMenu.Update(this->m_Player,this->Window());
+
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+			{
+				this->m_Cam.NewTarget(this->Window(), this->Window().RelativePos(sf::Mouse::getPosition()), this->m_Stage.GetMap().GetSize());
+			}
+		}
 
 		this->m_Cam.Update(this->Window());
 
@@ -238,7 +252,6 @@ void Game::Display()
 		{
 			this->m_StagePopUp->Display(this->Window());
 		}
-
 		if (this->m_BonusPopUp)
 		{
 			this->m_BonusPopUp->Display(this->Window());
@@ -255,11 +268,15 @@ void Game::Display()
 		{
 			this->m_StagePopUp->Display(this->Window());
 		}
-
 		if (this->m_BonusPopUp)
 		{
 			this->m_BonusPopUp->Display(this->Window());
 		}
+	}
+
+	if (!this->m_Player.GetMoving())
+	{
+		this->m_ReloadMenu.Display(this->Window());
 	}
 
 	this->DisplayWindow();
@@ -301,7 +318,7 @@ void Upgrade::Init()
 {
 	std::cout << "Upgrade Init" << std::endl;
 	this->Window().ResetView();
-	this->m_Shop = Shop(Level::GetLvl(), State::m_Muzzle, State::m_Grip, State::m_Stock, State::m_Magazine,	State::m_Armor, State::m_AmmoStash);
+	this->m_Shop.Init(Level::GetLvl(), State::m_Muzzle, State::m_Grip, State::m_Stock, State::m_Magazine,	State::m_Armor, State::m_AmmoStash);
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 
 	this->m_Play = Button("Start", sf::Vector2f(1695.f, 980.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
@@ -310,7 +327,7 @@ void Upgrade::Init()
 void Upgrade::Update()
 {
 	this->m_InputTimer += Time::GetDeltaTime();
-	this->m_Text.setString("Upgrade Menu\nPress Enter to launch a new game\nPress Escape to go back to Menu");
+	this->m_Text.setString("Armory");
 
 	this->m_Shop.Update(this->Window());
 
@@ -320,17 +337,6 @@ void Upgrade::Update()
 	State::m_Magazine = this->m_Shop.GetMagazine();
 	State::m_Armor = this->m_Shop.GetArmor();
 	State::m_AmmoStash = this->m_Shop.GetAmmoStash();
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && this->m_InputTimer > 0.2f)
-	{
-		this->m_InputTimer = 0.f;
-		this->ChangeState<Game>();
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && this->m_InputTimer > 0.2f)
-	{
-		this->m_InputTimer = 0.f;
-		this->ChangeState<Menu>();
-	}
 
 	if (this->m_Play.Update(this->Window(), 0))
 	{
@@ -343,6 +349,7 @@ void Upgrade::Update()
 		this->ChangeState<Menu>();
 	}
 
+	/// Temp ///
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add) && this->m_InputTimer > 0.2f)
 	{
 		this->m_InputTimer = 0.f;
@@ -353,6 +360,7 @@ void Upgrade::Update()
 			this->m_Shop.SetLevel(this->m_PlayerLevel);
 		}
 	}
+	////////////
 }
 void Upgrade::Display()
 {

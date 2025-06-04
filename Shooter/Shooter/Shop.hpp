@@ -18,14 +18,16 @@ class Shop
 		std::list<AttachmentButton> m_AttachementsList;
 		std::list<EquipmentButton> m_EquipmentList;
 		std::string m_PopUpString;
-		int m_PlayerLevel;
+		int m_PlayerLevel = 0;
 		bool m_PopUp = false;
+
 	public :
-		Shop();
-		Shop(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammostash);
-		~Shop() = default;
+		Shop() = default;
+		~Shop();
 
 		void LockItem();
+
+		void Init(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammostash);
 
 		template<typename T>
 		void AddAttachment(std::string _buttonName, sf::Vector2f _buttonPos, sf::Vector2f _buttonSize, std::string _textureName, T* _attachment);

@@ -8,7 +8,7 @@ class Stage
 {
 	private :
 		sf::RenderTexture m_MapTexture;
-		TileMap m_TileMap;
+		TileMap m_TileMap = TileMap(sf::Vector2i(40, 40));
 		sf::Sprite m_MapSprite;
 		EnemyList m_EnemyList;
 		Crate* m_Crate = nullptr;
@@ -21,7 +21,7 @@ class Stage
 	public :
 		Stage() = default;
 		Stage(int _num);
-		~Stage() = default;
+		~Stage();
 
 		inline EnemyList& GetEnemies() { return this->m_EnemyList; }
 		inline TileMap& GetMap() { return this->m_TileMap; }

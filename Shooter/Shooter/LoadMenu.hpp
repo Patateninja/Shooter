@@ -1,9 +1,8 @@
 #pragma once
-#include "Window.hpp"
-#include "Shotgun.hpp"
 #include "Button.hpp"
+#include "Player.hpp"
 
-class LoadMenu
+class ReloadMenu
 {
 	private :
 		Button m_BirdShot = Button("", sf::Vector2f(), sf::Vector2f(110.f, 50.f), &RscMana::Get<sf::Texture>("Placeholder"));
@@ -11,12 +10,12 @@ class LoadMenu
 		Button m_DragonBreath = Button("", sf::Vector2f(), sf::Vector2f(110.f, 50.f), &RscMana::Get<sf::Texture>("Placeholder"));
 		Button m_Slug = Button("", sf::Vector2f(), sf::Vector2f(110.f, 50.f),  &RscMana::Get<sf::Texture>("Placeholder"));
 		sf::RectangleShape m_Rect = sf::RectangleShape(sf::Vector2f(130.f, 250.f));
-		float m_InputTimer = 0.f;
+		float m_InputTimer = 1.f;
 
 	public :
-		LoadMenu() = default;
-		~LoadMenu() = default;
+		ReloadMenu() = default;
+		~ReloadMenu() = default;
 
-		void Update(int& _buckshot, int& _dragonbreath, int& _slug, bool _bmg, Window& _window, Shotgun& _shogtun);
+		void Update(Player& _player, Window& _window);
 		void Display(Window& _window);
 };

@@ -153,6 +153,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Equipement.cpp" />
     <ClCompile Include="LoadMenu.cpp" />
+    <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PopUp.cpp" />
     <ClCompile Include="Resource.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Enemy.hpp" />
     <ClInclude Include="Equipement.hpp" />
     <ClInclude Include="LoadMenu.hpp" />
+    <ClInclude Include="PauseMenu.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="PopUp.hpp" />
     <ClInclude Include="Resource.hpp" />

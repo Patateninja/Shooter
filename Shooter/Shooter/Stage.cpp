@@ -6,11 +6,17 @@ Stage::Stage(int _num)
 	this->GenerateMap();
 	this->SpawnEnemies();
 }
+Stage::~Stage()
+{
+	if (this->m_Crate)
+	{
+		delete this->m_Crate;
+	}
+}
 
 void Stage::GenerateMap()
 {
 	this->m_MapTexture.create(Tile::GetSize() * 40, Tile::GetSize() * 40);
-	this->m_TileMap = TileMap(sf::Vector2i(40, 40));
 	this->m_TileMap.Generate(this->m_MapTexture);
 	this->m_MapSprite.setTexture(this->m_MapTexture.getTexture());
 	this->m_MapSprite.setPosition(-Tile::GetSize() / 2.f, -Tile::GetSize() / 2.f);
@@ -101,18 +107,6 @@ void Stage::Update(Player& _player, Camera& _cam, BonusPopUp*& _popUp, Window& _
 			this->m_GiveVest = false;
 
 			_cam.NewTarget(_window, _player.GetPos(), this->m_TileMap.GetSize());
-		}
-	}
-
-	if (_player.GetMoving())
-	{
-		_cam.NewTarget(_window, _player.GetPos(), this->m_TileMap.GetSize());
-	}
-	else
-	{
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
-		{
-			_cam.NewTarget(_window, _window.RelativePos(sf::Mouse::getPosition()), this->m_TileMap.GetSize());
 		}
 	}
 }

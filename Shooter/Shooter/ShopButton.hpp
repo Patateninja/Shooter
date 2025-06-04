@@ -15,7 +15,7 @@ class ShopButton : public Button
 		~ShopButton() = default;
 
 		sf::Vector2f Pos() { return this->m_Rect.getPosition(); }
-		bool Hover() { return this->m_Rect.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition())); }
+		bool Hover(Window& _window) { return this->m_Rect.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(_window.Unwrap()))); }
 
 		void SetActive(bool _active) { this->m_Active = _active; }
 
