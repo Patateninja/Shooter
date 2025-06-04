@@ -370,7 +370,7 @@ EnemyList::EnemyList()
 }
 EnemyList::~EnemyList()
 {
-	this->m_List.clear();
+ 	this->m_List.clear();
 }
 
 void EnemyList::Clear()

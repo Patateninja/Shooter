@@ -1,6 +1,53 @@
 #include "Shop.hpp"
 
-Shop::Shop(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammostash)
+Shop::~Shop()
+{
+	for (AttachmentButton attachment : this->m_AttachementsList)
+	{
+		if (attachment.Get())
+		{
+			delete attachment.Get();
+		}
+	}
+	this->m_AttachementsList.clear();
+	
+	for (EquipmentButton equipment : this->m_EquipmentList)
+	{
+		if (equipment.Get())
+		{
+			delete equipment.Get();
+		}
+	}
+	this->m_EquipmentList.clear();
+}
+
+void Shop::LockItem()
+{
+	for (AttachmentButton& button : this->m_AttachementsList)
+	{
+		if (button.Get()->GetUnlockLevel() > this->m_PlayerLevel)
+		{
+			button.Lock();
+		}
+		else
+		{
+			button.Unlock();
+		}
+	}
+	for (EquipmentButton& button : this->m_EquipmentList)
+	{
+		if (button.Get()->GetUnlockLevel() > this->m_PlayerLevel)
+		{
+			button.Lock();
+		}
+		else
+		{
+			button.Unlock();
+		}
+	}
+}
+
+void Shop::Init(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammostash)
 {
 	this->m_PlayerLevel = _lvl;
 	this->m_Text.setFont(RscMana::Get<sf::Font>("Mono"));
@@ -66,32 +113,6 @@ Shop::Shop(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _mag
 	this->m_PopUpText.setCharacterSize(20);
 }
 
-void Shop::LockItem()
-{
-	for (AttachmentButton& button : this->m_AttachementsList)
-	{
-		if (button.Get()->GetUnlockLevel() > this->m_PlayerLevel)
-		{
-			button.Lock();
-		}
-		else
-		{
-			button.Unlock();
-		}
-	}
-	for (EquipmentButton& button : this->m_EquipmentList)
-	{
-		if (button.Get()->GetUnlockLevel() > this->m_PlayerLevel)
-		{
-			button.Lock();
-		}
-		else
-		{
-			button.Unlock();
-		}
-	}
-}
-
 template <typename T>
 void Shop::AddAttachment(std::string _buttonName, sf::Vector2f _buttonPos, sf::Vector2f _buttonSize, std::string _textureName, T* _attachment)
 {
@@ -107,7 +128,7 @@ void Shop::AddEquipment(std::string _buttonName, sf::Vector2f _buttonPos, sf::Ve
 
 void Shop::Update(Window& _window)
 {
-	this->LockItem(); //Move to constructor after debug
+	this->LockItem(); //Move to Init after debug
 
 	this->m_PopUp = false;
 

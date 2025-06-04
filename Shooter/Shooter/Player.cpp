@@ -12,7 +12,6 @@ void Player::Init(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _sto
 {
 	this->m_Circle.setOrigin(20.f, 20.f);
 	this->m_Circle.setFillColor(sf::Color::Blue);
-	this->m_Text.setFont(RscMana::Get<sf::Font>("Mono"));
 
 	this->ModifyShotgun(_muzzle, _grip, _magazine, _stock);
 	this->Equip(_armor, _ammoStash);
@@ -33,19 +32,9 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 				_enemyList.Activate();
 			}
 		}
-
-		this->m_LoadMenu.Update(this->m_BuckShot, this->m_DragonBreath, this->m_Slug, this->m_Got50BMG, _window, this->m_Shotgun);
-
-		this->m_Text.setString(std::to_string(' ') + "Coffee : " + (this->m_Caffeinated ? "true" : "false") + "\nBMG : " + (this->m_Got50BMG ? "true" : "false"));
-		this->m_Text.setPosition(_window.RelativePos(sf::Vector2f(10.f, 110.f)));
 	}
 	else if (this->m_CanMove)
 	{
-		this->m_Text.setPosition(_window.RelativePos(sf::Vector2f(10.f, 110.f)));
-		this->m_Text.setString("Remaining : " + std::to_string(_enemyList.Alive())
-								+ "\nCoffee : " + (this->m_Caffeinated ? "true" : "false")
-								+ "\nBMG : " + (this->m_Got50BMG ? "true" : "false"));
-
 		this->m_Angle = Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition(_window.Unwrap()))));
 		this->m_Circle.setRotation(Tools::RadToDeg(this->m_Angle));
 
@@ -124,19 +113,12 @@ void Player::Display(Window& _window)
 {
 	_window.Draw(this->m_Circle);
 
-	_window.Draw(this->m_Text);
-
 	sf::VertexArray lines(sf::Lines, 2);
 	lines[0].position = this->m_Position;
 	lines[0].color = sf::Color::Red;
 	lines[1].position = Tools::AngleToVector(200.f, this->m_Angle) + this->m_Position;
 	lines[1].color = sf::Color::Red;
 	_window.Draw(lines);
-
-	if (this->m_CanReload)
-	{
-		this->m_LoadMenu.Display(_window);
-	}
 
 	this->m_Shotgun.DisplayMagazine(_window);
 }
@@ -152,6 +134,7 @@ void Player::Equip(Armor& _armor, AmmoStash& _ammoStash)
 
 	this->m_Life += this->m_Armor.GetLife();
 	this->m_MaxAmmo += this->m_AmmoStash.GetCapacity();
+	
 	this->m_BuckShot = this->m_MaxAmmo;
 	this->m_DragonBreath = this->m_MaxAmmo;
 	this->m_Slug = this->m_MaxAmmo;

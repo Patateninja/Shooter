@@ -109,18 +109,6 @@ void Stage::Update(Player& _player, Camera& _cam, BonusPopUp*& _popUp, Window& _
 			_cam.NewTarget(_window, _player.GetPos(), this->m_TileMap.GetSize());
 		}
 	}
-
-	if (_player.GetMoving())
-	{
-		_cam.NewTarget(_window, _player.GetPos(), this->m_TileMap.GetSize());
-	}
-	else
-	{
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
-		{
-			_cam.NewTarget(_window, _window.RelativePos(sf::Mouse::getPosition()), this->m_TileMap.GetSize());
-		}
-	}
 }
 void Stage::Display(Window& _window)
 {

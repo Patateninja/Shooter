@@ -5,6 +5,7 @@
 #include "Camera.hpp" 
 #include "Shop.hpp"
 #include "BonusPopUp.hpp"
+#include "LoadMenu.hpp"
 
 class StateManager;
 
@@ -66,6 +67,7 @@ class Menu : public State
 class Game : public State
 {
 	private :
+		ReloadMenu m_ReloadMenu;
 		Player m_Player;
 		Stage m_Stage;
 		Camera m_Cam;

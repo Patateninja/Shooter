@@ -3,7 +3,6 @@
 #include "Enemy.hpp"
 #include "Equipement.hpp"
 #include "Camera.hpp"
-#include "LoadMenu.hpp"
 
 typedef enum Direction
 {
@@ -16,9 +15,7 @@ typedef enum Direction
 class Player
 {
 	private :
-		LoadMenu m_LoadMenu;
 		Shotgun m_Shotgun;
-		sf::Text m_Text;
 		sf::CircleShape m_Circle;
 		Armor m_Armor;
 		AmmoStash m_AmmoStash;
@@ -43,11 +40,17 @@ class Player
 
 		void Init(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _stock, Armor& _armor, AmmoStash& _ammoStash);
 
-		inline const sf::Vector2f& GetPos() const { return this->m_Position; }
-		inline const sf::Vector2f& GetVel() const { return this->m_Velocity; }
-		inline const int GetHP() const { return this->m_Life; }
-		inline const int GetVest() const { return this->m_Vest; }
-		inline const bool GetMoving() const { return this->m_CanMove; }
+		inline const sf::Vector2f& GetPos()    const { return this->m_Position; }
+		inline const sf::Vector2f& GetVel()    const { return this->m_Velocity; }
+		inline const int           GetHP()     const { return this->m_Life; }
+		inline const int           GetVest()   const { return this->m_Vest; }
+		inline const bool          GetMoving() const { return this->m_CanMove; }
+
+		inline int&     GetBuckshot()     { return this->m_BuckShot; }
+		inline int&     GetDragonBreath() { return this->m_DragonBreath; };
+		inline int&     GetSlug()         { return this->m_Slug; }
+		inline Shotgun& GetShotgun()      { return this->m_Shotgun; }
+		inline bool     GetBmgEnabled()   { return this->m_Got50BMG; }
 
 		inline void SetTimer(float _timer) { this->m_InputTimer = _timer; }
 

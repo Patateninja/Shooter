@@ -174,8 +174,22 @@ void Game::Update()
 		this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
 
 		this->m_Player.Update(this->m_Stage.GetEnemies(), this->m_Stage.GetMap(), this->m_Cam, this->Window());
-		this->m_Stage.Update(this->m_Player, this->m_Cam, this->m_BonusPopUp ,this->Window());
-		ProjList::Update(this->m_Stage.GetMap());
+		
+		if (this->m_Player.GetMoving())
+		{
+			ProjList::Update(this->m_Stage.GetMap());
+			this->m_Stage.Update(this->m_Player, this->m_Cam, this->m_BonusPopUp, this->Window());
+			this->m_Cam.NewTarget(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
+		}
+		else
+		{
+			this->m_ReloadMenu.Update(this->m_Player,this->Window());
+
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+			{
+				this->m_Cam.NewTarget(this->Window(), this->Window().RelativePos(sf::Mouse::getPosition()), this->m_Stage.GetMap().GetSize());
+			}
+		}
 
 		this->m_Cam.Update(this->Window());
 
@@ -238,7 +252,6 @@ void Game::Display()
 		{
 			this->m_StagePopUp->Display(this->Window());
 		}
-
 		if (this->m_BonusPopUp)
 		{
 			this->m_BonusPopUp->Display(this->Window());
@@ -255,11 +268,15 @@ void Game::Display()
 		{
 			this->m_StagePopUp->Display(this->Window());
 		}
-
 		if (this->m_BonusPopUp)
 		{
 			this->m_BonusPopUp->Display(this->Window());
 		}
+	}
+
+	if (!this->m_Player.GetMoving())
+	{
+		this->m_ReloadMenu.Display(this->Window());
 	}
 
 	this->DisplayWindow();
@@ -301,7 +318,7 @@ void Upgrade::Init()
 {
 	std::cout << "Upgrade Init" << std::endl;
 	this->Window().ResetView();
-	this->m_Shop = Shop(Level::GetLvl(), State::m_Muzzle, State::m_Grip, State::m_Stock, State::m_Magazine,	State::m_Armor, State::m_AmmoStash);
+	this->m_Shop.Init(Level::GetLvl(), State::m_Muzzle, State::m_Grip, State::m_Stock, State::m_Magazine,	State::m_Armor, State::m_AmmoStash);
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 
 	this->m_Play = Button("Start", sf::Vector2f(1695.f, 980.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
