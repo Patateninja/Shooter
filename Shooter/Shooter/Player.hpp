@@ -3,16 +3,25 @@
 #include "Enemy.hpp"
 #include "Equipement.hpp"
 #include "Camera.hpp"
+#include "LoadMenu.hpp"
+
+typedef enum Direction
+{
+	UP,
+	RIGHT,
+	DOWN,
+	LEFT,
+} Direction;
 
 class Player
 {
 	private :
+		LoadMenu m_LoadMenu;
 		Shotgun m_Shotgun;
 		sf::Text m_Text;
 		sf::CircleShape m_Circle;
 		Armor m_Armor;
 		AmmoStash m_AmmoStash;
-		sf::String infinite = L"\u221E"; //Either put on the texture or move to an other file
 		sf::Vector2f m_Position;
 		sf::Vector2f m_Velocity;
 		float m_Angle = 0.f;
@@ -47,6 +56,8 @@ class Player
 
 		void ModifyShotgun(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _stock);
 		void Equip(Armor& _armor, AmmoStash& _ammoStash);
+
+		bool CheckWallCollision(TileMap& _map, Direction _direction);
 
 		bool CheckDamage();
 

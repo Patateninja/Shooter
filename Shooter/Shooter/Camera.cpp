@@ -9,7 +9,12 @@ void Camera::Update(Window& _window)
 {
 	if (_window.GetViewCenter() != this->m_Target)
 	{
-		sf::Vector2f newCenter = _window.GetViewCenter() + Tools::Normalize(this->m_Target - _window.GetViewCenter()) * Time::GetDeltaTime() * 450.f;
+		sf::Vector2f mvt = Tools::Normalize(this->m_Target - _window.GetViewCenter()) * Time::GetDeltaTime() * 450.f;
+		if (Tools::Distance(_window.GetViewCenter(), this->m_Target) < Tools::Magnitude(mvt))
+		{
+			mvt = Tools::Normalize(mvt) * Tools::Distance(_window.GetViewCenter(), this->m_Target);
+		}
+		sf::Vector2f newCenter = _window.GetViewCenter() + mvt;
 		_window.SetViewCenter(newCenter);
 	}
 }

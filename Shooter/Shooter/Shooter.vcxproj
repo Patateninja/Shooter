@@ -152,6 +152,7 @@
     <ClCompile Include="Crate.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Equipement.cpp" />
+    <ClCompile Include="LoadMenu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PopUp.cpp" />
     <ClCompile Include="Resource.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="Crate.hpp" />
     <ClInclude Include="Enemy.hpp" />
     <ClInclude Include="Equipement.hpp" />
+    <ClInclude Include="LoadMenu.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="PopUp.hpp" />
     <ClInclude Include="Resource.hpp" />

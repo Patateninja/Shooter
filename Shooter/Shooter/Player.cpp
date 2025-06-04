@@ -34,60 +34,9 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 			}
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && !this->m_Shotgun.Full() && this->m_InputTimer > 0.3f)
-		{
-			this->m_InputTimer = 0.f;
-			if (!this->m_Got50BMG)
-			{
-				this->m_Shotgun.Load(1);
-			}
-			else
-			{
-				this->m_Shotgun.Load(5);
-			}
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && !this->m_Shotgun.Full() && this->m_BuckShot != 0 && this->m_InputTimer > 0.3f)
-		{
-			this->m_InputTimer = 0.f;
-			if (!this->m_Got50BMG)
-			{
-				--this->m_BuckShot;
-				this->m_Shotgun.Load(2);
-			}
-			else
-			{
-				this->m_Shotgun.Load(5);
-			}
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && !this->m_Shotgun.Full() && this->m_DragonBreath != 0 && this->m_InputTimer > 0.3f)
-		{
-			this->m_InputTimer = 0.f;
-			if (!this->m_Got50BMG)
-			{
-				--this->m_DragonBreath;
-				this->m_Shotgun.Load(3);
-			}
-			else
-			{
-				this->m_Shotgun.Load(5);
-			}
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && !this->m_Shotgun.Full() && this->m_Slug != 0 && this->m_InputTimer > 0.3f)
-		{
-			this->m_InputTimer = 0.f;
-			if (!this->m_Got50BMG) 
-			{
-				--this->m_Slug;
-				this->m_Shotgun.Load(4);
-			}
-			else
-			{
-				this->m_Shotgun.Load(5);
-			}
-		}
+		this->m_LoadMenu.Update(this->m_BuckShot, this->m_DragonBreath, this->m_Slug, this->m_Got50BMG, _window, this->m_Shotgun);
 
-		this->m_Text.setString("- Birdshot : " + this->infinite + " \n- Buckshot : " + std::to_string(this->m_BuckShot) + "\n- DragonBreath : " + std::to_string(this->m_DragonBreath) + "\n- Slug : " + std::to_string(this->m_Slug) + "\nCoffee : " + (this->m_Caffeinated ? "true" : "false")
-			+ "\nBMG : " + (this->m_Got50BMG ? "true" : "false"));
+		this->m_Text.setString(std::to_string(' ') + "Coffee : " + (this->m_Caffeinated ? "true" : "false") + "\nBMG : " + (this->m_Got50BMG ? "true" : "false"));
 		this->m_Text.setPosition(_window.RelativePos(sf::Vector2f(10.f, 110.f)));
 	}
 	else if (this->m_CanMove)
@@ -133,28 +82,28 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 		this->m_Velocity.y = 0;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
 		{
-			if (_map.GetTile(sf::Vector2i((this->m_Position - sf::Vector2f(0, this->m_Circle.getRadius())) - (sf::Vector2f(0, 375) * Time::GetDeltaTime()))).GetWalkable())
+			if (this->CheckWallCollision(_map,UP))
 			{
 				this->m_Velocity.y = -1;
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
-			if (_map.GetTile(sf::Vector2i((this->m_Position + sf::Vector2f(0, this->m_Circle.getRadius())) + (sf::Vector2f(0, 375) * Time::GetDeltaTime()))).GetWalkable())
+			if (this->CheckWallCollision(_map, DOWN))
 			{
 				this->m_Velocity.y = 1;
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 		{
-			if (_map.GetTile(sf::Vector2i((this->m_Position - sf::Vector2f(this->m_Circle.getRadius(), 0)) - (sf::Vector2f(375, 0) * Time::GetDeltaTime()))).GetWalkable())
+			if (this->CheckWallCollision(_map, LEFT))
 			{
 				this->m_Velocity.x = -1;
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
-			if (_map.GetTile(sf::Vector2i((this->m_Position + sf::Vector2f(this->m_Circle.getRadius(), 0)) + (sf::Vector2f(375, 0) * Time::GetDeltaTime()))).GetWalkable())
+			if (this->CheckWallCollision(_map, RIGHT))
 			{
 				this->m_Velocity.x = 1;
 			}
@@ -184,6 +133,11 @@ void Player::Display(Window& _window)
 	lines[1].color = sf::Color::Red;
 	_window.Draw(lines);
 
+	if (this->m_CanReload)
+	{
+		this->m_LoadMenu.Display(_window);
+	}
+
 	this->m_Shotgun.DisplayMagazine(_window);
 }
 
@@ -201,6 +155,79 @@ void Player::Equip(Armor& _armor, AmmoStash& _ammoStash)
 	this->m_BuckShot = this->m_MaxAmmo;
 	this->m_DragonBreath = this->m_MaxAmmo;
 	this->m_Slug = this->m_MaxAmmo;
+}
+
+bool Player::CheckWallCollision(TileMap& _map, Direction _direction)
+{
+	sf::Vector2f PlayerTopRight  = this->m_Position + sf::Vector2f(-this->m_Circle.getRadius(), this->m_Circle.getRadius());
+	sf::Vector2f PlayerDownRight = this->m_Position + sf::Vector2f(this->m_Circle.getRadius(), this->m_Circle.getRadius());
+	sf::Vector2f PlayerTopLeft   = this->m_Position + sf::Vector2f(-this->m_Circle.getRadius(), -this->m_Circle.getRadius());
+	sf::Vector2f PlayerDownLeft  = this->m_Position + sf::Vector2f(this->m_Circle.getRadius(), -this->m_Circle.getRadius());
+
+	switch (_direction)
+	{
+		case UP :
+		{
+			sf::Vector2f mvt = (sf::Vector2f(0, -375) * Time::GetDeltaTime());
+			if (_map.GetTile(sf::Vector2i(PlayerTopRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerTopLeft + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownLeft + mvt)).GetWalkable())
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+			break;
+		}
+		case RIGHT :
+		{
+			sf::Vector2f mvt = (sf::Vector2f(375, 0) * Time::GetDeltaTime());
+			if (_map.GetTile(sf::Vector2i(PlayerTopRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerTopLeft + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownLeft + mvt)).GetWalkable())
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+			break;
+		}
+		case DOWN :
+		{
+			sf::Vector2f mvt = (sf::Vector2f(0, 375) * Time::GetDeltaTime());
+			if (_map.GetTile(sf::Vector2i(PlayerTopRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerTopLeft + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownLeft + mvt)).GetWalkable())
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+			break;
+		}
+		case LEFT :
+		{
+			sf::Vector2f mvt = (sf::Vector2f(-375,0) * Time::GetDeltaTime());
+			if (_map.GetTile(sf::Vector2i(PlayerTopRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerTopLeft + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownLeft + mvt)).GetWalkable())
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+			break;
+		}
+		default :
+		{
+			return false;
+			break;
+		}
+	}
 }
 
 bool Player::CheckDamage()
