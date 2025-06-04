@@ -150,6 +150,9 @@
     <ClCompile Include="BonusPopUp.cpp">
       <Filter>Source Files\Bonus &amp; Boost</Filter>
     </ClCompile>
+    <ClCompile Include="LoadMenu.cpp">
+      <Filter>Source Files\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tools.hpp">
@@ -229,6 +232,9 @@
     </ClInclude>
     <ClInclude Include="BonusPopUp.hpp">
       <Filter>Header Files\Bonus &amp; Boost</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadMenu.hpp">
+      <Filter>Header Files\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

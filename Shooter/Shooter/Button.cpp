@@ -14,8 +14,13 @@ Button::Button(std::string _str, sf::Vector2f _pos, sf::Vector2f _size, sf::Text
 
 void Button::SetPosition(sf::Vector2f _pos)
 {
-	this->m_Text.setPosition(_pos + sf::Vector2f(1.f, 1.f));
 	this->m_Rect.setPosition(_pos);
+	this->m_Text.setPosition(_pos + sf::Vector2f(1.f, 1.f));
+}
+
+void Button::UpdateText(std::string _str)
+{
+	this->m_Text.setString(_str);
 }
 
 bool Button::Clicked(Window& _window)

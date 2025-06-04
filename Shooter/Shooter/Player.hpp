@@ -11,7 +11,7 @@ typedef enum Direction
 	RIGHT,
 	DOWN,
 	LEFT,
-};
+} Direction;
 
 class Player
 {
