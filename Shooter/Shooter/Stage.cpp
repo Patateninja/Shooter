@@ -6,6 +6,13 @@ Stage::Stage(int _num)
 	this->GenerateMap();
 	this->SpawnEnemies();
 }
+Stage::~Stage()
+{
+	if (this->m_Crate)
+	{
+		delete this->m_Crate;
+	}
+}
 
 void Stage::GenerateMap()
 {

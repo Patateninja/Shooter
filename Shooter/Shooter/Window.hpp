@@ -36,15 +36,16 @@ class Window
 		
 		void Create(sf::VideoMode _videoMode,const sf::String& _title, sf::Uint32 _style);
 
-		inline View GetView() { return this->m_View; };
-		inline View GetDefaultView() { return View(this->m_Window.getDefaultView()); };
-		inline sf::Vector2u GetSize() { return this->m_Window.getSize(); };
-		inline sf::Vector2f GetViewSize() { return this->m_View.GetSize(); };
-		inline sf::Vector2f GetViewCenter() { return this->m_View.GetCenter(); };
-		inline float GetViewLeft() { return this->m_View.Left(); };
-		inline float GetViewRight() { return this->m_View.Right(); };
-		inline float GetViewTop() { return this->m_View.Top(); };
-		inline float GetViewDown() { return this->m_View.Down(); };
+		inline sf::RenderWindow& Unwrap() { return this->m_Window; }
+		inline View GetView() { return this->m_View; }
+		inline View GetDefaultView() { return View(this->m_Window.getDefaultView()); }
+		inline sf::Vector2u GetSize() { return this->m_Window.getSize(); }
+		inline sf::Vector2f GetViewSize() { return this->m_View.GetSize(); }
+		inline sf::Vector2f GetViewCenter() { return this->m_View.GetCenter(); }
+		inline float GetViewLeft() { return this->m_View.Left(); }
+		inline float GetViewRight() { return this->m_View.Right(); }
+		inline float GetViewTop() { return this->m_View.Top(); }
+		inline float GetViewDown() { return this->m_View.Down(); }
 
 		void ToggleFullscreen();
 		void SetView(View _view);

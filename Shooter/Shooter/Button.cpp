@@ -25,7 +25,7 @@ void Button::UpdateText(std::string _str)
 
 bool Button::Clicked(Window& _window)
 {
-	if (!this->m_Locked && sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->m_Rect.getGlobalBounds().contains(_window.RelativePos(sf::Mouse::getPosition())))
+	if (!this->m_Locked && sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->m_Rect.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(_window.Unwrap()))))
 	{
 		return true;
 	}
@@ -35,7 +35,7 @@ bool Button::Clicked(Window& _window)
 
 bool Button::Update(Window& _window, int _unused)
 {
-	if (this->m_Rect.getGlobalBounds().contains(_window.RelativePos(sf::Mouse::getPosition())))
+	if (this->m_Rect.getGlobalBounds().contains(_window.RelativePos(sf::Mouse::getPosition(_window.Unwrap()))))
 	{
 		this->m_Rect.setFillColor(Color::LightGrey);
 	}

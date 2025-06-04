@@ -25,13 +25,14 @@ bool ShopButton::Update(Window& _window, int _linkedAttachementLvl)
 	else
 	{
 		this->m_Text.setString(this->m_Memory);
+
+		if (this->Button::Update(_window, 0))
+		{
+			this->m_Active = true;
+			return true;
+		}
 	}
 
-	if (Button::Update(_window, 0))
-	{
-		this->m_Active = true;
-		return true;
-	}
 	return false;
 }
 
@@ -58,7 +59,7 @@ void ShopButton::Display(Window& _window)
 		this->m_Rect.setOutlineThickness(5.f);
 	}
 
-	Button::Display(_window);
+	this->Button::Display(_window);
 }
 
 //////////////////////////////////////////////////

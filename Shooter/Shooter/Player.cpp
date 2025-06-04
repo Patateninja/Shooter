@@ -46,7 +46,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 								+ "\nCoffee : " + (this->m_Caffeinated ? "true" : "false")
 								+ "\nBMG : " + (this->m_Got50BMG ? "true" : "false"));
 
-		this->m_Angle = Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition())));
+		this->m_Angle = Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition(_window.Unwrap()))));
 		this->m_Circle.setRotation(Tools::RadToDeg(this->m_Angle));
 
 		this->m_Shotgun.ReduceRecoil();

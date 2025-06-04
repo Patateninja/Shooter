@@ -1,9 +1,5 @@
 #include "Shop.hpp"
 
-Shop::Shop()
-{
-	this->m_PlayerLevel = 0;
-}
 Shop::Shop(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammostash)
 {
 	this->m_PlayerLevel = _lvl;
@@ -72,8 +68,6 @@ Shop::Shop(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _mag
 
 void Shop::LockItem()
 {
-	this->m_PopUp = false;
-
 	for (AttachmentButton& button : this->m_AttachementsList)
 	{
 		if (button.Get()->GetUnlockLevel() > this->m_PlayerLevel)
@@ -84,8 +78,91 @@ void Shop::LockItem()
 		{
 			button.Unlock();
 		}
+	}
+	for (EquipmentButton& button : this->m_EquipmentList)
+	{
+		if (button.Get()->GetUnlockLevel() > this->m_PlayerLevel)
+		{
+			button.Lock();
+		}
+		else
+		{
+			button.Unlock();
+		}
+	}
+}
 
-		if (button.Hover() && button.Get()->GetUnlockLevel() <= this->m_PlayerLevel)
+template <typename T>
+void Shop::AddAttachment(std::string _buttonName, sf::Vector2f _buttonPos, sf::Vector2f _buttonSize, std::string _textureName, T* _attachment)
+{
+	this->m_AttachementsList.push_back(AttachmentButton(_buttonName, _buttonPos, _buttonSize, &RscMana::Get<sf::Texture>(_textureName)));
+	this->m_AttachementsList.back().Bind(*_attachment);
+}
+template<typename T>
+void Shop::AddEquipment(std::string _buttonName, sf::Vector2f _buttonPos, sf::Vector2f _buttonSize, std::string _textureName, T* _equipment)
+{
+	this->m_EquipmentList.push_back(EquipmentButton(_buttonName, _buttonPos, _buttonSize, &RscMana::Get<sf::Texture>(_textureName)));
+	this->m_EquipmentList.back().Bind(*_equipment);
+}
+
+void Shop::Update(Window& _window)
+{
+	this->LockItem(); //Move to constructor after debug
+
+	this->m_PopUp = false;
+
+	for (AttachmentButton& button : this->m_AttachementsList)
+	{
+		std::string currentName = button.Get()->GetName();
+		if (currentName != this->m_EquipedGrip.GetName() && currentName != this->m_EquipedMag.GetName() && currentName != this->m_EquipedMuzzle.GetName() && currentName != this->m_EquipedStock.GetName())
+		{
+			button.SetActive(false);
+		}
+		else
+		{
+			button.SetActive(true);
+		}
+
+		/// Temp ///
+		if (this->m_EquipedMuzzle.GetUnlockLevel() > this->m_PlayerLevel)
+		{
+			this->m_EquipedMuzzle = Muzzle("Default Muzzle", 0, 1.f, 1.f, 1.f);
+		}
+		if (this->m_EquipedGrip.GetUnlockLevel() > this->m_PlayerLevel)
+		{
+			this->m_EquipedGrip = Grip("Default Grip", 0, 1.f, 1.f, 1.f);
+		}
+		if (this->m_EquipedStock.GetUnlockLevel() > this->m_PlayerLevel)
+		{
+			this->m_EquipedStock = Stock("Default Stock", 0, 1.f, 1.f, 1.f);
+		}
+		if (this->m_EquipedMag.GetUnlockLevel() > this->m_PlayerLevel)
+		{
+			this->m_EquipedMag = Magazine("Default Magazine", 0, 0);
+		}
+		////////////
+
+		if (button.Update(_window, button.Get()->GetUnlockLevel()))
+		{
+			if (dynamic_cast<Muzzle*>(button.Get()))
+			{
+				this->m_EquipedMuzzle = *dynamic_cast<Muzzle*>(button.Get());
+			}
+			else if (dynamic_cast<Grip*>(button.Get()))
+			{
+				this->m_EquipedGrip = *dynamic_cast<Grip*>(button.Get());
+			}
+			else if (dynamic_cast<Stock*>(button.Get()))
+			{
+				this->m_EquipedStock = *dynamic_cast<Stock*>(button.Get());
+			}
+			else if (dynamic_cast<Magazine*>(button.Get()))
+			{
+				this->m_EquipedMag = *dynamic_cast<Magazine*>(button.Get());
+			}
+		}
+
+		if (button.Hover(_window) && button.Get()->GetUnlockLevel() <= this->m_PlayerLevel)
 		{
 			this->m_PopUpRect.setPosition(button.Pos() + sf::Vector2f(260.f, 0));
 			this->m_PopUpText.setPosition(this->m_PopUpRect.getPosition() + sf::Vector2f(5.f, 5.f));
@@ -120,20 +197,44 @@ void Shop::LockItem()
 
 			this->m_PopUpText.setString(this->m_PopUpString);
 		}
+
 	}
-	
 	for (EquipmentButton& button : this->m_EquipmentList)
 	{
-		if (button.Get()->GetUnlockLevel() > this->m_PlayerLevel)
+		std::string currentName = button.Get()->GetName();
+		if (currentName != this->m_EquipedArmor.GetName() && currentName != this->m_EquipedAmmoStash.GetName())
 		{
-			button.Lock();
+			button.SetActive(false);
 		}
 		else
 		{
-			button.Unlock();
+			button.SetActive(true);
 		}
 
-		if (button.Hover() && button.Get()->GetUnlockLevel() <= this->m_PlayerLevel)
+		/// Temp ///
+		if (this->m_EquipedArmor.GetUnlockLevel() > this->m_PlayerLevel)
+		{
+			this->m_EquipedArmor = Armor("None", 0, 0, 1.f);
+		}
+		if (this->m_EquipedAmmoStash.GetUnlockLevel() > this->m_PlayerLevel)
+		{
+			this->m_EquipedAmmoStash = AmmoStash("Ammo Pouch", 0, 0);
+		}
+		////////////
+
+		if (button.Update(_window, button.Get()->GetUnlockLevel()))
+		{
+			if (dynamic_cast<Armor*>(button.Get()))
+			{
+				this->m_EquipedArmor = *dynamic_cast<Armor*>(button.Get());
+			}
+			else if (dynamic_cast<AmmoStash*>(button.Get()))
+			{
+				this->m_EquipedAmmoStash = *dynamic_cast<AmmoStash*>(button.Get());
+			}
+		}
+
+		if (button.Hover(_window) && button.Get()->GetUnlockLevel() <= this->m_PlayerLevel)
 		{
 			this->m_PopUpRect.setPosition(button.Pos() + sf::Vector2f(260.f, 0));
 			this->m_PopUpText.setPosition(this->m_PopUpRect.getPosition() + sf::Vector2f(5.f, 5.f));
@@ -156,112 +257,6 @@ void Shop::LockItem()
 	}
 }
 
-template <typename T>
-void Shop::AddAttachment(std::string _buttonName, sf::Vector2f _buttonPos, sf::Vector2f _buttonSize, std::string _textureName, T* _attachment)
-{
-	this->m_AttachementsList.push_back(AttachmentButton(_buttonName, _buttonPos, _buttonSize, &RscMana::Get<sf::Texture>(_textureName)));
-	this->m_AttachementsList.back().Bind(*_attachment);
-}
-template<typename T>
-void Shop::AddEquipment(std::string _buttonName, sf::Vector2f _buttonPos, sf::Vector2f _buttonSize, std::string _textureName, T* _equipment)
-{
-	this->m_EquipmentList.push_back(EquipmentButton(_buttonName, _buttonPos, _buttonSize, &RscMana::Get<sf::Texture>(_textureName)));
-	this->m_EquipmentList.back().Bind(*_equipment);
-}
-
-void Shop::Update(Window& _window)
-{
-	this->LockItem(); //Move to constructor after debug
-
-	for (AttachmentButton& button : this->m_AttachementsList)
-	{
-		std::string currentName = button.Get()->GetName();
-		if (currentName != this->m_EquipedGrip.GetName() && currentName != this->m_EquipedMag.GetName() && currentName != this->m_EquipedMuzzle.GetName() && currentName != this->m_EquipedStock.GetName())
-		{
-			button.SetActive(false);
-		}
-		else
-		{
-			button.SetActive(true);
-		}
-
-		/// Temp ///
-		if (this->m_EquipedMuzzle.GetUnlockLevel() > this->m_PlayerLevel)
-		{
-			this->m_EquipedMuzzle = Muzzle("Default Muzzle", 0, 1.f, 1.f, 1.f);
-		}
-		else if (this->m_EquipedGrip.GetUnlockLevel() > this->m_PlayerLevel)
-		{
-			this->m_EquipedGrip = Grip("Default Grip", 0, 1.f, 1.f, 1.f);
-		}
-		else if (this->m_EquipedStock.GetUnlockLevel() > this->m_PlayerLevel)
-		{
-			this->m_EquipedStock = Stock("Default Stock", 0, 1.f, 1.f, 1.f);
-		}
-		else if (this->m_EquipedMag.GetUnlockLevel() > this->m_PlayerLevel)
-		{
-			this->m_EquipedMag = Magazine("Default Magazine", 0, 0);
-		}
-		////////////
-
-		if (button.Update(_window, button.Get()->GetUnlockLevel()))
-		{
-			if (dynamic_cast<Muzzle*>(button.Get()))
-			{
-				this->m_EquipedMuzzle = *dynamic_cast<Muzzle*>(button.Get());
-			}
-			else if (dynamic_cast<Grip*>(button.Get()))
-			{
-				this->m_EquipedGrip = *dynamic_cast<Grip*>(button.Get());
-			}
-			else if (dynamic_cast<Stock*>(button.Get()))
-			{
-				this->m_EquipedStock = *dynamic_cast<Stock*>(button.Get());
-			}
-			else if (dynamic_cast<Magazine*>(button.Get()))
-			{
-				this->m_EquipedMag = *dynamic_cast<Magazine*>(button.Get());
-			}
-		}
-	}
-	for (EquipmentButton& button : this->m_EquipmentList)
-	{
-		std::string currentName = button.Get()->GetName();
-		if (currentName != this->m_EquipedArmor.GetName() && currentName != this->m_EquipedAmmoStash.GetName())
-		{
-			button.SetActive(false);
-		}
-		else
-		{
-			button.SetActive(true);
-		}
-
-		/// Temp ///
-		if (this->m_EquipedArmor.GetUnlockLevel() > this->m_PlayerLevel)
-		{
-			this->m_EquipedArmor = Armor("None", 0, 0, 1.f);
-		}
-		else if (this->m_EquipedAmmoStash.GetUnlockLevel() > this->m_PlayerLevel)
-		{
-			this->m_EquipedAmmoStash = AmmoStash("Ammo Pouch", 0, 0);
-		}
-		////////////
-
-		if (button.Update(_window, button.Get()->GetUnlockLevel()))
-		{
-			if (dynamic_cast<Armor*>(button.Get()))
-			{
-				this->m_EquipedArmor = *dynamic_cast<Armor*>(button.Get());
-			}
-			else if (dynamic_cast<AmmoStash*>(button.Get()))
-			{
-				this->m_EquipedAmmoStash = *dynamic_cast<AmmoStash*>(button.Get());
-			}
-		}
-	}
-	
-}
-
 void Shop::Display(Window& _window)
 {
 	this->m_Text.setString("Attachment");
@@ -272,7 +267,6 @@ void Shop::Display(Window& _window)
 		button.Display(_window);
 	}
 
-
 	this->m_Text.setString("Equipment");
 	this->m_Text.setPosition(sf::Vector2f(10.f,600.f));
 	_window.Draw(this->m_Text);
@@ -281,13 +275,7 @@ void Shop::Display(Window& _window)
 		button.Display(_window);
 	}
 
-	this->m_Text.setString("Player Level : " + std::to_string(this->m_PlayerLevel) + "[" + std::to_string(Level::GetXp()) + "]"
-							+ "\nMuzzle : " + this->m_EquipedMuzzle.GetName()
-							+ "\nGrip : " + this->m_EquipedGrip.GetName()
-							+ "\nStock : " + this->m_EquipedStock.GetName()
-							+ "\nMagazine : " + this->m_EquipedMag.GetName()
-							+ "\nArmor : " + this->m_EquipedArmor.GetName()
-							+ "\nAmmo Stash : " + this->m_EquipedAmmoStash.GetName());
+	this->m_Text.setString("Player Level : " + std::to_string(this->m_PlayerLevel) + "[" + std::to_string(Level::GetXp()) + "]");
 	this->m_Text.setPosition(sf::Vector2f(1200.f, 10.f));
 	_window.Draw(this->m_Text);
 

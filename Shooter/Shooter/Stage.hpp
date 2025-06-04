@@ -21,7 +21,7 @@ class Stage
 	public :
 		Stage() = default;
 		Stage(int _num);
-		~Stage() = default;
+		~Stage();
 
 		inline EnemyList& GetEnemies() { return this->m_EnemyList; }
 		inline TileMap& GetMap() { return this->m_TileMap; }

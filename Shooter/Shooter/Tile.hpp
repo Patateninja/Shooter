@@ -14,22 +14,22 @@ class Tile
 {
 	private :
 		sf::Vector2f m_Cood;
-		TileType m_Type;
-		static int m_Side;
-		bool m_Walkable;
-		bool m_BulletThrough;
+		TileType m_Type = WALL;
+		static int m_Size;
+		bool m_Walkable = false;
+		bool m_BulletThrough = false;
 
 	public :
-		Tile();
+		Tile() = default;
 		Tile(sf::Vector2f _pos, TileType);
 		Tile(const Tile& _tile);
-		~Tile();
+		~Tile() = default;
 
 		inline sf::Vector2f GetCood() const { return this->m_Cood; };
 		inline bool GetWalkable() const { return this->m_Walkable; };
 		inline bool GetBulletThrough() const { return this->m_BulletThrough; };
 		inline TileType GetType() const { return this->m_Type; };
-		inline static int GetSize() { return Tile::m_Side; };
+		inline static int GetSize() { return Tile::m_Size; };
 
 		bool operator==(const Tile& _tile2) const { return this->m_Cood == _tile2.m_Cood; };
 		bool operator!=(const Tile& _tile2) const { return this->m_Cood != _tile2.m_Cood; };
@@ -38,11 +38,10 @@ class Tile
 class TileMap
 {
 	private :
-		sf::RectangleShape m_RectRenderer;
 		sf::Vector2i m_Size;
 		std::list<Tile> m_Map;
 	public :
-		TileMap();
+		TileMap() = default;
 		TileMap(sf::Vector2i _size);
 		~TileMap();
 

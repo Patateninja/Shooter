@@ -147,7 +147,7 @@ void Game::Update()
 			this->m_InputTimer = 0.f;
 			this->ChangeState<Menu>();
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->m_InputTimer > 0.2f)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && this->m_InputTimer > 0.2f)
 		{
 			this->m_InputTimer = 0.f;
 			this->m_Paused = false;
@@ -310,7 +310,7 @@ void Upgrade::Init()
 void Upgrade::Update()
 {
 	this->m_InputTimer += Time::GetDeltaTime();
-	this->m_Text.setString("Upgrade Menu\nPress Enter to launch a new game\nPress Escape to go back to Menu");
+	this->m_Text.setString("Armory");
 
 	this->m_Shop.Update(this->Window());
 
@@ -320,17 +320,6 @@ void Upgrade::Update()
 	State::m_Magazine = this->m_Shop.GetMagazine();
 	State::m_Armor = this->m_Shop.GetArmor();
 	State::m_AmmoStash = this->m_Shop.GetAmmoStash();
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && this->m_InputTimer > 0.2f)
-	{
-		this->m_InputTimer = 0.f;
-		this->ChangeState<Game>();
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && this->m_InputTimer > 0.2f)
-	{
-		this->m_InputTimer = 0.f;
-		this->ChangeState<Menu>();
-	}
 
 	if (this->m_Play.Update(this->Window(), 0))
 	{
@@ -343,6 +332,7 @@ void Upgrade::Update()
 		this->ChangeState<Menu>();
 	}
 
+	/// Temp ///
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add) && this->m_InputTimer > 0.2f)
 	{
 		this->m_InputTimer = 0.f;
@@ -353,6 +343,7 @@ void Upgrade::Update()
 			this->m_Shop.SetLevel(this->m_PlayerLevel);
 		}
 	}
+	////////////
 }
 void Upgrade::Display()
 {
