@@ -251,8 +251,5 @@
     <ClInclude Include="PauseMenu.hpp">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Save.hpp">
-      <Filter>Header Files\Save &amp; Load</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
