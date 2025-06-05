@@ -1,4 +1,4 @@
-#include "Equipement.hpp"
+#include "Equipment.hpp"
 
 //////////////////////////////////////////////////
 

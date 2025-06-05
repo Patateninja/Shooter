@@ -2,7 +2,7 @@
 #include <string>
 #include "Button.hpp"
 #include "Attachment.hpp"
-#include "Equipement.hpp"
+#include "Equipment.hpp"
 
 class ShopButton : public Button
 {

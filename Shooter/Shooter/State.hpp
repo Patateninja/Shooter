@@ -40,6 +40,13 @@ class State
 		template<typename T>
 		T& GetRsc(const std::string& _name);
 
+		static Muzzle& GetMuzzle() { return State::m_Muzzle; }
+		static Grip& GetGrip() { return State::m_Grip; }
+		static Stock& GetStock() { return State::m_Stock; }
+		static Magazine& GetMagazine() { return State::m_Magazine; }
+		static Armor& GetArmor() { return State::m_Armor; }
+		static AmmoStash& GetAmmoStash() { return State::m_AmmoStash; }
+
 		virtual void Init() = 0;
 		virtual void Update() = 0;
 		virtual void Display() = 0;

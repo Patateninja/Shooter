@@ -1,7 +1,7 @@
 #pragma once
 #include "Shotgun.hpp"
 #include "Enemy.hpp"
-#include "Equipement.hpp"
+#include "Equipment.hpp"
 #include "Camera.hpp"
 
 typedef enum Direction
