@@ -1,26 +1,28 @@
 #include "PauseMenu.hpp"
 
+#include "StateManager.hpp"
+
 void PauseMenu::Update(Window& _window, bool& _pause, StateManager& _stateManager)
 {
-	this->m_Resume.SetPosition(_window.RelativePos(sf::Vector2f(_window.GetViewCenter().x - 125.f, 150.f)));
+	this->m_Resume.SetPosition(_window.RelativePos(sf::Vector2f(_window.GetViewCenter().x - 175.f, 150.f)));
 	if (this->m_Resume.Update(_window, 0))
 	{
 		_pause = false;
 	}
 
-	this->m_ToShop.SetPosition(_window.RelativePos(sf::Vector2f(_window.GetViewCenter().x - 125.f, 150.f)));
+	this->m_ToShop.SetPosition(_window.RelativePos(sf::Vector2f(_window.GetViewCenter().x - 175.f, 250.f)));
 	if (this->m_ToShop.Update(_window, 0))
 	{
 		_stateManager.ChangeState<Upgrade>();
 	}
 
-	this->m_ToMenu.SetPosition(_window.RelativePos(sf::Vector2f(_window.GetViewCenter().x - 125.f, 150.f)));
+	this->m_ToMenu.SetPosition(_window.RelativePos(sf::Vector2f(_window.GetViewCenter().x - 175.f, 350.f)));
 	if (this->m_ToMenu.Update(_window, 0))
 	{
 		_stateManager.ChangeState<Menu>();
 	}
 
-	this->m_ToDesktop.SetPosition(_window.RelativePos(sf::Vector2f(_window.GetViewCenter().x - 125.f, 150.f)));
+	this->m_ToDesktop.SetPosition(_window.RelativePos(sf::Vector2f(_window.GetViewCenter().x - 175.f, 450.f)));
 	if (this->m_ToDesktop.Update(_window, 0))
 	{
 		_stateManager.ChangeState<Quit>();

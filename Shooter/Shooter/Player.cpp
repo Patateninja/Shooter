@@ -4,13 +4,13 @@
 
 Player::Player()
 {
-	this->m_Circle = sf::CircleShape(20.f);
+	this->m_Circle = sf::CircleShape(28.f);
 	this->m_Position = sf::Vector2f(576.f, 64.f);
 }
 
 void Player::Init(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _stock, Armor& _armor, AmmoStash& _ammoStash)
 {
-	this->m_Circle.setOrigin(20.f, 20.f);
+	this->m_Circle.setOrigin(this->m_Circle.getRadius(), this->m_Circle.getRadius());
 	this->m_Circle.setFillColor(sf::Color::Blue);
 
 	this->ModifyShotgun(_muzzle, _grip, _magazine, _stock);
@@ -151,7 +151,7 @@ bool Player::CheckWallCollision(TileMap& _map, Direction _direction)
 	{
 		case UP :
 		{
-			sf::Vector2f mvt = (sf::Vector2f(0, -375) * Time::GetDeltaTime());
+			sf::Vector2f mvt = (sf::Vector2f(0, -350) * Time::GetDeltaTime());
 			if (_map.GetTile(sf::Vector2i(PlayerTopRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerTopLeft + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownLeft + mvt)).GetWalkable())
 			{
 				return true;
@@ -179,7 +179,7 @@ bool Player::CheckWallCollision(TileMap& _map, Direction _direction)
 		}
 		case DOWN :
 		{
-			sf::Vector2f mvt = (sf::Vector2f(0, 375) * Time::GetDeltaTime());
+			sf::Vector2f mvt = (sf::Vector2f(0, 350) * Time::GetDeltaTime());
 			if (_map.GetTile(sf::Vector2i(PlayerTopRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerTopLeft + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownLeft + mvt)).GetWalkable())
 			{
 				return true;
@@ -193,7 +193,7 @@ bool Player::CheckWallCollision(TileMap& _map, Direction _direction)
 		}
 		case LEFT :
 		{
-			sf::Vector2f mvt = (sf::Vector2f(-375,0) * Time::GetDeltaTime());
+			sf::Vector2f mvt = (sf::Vector2f(-350,0) * Time::GetDeltaTime());
 			if (_map.GetTile(sf::Vector2i(PlayerTopRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerTopLeft + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownLeft + mvt)).GetWalkable())
 			{
 				return true;

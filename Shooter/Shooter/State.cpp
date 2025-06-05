@@ -166,6 +166,8 @@ void Game::Update()
 			}
 		}
 
+		this->m_PauseMenu.Update(this->Window(),this->m_Paused, *this->m_StateManager);
+
 		this->m_Player.SetTimer(0.f);
 	}
 	else
@@ -174,11 +176,11 @@ void Game::Update()
 		this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
 
 		this->m_Player.Update(this->m_Stage.GetEnemies(), this->m_Stage.GetMap(), this->m_Cam, this->Window());
-		
+		this->m_Stage.Update(this->m_Player, this->m_Cam, this->m_BonusPopUp, this->Window());
+
 		if (this->m_Player.GetMoving())
 		{
 			ProjList::Update(this->m_Stage.GetMap());
-			this->m_Stage.Update(this->m_Player, this->m_Cam, this->m_BonusPopUp, this->Window());
 			this->m_Cam.NewTarget(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
 		}
 		else
@@ -256,6 +258,8 @@ void Game::Display()
 		{
 			this->m_BonusPopUp->Display(this->Window());
 		}
+	
+		this->m_PauseMenu.Display(this->Window());
 	}
 	else
 	{

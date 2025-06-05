@@ -50,6 +50,11 @@ TileMap::~TileMap()
 
 void TileMap::Generate(sf::RenderTexture& _rendertexture)
 {
+	while (!this->m_Map.empty())
+	{
+		this->m_Map.erase(this->m_Map.begin());
+	}
+
 	for (int i = 0; i < this->m_Size.x; ++i)
 	{
 		for (int j = 0; j < this->m_Size.y; ++j)
