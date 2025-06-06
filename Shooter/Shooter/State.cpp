@@ -142,33 +142,31 @@ void Game::Update()
 {
 	this->m_InputTimer += Time::GetDeltaTime();
 
-	if (this->m_Paused)
+	if (this->m_Paused || this->m_PickupPopUpPause)
 	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) && this->m_InputTimer > 0.2f)
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && this->m_InputTimer > 0.5f)
 		{
 			this->m_InputTimer = 0.f;
-			this->ChangeState<Menu>();
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) && this->m_InputTimer > 0.2f)
-		{
-			this->m_InputTimer = 0.f;
-			this->m_Paused = false;
+			this->m_Paused = !this->m_Paused;
 		}
 
-		if (this->m_BonusPopUp)
+		if (this->m_BonusPopUp && !this->m_Paused)
 		{
 			this->m_BonusPopUp->Update(this->Window());
-			this->m_Paused = true;
+			this->m_PickupPopUpPause = true;
 
 			if (this->m_BonusPopUp->GetToDelete())
 			{
 				delete this->m_BonusPopUp;
 				this->m_BonusPopUp = nullptr;
-				this->m_Paused = false;
+				this->m_PickupPopUpPause = false;
 			}
 		}
 
-		this->m_PauseMenu.Update(this->Window(),this->m_Paused, *this->m_StateManager);
+		if (this->m_Paused)
+		{
+			this->m_PauseMenu.Update(this->Window(), this->m_Paused, *this->m_StateManager);
+		}
 
 		this->m_Player.SetTimer(0.f);
 	}
@@ -220,13 +218,13 @@ void Game::Update()
 		if (this->m_BonusPopUp)
 		{
 			this->m_BonusPopUp->Update(this->Window());
-			this->m_Paused = true;
+			this->m_PickupPopUpPause = true;
 
 			if (this->m_BonusPopUp->GetToDelete())
 			{
 				delete this->m_BonusPopUp;
 				this->m_BonusPopUp = nullptr;
-				this->m_Paused = false;
+				this->m_PickupPopUpPause = false;
 			}
 		}
 
@@ -235,6 +233,7 @@ void Game::Update()
 			this->m_InputTimer = 0.f;
 			this->m_Paused = true;
 		}
+
 		if (this->m_Player.GetHP() == 0)
 		{
 			this->ChangeState<Upgrade>();

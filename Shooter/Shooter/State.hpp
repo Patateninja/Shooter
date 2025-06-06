@@ -84,6 +84,7 @@ class Game : public State
 		PopUp* m_StagePopUp = nullptr;
 		BonusPopUp* m_BonusPopUp = nullptr;
 		bool m_Paused = false;
+		bool m_PickupPopUpPause = false;
 
 	public :
 		Game(StateManager* _stateManager);
