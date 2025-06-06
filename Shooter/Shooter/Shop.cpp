@@ -82,7 +82,7 @@ void Shop::Init(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine&
 	this->AddAttachment(std::string("Default"), sf::Vector2f(10.f, 400.f), buttonsize, "Placeholder", new Stock("Default Stock", 0, 1.f, 1.f, 1.f));
 	this->AddAttachment(std::string("Light Recon Stock"), sf::Vector2f(280.f, 400.f), buttonsize, "Placeholder", new Stock("Light Recon Stock", 5, 1.25f, 0.85f, 1.1f));
 	this->AddAttachment(std::string("Heavy Assault Stock"), sf::Vector2f(550.f, 400.f), buttonsize, "Placeholder", new Stock("Heavy Assault Stock", 8, 0.9f, 0.5f, 0.9f));
-	this->AddAttachment(std::string("No Stock"), sf::Vector2f(820.f, 400.f), buttonsize, "Placeholder", new Stock("No Stock", 26, 0.5f, 1.5f, 1.5f));
+	this->AddAttachment(std::string("No Stock"), sf::Vector2f(820.f, 400.f), buttonsize, "Placeholder", new Stock("No Stock", 26, 0.5f, 1.5f, 1.3f));
 	#pragma endregion
 
 	#pragma region Magazine
@@ -96,8 +96,8 @@ void Shop::Init(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine&
 	this->AddEquipment(std::string("None"), sf::Vector2f(10.f, 650.f), buttonsize, "Placeholder", new Armor("None", 0, 0, 1.f));
 	this->AddEquipment(std::string("Flak Vest"), sf::Vector2f(280.f, 650.f), buttonsize, "Placeholder", new Armor("Flak Vest", 2, 1, 1.f));
 	this->AddEquipment(std::string("Marine Armor"), sf::Vector2f(550.f, 650.f), buttonsize, "Placeholder", new Armor("Marine Armor", 7, 2, 1.f));
-	this->AddEquipment(std::string("Recon Armor"), sf::Vector2f(820.f, 650.f), buttonsize, "Placeholder", new Armor("Recon Armor", 16, 3, 1.25f));
-	this->AddEquipment(std::string("Juggernaut Armor"), sf::Vector2f(1090.f, 650.f), buttonsize, "Placeholder", new Armor("Jugernaut Armor", 32, 6, 0.5f));
+	this->AddEquipment(std::string("Recon Armor"), sf::Vector2f(820.f, 650.f), buttonsize, "Placeholder", new Armor("Recon Armor", 16, 3, 1.20f));
+	this->AddEquipment(std::string("Juggernaut Armor"), sf::Vector2f(1090.f, 650.f), buttonsize, "Placeholder", new Armor("Jugernaut Armor", 32, 8, 0.7f));
 	#pragma endregion
 
 	#pragma region AmmoStash

@@ -100,10 +100,12 @@ class Game : public State
 class Upgrade : public State
 {
 	private :
+		sf::RectangleShape m_DelayRect;
+		Shop m_Shop;
 		Button m_Menu;
 		Button m_Play;
 		int m_PlayerLevel = 0;
-		Shop m_Shop;
+		bool m_ShopActive = false;
 
 	public :
 		Upgrade(StateManager* _stateManager);

@@ -77,6 +77,8 @@ void Menu::Update()
 {
 	this->m_InputTimer += Time::GetDeltaTime();
 
+	Muzzle muzzle = State::m_Muzzle;
+
 	if (this->m_Play.Update(this->Window(),0))
 	{
 		this->m_InputTimer = 0.f;
@@ -322,18 +324,33 @@ void Upgrade::Init()
 {
 	std::cout << "Upgrade Init" << std::endl;
 	this->Window().ResetView();
-	this->m_Shop.Init(Level::GetLvl(), State::m_Muzzle, State::m_Grip, State::m_Stock, State::m_Magazine,	State::m_Armor, State::m_AmmoStash);
+	this->m_Shop.Init(Level::GetLvl(), State::GetMuzzle(), State::m_Grip, State::m_Stock, State::m_Magazine, State::m_Armor, State::m_AmmoStash);
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
+
+	this->m_DelayRect.setSize(sf::Vector2f(1920.f, 1080.f));
+	this->m_DelayRect.setPosition(sf::Vector2f(0.f, 0.f));
+	this->m_DelayRect.setTexture(&this->GetRsc<sf::Texture>("Placeholder"));
 
 	this->m_Play = Button("Start", sf::Vector2f(1695.f, 980.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
 	this->m_Menu = Button("Menu", sf::Vector2f(25.f, 980.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
 }
+
+int i = 0;
+
 void Upgrade::Update()
-{
+{	
 	this->m_InputTimer += Time::GetDeltaTime();
 	this->m_Text.setString("Armory");
 
-	this->m_Shop.Update(this->Window());
+	if (!this->m_ShopActive && this->m_InputTimer > 0.5f)
+	{
+		this->m_ShopActive = true;
+	}
+
+	if (this->m_ShopActive)
+	{
+		this->m_Shop.Update(this->Window());
+	}
 
 	State::m_Muzzle = this->m_Shop.GetMuzzle();
 	State::m_Grip = this->m_Shop.GetGrip();
@@ -370,11 +387,18 @@ void Upgrade::Display()
 {
 	this->ClearWindow();
 
-	this->Draw(this->m_Text);
-	this->m_Shop.Display(this->Window());
+	if (this->m_ShopActive)
+	{
+		this->Draw(this->m_Text);
+		this->m_Shop.Display(this->Window());
 
-	this->m_Play.Display(this->Window());
-	this->m_Menu.Display(this->Window());
+		this->m_Play.Display(this->Window());
+		this->m_Menu.Display(this->Window());
+	}
+	else
+	{
+		this->Draw(this->m_DelayRect);
+	}
 
 	this->DisplayWindow();
 }

@@ -83,7 +83,7 @@ namespace SaveSystem
 		}
 		else if (name == "No Stock")
 		{
-			_stock = Stock("No Stock", 26, 0.5f, 1.5f, 1.5f);
+			_stock = Stock("No Stock", 26, 0.5f, 1.5f, 1.3f);
 		}
 		else
 		{
@@ -123,11 +123,11 @@ namespace SaveSystem
 		}
 		else if (name == "Recon Armor")
 		{
-			_armor = Armor("Recon Armor", 16, 3, 1.25f);
+			_armor = Armor("Recon Armor", 16, 3, 1.2f);
 		}
 		else if (name == "Jugernaut Armor")
 		{
-			_armor = Armor("Jugernaut Armor", 32, 6, 0.5f);
+			_armor = Armor("Jugernaut Armor", 32, 8, 0.7f);
 		}
 		else
 		{
