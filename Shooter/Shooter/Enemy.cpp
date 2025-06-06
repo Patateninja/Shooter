@@ -54,7 +54,7 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 
 		this->m_ProjectileOrigin = this->m_Position + Tools::AngleToVector(20.f, Tools::VectorToAngle(_playerPos - this->m_Position) + Tools::DegToRad(90));
 		
-		if (Tools::Distance(this->m_Position, _playerPos) > this->m_AttackRange || !this->m_SeePlayer)
+		if (Tools::Distance(this->m_Position, _playerPos) < this->m_ActionRange && (Tools::Distance(this->m_Position, _playerPos) > this->m_AttackRange || !this->m_SeePlayer))
 		{
 			this->Move(_playerPos, _map);
 		}
@@ -102,11 +102,11 @@ bool Enemy::PlayerInSight(const sf::Vector2f& _playerPos, TileMap& _map)
 }
 void Enemy::UpdatePath(const sf::Vector2f& _playerPos, TileMap& _map)
 {
-	while (this->m_Active)
+	while (this->m_Active && Tools::Distance(this->m_Position, _playerPos) < this->m_ActionRange)
 	{
 		if (this->m_PathUdpateCooldown <= 0.f)
 		{
-			this->m_Path = Astar::Pathfinding(_map.GetTile(int(this->m_Position.x), int(this->m_Position.y)), _map.GetTile(int(_playerPos.x), int(_playerPos.y)), _map);
+			this->m_Path = Astar::Pathfinding(_map.GetTile(int(this->m_Position.x), int(this->m_Position.y)), _map.GetTile(int(_playerPos.x), int(_playerPos.y)), _map, std::ref(this->m_Active));
 			this->m_PathUdpateCooldown = 1.f;
 		}
 	}
@@ -117,9 +117,7 @@ void Enemy::Move(const sf::Vector2f& _playerPos, TileMap& _map)
 	{
 		this->m_Target = this->m_Path.front().GetCood();
 
-		sf::Vector2f normalized = Tools::Normalize(this->m_Target - this->m_Position);
-
-		this->m_Velocity = normalized * this->m_Speed;
+		this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed;
 
 		this->m_Position += this->m_Velocity * Time::GetDeltaTime();
 
@@ -128,9 +126,16 @@ void Enemy::Move(const sf::Vector2f& _playerPos, TileMap& _map)
 			this->m_Path.erase(this->m_Path.begin());
 		}
 	}
-	else
+	else if (Tools::Distance(this->m_Position, _playerPos) < Tile::GetSize() * 3)
 	{
-		std::cout << "Cant move" << std::endl;
+		this->m_Target = _playerPos;
+
+		this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed;
+
+		if (_map.GetTile(sf::Vector2i(this->m_Position + this->m_Velocity * Time::GetDeltaTime() + Tools::Normalize(this->m_Velocity) * 25.f )).GetWalkable())
+		{
+			this->m_Position += this->m_Velocity * Time::GetDeltaTime();
+		}
 	}
 
 	this->m_Circle.setPosition(this->m_Position);
@@ -261,7 +266,7 @@ Ranged::Ranged(const sf::Vector2f& _startingPos)
 	this->m_Speed = 250.f;
 	this->m_Thread = std::thread(&Enemy::Threadlauncher, this);
 
-	this->m_ShootTimer = 3.f;
+	this->m_ShootTimer = 0.5f;
 }
 Ranged::~Ranged()
 {
@@ -277,17 +282,24 @@ void Ranged::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 {
 	Enemy::Update(_playerPos, _map);
 
-	this->m_ShootTimer -= Time::GetDeltaTime();
-	if (this->m_Active && this->m_SeePlayer && this->m_ShootTimer <= 0.f)
+	if (this->m_Active && this->m_SeePlayer)
 	{
-		this->Shoot(_playerPos);
+		if (this->m_ShootTimer <= 0.f)
+		{
+			this->Shoot(_playerPos);
+			this->m_ShootTimer = 1.5f;
+		}
+		else
+		{
+			this->m_ShootTimer -= Time::GetDeltaTime();
+
+		}
 	}
 }
 
 void Ranged::Shoot(const sf::Vector2f& _playerPos)
 {
 	ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000.f, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin) + Tools::DegToRad(float(Tools::Random(5, -5)))), CLASSIC, 1, 1000, ENEMY);
-	this->m_ShootTimer = 1.5f;
 }
 
 #pragma endregion
@@ -375,7 +387,7 @@ RangedShielded::RangedShielded(const sf::Vector2f& _startingPos)
 	this->m_MaxHp = 50;
 	this->m_Hp = 50;
 	this->m_Speed = 150.f;
-	this->m_ShootTimer = 3.f;
+	this->m_ShootTimer = 0.5f;
 	this->m_Thread = std::thread(&Enemy::Threadlauncher, this);
 
 	this->m_Shield = std::make_unique<Shield>(this->m_Position);
@@ -394,10 +406,17 @@ void RangedShielded::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 {
 	Enemy::Update(_playerPos, _map);
 
-	this->m_ShootTimer -= Time::GetDeltaTime();
-	if (this->m_Active && this->m_SeePlayer && this->m_ShootTimer <= 0.f)
+	if (this->m_Active && this->m_SeePlayer)
 	{
-		this->Shoot(_playerPos);
+		if (this->m_ShootTimer <= 0.f)
+		{
+			this->Shoot(_playerPos);
+			this->m_ShootTimer = 2.5f;
+		}
+		else
+		{
+			this->m_ShootTimer -= Time::GetDeltaTime();
+		}
 	}
 
 	this->m_Shield->Udpate(this->m_Active, this->m_Position, Tools::RadToDeg(Tools::VectorToAngle(this->m_Target - this->m_Position)));

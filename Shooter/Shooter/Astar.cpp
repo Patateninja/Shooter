@@ -82,7 +82,7 @@ const int Astar::FCost(const Node& _current, const Node& _start, const Node& _en
 	return GCost(_current, _start, _map) + HCost(_current, _end, _map);
 }
 
-std::list<Tile> Astar::Pathfinding(Tile& _start, Tile& _end, TileMap& _map)
+std::list<Tile> Astar::Pathfinding(Tile& _start, Tile& _end, TileMap& _map, bool& _breaker)
 {
 	std::list<Tile> path;
 
@@ -92,9 +92,9 @@ std::list<Tile> Astar::Pathfinding(Tile& _start, Tile& _end, TileMap& _map)
 		return path;
 	}
 
-	std::list<Node> nodeList = Astar::Astar(_start, _end, _map);
+	std::list<Node> nodeList = Astar::Astar(_start, _end, _map, _breaker);
 
-	if (!nodeList.empty())
+	if (!nodeList.empty() && _breaker)
 	{
 		Node current = nodeList.back();
 		do
@@ -152,7 +152,7 @@ void Astar::BestNode(Node& _node, std::list<Node> _list)
 	}
 }
 
-std::list<Node> Astar::Astar(Tile& _start, Tile& _end, TileMap& _map)
+std::list<Node> Astar::Astar(Tile& _start, Tile& _end, TileMap& _map, bool& _breaker)
 {
 	std::list<Node> toCheck;
 	std::list<Node> checked;
@@ -170,7 +170,7 @@ std::list<Node> Astar::Astar(Tile& _start, Tile& _end, TileMap& _map)
 		Astar::RemoveNode(toCheck, current);
 		checked.push_back(current);
 
-		if (current == end || checked.size() > (_map.GetSize().x * _map.GetSize().y) / 4)
+		if (current == end || !_breaker)
 		{
 			break;
 		}
@@ -192,7 +192,7 @@ std::list<Node> Astar::Astar(Tile& _start, Tile& _end, TileMap& _map)
 			}
 		}
 
-		if (!checked.empty() && toCheck.empty())
+		if (!checked.empty() && toCheck.empty() || checked.size() > (_map.GetSize().x * _map.GetSize().y) / 4)
 		{
 			std::list<Node> still;
 			still.push_back(start);

@@ -25,6 +25,7 @@ class Enemy
 		float m_Speed = 0.f;
 		float m_BurnCooldown = 0.f;
 		float m_PathUdpateCooldown = 0.f;
+		float m_ActionRange = Tile::GetSize() * 25.f;
 		bool m_Burning = false;
 		bool m_Active = false;
 		bool m_SeePlayer = false;
@@ -44,7 +45,6 @@ class Enemy
 
 		void Respawn();
 		void Threadlauncher() { return; }
-
 
 		virtual void Update(const sf::Vector2f& _playerPos, TileMap& _map);
 		virtual void Display(Window& _window);
