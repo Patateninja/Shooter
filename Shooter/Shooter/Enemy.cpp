@@ -7,10 +7,16 @@ Enemy::Enemy(const sf::Vector2f& _startingPos)
 {
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
+	this->m_Thread = std::thread(&Enemy::Threadlauncher, this);
 }
 Enemy::~Enemy()
 {
 	this->m_IgnoreProj.clear();
+	this->m_Active = false;
+	if (this->m_Thread.joinable())
+	{
+		this->m_Thread.join();
+	}
 }
 
 void Enemy::Respawn()
@@ -25,24 +31,30 @@ void Enemy::Respawn()
 	this->m_Circle.setFillColor(sf::Color::Red);
 	this->m_IgnoreProj.clear();
 	this->m_Path.clear();
+	this->m_Thread = std::thread(&Enemy::Threadlauncher,this);
 }
 
 void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 {
 	if (this->m_Active)
 	{
-		if (this->m_PathUdpateCooldown <= 0.f || this->m_Path.empty())
+		if (this->m_Thread.joinable())
 		{
-			this->UpdatePath(_playerPos, _map);
+			this->m_Thread.join();
+			this->m_Thread = std::thread(&Enemy::UpdatePath, this, std::ref(_playerPos), std::ref(_map));
+			this->m_Thread.detach();
+		}
+		if (this->m_PathUdpateCooldown <= 0.f)
+		{
 			this->m_SeePlayer = this->PlayerInSight(_playerPos, _map);
 			this->m_PathUdpateCooldown = 1.f;
 		}
-		else
-		{
-			this->m_PathUdpateCooldown -= Time::GetDeltaTime();
-		}
+		
+		this->m_PathUdpateCooldown -= Time::GetDeltaTime();
+
 		this->m_ProjectileOrigin = this->m_Position + Tools::AngleToVector(20.f, Tools::VectorToAngle(_playerPos - this->m_Position) + Tools::DegToRad(90));
-		if (Tools::Distance(this->m_Position, _playerPos) > this->m_AttackRange || !this->m_SeePlayer)
+		
+		if (Tools::Distance(this->m_Position, _playerPos) < this->m_ActionRange && (Tools::Distance(this->m_Position, _playerPos) > this->m_AttackRange || !this->m_SeePlayer))
 		{
 			this->Move(_playerPos, _map);
 		}
@@ -57,6 +69,11 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 			this->TakeDamage(this->m_BurningDamage);
 			this->m_BurnCooldown = 3.f;
 		}
+	}
+
+	if (this->m_Position.x < 0.f || this->m_Position.y < 0.f || this->m_Position.x > Tile::GetSize() * (_map.GetSize().x - 1) || this->m_Position.y > Tile::GetSize() * (_map.GetSize().y - 1) || this->m_Position.x != this->m_Position.x || this->m_Position.y != this->m_Position.y)
+	{
+		this->TakeDamage(10000);
 	}
 }
 void Enemy::Display(Window& _window)
@@ -76,26 +93,52 @@ bool Enemy::PlayerInSight(const sf::Vector2f& _playerPos, TileMap& _map)
 			}
 		}
 	}
+	else
+	{
+		return false;
+	}
 
 	return true;
 }
 void Enemy::UpdatePath(const sf::Vector2f& _playerPos, TileMap& _map)
 {
-	auto future = std::async(Astar::Pathfinding, std::ref(_map.GetTile(int(this->m_Position.x), int(this->m_Position.y))), std::ref(_map.GetTile(int(_playerPos.x), int(_playerPos.y))), std::ref(_map));
-	this->m_Path = future.get();
+	while (this->m_Active && Tools::Distance(this->m_Position, _playerPos) < this->m_ActionRange)
+	{
+		if (this->m_PathUdpateCooldown <= 0.f)
+		{
+			this->m_Path = Astar::Pathfinding(_map.GetTile(int(this->m_Position.x), int(this->m_Position.y)), _map.GetTile(int(_playerPos.x), int(_playerPos.y)), _map, std::ref(this->m_Active));
+			this->m_PathUdpateCooldown = 1.f;
+		}
+	}
 }
 void Enemy::Move(const sf::Vector2f& _playerPos, TileMap& _map)
 {
-	this->m_Target = this->m_Path.front().GetCood();
-	this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed;
-
-	this->m_Position += this->m_Velocity * Time::GetDeltaTime();
-	this->m_Circle.setPosition(this->m_Position);
-
-	if (_map.GetTile(int(this->m_Position.x), int(this->m_Position.y)) == this->m_Path.front())
+	if (!this->m_Path.empty())
 	{
-		this->m_Path.erase(this->m_Path.begin());
+		this->m_Target = this->m_Path.front().GetCood();
+
+		this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed;
+
+		this->m_Position += this->m_Velocity * Time::GetDeltaTime();
+
+		if (_map.GetTile(int(this->m_Position.x), int(this->m_Position.y)) == this->m_Path.front())
+		{
+			this->m_Path.erase(this->m_Path.begin());
+		}
 	}
+	else if (Tools::Distance(this->m_Position, _playerPos) < Tile::GetSize() * 3)
+	{
+		this->m_Target = _playerPos;
+
+		this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed;
+
+		if (_map.GetTile(sf::Vector2i(this->m_Position + this->m_Velocity * Time::GetDeltaTime() + Tools::Normalize(this->m_Velocity) * 25.f )).GetWalkable())
+		{
+			this->m_Position += this->m_Velocity * Time::GetDeltaTime();
+		}
+	}
+
+	this->m_Circle.setPosition(this->m_Position);
 }
 void Enemy::CheckDamage()
 {
@@ -166,10 +209,16 @@ Baseliner::Baseliner(const sf::Vector2f& _startingPos)
 	this->m_MaxHp = 35;
 	this->m_Hp = 35;
 	this->m_Speed = 250.f;
+	this->m_Thread = std::thread(&Enemy::Threadlauncher, this);
 }
 Baseliner::~Baseliner()
 {
-
+	this->m_IgnoreProj.clear();
+	this->m_Active = false;
+	if (this->m_Thread.joinable())
+	{
+		this->m_Thread.join();
+	}
 }
 
 #pragma endregion
@@ -187,10 +236,16 @@ Tank::Tank(const sf::Vector2f& _startingPos)
 	this->m_MaxHp = 75;
 	this->m_Hp = 75;
 	this->m_Speed = 200.f;
+	this->m_Thread = std::thread(&Enemy::Threadlauncher, this);
 }
 Tank::~Tank()
 {
-
+	this->m_IgnoreProj.clear();
+	this->m_Active = false;
+	if (this->m_Thread.joinable())
+	{
+		this->m_Thread.join();
+	}
 }
 
 #pragma endregion
@@ -209,44 +264,49 @@ Ranged::Ranged(const sf::Vector2f& _startingPos)
 	this->m_MaxHp = 25;
 	this->m_Hp = 25;
 	this->m_Speed = 250.f;
-	this->m_ShootTimer = 1.5f;
+	this->m_Thread = std::thread(&Enemy::Threadlauncher, this);
+
+	this->m_ShootTimer = 0.5f;
 }
 Ranged::~Ranged()
 {
-
+	this->m_IgnoreProj.clear();
+	this->m_Active = false;
+	if (this->m_Thread.joinable())
+	{
+		this->m_Thread.join();
+	}
 }
 
 void Ranged::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 {
 	Enemy::Update(_playerPos, _map);
-	if (this->m_Active && this->CanShoot(_playerPos))
+
+	if (this->m_Active && this->m_SeePlayer)
 	{
-		this->Shoot(_playerPos);
+		if (this->m_ShootTimer <= 0.f)
+		{
+			this->Shoot(_playerPos);
+			this->m_ShootTimer = 1.5f;
+		}
+		else
+		{
+			this->m_ShootTimer -= Time::GetDeltaTime();
+
+		}
 	}
 }
 
-bool Ranged::CanShoot(sf::Vector2f _playerPos)
-{
-	return (Tools::Distance(this->m_ProjectileOrigin, _playerPos) -128 < m_AttackRange);
-}
 void Ranged::Shoot(const sf::Vector2f& _playerPos)
 {
-	if (this->m_ShootTimer <= 0.f)
-	{
-		ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000.f, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin) + Tools::DegToRad(float(Tools::Random(5, -5)))), CLASSIC, 1, 1000, ENEMY);
-		this->m_ShootTimer = 1.5f;
-	}
-	else
-	{
-		this->m_ShootTimer -= Time::GetDeltaTime();
-	}
+	ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000.f, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin) + Tools::DegToRad(float(Tools::Random(5, -5)))), CLASSIC, 1, 1000, ENEMY);
 }
 
 #pragma endregion
 ////////////////////////////////////////////////////////
-#pragma region Swarmer
+#pragma region Speedster
 
-Swarmer::Swarmer(const sf::Vector2f& _startingPos)
+Speedster::Speedster(const sf::Vector2f& _startingPos)
 {
 	this->m_Circle = sf::CircleShape(15.f);
 	this->m_Circle.setOrigin(15.f, 15.f);
@@ -257,10 +317,16 @@ Swarmer::Swarmer(const sf::Vector2f& _startingPos)
 	this->m_MaxHp = 10;
 	this->m_Hp = 10;
 	this->m_Speed = 400.f;
+	this->m_Thread = std::thread(&Enemy::Threadlauncher, this);
 }
-Swarmer::~Swarmer()
+Speedster::~Speedster()
 {
-
+	this->m_IgnoreProj.clear();
+	this->m_Active = false;
+	if (this->m_Thread.joinable())
+	{
+		this->m_Thread.join();
+	}
 }
 
 #pragma endregion
@@ -277,13 +343,19 @@ Shielded::Shielded(const sf::Vector2f& _startingPos)
 	this->m_Position = _startingPos;
 	this->m_MaxHp = 35;
 	this->m_Hp = 35;
-	this->m_Speed = 0.f;
+	this->m_Speed = 200.f;
+	this->m_Thread = std::thread(&Enemy::Threadlauncher, this);
 
 	this->m_Shield = std::make_unique<Shield>(this->m_Position);
 }
 Shielded::~Shielded()
 {
-
+	this->m_IgnoreProj.clear();
+	this->m_Active = false;
+	if (this->m_Thread.joinable())
+	{
+		this->m_Thread.join();
+	}
 }
 
 void Shielded::Update(const sf::Vector2f& _playerPos, TileMap& _map)
@@ -298,7 +370,6 @@ void Shielded::Display(Window& _window)
 	Enemy::Display(_window);
 	this->m_Shield->Display(_window);
 }
-
 
 #pragma endregion
 ////////////////////////////////////////////////////////
@@ -316,22 +387,36 @@ RangedShielded::RangedShielded(const sf::Vector2f& _startingPos)
 	this->m_MaxHp = 50;
 	this->m_Hp = 50;
 	this->m_Speed = 150.f;
-	this->m_ShootTimer = 1.5f;
+	this->m_ShootTimer = 0.5f;
+	this->m_Thread = std::thread(&Enemy::Threadlauncher, this);
 
 	this->m_Shield = std::make_unique<Shield>(this->m_Position);
 }
 RangedShielded::~RangedShielded()
 {
-
+	this->m_IgnoreProj.clear();
+	this->m_Active = false;
+	if (this->m_Thread.joinable())
+	{
+		this->m_Thread.join();
+	}
 }
 
 void RangedShielded::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 {
 	Enemy::Update(_playerPos, _map);
 
-	if (this->m_Active && this->CanShoot(_playerPos))
+	if (this->m_Active && this->m_SeePlayer)
 	{
-		this->Shoot(_playerPos);
+		if (this->m_ShootTimer <= 0.f)
+		{
+			this->Shoot(_playerPos);
+			this->m_ShootTimer = 2.5f;
+		}
+		else
+		{
+			this->m_ShootTimer -= Time::GetDeltaTime();
+		}
 	}
 
 	this->m_Shield->Udpate(this->m_Active, this->m_Position, Tools::RadToDeg(Tools::VectorToAngle(this->m_Target - this->m_Position)));
@@ -342,21 +427,10 @@ void RangedShielded::Display(Window& _window)
 	this->m_Shield->Display(_window);
 }
 
-bool RangedShielded::CanShoot(const sf::Vector2f& _playerPos)
-{
-	return (Tools::Distance(this->m_ProjectileOrigin, _playerPos) - 128 < m_AttackRange);
-}
 void RangedShielded::Shoot(const sf::Vector2f& _playerPos)
 {
-	if (this->m_ShootTimer <= 0.f)
-	{
-		ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000.f, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin) + Tools::DegToRad(float(Tools::Random(5,-5)))), CLASSIC, 1, 1000, ENEMY);
-		this->m_ShootTimer = 1.5f;
-	}
-	else
-	{
-		this->m_ShootTimer -= Time::GetDeltaTime();
-	}
+	ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000.f, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin) + Tools::DegToRad(float(Tools::Random(5, -5)))), CLASSIC, 1, 1000, ENEMY);
+	this->m_ShootTimer = 2.5f;
 }
 
 #pragma endregion

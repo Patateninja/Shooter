@@ -59,7 +59,7 @@ namespace Astar
 
 	int NodeDist(Node& _node1, Node& _node2);
 
-	std::list<Tile> Pathfinding(Tile& _start, Tile& _end, TileMap& _map);
+	std::list<Tile> Pathfinding(Tile& _start, Tile& _end, TileMap& _map, bool& _breaker);
 	void BestNode(Node& _node, std::list<Node> _list);
-	std::list<Node> Astar(Tile& _start, Tile& _end, TileMap& _map);
+	std::list<Node> Astar(Tile& _start, Tile& _end, TileMap& _map, bool& _breaker);
 }

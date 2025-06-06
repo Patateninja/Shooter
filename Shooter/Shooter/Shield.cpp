@@ -21,13 +21,6 @@ void Shield::Udpate(bool _active, sf::Vector2f _pos, float _angle)
 void Shield::Display(Window& _window)
 {
 	_window.Draw(this->m_Rect);
-
-	sf::RectangleShape hitbox(this->m_Rect.getGlobalBounds().getSize());
-	hitbox.setFillColor(sf::Color::Transparent);
-	hitbox.setOutlineColor(sf::Color::White);
-	hitbox.setOutlineThickness(1.f);
-	hitbox.setPosition(this->m_Rect.getGlobalBounds().getPosition());
-	_window.Draw(hitbox);
 }
 
 void Shield::CheckContact()

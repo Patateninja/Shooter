@@ -51,8 +51,8 @@ void Stage::SpawnEnemies()
 	else
 	{
 		this->m_EnemyList.Add<Tank>(sf::Vector2f(64.f, 640.f));
-		this->m_EnemyList.Add<Swarmer>(sf::Vector2f(960.f, 1152.f));
-		this->m_EnemyList.Add<Swarmer>(sf::Vector2f(1216, 832.f));
+		this->m_EnemyList.Add<Speedster>(sf::Vector2f(960.f, 1152.f));
+		this->m_EnemyList.Add<Speedster>(sf::Vector2f(1216, 832.f));
 		this->m_EnemyList.Add<Tank>(sf::Vector2f(576.f, 1024.f));
 	}
 }

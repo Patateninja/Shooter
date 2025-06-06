@@ -9,8 +9,8 @@
 class Enemy
 {
 	protected :
-		std::vector<std::weak_ptr<Projectile>> m_IgnoreProj;
 		sf::CircleShape m_Circle;
+		std::vector<std::weak_ptr<Projectile>> m_IgnoreProj;
 		std::list<Tile> m_Path;
 		std::thread m_Thread;
 		sf::Vector2f m_StartingPosition;
@@ -25,6 +25,7 @@ class Enemy
 		float m_Speed = 0.f;
 		float m_BurnCooldown = 0.f;
 		float m_PathUdpateCooldown = 0.f;
+		float m_ActionRange = Tile::GetSize() * 25.f;
 		bool m_Burning = false;
 		bool m_Active = false;
 		bool m_SeePlayer = false;
@@ -43,6 +44,7 @@ class Enemy
 		inline void SetActive(bool _input) { this->m_Active = _input; };
 
 		void Respawn();
+		void Threadlauncher() { return; }
 
 		virtual void Update(const sf::Vector2f& _playerPos, TileMap& _map);
 		virtual void Display(Window& _window);
@@ -81,15 +83,14 @@ class Ranged : public Enemy
 
 		void Update(const sf::Vector2f& _playerPos, TileMap& _map) override;
 
-		bool CanShoot(const sf::Vector2f _playerPos);
 		void Shoot(const sf::Vector2f& _playerPos);
 };
 
-class Swarmer : public Enemy
+class Speedster : public Enemy
 {
 	public:
-		Swarmer(const sf::Vector2f& _stratingPos);
-		~Swarmer();
+		Speedster(const sf::Vector2f& _stratingPos);
+		~Speedster();
 };
 
 class Shielded : public Enemy
@@ -118,7 +119,6 @@ class RangedShielded : public Enemy
 		void Update(const sf::Vector2f& _playerPos, TileMap& _map) override;
 		void Display(Window& _window) override;
 
-		bool CanShoot(const sf::Vector2f& _playerPos);
 		void Shoot(const sf::Vector2f& _playerPos);
 };
 
