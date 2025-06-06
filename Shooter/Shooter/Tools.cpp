@@ -30,7 +30,14 @@ float Tools::Magnitude(sf::Vector2f const _vect)
 }
 sf::Vector2f Tools::Normalize(sf::Vector2f const _vect)
 {
-	return sf::Vector2f(_vect.x / Tools::Magnitude(_vect), _vect.y / Tools::Magnitude(_vect));
+	if (_vect.x == 0.f && _vect.y == 0.f)
+	{
+		return sf::Vector2f(0.f, 0.f);
+	}
+	else
+	{
+		return sf::Vector2f(_vect.x / Tools::Magnitude(_vect), _vect.y / Tools::Magnitude(_vect));
+	}
 }
 
 float Tools::RadToDeg(float _rad)

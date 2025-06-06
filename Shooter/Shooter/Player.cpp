@@ -5,7 +5,7 @@
 Player::Player()
 {
 	this->m_Circle = sf::CircleShape(25.f);
-	this->m_Position = sf::Vector2f(576.f, 64.f);
+	this->m_Position = sf::Vector2f(64.f, 64.f);
 }
 
 void Player::Init(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _stock, Armor& _armor, AmmoStash& _ammoStash)
@@ -57,6 +57,11 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 					--this->m_Vest;
 				}
 			}
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::B))
+		{
+			this->m_Position = sf::Vector2f(640.f,64.f);
 		}
 
 		if (this->CheckDamage())
@@ -245,7 +250,7 @@ void Player::Die()
 }
 void Player::Respawn()
 {
-	this->m_Position = sf::Vector2f(576.f, 64.f); //Change to stage start pos;
+	this->m_Position = sf::Vector2f(64.f, 64.f); //Change to stage start pos;
 	this->m_Angle = 0.f;
 	this->m_CanReload = true;
 	this->m_CanMove = false;

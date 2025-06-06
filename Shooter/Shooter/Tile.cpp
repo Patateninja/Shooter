@@ -69,7 +69,12 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 				
 
 				// Temp //
-				if (i % 4 == 0 && j != 1)
+				if (i == 4)
+				{
+					this->m_Map.push_back(Tile(sf::Vector2f(float(i * Tile::GetSize()), float(j * Tile::GetSize())), WALL));
+
+				}
+				else if (i % 4 == 0 && j != 1)
 				{
 					this->m_Map.push_back(Tile(sf::Vector2f(float(i * Tile::GetSize()), float(j * Tile::GetSize())), TileType(Tools::Random(2, 0))));
 				}
@@ -125,7 +130,7 @@ Tile& TileMap::GetTile(sf::Vector2i _cood)
 		}
 	}
 
-	return this->GetTile(this->m_Size.x * Tile::GetSize(), this->m_Size.y * Tile::GetSize());
+	return this->GetTile(0, 0);
 }
 Tile& TileMap::GetTile(int _x, int _y)
 {

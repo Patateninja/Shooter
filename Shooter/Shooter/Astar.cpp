@@ -92,12 +92,21 @@ std::list<Tile> Astar::Pathfinding(Tile& _start, Tile& _end, TileMap& _map)
 		return path;
 	}
 
-	Node current = Astar::Astar(_start,_end,_map).back();
-	do
+	std::list<Node> nodeList = Astar::Astar(_start, _end, _map);
+
+	if (!nodeList.empty())
 	{
-		path.push_front(*current.GetTile());
-		current = *current.GetPrev();
-	} while (*current.GetTile() != _start);
+		Node current = nodeList.back();
+		do
+		{
+			path.push_front(*current.GetTile());
+			if(current.GetPrev()) 
+			{
+				current = *current.GetPrev();
+			}
+
+		} while (*current.GetTile() != _start);
+	}
 
 	return path;
 }
@@ -161,7 +170,7 @@ std::list<Node> Astar::Astar(Tile& _start, Tile& _end, TileMap& _map)
 		Astar::RemoveNode(toCheck, current);
 		checked.push_back(current);
 
-		if (current == end)
+		if (current == end || checked.size() > (_map.GetSize().x * _map.GetSize().y) / 4)
 		{
 			break;
 		}
@@ -182,6 +191,14 @@ std::list<Node> Astar::Astar(Tile& _start, Tile& _end, TileMap& _map)
 				}
 			}
 		}
+
+		if (!checked.empty() && toCheck.empty())
+		{
+			std::list<Node> still;
+			still.push_back(start);
+			return still;
+		}
+
 	} while (current != end);
 
 	return checked;
