@@ -30,7 +30,7 @@ namespace Level
 	{
 		return Level::m_Level;
 	}
-	int GetXp()
+	int& GetXp()
 	{
 		return Level::m_XP;
 	}

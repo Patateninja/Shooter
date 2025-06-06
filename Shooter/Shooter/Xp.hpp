@@ -7,5 +7,5 @@ namespace Level
 	bool CalculateLvL();
 	
 	int GetLvl();
-	int GetXp();
+	int& GetXp();
 }

@@ -67,6 +67,12 @@
     <Filter Include="Header Files\UI">
       <UniqueIdentifier>{2619cded-1af1-4e20-86c4-d3b8fcd00fac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Save &amp; Load">
+      <UniqueIdentifier>{a96da7ae-8663-4de2-a12d-4e6c89a3dee0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Save &amp; Load">
+      <UniqueIdentifier>{c6f7db7d-a620-4eac-9d70-86ce2b938e0a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -132,7 +138,7 @@
     <ClCompile Include="ShopButton.cpp">
       <Filter>Source Files\Upgrades</Filter>
     </ClCompile>
-    <ClCompile Include="Equipement.cpp">
+    <ClCompile Include="Equipment.cpp">
       <Filter>Source Files\Upgrades</Filter>
     </ClCompile>
     <ClCompile Include="Xp.cpp">
@@ -155,6 +161,9 @@
     </ClCompile>
     <ClCompile Include="PauseMenu.cpp">
       <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Save.cpp">
+      <Filter>Source Files\Save &amp; Load</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -218,7 +227,7 @@
     <ClInclude Include="ShopButton.hpp">
       <Filter>Header Files\Upgrades</Filter>
     </ClInclude>
-    <ClInclude Include="Equipement.hpp">
+    <ClInclude Include="Equipment.hpp">
       <Filter>Header Files\Upgrades</Filter>
     </ClInclude>
     <ClInclude Include="Xp.hpp">

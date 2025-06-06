@@ -4,7 +4,7 @@
 
 Player::Player()
 {
-	this->m_Circle = sf::CircleShape(28.f);
+	this->m_Circle = sf::CircleShape(25.f);
 	this->m_Position = sf::Vector2f(576.f, 64.f);
 }
 
@@ -147,11 +147,13 @@ bool Player::CheckWallCollision(TileMap& _map, Direction _direction)
 	sf::Vector2f PlayerTopLeft   = this->m_Position + sf::Vector2f(-this->m_Circle.getRadius(), -this->m_Circle.getRadius());
 	sf::Vector2f PlayerDownLeft  = this->m_Position + sf::Vector2f(this->m_Circle.getRadius(), -this->m_Circle.getRadius());
 
+	float velocity = 350.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier()) + int(this->m_Caffeinated) * 100;
+
 	switch (_direction)
 	{
 		case UP :
 		{
-			sf::Vector2f mvt = (sf::Vector2f(0, -350) * Time::GetDeltaTime());
+			sf::Vector2f mvt = (sf::Vector2f(0.f, -velocity) * Time::GetDeltaTime());
 			if (_map.GetTile(sf::Vector2i(PlayerTopRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerTopLeft + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownLeft + mvt)).GetWalkable())
 			{
 				return true;
@@ -165,7 +167,7 @@ bool Player::CheckWallCollision(TileMap& _map, Direction _direction)
 		}
 		case RIGHT :
 		{
-			sf::Vector2f mvt = (sf::Vector2f(375, 0) * Time::GetDeltaTime());
+			sf::Vector2f mvt = (sf::Vector2f(velocity, 0.f) * Time::GetDeltaTime());
 			if (_map.GetTile(sf::Vector2i(PlayerTopRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerTopLeft + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownLeft + mvt)).GetWalkable())
 			{
 				return true;
@@ -179,7 +181,7 @@ bool Player::CheckWallCollision(TileMap& _map, Direction _direction)
 		}
 		case DOWN :
 		{
-			sf::Vector2f mvt = (sf::Vector2f(0, 350) * Time::GetDeltaTime());
+			sf::Vector2f mvt = (sf::Vector2f(0.f, velocity) * Time::GetDeltaTime());
 			if (_map.GetTile(sf::Vector2i(PlayerTopRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerTopLeft + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownLeft + mvt)).GetWalkable())
 			{
 				return true;
@@ -193,7 +195,7 @@ bool Player::CheckWallCollision(TileMap& _map, Direction _direction)
 		}
 		case LEFT :
 		{
-			sf::Vector2f mvt = (sf::Vector2f(-350,0) * Time::GetDeltaTime());
+			sf::Vector2f mvt = (sf::Vector2f(-velocity, 0.f) * Time::GetDeltaTime());
 			if (_map.GetTile(sf::Vector2i(PlayerTopRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownRight + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerTopLeft + mvt)).GetWalkable() && _map.GetTile(sf::Vector2i(PlayerDownLeft + mvt)).GetWalkable())
 			{
 				return true;
