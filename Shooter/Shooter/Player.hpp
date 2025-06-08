@@ -50,7 +50,7 @@ class Player
 		inline int&     GetDragonBreath() { return this->m_DragonBreath; };
 		inline int&     GetSlug()         { return this->m_Slug; }
 		inline Shotgun& GetShotgun()      { return this->m_Shotgun; }
-		inline bool     GetBmgEnabled()   { return this->m_Got50BMG; }
+		inline const bool     GetBmgEnabled()  const { return this->m_Got50BMG; }
 
 		inline void SetTimer(float _timer) { this->m_InputTimer = _timer; }
 

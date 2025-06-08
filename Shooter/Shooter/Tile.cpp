@@ -105,15 +105,15 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 				{
 					if ((i == x-1 || j == y-1) && ((i != int(x / 2)) ^! (j != int(y / 2))))
 					{
-						this->GetTile(tile.GetCood().x + (i * Tile::GetSize()), tile.GetCood().y + (j * Tile::GetSize())).SetType(WALL);
+						this->GetTile(int(tile.GetCood().x) + (i * Tile::GetSize()), int(tile.GetCood().y) + (j * Tile::GetSize())).SetType(WALL);
 					}
 					else if (i > 1 && j > 1 && i < x-2 && j < y-2 && Tools::Random(10,0) == 1)
 					{
-						this->GetTile(tile.GetCood().x + (i * Tile::GetSize()), tile.GetCood().y + (j * Tile::GetSize())).SetType(FURNITURE);
+						this->GetTile(int(tile.GetCood().x) + (i * Tile::GetSize()), int(tile.GetCood().y) + (j * Tile::GetSize())).SetType(FURNITURE);
 					}
 					else
 					{
-						this->GetTile(tile.GetCood().x + (i * Tile::GetSize()), tile.GetCood().y + (j * Tile::GetSize())).SetType(FLOOR);
+						this->GetTile(int(tile.GetCood().x) + (i * Tile::GetSize()), int(tile.GetCood().y) + (j * Tile::GetSize())).SetType(FLOOR);
 					}
 				}
 			}

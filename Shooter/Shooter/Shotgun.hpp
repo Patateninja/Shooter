@@ -1,5 +1,4 @@
 #pragma once
-#include "ResourceManager.hpp"
 #include "Attachment.hpp"
 #include "Shell.hpp"
 
@@ -25,7 +24,7 @@ class Shotgun
 		inline const float GetRecoilModifier() const { return this->m_GripAttachement.GetRecoilMod() * this->m_Stock.GetRecoilMod(); }
 		inline const std::vector<std::unique_ptr<Shell>>& GetShells() const { return this->m_Magazine; }
 		inline const bool Empty() const { return this->m_Magazine.empty(); }
-		inline const bool Full() const { return this->m_Magazine.size() >= this->m_DefaultCapacity + this->m_MagazineAttachement.GetCapacity(); }
+		inline const bool Full() const { return int(this->m_Magazine.size()) >= this->m_DefaultCapacity + this->m_MagazineAttachement.GetCapacity(); }
 		
 		void Modify(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _stock);
 

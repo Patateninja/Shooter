@@ -39,12 +39,12 @@ class Enemy
 		Enemy(const sf::Vector2f& _stratingPos);
 		~Enemy();
 
-		inline float GetRange() { return this->m_AttackRange; };
-		inline sf::Vector2f GetPos() { return this->m_Position; };
-		inline sf::Vector2f GetProjOrigin() { return this->m_ProjectileOrigin; };
-		inline int GetHP() { return this->m_Hp; };
+		inline const float GetRange() const { return this->m_AttackRange; };
+		inline const sf::Vector2f GetPos() const { return this->m_Position; };
+		inline const sf::Vector2f GetProjOrigin()const { return this->m_ProjectileOrigin; };
+		inline const int GetHP() const { return this->m_Hp; };
 		inline sf::FloatRect GetHitbox() { return this->m_Circle.getGlobalBounds(); };
-		inline bool GetActive() { return this->m_Active; };
+		inline const bool GetActive() const { return this->m_Active; };
 		inline void SetActive(bool _input) { this->m_Active = _input; };
 
 		void Respawn();

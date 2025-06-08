@@ -48,7 +48,7 @@ class TileMap
 		TileMap(sf::Vector2i _size);
 		~TileMap();
 
-		inline sf::Vector2i GetSize() { return this->m_Size; };
+		inline const sf::Vector2i GetSize() const { return this->m_Size; };
 
 		void Generate(sf::RenderTexture& _rendertexture);
 

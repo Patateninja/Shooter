@@ -1,5 +1,4 @@
 #pragma once
-#include "Window.hpp"
 #include "State.hpp"
 #include "Save.hpp"
 

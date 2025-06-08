@@ -2,7 +2,6 @@
 #include "Attachment.hpp"
 #include "Equipment.hpp"
 #include <fstream>
-#include <string>
 
 namespace SaveSystem
 {

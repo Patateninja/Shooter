@@ -17,7 +17,7 @@ void ReloadMenu::Update(Player& _player, Window& _window)
 	this->m_Slug.SetPosition(sf::Vector2f(_window.RelativePos(sf::Vector2f(20.f, 255.f))));
 	this->m_Slug.UpdateText(std::to_string(_player.GetSlug()));
 
-	if (this->m_BirdShot.Update(_window, 0) && !_player.GetShotgun().Full() && this->m_InputTimer > 0.3f)
+	if (this->m_BirdShot.Update(_window) && !_player.GetShotgun().Full() && this->m_InputTimer > 0.3f)
 	{
 		this->m_InputTimer = 0.f;
 		if (!_player.GetBmgEnabled())
@@ -29,7 +29,7 @@ void ReloadMenu::Update(Player& _player, Window& _window)
 			_player.GetShotgun().Load(5);
 		}
 	}
-	if (this->m_BuckShot.Update(_window, 0) && !_player.GetShotgun().Full() && _player.GetBuckshot() != 0 && this->m_InputTimer > 0.3f)
+	if (this->m_BuckShot.Update(_window) && !_player.GetShotgun().Full() && _player.GetBuckshot() != 0 && this->m_InputTimer > 0.3f)
 	{
 		this->m_InputTimer = 0.f;
 		if (!_player.GetBmgEnabled())
@@ -42,7 +42,7 @@ void ReloadMenu::Update(Player& _player, Window& _window)
 			_player.GetShotgun().Load(5);
 		}
 	}
-	if (this->m_DragonBreath.Update(_window, 0) && !_player.GetShotgun().Full() && _player.GetDragonBreath() != 0 && this->m_InputTimer > 0.3f)
+	if (this->m_DragonBreath.Update(_window) && !_player.GetShotgun().Full() && _player.GetDragonBreath() != 0 && this->m_InputTimer > 0.3f)
 	{
 		this->m_InputTimer = 0.f;
 		if (!_player.GetBmgEnabled())
@@ -55,7 +55,7 @@ void ReloadMenu::Update(Player& _player, Window& _window)
 			_player.GetShotgun().Load(5);
 		}
 	}
-	if (this->m_Slug.Update(_window, 0) && !_player.GetShotgun().Full() && _player.GetSlug() != 0 && this->m_InputTimer > 0.3f)
+	if (this->m_Slug.Update(_window) && !_player.GetShotgun().Full() && _player.GetSlug() != 0 && this->m_InputTimer > 0.3f)
 	{
 		this->m_InputTimer = 0.f;
 		if (!_player.GetBmgEnabled())

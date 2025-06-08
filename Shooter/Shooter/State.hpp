@@ -1,10 +1,7 @@
 #pragma once
 #include "Player.hpp"
-#include "Enemy.hpp"
 #include "Stage.hpp"
-#include "Camera.hpp" 
 #include "Shop.hpp"
-#include "BonusPopUp.hpp"
 #include "LoadMenu.hpp"
 #include "PauseMenu.hpp"
 

@@ -11,7 +11,7 @@ class View
 		View(const sf::View& _wiew);
 		~View();
 
-		inline sf::View GetView() { return this->m_View; };
+		inline const sf::View GetView() const { return this->m_View; };
 		inline sf::Vector2f GetSize() { return this->m_View.getSize(); }
 		inline sf::Vector2f GetCenter() { return this->m_View.getCenter(); }
 
@@ -37,7 +37,7 @@ class Window
 		void Create(sf::VideoMode _videoMode,const sf::String& _title, sf::Uint32 _style);
 
 		inline sf::RenderWindow& Unwrap() { return this->m_Window; }
-		inline View GetView() { return this->m_View; }
+		inline const View GetView() const { return this->m_View; }
 		inline View GetDefaultView() { return View(this->m_Window.getDefaultView()); }
 		inline sf::Vector2u GetSize() { return this->m_Window.getSize(); }
 		inline sf::Vector2f GetViewSize() { return this->m_View.GetSize(); }
