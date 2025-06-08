@@ -37,6 +37,31 @@ Tile::Tile(const Tile& _tile)
 	this->m_BulletThrough = _tile.m_BulletThrough;
 }
 
+void Tile::SetType(TileType _type)
+{
+	this->m_Type = _type;
+
+	switch (_type)
+	{
+		case WALL:
+			this->m_Walkable = false;
+			this->m_BulletThrough = false;
+			break;
+		case FURNITURE:
+			this->m_Walkable = false;
+			this->m_BulletThrough = true;
+			break;
+		case FLOOR:
+			this->m_Walkable = true;
+			this->m_BulletThrough = true;
+			break;
+		default:
+			this->m_Walkable = false;
+			this->m_BulletThrough = false;
+			break;
+	}
+}
+
 ////////////////////////////////////////////////////////
 
 TileMap::TileMap(sf::Vector2i _size)
@@ -59,42 +84,49 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 	{
 		for (int j = 0; j < this->m_Size.y; ++j)
 		{
-			if (i == 0 || i == this->m_Size.x - 1 || j == 0 || j == this->m_Size.y - 1)
-			{
-				this->m_Map.push_back(Tile(sf::Vector2f(float(i * Tile::GetSize()), float(j * Tile::GetSize())), WALL));
-			}
-			else
-			{
-				//this->m_Map.push_back(Tile(sf::Vector2f(float(i * Tile::GetSize()), float(j * Tile::GetSize())), TileType(Tools::Random(2, 0))));
-				
+			this->m_Map.push_back(Tile(sf::Vector2f(float(i * Tile::GetSize()), float(j * Tile::GetSize())), TO_GENERATE));
+		}
+	}
 
-				// Temp //
-				if (i == 4)
-				{
-					this->m_Map.push_back(Tile(sf::Vector2f(float(i * Tile::GetSize()), float(j * Tile::GetSize())), WALL));
+	for (Tile& tile : this->m_Map)
+	{
+		if (tile.GetCood().x == 0 || tile.GetCood().x == (this->m_Size.x - 1) * Tile::GetSize() || tile.GetCood().y == 0 || tile.GetCood().y == (this->m_Size.y - 1) * Tile::GetSize())
+		{
+			tile.SetType(WALL);
+		}
+		else if (tile.GetType() == TO_GENERATE)
+		{
+			int	x = Tools::Random(Tools::Min<int, float, int>(15, this->m_Size.x - (tile.GetCood().x / Tile::GetSize())), Tools::Min<int, float, int>(5, this->m_Size.x - (tile.GetCood().x / Tile::GetSize())));
+			int y = Tools::Random(Tools::Min<int, float, int>(15, this->m_Size.y - (tile.GetCood().y / Tile::GetSize())), Tools::Min<int, float, int>(5, this->m_Size.y - (tile.GetCood().y / Tile::GetSize())));
 
-				}
-				else if (i % 4 == 0 && j != 1)
+			for (int i = 0; i < x; ++i)
+			{
+				for (int j = 0; j < y; ++j)
 				{
-					this->m_Map.push_back(Tile(sf::Vector2f(float(i * Tile::GetSize()), float(j * Tile::GetSize())), TileType(Tools::Random(2, 0))));
+					if ((i == x-1 || j == y-1) && ((i != int(x / 2)) ^! (j != int(y / 2))))
+					{
+						this->GetTile(tile.GetCood().x + (i * Tile::GetSize()), tile.GetCood().y + (j * Tile::GetSize())).SetType(WALL);
+					}
+					else if (i > 1 && j > 1 && i < x-2 && j < y-2 && Tools::Random(10,0) == 1)
+					{
+						this->GetTile(tile.GetCood().x + (i * Tile::GetSize()), tile.GetCood().y + (j * Tile::GetSize())).SetType(FURNITURE);
+					}
+					else
+					{
+						this->GetTile(tile.GetCood().x + (i * Tile::GetSize()), tile.GetCood().y + (j * Tile::GetSize())).SetType(FLOOR);
+					}
 				}
-				else
-				{
-					this->m_Map.push_back(Tile(sf::Vector2f(float(i * Tile::GetSize()), float(j * Tile::GetSize())), FLOOR));
-				}
-				//////////
 			}
 		}
 	}
+
 	_rendertexture.clear(sf::Color::Transparent);
-
-
 	sf::RectangleShape renderer = sf::RectangleShape(sf::Vector2f(float(Tile::GetSize()), float(Tile::GetSize())));
 	renderer.setOrigin(32.f, 32.f);
-	for (auto tileIt = this->m_Map.begin(); tileIt != this->m_Map.end(); ++tileIt)
+	for (Tile& tile : this->m_Map)
 	{
-		renderer.setPosition(tileIt->GetCood() + sf::Vector2f(32.f,32.f));
-		switch (tileIt->GetType())
+		renderer.setPosition(tile.GetCood() + sf::Vector2f(32.f,32.f));
+		switch (tile.GetType())
 		{
 			case WALL :
 				renderer.setFillColor(Color::Wall);

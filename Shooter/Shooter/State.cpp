@@ -2,6 +2,7 @@
 #include "StateManager.hpp"
 
 ////////////////////////////////////////////////////////
+#pragma region InitStatic
 
 Muzzle State::m_Muzzle = Muzzle("Default Muzzle", 0, 1.f, 1.f, 1.f);
 Grip State::m_Grip = Grip("Default Grip", 0, 1.f, 1.f, 1.f);
@@ -10,6 +11,7 @@ Magazine State::m_Magazine = Magazine("Default Magazine", 0, 0);
 Armor State::m_Armor = Armor("None", 0, 0, 1.f);
 AmmoStash State::m_AmmoStash = AmmoStash("Ammo Pouch", 0, 0);
 
+#pragma endregion
 ////////////////////////////////////////////////////////
 #pragma region State
 
@@ -77,14 +79,12 @@ void Menu::Update()
 {
 	this->m_InputTimer += Time::GetDeltaTime();
 
-	Muzzle muzzle = State::m_Muzzle;
-
-	if (this->m_Play.Update(this->Window(),0))
+	if (this->m_Play.Update(this->Window()))
 	{
 		this->m_InputTimer = 0.f;
 		this->ChangeState<Upgrade>();
 	}
-	if (this->m_Quit.Update(this->Window(),0))
+	if (this->m_Quit.Update(this->Window()))
 	{
 		this->m_InputTimer = 0.f;
 		this->ChangeState<Quit>();
@@ -236,7 +236,7 @@ void Game::Update()
 
 		if (this->m_Player.GetHP() == 0)
 		{
-			this->ChangeState<Upgrade>();
+			this->ChangeState<GameOver>();
 		}
 	}
 }
@@ -302,6 +302,67 @@ void Game::DeInit()
 
 #pragma endregion
 ////////////////////////////////////////////////////////
+#pragma region GameOver
+
+GameOver::GameOver(StateManager* _stateManager)
+{
+	std::cout << "GameOver Created" << std::endl;
+	this->m_StateManager = _stateManager;
+}
+GameOver::~GameOver()
+{
+	std::cout << "GameOver Deleted" << std::endl;
+}
+
+void GameOver::Deletor()
+{
+	this->~GameOver();
+}
+
+void GameOver::Init()
+{
+	std::cout << "Menu Init" << std::endl;
+	this->Window().ResetView();
+	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
+	this->m_Text.setString("Game Over");
+	this->m_Text.setPosition(this->Window().GetViewCenter().x - (this->m_Text.getGlobalBounds().width * 2.f), 150.f);
+	this->m_Text.setCharacterSize(120);
+
+	this->m_ToMenu = Button("Main Menu", sf::Vector2f(250.f, 800.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
+	this->m_ToShop = Button("Shop", sf::Vector2f(1420.f, 800.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
+}
+void GameOver::Update()
+{
+	this->m_InputTimer += Time::GetDeltaTime();
+
+	if (this->m_ToMenu.Update(this->Window()))
+	{
+		this->m_InputTimer = 0.f;
+		this->ChangeState<Menu>();
+	}
+	if (this->m_ToShop.Update(this->Window()))
+	{
+		this->m_InputTimer = 0.f;
+		this->ChangeState<Upgrade>();
+	}
+}
+void GameOver::Display()
+{
+	this->ClearWindow();
+
+	this->Draw(this->m_Text);
+	this->m_ToMenu.Display(this->Window());
+	this->m_ToShop.Display(this->Window());
+
+	this->DisplayWindow();
+}
+void GameOver::DeInit()
+{
+	std::cout << "GameOver DeInit" << std::endl;
+}
+
+#pragma endregion
+////////////////////////////////////////////////////////
 #pragma region Upgrade
 
 Upgrade::Upgrade(StateManager* _stateManager)
@@ -334,8 +395,6 @@ void Upgrade::Init()
 	this->m_Menu = Button("Menu", sf::Vector2f(25.f, 980.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
 }
 
-int i = 0;
-
 void Upgrade::Update()
 {	
 	this->m_InputTimer += Time::GetDeltaTime();
@@ -358,12 +417,12 @@ void Upgrade::Update()
 	State::m_Armor = this->m_Shop.GetArmor();
 	State::m_AmmoStash = this->m_Shop.GetAmmoStash();
 
-	if (this->m_Play.Update(this->Window(), 0))
+	if (this->m_Play.Update(this->Window()))
 	{
 		this->m_InputTimer = 0.f;
 		this->ChangeState<Game>();
 	}
-	if (this->m_Menu.Update(this->Window(), 0))
+	if (this->m_Menu.Update(this->Window()))
 	{
 		this->m_InputTimer = 0.f;
 		this->ChangeState<Menu>();

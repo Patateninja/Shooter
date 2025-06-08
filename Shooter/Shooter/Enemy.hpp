@@ -4,7 +4,7 @@
 #include "Shield.hpp"
 #include "Xp.hpp"
 #include <thread>
-#include <future>
+#include <mutex>
 
 class Enemy
 {
@@ -12,7 +12,10 @@ class Enemy
 		sf::CircleShape m_Circle;
 		std::vector<std::weak_ptr<Projectile>> m_IgnoreProj;
 		std::list<Tile> m_Path;
-		std::thread m_Thread;
+		std::mutex m_Mutex;
+		std::thread m_MovingThread;
+		std::thread m_PathfidingThread;
+
 		sf::Vector2f m_StartingPosition;
 		sf::Vector2f m_Position;
 		sf::Vector2f m_ProjectileOrigin;
@@ -25,6 +28,7 @@ class Enemy
 		float m_Speed = 0.f;
 		float m_BurnCooldown = 0.f;
 		float m_PathUdpateCooldown = 0.f;
+		float m_SeePlayerUdpateCooldown = 0.f;
 		float m_ActionRange = Tile::GetSize() * 25.f;
 		bool m_Burning = false;
 		bool m_Active = false;

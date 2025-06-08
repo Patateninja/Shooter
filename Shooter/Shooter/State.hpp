@@ -98,6 +98,24 @@ class Game : public State
 		void DeInit() override;
 };
 
+class GameOver : public State
+{
+	private:
+		Button m_ToMenu;
+		Button m_ToShop;
+
+	public:
+		GameOver(StateManager* _stateManager);
+		~GameOver();
+
+		void Deletor() override;
+
+		void Init() override;
+		void Update() override;
+		void Display() override;
+		void DeInit() override;
+};
+
 class Upgrade : public State
 {
 	private :

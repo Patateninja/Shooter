@@ -19,7 +19,7 @@ class ShopButton : public Button
 
 		void SetActive(bool _active) { this->m_Active = _active; }
 
-		bool Update(Window& _window, int _linkedAttachmentLvl) override;
+		bool Update(Window& _window, std::optional<int> _linkedAttachmentLvl);
 		void Display(Window& _window) override;
 };
 

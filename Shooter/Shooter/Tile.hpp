@@ -8,6 +8,7 @@ typedef enum TileType
 	WALL,
 	FURNITURE,
 	FLOOR,
+	TO_GENERATE,
 } TileType;
 
 class Tile
@@ -30,6 +31,8 @@ class Tile
 		inline bool GetBulletThrough() const { return this->m_BulletThrough; };
 		inline TileType GetType() const { return this->m_Type; };
 		inline static int GetSize() { return Tile::m_Size; };
+
+		void SetType(TileType _type);
 
 		bool operator==(const Tile& _tile2) const { return this->m_Cood == _tile2.m_Cood; };
 		bool operator!=(const Tile& _tile2) const { return this->m_Cood != _tile2.m_Cood; };

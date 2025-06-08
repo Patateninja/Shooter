@@ -1,6 +1,7 @@
 #pragma once
 #include "Window.hpp"
 #include "ResourceManager.hpp"
+#include <optional>
 
 class Button
 {
@@ -23,6 +24,6 @@ class Button
 		inline void Lock() { this->m_Locked = true; }
 		inline void Unlock() { this->m_Locked = false; }
 
-		virtual bool Update(Window& _window, int _unused);
+		bool Update(Window& _window);
 		virtual void Display(Window& _window);
 };
