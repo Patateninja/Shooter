@@ -163,6 +163,7 @@
     <ClCompile Include="Shop.cpp" />
     <ClCompile Include="ShopButton.cpp" />
     <ClCompile Include="Shotgun.cpp" />
+    <ClCompile Include="Slider.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="Shop.hpp" />
     <ClInclude Include="ShopButton.hpp" />
     <ClInclude Include="Shotgun.hpp" />
+    <ClInclude Include="Slider.hpp" />
     <ClInclude Include="Stage.hpp" />
     <ClInclude Include="StateManager.hpp" />
     <ClInclude Include="Projectile.hpp" />

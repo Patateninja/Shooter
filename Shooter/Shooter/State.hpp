@@ -4,6 +4,7 @@
 #include "Shop.hpp"
 #include "LoadMenu.hpp"
 #include "PauseMenu.hpp"
+#include "Slider.hpp"
 
 class StateManager;
 
@@ -20,6 +21,9 @@ class State
 		static Magazine m_Magazine;
 		static Armor m_Armor;
 		static AmmoStash m_AmmoStash;
+
+		static int m_SfxVolume;
+		static int m_BgmVolume;
 		
 	public :
 		State() = default;
@@ -138,6 +142,11 @@ class Upgrade : public State
 class Option : public State
 {
 	private :
+		Button m_Menu;
+		Button m_Fullscreen;
+		Slider m_SFX;
+		Slider m_BGM;
+
 
 	public :
 		Option(StateManager* _stateManager);

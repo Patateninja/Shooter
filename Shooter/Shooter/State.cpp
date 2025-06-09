@@ -11,6 +11,9 @@ Magazine State::m_Magazine = Magazine("Default Magazine", 0, 0);
 Armor State::m_Armor = Armor("None", 0, 0, 1.f);
 AmmoStash State::m_AmmoStash = AmmoStash("Ammo Pouch", 0, 0);
 
+int State::m_SfxVolume = 100;
+int State::m_BgmVolume = 100;
+
 #pragma endregion
 ////////////////////////////////////////////////////////
 #pragma region State
@@ -72,8 +75,10 @@ void Menu::Init()
 	this->m_Text.setPosition(10.f, 5.f);
 	this->m_Text.setCharacterSize(120);
 
-	this->m_Play = Button("Play", sf::Vector2f(25.f, 200.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
-	this->m_Quit = Button("Quit", sf::Vector2f(25.f, 300.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
+	this->m_Play = Button("Play", sf::Vector2f(25.f, 250.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("Placeholder"));
+	this->m_Option = Button("Settings", sf::Vector2f(25.f, 400.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("Placeholder"));
+	this->m_Quit = Button("Quit", sf::Vector2f(25.f, 550.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("Placeholder"));
+
 }
 void Menu::Update()
 {
@@ -83,6 +88,11 @@ void Menu::Update()
 	{
 		this->m_InputTimer = 0.f;
 		this->ChangeState<Upgrade>();
+	}
+	if (this->m_Option.Update(this->Window()))
+	{
+		this->m_InputTimer = 0.f;
+		this->ChangeState<Option>();
 	}
 	if (this->m_Quit.Update(this->Window()))
 	{
@@ -96,6 +106,7 @@ void Menu::Display()
 
 	this->Draw(this->m_Text);
 	this->m_Play.Display(this->Window());
+	this->m_Option.Display(this->Window());
 	this->m_Quit.Display(this->Window());
 
 	this->DisplayWindow();
@@ -385,6 +396,9 @@ void Upgrade::Init()
 	std::cout << "Upgrade Init" << std::endl;
 	this->Window().ResetView();
 	this->m_Shop.Init(Level::GetLvl(), State::GetMuzzle(), State::m_Grip, State::m_Stock, State::m_Magazine, State::m_Armor, State::m_AmmoStash);
+	
+	this->m_Text.setString("Armory");
+	this->m_Text.setCharacterSize(60);
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 
 	this->m_DelayRect.setSize(sf::Vector2f(1920.f, 1080.f));
@@ -398,7 +412,7 @@ void Upgrade::Init()
 void Upgrade::Update()
 {	
 	this->m_InputTimer += Time::GetDeltaTime();
-	this->m_Text.setString("Armory");
+	
 
 	if (!this->m_ShopActive && this->m_InputTimer > 0.5f)
 	{
@@ -488,22 +502,61 @@ void Option::Init()
 {
 	std::cout << "Option Init" << std::endl;
 	this->Window().ResetView();
+
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
+
+	this->GetRsc<sf::Music>("Bogus").play();
+
+	this->m_SFX = Slider(sf::Vector2f(300.f, 250.f), sf::Vector2f(700.f, 25.f), 0);
+	this->m_BGM = Slider(sf::Vector2f(300.f, 450.f), sf::Vector2f(700.f, 25.f), 0);
+	this->m_Fullscreen = Button("", sf::Vector2f(200.f, 700.f), sf::Vector2f(75.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
+	this->m_Menu = Button("Menu", sf::Vector2f(25.f, 980.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
 }
 void Option::Update()
 {
-	this->m_Text.setString("Option\nPress Backspace to return to Menu");
+	this->m_SFX.Update(this->Window(), this->m_SfxVolume);
+	RscMana::SetSFXVolume(this->m_SfxVolume);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace))
+	this->m_BGM.Update(this->Window(), this->m_BgmVolume);
+	RscMana::SetBGMVolume(this->m_BgmVolume);
+
+	if (this->m_Menu.Update(this->Window()))
 	{
 		this->ChangeState<Menu>();
+	}
+	if (this->m_Fullscreen.Update(this->Window()))
+	{
+		this->Window().ToggleFullscreen();
 	}
 }
 void Option::Display()
 {
 	this->ClearWindow();
 
+	this->m_Text.setCharacterSize(60);
+	this->m_Text.setString("Settings");
+	this->m_Text.setPosition(10.f, 5.f);
 	this->Draw(this->m_Text);
+
+	this->m_Menu.Display(this->Window());
+	
+	this->m_Text.setCharacterSize(30);
+	this->m_Text.setString("SFX");
+	this->m_Text.setPosition(200.f, 230.f);
+	this->Draw(this->m_Text);
+	this->m_Fullscreen.Display(this->Window());
+	
+	this->m_Text.setCharacterSize(30);
+	this->m_Text.setString("SFX");
+	this->m_Text.setPosition(200.f, 230.f);
+	this->Draw(this->m_Text);
+	this->m_SFX.Display(this->Window());
+
+	this->m_Text.setCharacterSize(30);
+	this->m_Text.setString("BGM");
+	this->m_Text.setPosition(200.f, 430.f);
+	this->Draw(this->m_Text);
+	this->m_BGM.Display(this->Window());
 
 	this->DisplayWindow();
 }

@@ -4,10 +4,11 @@
 
 class ResourceManager
 {
-	private:
+	private :
 		std::unordered_map<std::string, RSC*> m_RessourcesStorage;
-	public:
-		ResourceManager();
+	
+	public :
+		ResourceManager() = default;
 		~ResourceManager();
 
 		void Init();
@@ -25,6 +26,9 @@ class ResourceManager
 		{
 			return dynamic_cast<Resource<T>*>(this->m_RessourcesStorage[_name])->GetRSC();
 		}
+
+		void SetSFXVolume(int _volume);
+		void SetBGMVolume(int _volume);
 };
 
 
@@ -48,4 +52,7 @@ namespace RscMana
 	{
 		return dynamic_cast<Resource<T>*>(GetWrapped(_name))->GetRSC();
 	}
+
+	void SetBGMVolume(int _volume);
+	void SetSFXVolume(int _volume);
 }

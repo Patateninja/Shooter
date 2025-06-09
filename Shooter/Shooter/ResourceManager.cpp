@@ -1,9 +1,5 @@
 #include "ResourceManager.hpp"
 
-ResourceManager::ResourceManager()
-{
-
-}
 ResourceManager::~ResourceManager()
 {
 	while (!this->m_RessourcesStorage.empty())
@@ -31,6 +27,23 @@ void ResourceManager::Init()
 	this->Add<sf::Music>("Bogus", path + "BGM\\Bogus.ogg");
 }
 
+void ResourceManager::SetSFXVolume(int _volume)
+{
+	for (std::unordered_map<std::string, RSC*>::iterator iterator = this->m_RessourcesStorage.begin(); iterator != this->m_RessourcesStorage.end(); ++iterator)
+	{
+		iterator->second->SetVolume(_volume);
+	}
+}
+
+void ResourceManager::SetBGMVolume(int _volume)
+{
+	for (std::unordered_map<std::string, RSC*>::iterator iterator = this->m_RessourcesStorage.begin(); iterator != this->m_RessourcesStorage.end(); ++iterator)
+	{
+		iterator->second->SetVolume(_volume);
+	}
+}
+
+
 namespace RscMana
 {
 	ResourceManager rscm;
@@ -49,4 +62,13 @@ namespace RscMana
 		return RscMana::rscm.GetMap()[_name];
 	}
 	
+	void SetBGMVolume(int _volume)
+	{
+		rscm.SetBGMVolume(_volume);
+	}
+
+	void SetSFXVolume(int _volume)
+	{
+		rscm.SetSFXVolume(_volume);
+	}
 }
