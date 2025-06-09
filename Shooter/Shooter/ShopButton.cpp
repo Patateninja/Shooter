@@ -15,17 +15,17 @@ ShopButton::ShopButton(std::string _str, sf::Vector2f _pos, sf::Vector2f _size, 
 	this->m_Active = false;
 }
 
-bool ShopButton::Update(Window& _window, int _linkedAttachementLvl)
+bool ShopButton::Update(Window& _window, std::optional<int> _linkedAttachementLvl = std::nullopt)
 {
 	if (this->m_Locked)
 	{
-		this->m_Text.setString("Unlocked at lvl." + std::to_string(_linkedAttachementLvl));
+		this->m_Text.setString("Unlocked at lvl." + std::to_string(_linkedAttachementLvl.value()));
 	}
 	else
 	{
 		this->m_Text.setString(this->m_Memory);
 
-		if (this->Button::Update(_window, 0))
+		if (this->Button::Update(_window))
 		{
 			this->m_Active = true;
 			return true;

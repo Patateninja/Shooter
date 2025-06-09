@@ -55,7 +55,7 @@ void DragonBreath::Shot(sf::Vector2f _playerpos, sf::Vector2f _playerVel, float 
 {
 	for (int i = 0; i < this->m_Pellets; ++i)
 	{
-		float spread = Tools::DegToRad((this->m_Spread / 2.f) - ((this->m_Spread / (this->m_Pellets - 1)) * i));
+		float spread = Tools::DegToRad((this->m_Spread / 2.f) - ((this->m_Spread / float(this->m_Pellets - 1)) * i));
 		ProjList::Add(_playerpos, Tools::AngleToVector(this->m_Velocity, _playerAngle + (spread * _recoil)) - _playerVel, FLAMMING, this->m_Damage, this->m_Range, PLAYER);
 	}
 }

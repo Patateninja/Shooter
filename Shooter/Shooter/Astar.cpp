@@ -192,7 +192,7 @@ std::list<Node> Astar::Astar(Tile& _start, Tile& _end, TileMap& _map, bool& _bre
 			}
 		}
 
-		if (!checked.empty() && toCheck.empty() || checked.size() > (_map.GetSize().x * _map.GetSize().y) / 4)
+		if (!checked.empty() && toCheck.empty())
 		{
 			std::list<Node> still;
 			still.push_back(start);

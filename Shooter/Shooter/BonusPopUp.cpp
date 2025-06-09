@@ -23,7 +23,7 @@ void BonusPopUp::Update(Window& _window)
 		this->m_Rect.setFillColor(sf::Color::Red);
 	}
 
-	if (this->m_CloseButton.Update(_window, 0))
+	if (this->m_CloseButton.Update(_window))
 	{
 		this->m_ToDelete = true;
 	}

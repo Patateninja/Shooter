@@ -165,6 +165,9 @@
     <ClCompile Include="Save.cpp">
       <Filter>Source Files\Save &amp; Load</Filter>
     </ClCompile>
+    <ClCompile Include="Slider.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tools.hpp">
@@ -253,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="Save.hpp">
       <Filter>Header Files\Save &amp; Load</Filter>
+    </ClInclude>
+    <ClInclude Include="Slider.hpp">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

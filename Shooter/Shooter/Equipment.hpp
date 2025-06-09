@@ -13,7 +13,7 @@ class Equipment
 		virtual void foo() {};
 
 		inline std::string& GetName() { return this->m_Name; }
-		inline int GetUnlockLevel() { return this->m_UnlockLevel; }
+		inline const int GetUnlockLevel() const { return this->m_UnlockLevel; }
 };
 
 class Armor : public Equipment
@@ -27,8 +27,8 @@ class Armor : public Equipment
 		Armor(const Armor& _muzzle);
 		~Armor() = default;
 
-		inline int GetLife() { return this->m_BonusLife; }
-		inline float GetWalkSpeedMod() { return this->m_WalkingSpeedModifier; }
+		inline const int GetLife() const { return this->m_BonusLife; }
+		inline const float GetWalkSpeedMod() const { return this->m_WalkingSpeedModifier; }
 };
 
 class AmmoStash : public Equipment
@@ -41,6 +41,6 @@ class AmmoStash : public Equipment
 		AmmoStash(const AmmoStash& _magazine);
 		~AmmoStash() = default;
 
-		inline int GetCapacity() { return this->m_Capacity; }
+		inline const int GetCapacity() const { return this->m_Capacity; }
 };
 

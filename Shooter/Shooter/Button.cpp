@@ -33,7 +33,7 @@ bool Button::Clicked(Window& _window)
 	return false;
 }
 
-bool Button::Update(Window& _window, int _unused)
+bool Button::Update(Window& _window)
 {
 	if (this->m_Rect.getGlobalBounds().contains(_window.RelativePos(sf::Mouse::getPosition(_window.Unwrap()))))
 	{

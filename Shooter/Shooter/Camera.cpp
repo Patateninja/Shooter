@@ -5,7 +5,7 @@ void Camera::Reset()
 	this->m_Target = sf::Vector2f(0.f, 0.f);
 }
 
-void Camera::Update(Window& _window)
+void Camera::Update(Window& _window) const
 {
 	if (_window.GetViewCenter() != this->m_Target)
 	{

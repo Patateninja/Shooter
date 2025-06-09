@@ -1,12 +1,10 @@
 #pragma once
 #include "Player.hpp"
-#include "Enemy.hpp"
 #include "Stage.hpp"
-#include "Camera.hpp" 
 #include "Shop.hpp"
-#include "BonusPopUp.hpp"
 #include "LoadMenu.hpp"
 #include "PauseMenu.hpp"
+#include "Slider.hpp"
 
 class StateManager;
 
@@ -23,6 +21,9 @@ class State
 		static Magazine m_Magazine;
 		static Armor m_Armor;
 		static AmmoStash m_AmmoStash;
+
+		static int m_SfxVolume;
+		static int m_BgmVolume;
 		
 	public :
 		State() = default;
@@ -98,6 +99,24 @@ class Game : public State
 		void DeInit() override;
 };
 
+class GameOver : public State
+{
+	private:
+		Button m_ToMenu;
+		Button m_ToShop;
+
+	public:
+		GameOver(StateManager* _stateManager);
+		~GameOver();
+
+		void Deletor() override;
+
+		void Init() override;
+		void Update() override;
+		void Display() override;
+		void DeInit() override;
+};
+
 class Upgrade : public State
 {
 	private :
@@ -123,6 +142,11 @@ class Upgrade : public State
 class Option : public State
 {
 	private :
+		Button m_Menu;
+		Button m_Fullscreen;
+		Slider m_SFX;
+		Slider m_BGM;
+
 
 	public :
 		Option(StateManager* _stateManager);

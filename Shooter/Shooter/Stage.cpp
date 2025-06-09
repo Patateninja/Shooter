@@ -21,39 +21,121 @@ void Stage::GenerateMap()
 	this->m_MapSprite.setTexture(this->m_MapTexture.getTexture());
 	this->m_MapSprite.setPosition(-Tile::GetSize() / 2.f, -Tile::GetSize() / 2.f);
 
-	if (bool(Tools::Random(1, 0)))
+	if (this->m_Crate)
 	{
-		this->m_Crate = new BonusCrate(sf::Vector2f(128.f, 128.f));
+		delete this->m_Crate;
+	}
+	if (this->m_Num % 3 == 0)
+	{
+		Tile tile;
+		do
+		{
+			int x = Tools::Random(this->m_TileMap.GetSize().x - 1, 15);
+			int y = Tools::Random(this->m_TileMap.GetSize().y - 1, 15);
+			tile = this->m_TileMap.GetTile(x * Tile::GetSize(), y * Tile::GetSize());
+		} while (!tile.GetWalkable());
+
+		this->m_Crate = new BonusCrate(tile.GetCood());
+	}
+	else if (this->m_Num % 5 == 0)
+	{
+		Tile tile;
+		do
+		{
+			int x = Tools::Random(this->m_TileMap.GetSize().x - 1, 15);
+			int y = Tools::Random(this->m_TileMap.GetSize().y - 1, 15);
+			tile = this->m_TileMap.GetTile(x * Tile::GetSize(), y * Tile::GetSize());
+		} while (!tile.GetWalkable());
+
+		this->m_Crate = new BoostCrate(tile.GetCood(), true, true);
 	}
 	else
 	{
-		this->m_Crate = new BoostCrate(sf::Vector2f(128.f, 128.f),true,true);
+		this->m_Crate = nullptr;
 	}
 }
 void Stage::SpawnEnemies()
 {
-	if (this->m_Num % 3 == 0)
+
+	if (this->m_Num != 1 && this->m_Num != 42)
 	{
-		//this->m_EnemyList.Add<Tank>(sf::Vector2f(320.f, 640.f));
-		this->m_EnemyList.Add<RangedShielded>(sf::Vector2f(64.f, 640.f));
-		this->m_EnemyList.Add<Ranged>(sf::Vector2f(960.f, 1152.f));
-		this->m_EnemyList.Add<Ranged>(sf::Vector2f(384.f, 1280.f));
-		this->m_EnemyList.Add<Ranged>(sf::Vector2f(960.f, 1152.f));
-		this->m_EnemyList.Add<Ranged>(sf::Vector2f(1216.f, 832.f));
-		this->m_EnemyList.Add<RangedShielded>(sf::Vector2f(576.f, 1024.f));
-		//this->m_EnemyList.Add<Tank>(sf::Vector2f(1344.f, 384.f));
+		int credits = int(this->m_Num * 1.5f) + int(this->m_Num % 5 == 0) * 6 + 1;
+
+		while (credits > 0 && this->m_EnemyList.Size() < 15)
+		{
+			Tile tile;
+			do
+			{
+				int x = Tools::Random(this->m_TileMap.GetSize().x - 1, 5);
+				int y = Tools::Random(this->m_TileMap.GetSize().y - 1, 5);
+				tile = this->m_TileMap.GetTile(x * Tile::GetSize(), y * Tile::GetSize());
+			} while (!tile.GetWalkable());
+
+			switch (Tools::Random(6, 0))
+			{
+				case 0:
+					if (credits - 1 >= 0)
+					{
+						this->m_EnemyList.Add<Baseliner>(tile.GetCood());
+						credits -= 1;
+					}
+					break;
+				case 1:
+					if (credits - 3 >= 0)
+					{
+						this->m_EnemyList.Add<Tank>(tile.GetCood());
+						credits -= 3;
+					}
+					break;
+				case 2:
+					if (credits - 2 >= 0)
+					{
+						this->m_EnemyList.Add<Speedster>(tile.GetCood());
+						credits -= 2;
+					}
+					break;
+				case 3:
+					if (credits - 4 >= 0)
+					{
+						this->m_EnemyList.Add<Ranged>(tile.GetCood());
+						credits -= 4;
+					}
+					break;
+				case 4:
+					if (credits - 6 >= 0)
+					{
+						this->m_EnemyList.Add<Shielded>(tile.GetCood());
+						credits -= 6;
+					}
+					break;
+				case 5:
+					if (credits - 10 >= 0)
+					{
+						this->m_EnemyList.Add<RangedShielded>(tile.GetCood());
+						credits -= 10;
+					}
+					break;
+				default:
+					break;
+			}
+		}
 	}
-	else if (this->m_Num % 3 == 1)
+	else if (this->m_Num == 1)
 	{
-		this->m_EnemyList.Add<Shielded>(sf::Vector2f(1216, 832.f));
-		//this->m_EnemyList.Add<Baseliner>(sf::Vector2f(576.f, 1024.f));
+
+		Tile tile;
+		do
+		{
+			int x = Tools::Random(20, 10);
+			int y = Tools::Random(20, 10);
+			tile = this->m_TileMap.GetTile(x * Tile::GetSize(), y * Tile::GetSize());
+		} while (!tile.GetWalkable());
+
+		this->m_EnemyList.Add<Baseliner>(tile.GetCood());
 	}
 	else
 	{
-		this->m_EnemyList.Add<Tank>(sf::Vector2f(64.f, 640.f));
-		this->m_EnemyList.Add<Speedster>(sf::Vector2f(960.f, 1152.f));
-		this->m_EnemyList.Add<Speedster>(sf::Vector2f(1216, 832.f));
-		this->m_EnemyList.Add<Tank>(sf::Vector2f(576.f, 1024.f));
+		//BOSS
 	}
 }
 
@@ -65,7 +147,12 @@ void Stage::Init()
 void Stage::Update(Player& _player, Camera& _cam, BonusPopUp*& _popUp, Window& _window)
 {
 	this->m_EnemyList.Update(_player.GetPos(), this->m_TileMap);
-	this->m_Crate->Update(_player, this->m_GiveCoffee, this->m_GiveBMG, this->m_GiveVest, _popUp);
+	
+	if (this->m_Crate)
+	{
+		this->m_Crate->Update(_player, this->m_GiveCoffee, this->m_GiveBMG, this->m_GiveVest, _popUp);
+	}
+	
 	if (this->m_EnemyList.AllDead())
 	{
 		ProjList::Clear();
@@ -113,6 +200,9 @@ void Stage::Update(Player& _player, Camera& _cam, BonusPopUp*& _popUp, Window& _
 void Stage::Display(Window& _window)
 {
 	_window.Draw(this->m_MapSprite);
+	if (this->m_Crate)
+	{
+		this->m_Crate->Display(_window);
+	}
 	this->m_EnemyList.Display(_window);
-	this->m_Crate->Display(_window);
 }

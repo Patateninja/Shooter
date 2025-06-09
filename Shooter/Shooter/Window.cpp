@@ -54,7 +54,7 @@ void Window::SetViewCenter(const sf::Vector2f& _center)
 }
 void Window::ResetView()
 {
-	this->m_View.GetView() = this->m_Window.getDefaultView();
+	this->SetView(this->m_Window.getDefaultView());
 	this->m_Window.setView(this->m_Window.getDefaultView());
 }
 

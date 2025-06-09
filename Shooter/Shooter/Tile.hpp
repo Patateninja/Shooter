@@ -8,6 +8,7 @@ typedef enum TileType
 	WALL,
 	FURNITURE,
 	FLOOR,
+	TO_GENERATE,
 } TileType;
 
 class Tile
@@ -31,6 +32,8 @@ class Tile
 		inline TileType GetType() const { return this->m_Type; };
 		inline static int GetSize() { return Tile::m_Size; };
 
+		void SetType(TileType _type);
+
 		bool operator==(const Tile& _tile2) const { return this->m_Cood == _tile2.m_Cood; };
 		bool operator!=(const Tile& _tile2) const { return this->m_Cood != _tile2.m_Cood; };
 };
@@ -45,7 +48,7 @@ class TileMap
 		TileMap(sf::Vector2i _size);
 		~TileMap();
 
-		inline sf::Vector2i GetSize() { return this->m_Size; };
+		inline const sf::Vector2i GetSize() const { return this->m_Size; };
 
 		void Generate(sf::RenderTexture& _rendertexture);
 

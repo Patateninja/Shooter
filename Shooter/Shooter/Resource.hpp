@@ -6,7 +6,9 @@
 class RSC
 {
 	public :
-		virtual void Deletor() {};
+		virtual void Deletor() {}
+
+		virtual void SetVolume(int _volume) {} //Find better way to do it
 };
 
 template <typename T>
@@ -58,6 +60,11 @@ class Resource<sf::Music> : public RSC
 			this->~Resource();
 		}
 
+		void SetVolume(int _volume) override
+		{
+			this->m_Music.setVolume(_volume);
+		}
+
 		sf::Music& GetRSC()
 		{
 			return this->m_Music;
@@ -85,6 +92,11 @@ class Resource<sf::Sound> : public RSC
 		void Deletor() override
 		{
 			this->~Resource();
+		}
+
+		void SetVolume(int _volume) override
+		{
+			this->m_Sound.setVolume(_volume);
 		}
 
 		sf::Sound& GetRSC()

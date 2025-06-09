@@ -7,15 +7,15 @@ Enemy::Enemy(const sf::Vector2f& _startingPos)
 {
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
-	this->m_Thread = std::thread(&Enemy::Threadlauncher, this);
+	this->m_PathfidingThread = std::thread(&Enemy::Threadlauncher, this);
 }
 Enemy::~Enemy()
 {
 	this->m_IgnoreProj.clear();
 	this->m_Active = false;
-	if (this->m_Thread.joinable())
+	if (this->m_PathfidingThread.joinable())
 	{
-		this->m_Thread.join();
+		this->m_PathfidingThread.join();
 	}
 }
 
@@ -31,33 +31,50 @@ void Enemy::Respawn()
 	this->m_Circle.setFillColor(sf::Color::Red);
 	this->m_IgnoreProj.clear();
 	this->m_Path.clear();
-	this->m_Thread = std::thread(&Enemy::Threadlauncher,this);
+
+	while (!this->m_MovingThread.joinable());
+	this->m_MovingThread.join();
+	this->m_MovingThread = std::thread(&Enemy::Threadlauncher, this);
+
+	while (!this->m_PathfidingThread.joinable());
+	this->m_PathfidingThread.join();
+	this->m_PathfidingThread = std::thread(&Enemy::Threadlauncher, this);
 }
 
 void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 {
 	if (this->m_Active)
-	{
-		if (this->m_Thread.joinable())
+	{	
+		if (this->m_PathUdpateCooldown <= 0.f && this->m_PathfidingThread.joinable())
 		{
-			this->m_Thread.join();
-			this->m_Thread = std::thread(&Enemy::UpdatePath, this, std::ref(_playerPos), std::ref(_map));
-			this->m_Thread.detach();
-		}
-		if (this->m_PathUdpateCooldown <= 0.f)
-		{
-			this->m_SeePlayer = this->PlayerInSight(_playerPos, _map);
+			this->m_PathfidingThread.join();
+			this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(_playerPos), std::ref(_map));
 			this->m_PathUdpateCooldown = 1.f;
 		}
+		else
+		{
+			this->m_PathUdpateCooldown -= Time::GetDeltaTime();
+		}
+
+		if (this->m_SeePlayerUdpateCooldown <= 0.f)
+		{
+			this->m_SeePlayer = this->PlayerInSight(_playerPos, _map);
+			this->m_SeePlayerUdpateCooldown = 1.f;
+		}
+		else
+		{
+			this->m_SeePlayerUdpateCooldown -= Time::GetDeltaTime();
+		}
 		
-		this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 
 		this->m_ProjectileOrigin = this->m_Position + Tools::AngleToVector(20.f, Tools::VectorToAngle(_playerPos - this->m_Position) + Tools::DegToRad(90));
 		
-		if (Tools::Distance(this->m_Position, _playerPos) < this->m_ActionRange && (Tools::Distance(this->m_Position, _playerPos) > this->m_AttackRange || !this->m_SeePlayer))
+		if (this->m_MovingThread.joinable() && (Tools::Distance(this->m_Position, _playerPos) < this->m_ActionRange && ((Tools::Distance(this->m_Position, _playerPos) > this->m_AttackRange || !this->m_SeePlayer))))
 		{
-			this->Move(_playerPos, _map);
+			this->m_MovingThread.join();
+			this->m_MovingThread = std::thread(&Enemy::Move,this,std::ref(_playerPos), std::ref(_map));
 		}
+
 		this->CheckDamage();
 
 		if (this->m_Burning)
@@ -102,29 +119,23 @@ bool Enemy::PlayerInSight(const sf::Vector2f& _playerPos, TileMap& _map)
 }
 void Enemy::UpdatePath(const sf::Vector2f& _playerPos, TileMap& _map)
 {
-	while (this->m_Active && Tools::Distance(this->m_Position, _playerPos) < this->m_ActionRange)
-	{
-		if (this->m_PathUdpateCooldown <= 0.f)
-		{
-			this->m_Path = Astar::Pathfinding(_map.GetTile(int(this->m_Position.x), int(this->m_Position.y)), _map.GetTile(int(_playerPos.x), int(_playerPos.y)), _map, std::ref(this->m_Active));
-			this->m_PathUdpateCooldown = 1.f;
-		}
-	}
+	this->m_Mutex.lock();
+	this->m_Path = Astar::Pathfinding(_map.GetTile(int(this->m_Position.x), int(this->m_Position.y)), _map.GetTile(int(_playerPos.x), int(_playerPos.y)), _map, std::ref(this->m_Active));
+	this->m_Mutex.unlock();
 }
 void Enemy::Move(const sf::Vector2f& _playerPos, TileMap& _map)
 {
 	if (!this->m_Path.empty())
 	{
+		this->m_Mutex.lock();
 		this->m_Target = this->m_Path.front().GetCood();
-
 		this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed;
-
 		this->m_Position += this->m_Velocity * Time::GetDeltaTime();
-
 		if (_map.GetTile(int(this->m_Position.x), int(this->m_Position.y)) == this->m_Path.front())
 		{
 			this->m_Path.erase(this->m_Path.begin());
 		}
+		this->m_Mutex.unlock();
 	}
 	else if (Tools::Distance(this->m_Position, _playerPos) < Tile::GetSize() * 3)
 	{
@@ -209,16 +220,18 @@ Baseliner::Baseliner(const sf::Vector2f& _startingPos)
 	this->m_MaxHp = 35;
 	this->m_Hp = 35;
 	this->m_Speed = 250.f;
-	this->m_Thread = std::thread(&Enemy::Threadlauncher, this);
+	this->m_PathfidingThread = std::thread(&Enemy::Threadlauncher, this);
+	this->m_MovingThread = std::thread(&Enemy::Threadlauncher, this);
 }
 Baseliner::~Baseliner()
 {
 	this->m_IgnoreProj.clear();
 	this->m_Active = false;
-	if (this->m_Thread.joinable())
-	{
-		this->m_Thread.join();
-	}
+
+	while (!this->m_MovingThread.joinable());
+	this->m_MovingThread.join();
+	while (!this->m_PathfidingThread.joinable());
+	this->m_PathfidingThread.join();
 }
 
 #pragma endregion
@@ -236,16 +249,18 @@ Tank::Tank(const sf::Vector2f& _startingPos)
 	this->m_MaxHp = 75;
 	this->m_Hp = 75;
 	this->m_Speed = 200.f;
-	this->m_Thread = std::thread(&Enemy::Threadlauncher, this);
+	this->m_PathfidingThread = std::thread(&Enemy::Threadlauncher, this);
+	this->m_MovingThread = std::thread(&Enemy::Threadlauncher, this);
 }
 Tank::~Tank()
 {
 	this->m_IgnoreProj.clear();
 	this->m_Active = false;
-	if (this->m_Thread.joinable())
-	{
-		this->m_Thread.join();
-	}
+
+	while (!this->m_MovingThread.joinable());
+	this->m_MovingThread.join();
+	while (!this->m_PathfidingThread.joinable());
+	this->m_PathfidingThread.join();
 }
 
 #pragma endregion
@@ -264,7 +279,8 @@ Ranged::Ranged(const sf::Vector2f& _startingPos)
 	this->m_MaxHp = 25;
 	this->m_Hp = 25;
 	this->m_Speed = 250.f;
-	this->m_Thread = std::thread(&Enemy::Threadlauncher, this);
+	this->m_PathfidingThread = std::thread(&Enemy::Threadlauncher, this);
+	this->m_MovingThread = std::thread(&Enemy::Threadlauncher, this);
 
 	this->m_ShootTimer = 0.5f;
 }
@@ -272,10 +288,11 @@ Ranged::~Ranged()
 {
 	this->m_IgnoreProj.clear();
 	this->m_Active = false;
-	if (this->m_Thread.joinable())
-	{
-		this->m_Thread.join();
-	}
+	
+	while (!this->m_MovingThread.joinable());
+	this->m_MovingThread.join();
+	while (!this->m_PathfidingThread.joinable());
+	this->m_PathfidingThread.join();
 }
 
 void Ranged::Update(const sf::Vector2f& _playerPos, TileMap& _map)
@@ -292,7 +309,6 @@ void Ranged::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 		else
 		{
 			this->m_ShootTimer -= Time::GetDeltaTime();
-
 		}
 	}
 }
@@ -317,16 +333,18 @@ Speedster::Speedster(const sf::Vector2f& _startingPos)
 	this->m_MaxHp = 10;
 	this->m_Hp = 10;
 	this->m_Speed = 400.f;
-	this->m_Thread = std::thread(&Enemy::Threadlauncher, this);
+	this->m_PathfidingThread = std::thread(&Enemy::Threadlauncher, this);
+	this->m_MovingThread = std::thread(&Enemy::Threadlauncher, this);
 }
 Speedster::~Speedster()
 {
 	this->m_IgnoreProj.clear();
 	this->m_Active = false;
-	if (this->m_Thread.joinable())
-	{
-		this->m_Thread.join();
-	}
+	
+	while (!this->m_MovingThread.joinable());
+	this->m_MovingThread.join();
+	while (!this->m_PathfidingThread.joinable());
+	this->m_PathfidingThread.join();
 }
 
 #pragma endregion
@@ -344,7 +362,8 @@ Shielded::Shielded(const sf::Vector2f& _startingPos)
 	this->m_MaxHp = 35;
 	this->m_Hp = 35;
 	this->m_Speed = 200.f;
-	this->m_Thread = std::thread(&Enemy::Threadlauncher, this);
+	this->m_PathfidingThread = std::thread(&Enemy::Threadlauncher, this);
+	this->m_MovingThread = std::thread(&Enemy::Threadlauncher, this);
 
 	this->m_Shield = std::make_unique<Shield>(this->m_Position);
 }
@@ -352,10 +371,11 @@ Shielded::~Shielded()
 {
 	this->m_IgnoreProj.clear();
 	this->m_Active = false;
-	if (this->m_Thread.joinable())
-	{
-		this->m_Thread.join();
-	}
+	
+	while (!this->m_MovingThread.joinable());
+	this->m_MovingThread.join();
+	while (!this->m_PathfidingThread.joinable());
+	this->m_PathfidingThread.join();
 }
 
 void Shielded::Update(const sf::Vector2f& _playerPos, TileMap& _map)
@@ -388,7 +408,8 @@ RangedShielded::RangedShielded(const sf::Vector2f& _startingPos)
 	this->m_Hp = 50;
 	this->m_Speed = 150.f;
 	this->m_ShootTimer = 0.5f;
-	this->m_Thread = std::thread(&Enemy::Threadlauncher, this);
+	this->m_PathfidingThread = std::thread(&Enemy::Threadlauncher, this);
+	this->m_MovingThread = std::thread(&Enemy::Threadlauncher, this);
 
 	this->m_Shield = std::make_unique<Shield>(this->m_Position);
 }
@@ -396,10 +417,11 @@ RangedShielded::~RangedShielded()
 {
 	this->m_IgnoreProj.clear();
 	this->m_Active = false;
-	if (this->m_Thread.joinable())
-	{
-		this->m_Thread.join();
-	}
+	
+	while (!this->m_MovingThread.joinable());
+	this->m_MovingThread.join();
+	while (!this->m_PathfidingThread.joinable());
+	this->m_PathfidingThread.join();
 }
 
 void RangedShielded::Update(const sf::Vector2f& _playerPos, TileMap& _map)
