@@ -47,7 +47,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 				if (this->m_Vest == 0)
 				{
 					this->Die();
-					_enemyList.Respawn();
+					_enemyList.Respawn(_map);
 					_cam.NewTarget(_window, this->m_Position, _map.GetSize());
 					return;
 				}
@@ -67,7 +67,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 		if (this->CheckDamage())
 		{
 			this->Die();
-			_enemyList.Respawn();
+			_enemyList.Respawn(_map);
 			_cam.NewTarget(_window, this->m_Position, _map.GetSize());
 			return;
 		}

@@ -17,7 +17,7 @@ void Shotgun::Modify(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _
 
 void Shotgun::Load(int _input)
 {
-	if (this->m_Magazine.size() < this->m_DefaultCapacity + this->m_MagazineAttachement.GetCapacity())
+	if (int(this->m_Magazine.size()) < this->m_DefaultCapacity + this->m_MagazineAttachement.GetCapacity())
 	{
 		switch (_input)
 		{

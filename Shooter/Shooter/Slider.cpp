@@ -29,7 +29,7 @@ void Slider::Update(Window& _window, int& _percent)
 	
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->m_Bar.getGlobalBounds().contains(_window.RelativePos(sf::Mouse::getPosition(_window.Unwrap()))))
 	{
-		_percent = (Tools::Distance(this->m_Bar.getPosition(), _window.RelativePos(sf::Mouse::getPosition(_window.Unwrap()))) / this->m_Bar.getGlobalBounds().width) * 100;
+		_percent = int(Tools::Distance(this->m_Bar.getPosition(), _window.RelativePos(sf::Mouse::getPosition(_window.Unwrap()))) / this->m_Bar.getGlobalBounds().width) * 100;
 	}
 
 	this->m_Percentage = _percent;
