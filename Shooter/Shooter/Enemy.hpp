@@ -10,7 +10,7 @@ typedef enum IdleBehavior
 {
 	PATROL,
 	WANDER,
-	STAND,
+	GUARD,
 } IdleBehavior;
 
 class Enemy

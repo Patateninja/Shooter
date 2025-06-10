@@ -25,6 +25,11 @@ Enemy::Enemy(const sf::Vector2f& _startingPos, TileMap& _map)
 		this->m_Circle.setOutlineColor(sf::Color::Blue);
 		this->m_Circle.setOutlineThickness(5.f);
 	}
+	else
+	{
+		this->m_Circle.setOutlineColor(sf::Color::Magenta);
+		this->m_Circle.setOutlineThickness(5.f);
+	}
 }
 Enemy::~Enemy()
 {
@@ -70,6 +75,11 @@ void Enemy::Respawn(TileMap& _map)
 		this->m_PathfidingThread.join();
 		this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_PatrolTargets.front().GetCood(), std::ref(_map));
 	}
+	else if (this->m_IdleBehavior == GUARD)
+	{
+		this->m_PathfidingThread.join();
+		this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_PatrolTargets.front().GetCood(), std::ref(_map));
+	}
 }
 
 void Enemy::MakePatrolPath(TileMap& _map)
@@ -110,8 +120,6 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 	{	
 		if (this->m_Idle)
 		{
-			this->m_Circle.setFillColor(Color::DarkRed);
-
 			if (this->m_IdleBehavior == PATROL)
 			{
 				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_PatrolTargets.front().GetCood() && this->m_PathUdpateCooldown <= 0.f && this->m_PathfidingThread.joinable())
@@ -162,8 +170,6 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 		}
 		else
 		{
-			this->m_Circle.setFillColor(sf::Color::Red);
-
 			if (this->m_PathUdpateCooldown <= 0.f && this->m_PathfidingThread.joinable())
 			{
 				this->m_PathfidingThread.join();
@@ -220,6 +226,11 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 
 				this->m_PathfidingThread.join();
 				this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_IdleTileTarget.GetCood(), std::ref(_map));
+			}
+			else if (this->m_IdleBehavior == GUARD)
+			{
+				this->m_PathfidingThread.join();
+				this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_StartingPosition, std::ref(_map));
 			}
 		}
 
