@@ -147,6 +147,18 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 				}
 			}
+			else
+			{
+				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_StartingPosition && this->m_PathUdpateCooldown <= 0.f && this->m_PathfidingThread.joinable())
+				{
+					this->m_PathfidingThread.join();
+					this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_StartingPosition, std::ref(_map));
+				}
+				else
+				{
+					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
+				}
+			}
 		}
 		else
 		{
@@ -178,7 +190,7 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 		if (this->m_CanAimPlayer || this->m_SeePlayer)
 		{
 			this->m_Idle = false;
-			this->m_LosePlayerCooldown = 5.f;
+			this->m_LosePlayerCooldown = 10.f;
 		}
 		else if (!this->m_Idle)
 		{
@@ -269,6 +281,18 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 				}
 			}
+			else
+			{
+				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_StartingPosition && this->m_PathUdpateCooldown <= 0.f && this->m_PathfidingThread.joinable())
+				{
+					this->m_PathfidingThread.join();
+					this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_StartingPosition, std::ref(_map));
+				}
+				else
+				{
+					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
+				}
+			}
 
 			if (this->m_MovingThread.joinable() && ((Tools::Distance(this->m_Position, _playerPos) > this->m_AttackRange || !this->m_CanAimPlayer)))
 			{
@@ -311,6 +335,14 @@ void Enemy::Display(Window& _window)
 	}
 }
 
+void Enemy::HearSound(sf::Vector2f& _soundPos, int _soundIntensity)
+{
+	if (Tools::Distance(this->m_Position, _soundPos) / Tile::GetSize() < _soundIntensity)
+	{
+		this->m_Idle = false;
+		this->m_LosePlayerCooldown = Tools::Min<int, float, float> (_soundIntensity, 5.f);
+	}
+}
 bool Enemy::SeePlayer(const sf::Vector2f& _playerPos, TileMap& _map) const 
 {
 	if (Tools::Distance(_playerPos, this->m_Position) < 10 * Tile::GetSize())
@@ -869,6 +901,14 @@ void EnemyList::Display(Window& _window)
 	for (std::shared_ptr<Enemy>& enemy : this->m_List)
 	{
 		enemy->Display(_window);
+	}
+}
+
+void EnemyList::AllHearSound(sf::Vector2f& _soundPos, int _soundIntensity)
+{
+	for (std::shared_ptr<Enemy>& enemy : this->m_List)
+	{
+		enemy->HearSound(_soundPos, _soundIntensity);
 	}
 }
 

@@ -63,9 +63,11 @@ class Enemy
 
 		void MakePatrolPath(TileMap& _map);
 
+
 		virtual void Update(const sf::Vector2f& _playerPos, TileMap& _map);
 		virtual void Display(Window& _window);
 
+		void HearSound(sf::Vector2f& _soundPos, int _soundIntensity);
 		bool SeePlayer(const sf::Vector2f& _playerPos, TileMap& _map) const;
 		bool PlayerAimable(const sf::Vector2f& _playerPos, TileMap& _map) const;
 		
@@ -168,6 +170,8 @@ class EnemyList
 
 		void Update(const sf::Vector2f& _playerPos, TileMap& _map);
 		void Display(Window& _window);
+
+		void AllHearSound(sf::Vector2f& _soundPos, int _soundIntensity);
 
 		void Activate();
 		void Respawn(TileMap& _map);
