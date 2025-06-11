@@ -50,6 +50,9 @@ class State
 		static Armor& GetArmor() { return State::m_Armor; }
 		static AmmoStash& GetAmmoStash() { return State::m_AmmoStash; }
 
+		static int& GetSFXVolume() { return State::m_SfxVolume; }
+		static int& GetBGMVolume() { return State::m_BgmVolume; }
+
 		virtual void Init() = 0;
 		virtual void Update() = 0;
 		virtual void Display() = 0;

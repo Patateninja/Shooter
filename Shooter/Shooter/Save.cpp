@@ -2,7 +2,7 @@
 
 namespace SaveSystem
 {
-	void Save(std::string _filename, int& _xp, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammoStash)
+	void Save(std::string _filename, int& _xp, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammoStash, int& _sfxVolume, int& _bgmVolume)
 	{
 		std::ofstream file;
 		file.open("..\\Save\\" + _filename);
@@ -17,10 +17,13 @@ namespace SaveSystem
 		file << _armor.GetName() + '\n';
 		file << _ammoStash.GetName() + '\n';
 
+		file << std::to_string(_sfxVolume) + '\n';
+		file << std::to_string(_bgmVolume) + '\n';
+
 		file.close();
 	}
 
-	void Load(std::string _filename, int& _xp, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammoStash)
+	void Load(std::string _filename, int& _xp, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammoStash, int& _sfxVolume, int& _bgmVolume)
 	{
 		std::ifstream file;
 		file.open("..\\Save\\" + _filename);
@@ -167,6 +170,27 @@ namespace SaveSystem
 				_ammoStash = AmmoStash("Ammo Pouch", 0, 0);
 			}
 			#pragma endregion
+
+			std::string volume;
+			std::getline(file >> std::ws, volume);
+			try
+			{
+				_sfxVolume = std::stoi(volume);
+			}
+			catch (std::exception)
+			{
+				_sfxVolume = 100;
+			}
+
+			std::getline(file >> std::ws, volume);
+			try
+			{
+				_bgmVolume = std::stoi(volume);
+			}
+			catch (std::exception)
+			{
+				_bgmVolume = 100;
+			}
 		}
 		else
 		{
@@ -177,6 +201,8 @@ namespace SaveSystem
 			_magazine = Magazine("Default Magazine", 0, 0);
 			_armor = Armor("None", 0, 0, 1.f);
 			_ammoStash = AmmoStash("Ammo Pouch", 0, 0);
+			_sfxVolume = 100;
+			_bgmVolume = 100;
 		}
 
 		file.close();
