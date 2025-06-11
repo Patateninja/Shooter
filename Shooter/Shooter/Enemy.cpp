@@ -832,7 +832,7 @@ Shielded::~Shielded()
 void Shielded::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 {
 	this->Enemy::Update(_playerPos,_map);
-	this->m_Shield->Udpate(this->m_Active, this->m_Position, Tools::RadToDeg(Tools::VectorToAngle(this->m_Target - this->m_Position)));
+	this->m_Shield->Udpate(this->m_Active, this->m_Position, this->m_Angle);
 }
 
 void Shielded::Display(Window& _window)
@@ -914,7 +914,7 @@ void RangedShielded::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 		}
 	}
 
-	this->m_Shield->Udpate(this->m_Active, this->m_Position, Tools::RadToDeg(Tools::VectorToAngle(this->m_Target - this->m_Position)));
+	this->m_Shield->Udpate(this->m_Active, this->m_Position, this->m_Angle);
 }
 void RangedShielded::Display(Window& _window)
 {
