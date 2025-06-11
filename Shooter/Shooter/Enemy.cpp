@@ -344,6 +344,14 @@ void Enemy::Display(Window& _window)
 			_window.Draw(circle);
 		}
 	}
+	else if (this->m_IdleBehavior == GUARD)
+	{
+		sf::CircleShape circle(20.f);
+		circle.setOrigin(20.f, 20.f);
+		circle.setPosition(this->m_StartingPosition);
+		circle.setFillColor(sf::Color::Magenta);
+		_window.Draw(circle);
+	}
 }
 
 void Enemy::HearSound(sf::Vector2f& _soundPos, int _soundIntensity)
@@ -405,7 +413,7 @@ void Enemy::Move(const sf::Vector2f& _playerPos, TileMap& _map)
 	{
 		this->m_Mutex.lock();
 		this->m_Target = this->m_Path.front().GetCood();
-		this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed;
+		this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed * (this->m_Idle ? 0.5f : 1);
 		this->m_Position += this->m_Velocity * Time::GetDeltaTime();
 		if (_map.GetTile(int(this->m_Position.x), int(this->m_Position.y)) == this->m_Path.front())
 		{
@@ -417,9 +425,9 @@ void Enemy::Move(const sf::Vector2f& _playerPos, TileMap& _map)
 	{
 		this->m_Target = _playerPos;
 
-		this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed;
+		this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed * (this->m_Idle ? 0.f : 1);
 
-		if (_map.GetTile(sf::Vector2i(this->m_Position + this->m_Velocity * Time::GetDeltaTime() + Tools::Normalize(this->m_Velocity) * 25.f )).GetWalkable())
+		if (_map.GetTile(sf::Vector2i((this->m_Position + this->m_Velocity * Time::GetDeltaTime() * (this->m_Idle ? 0.5f : 1)) + (Tools::Normalize(this->m_Velocity) * 25.f))).GetWalkable())
 		{
 			this->m_Position += this->m_Velocity * Time::GetDeltaTime();
 		}
@@ -747,26 +755,6 @@ void Shielded::Display(Window& _window)
 {
 	Enemy::Display(_window);
 	this->m_Shield->Display(_window);
-
-	if (this->m_IdleBehavior == WANDER)
-	{
-		sf::CircleShape circle(20.f);
-		circle.setOrigin(20.f, 20.f);
-		circle.setPosition(this->m_IdleTileTarget.GetCood());
-		circle.setFillColor(Color::Flamming);
-		_window.Draw(circle);
-	}
-	else if (this->m_IdleBehavior == PATROL)
-	{
-		for (Tile& tile : this->m_PatrolTargets)
-		{
-			sf::CircleShape circle(20.f);
-			circle.setOrigin(20.f, 20.f);
-			circle.setPosition(tile.GetCood());
-			circle.setFillColor(Color::LightRed);
-			_window.Draw(circle);
-		}
-	}
 }
 
 #pragma endregion
@@ -841,26 +829,6 @@ void RangedShielded::Display(Window& _window)
 {
 	Enemy::Display(_window);
 	this->m_Shield->Display(_window);
-
-	if (this->m_IdleBehavior == WANDER)
-	{
-		sf::CircleShape circle(20.f);
-		circle.setOrigin(20.f, 20.f);
-		circle.setPosition(this->m_IdleTileTarget.GetCood());
-		circle.setFillColor(Color::Flamming);
-		_window.Draw(circle);
-	}
-	else if (this->m_IdleBehavior == PATROL)
-	{
-		for (Tile& tile : this->m_PatrolTargets)
-		{
-			sf::CircleShape circle(20.f);
-			circle.setOrigin(20.f, 20.f);
-			circle.setPosition(tile.GetCood());
-			circle.setFillColor(Color::LightRed);
-			_window.Draw(circle);
-		}
-	}
 }
 
 void RangedShielded::Shoot(const sf::Vector2f& _playerPos)

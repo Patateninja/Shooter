@@ -12,6 +12,6 @@ class Checkbox : public Button
 		~Checkbox() = default;
 
 		void Update(Window& _window, bool& _bool);
-		void Display(Window& _window);
+		void Display(Window& _window) override;
 };
 

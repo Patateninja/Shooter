@@ -5,6 +5,7 @@
 #include "LoadMenu.hpp"
 #include "PauseMenu.hpp"
 #include "Slider.hpp"
+#include "Checkbox.hpp"
 
 class StateManager;
 
@@ -143,10 +144,10 @@ class Option : public State
 {
 	private :
 		Button m_Menu;
-		Button m_Fullscreen;
+		Checkbox m_FullscreenCheckbox;
 		Slider m_SFX;
 		Slider m_BGM;
-
+		bool m_Fullscreen = false;
 
 	public :
 		Option(StateManager* _stateManager);

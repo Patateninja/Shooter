@@ -6,10 +6,10 @@ class View
 	private :
 		sf::View m_View;
 	public :
-		View();
+		View() = default;
 		View(const sf::Vector2f& _center, const sf::Vector2f& size);
 		View(const sf::View& _wiew);
-		~View();
+		~View() = default;
 
 		inline const sf::View GetView() const { return this->m_View; };
 		inline sf::Vector2f GetSize() { return this->m_View.getSize(); }
@@ -30,9 +30,10 @@ class Window
 		sf::RenderWindow m_Window;
 		View m_View;
 		bool m_Fullscreen;
+
 	public :
 		Window();
-		~Window();
+		~Window() = default;
 		
 		void Create(sf::VideoMode _videoMode,const sf::String& _title, sf::Uint32 _style);
 
@@ -46,8 +47,10 @@ class Window
 		inline float GetViewRight() { return this->m_View.Right(); }
 		inline float GetViewTop() { return this->m_View.Top(); }
 		inline float GetViewDown() { return this->m_View.Down(); }
+		inline bool& GetFullscreen() { return this->m_Fullscreen; }
 
 		void ToggleFullscreen();
+		void SetFullScreen(bool _fullscreen);
 		void SetView(View _view);
 		void SetViewCenter(const sf::Vector2f& _center);
 		void ResetView();

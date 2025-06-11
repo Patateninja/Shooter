@@ -169,7 +169,7 @@
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="Checkbox.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
