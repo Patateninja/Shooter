@@ -541,13 +541,13 @@ void Option::Update()
 
 	if (this->m_InputTimer > 0.2f)
 	{
-		this->m_InputTimer = 0;
 		this->m_FullscreenCheckbox.Update(this->Window(), this->m_Fullscreen);
 	}
 
 	if (this->Window().GetFullscreen() != this->m_Fullscreen)
 	{
 		this->Window().SetFullScreen(this->m_Fullscreen);
+		this->m_InputTimer = 0;
 	}
 }
 void Option::Display()
