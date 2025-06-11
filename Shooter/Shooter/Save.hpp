@@ -5,6 +5,6 @@
 
 namespace SaveSystem
 {
-	void Save(std::string _filename, int& _xp, Muzzle& _muzzle, Grip& _grip, Stock& _Stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammoStash);
-	void Load(std::string _filename, int& _xp, Muzzle& _muzzle, Grip& _grip, Stock& _Stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammoStash);
+	void Save(std::string _filename, int& _xp, Muzzle& _muzzle, Grip& _grip, Stock& _Stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammoStash, int& _sfxVolume, int& _bgmVolume);
+	void Load(std::string _filename, int& _xp, Muzzle& _muzzle, Grip& _grip, Stock& _Stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammoStash, int& _sfxVolume, int& _bgmVolume);
 }

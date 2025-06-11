@@ -21,10 +21,6 @@ void Stage::GenerateMap()
 	this->m_MapSprite.setTexture(this->m_MapTexture.getTexture());
 	this->m_MapSprite.setPosition(-Tile::GetSize() / 2.f, -Tile::GetSize() / 2.f);
 
-	if (this->m_Crate)
-	{
-		delete this->m_Crate;
-	}
 	if (this->m_Num % 3 == 0)
 	{
 		Tile tile;
@@ -76,42 +72,42 @@ void Stage::SpawnEnemies()
 				case 0:
 					if (credits - 1 >= 0)
 					{
-						this->m_EnemyList.Add<Baseliner>(tile.GetCood());
+						this->m_EnemyList.Add<Baseliner>(tile.GetCood(), this->m_TileMap);
 						credits -= 1;
 					}
 					break;
 				case 1:
 					if (credits - 3 >= 0)
 					{
-						this->m_EnemyList.Add<Tank>(tile.GetCood());
+						this->m_EnemyList.Add<Tank>(tile.GetCood(), this->m_TileMap);
 						credits -= 3;
 					}
 					break;
 				case 2:
 					if (credits - 2 >= 0)
 					{
-						this->m_EnemyList.Add<Speedster>(tile.GetCood());
+						this->m_EnemyList.Add<Speedster>(tile.GetCood(), this->m_TileMap);
 						credits -= 2;
 					}
 					break;
 				case 3:
 					if (credits - 4 >= 0)
 					{
-						this->m_EnemyList.Add<Ranged>(tile.GetCood());
+						this->m_EnemyList.Add<Ranged>(tile.GetCood(), this->m_TileMap);
 						credits -= 4;
 					}
 					break;
 				case 4:
 					if (credits - 6 >= 0)
 					{
-						this->m_EnemyList.Add<Shielded>(tile.GetCood());
+						this->m_EnemyList.Add<Shielded>(tile.GetCood(), this->m_TileMap);
 						credits -= 6;
 					}
 					break;
 				case 5:
 					if (credits - 10 >= 0)
 					{
-						this->m_EnemyList.Add<RangedShielded>(tile.GetCood());
+						this->m_EnemyList.Add<RangedShielded>(tile.GetCood(), this->m_TileMap);
 						credits -= 10;
 					}
 					break;
@@ -131,7 +127,7 @@ void Stage::SpawnEnemies()
 			tile = this->m_TileMap.GetTile(x * Tile::GetSize(), y * Tile::GetSize());
 		} while (!tile.GetWalkable());
 
-		this->m_EnemyList.Add<Baseliner>(tile.GetCood());
+		this->m_EnemyList.Add<Baseliner>(tile.GetCood(), this->m_TileMap);
 	}
 	else
 	{

@@ -5,6 +5,7 @@
 #include "LoadMenu.hpp"
 #include "PauseMenu.hpp"
 #include "Slider.hpp"
+#include "Checkbox.hpp"
 
 class StateManager;
 
@@ -48,6 +49,9 @@ class State
 		static Magazine& GetMagazine() { return State::m_Magazine; }
 		static Armor& GetArmor() { return State::m_Armor; }
 		static AmmoStash& GetAmmoStash() { return State::m_AmmoStash; }
+
+		static int& GetSFXVolume() { return State::m_SfxVolume; }
+		static int& GetBGMVolume() { return State::m_BgmVolume; }
 
 		virtual void Init() = 0;
 		virtual void Update() = 0;
@@ -143,10 +147,10 @@ class Option : public State
 {
 	private :
 		Button m_Menu;
-		Button m_Fullscreen;
+		Checkbox m_FullscreenCheckbox;
 		Slider m_SFX;
 		Slider m_BGM;
-
+		bool m_Fullscreen = false;
 
 	public :
 		Option(StateManager* _stateManager);

@@ -47,7 +47,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 				if (this->m_Vest == 0)
 				{
 					this->Die();
-					_enemyList.Respawn();
+					_enemyList.Respawn(_map);
 					_cam.NewTarget(_window, this->m_Position, _map.GetSize());
 					return;
 				}
@@ -59,15 +59,10 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 			}
 		}
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::B))
-		{
-			this->m_Position = sf::Vector2f(640.f,64.f);
-		}
-
 		if (this->CheckDamage())
 		{
 			this->Die();
-			_enemyList.Respawn();
+			_enemyList.Respawn(_map);
 			_cam.NewTarget(_window, this->m_Position, _map.GetSize());
 			return;
 		}
@@ -107,9 +102,14 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 		{
 			this->m_InputTimer = 0.f;
 			this->m_Shotgun.Shoot(this->m_Position, this->m_Velocity, this->m_Angle, _window);
+			_enemyList.AllHearSound(this->m_Position, 10);
 		}
 
 		this->m_Position += Tools::AngleToVector((Tools::Magnitude(this->m_Velocity) == 0.f ? 0.f : 350.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier()) + int(this->m_Caffeinated) * 100), Tools::VectorToAngle(this->m_Velocity)) * Time::GetDeltaTime();
+		if (Tools::Magnitude(this->m_Velocity) != 0.f)
+		{
+			_enemyList.AllHearSound(this->m_Position, 1);
+		}
 	}
 
 	this->m_Circle.setPosition(this->m_Position);

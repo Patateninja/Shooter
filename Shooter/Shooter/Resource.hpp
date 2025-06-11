@@ -62,7 +62,7 @@ class Resource<sf::Music> : public RSC
 
 		void SetVolume(int _volume) override
 		{
-			this->m_Music.setVolume(_volume);
+			this->m_Music.setVolume(float(_volume));
 		}
 
 		sf::Music& GetRSC()
@@ -96,7 +96,7 @@ class Resource<sf::Sound> : public RSC
 
 		void SetVolume(int _volume) override
 		{
-			this->m_Sound.setVolume(_volume);
+			this->m_Sound.setVolume(float(_volume));
 		}
 
 		sf::Sound& GetRSC()

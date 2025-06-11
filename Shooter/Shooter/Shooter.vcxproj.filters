@@ -168,6 +168,9 @@
     <ClCompile Include="Slider.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Checkbox.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tools.hpp">
@@ -258,6 +261,9 @@
       <Filter>Header Files\Save &amp; Load</Filter>
     </ClInclude>
     <ClInclude Include="Slider.hpp">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Checkbox.hpp">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>

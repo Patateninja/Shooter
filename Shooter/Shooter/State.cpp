@@ -144,7 +144,7 @@ void Game::Init()
 	this->m_Player.Init(State::m_Muzzle, State::m_Grip, State::m_Magazine, State::m_Stock, State::m_Armor, State::m_AmmoStash);
 	this->m_Cam.NewTarget(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
 
-	this->m_Stage.SetNum(1);
+	this->m_Stage.SetNum(3);
 	this->m_Stage.Init();
 
 	this->Window().SetViewCenter(this->Window().GetDefaultView().GetCenter() - sf::Vector2f(Tile::GetSize() / 2.f, Tile::GetSize() / 2.f));
@@ -192,7 +192,15 @@ void Game::Update()
 		if (this->m_Player.GetMoving())
 		{
 			ProjList::Update(this->m_Stage.GetMap());
-			this->m_Cam.NewTarget(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
+
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+			{
+				this->m_Cam.NewTarget(this->Window(), this->Window().RelativePos(sf::Mouse::getPosition()), this->m_Stage.GetMap().GetSize());
+			}
+			else
+			{
+				this->m_Cam.NewTarget(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
+			}
 		}
 		else
 		{
@@ -507,13 +515,17 @@ void Option::Init()
 
 	this->GetRsc<sf::Music>("Bogus").play();
 
+	this->m_Fullscreen = this->Window().GetFullscreen();
+
 	this->m_SFX = Slider(sf::Vector2f(300.f, 250.f), sf::Vector2f(700.f, 25.f), 0);
 	this->m_BGM = Slider(sf::Vector2f(300.f, 450.f), sf::Vector2f(700.f, 25.f), 0);
-	this->m_Fullscreen = Button("", sf::Vector2f(200.f, 700.f), sf::Vector2f(75.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
+	this->m_FullscreenCheckbox = Checkbox("", sf::Vector2f(200.f, 700.f), sf::Vector2f(75.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"), this->m_Fullscreen);
 	this->m_Menu = Button("Menu", sf::Vector2f(25.f, 980.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
 }
 void Option::Update()
 {
+	this->m_InputTimer += Time::GetDeltaTime();
+
 	this->m_SFX.Update(this->Window(), this->m_SfxVolume);
 	RscMana::SetSFXVolume(this->m_SfxVolume);
 
@@ -524,9 +536,18 @@ void Option::Update()
 	{
 		this->ChangeState<Menu>();
 	}
-	if (this->m_Fullscreen.Update(this->Window()))
+
+	this->m_Fullscreen = this->Window().GetFullscreen();
+
+	if (this->m_InputTimer > 0.2f)
 	{
-		this->Window().ToggleFullscreen();
+		this->m_FullscreenCheckbox.Update(this->Window(), this->m_Fullscreen);
+	}
+
+	if (this->Window().GetFullscreen() != this->m_Fullscreen)
+	{
+		this->Window().SetFullScreen(this->m_Fullscreen);
+		this->m_InputTimer = 0;
 	}
 }
 void Option::Display()
@@ -541,10 +562,10 @@ void Option::Display()
 	this->m_Menu.Display(this->Window());
 	
 	this->m_Text.setCharacterSize(30);
-	this->m_Text.setString("SFX");
-	this->m_Text.setPosition(200.f, 230.f);
+	this->m_Text.setString("Fullscreen");
+	this->m_Text.setPosition(280.f, 720.f);
 	this->Draw(this->m_Text);
-	this->m_Fullscreen.Display(this->Window());
+	this->m_FullscreenCheckbox.Display(this->Window());
 	
 	this->m_Text.setCharacterSize(30);
 	this->m_Text.setString("SFX");

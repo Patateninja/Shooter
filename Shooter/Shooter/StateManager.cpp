@@ -6,17 +6,16 @@ StateManager::StateManager()
 {
 	RscMana::Init();
 	Time::Init();
-	this->m_Window.Create(sf::VideoMode(1920,1080),"Shooter", sf::Style::Default);
 	this->m_CurrentState = new Menu(this);
 	this->m_CurrentState->Init();
 	this->m_InputTimer = 0;
 
-	SaveSystem::Load("save.data", Level::GetXp(), this->m_CurrentState->GetMuzzle(), this->m_CurrentState->GetGrip(), this->m_CurrentState->GetStock(), this->m_CurrentState->GetMagazine(), this->m_CurrentState->GetArmor(), this->m_CurrentState->GetAmmoStash());
+	SaveSystem::Load("save.data", Level::GetXp(), this->m_CurrentState->GetMuzzle(), this->m_CurrentState->GetGrip(), this->m_CurrentState->GetStock(), this->m_CurrentState->GetMagazine(), this->m_CurrentState->GetArmor(), this->m_CurrentState->GetAmmoStash(), this->m_CurrentState->GetSFXVolume(), this->m_CurrentState->GetBGMVolume());
 	while (Level::CalculateLvL());
 }
 StateManager::~StateManager()
 {
-	SaveSystem::Save("save.data", Level::GetXp(), this->m_CurrentState->GetMuzzle(), this->m_CurrentState->GetGrip(), this->m_CurrentState->GetStock(), this->m_CurrentState->GetMagazine(), this->m_CurrentState->GetArmor(), this->m_CurrentState->GetAmmoStash());
+	SaveSystem::Save("save.data", Level::GetXp(), this->m_CurrentState->GetMuzzle(), this->m_CurrentState->GetGrip(), this->m_CurrentState->GetStock(), this->m_CurrentState->GetMagazine(), this->m_CurrentState->GetArmor(), this->m_CurrentState->GetAmmoStash(), this->m_CurrentState->GetSFXVolume(), this->m_CurrentState->GetBGMVolume());
 
 	this->m_CurrentState->DeInit();
 	this->m_CurrentState->Deletor();
