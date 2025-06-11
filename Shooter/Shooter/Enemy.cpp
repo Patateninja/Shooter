@@ -68,6 +68,9 @@ void Enemy::Respawn(TileMap& _map)
 	this->m_Idle = true;
 	this->m_SeePlayer = false;
 	this->m_CanAimPlayer = false;
+	this->m_SeePlayerUdpateCooldown = 0.f;
+	this->m_LosePlayerCooldown = 0.f;
+	this->m_PathUdpateCooldown = 0.f;
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(this->m_StartingPosition, FLOOR);
@@ -191,7 +194,7 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 		{
 			this->m_SeePlayer = this->SeePlayer(_playerPos, _map);
 			this->m_CanAimPlayer = this->PlayerAimable(_playerPos, _map);
-			this->m_SeePlayerUdpateCooldown = 0.5f;
+			this->m_SeePlayerUdpateCooldown = 0.3f;
 		}
 		else
 		{
@@ -327,7 +330,14 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 	}
 	else
 	{
-		this->m_Angle = Tools::RadToDeg(Tools::VectorToAngle(m_Target - this->m_Position));
+		if (this->m_SeePlayer)
+		{
+			this->m_Angle = Tools::RadToDeg(Tools::VectorToAngle(_playerPos - this->m_Position));
+		}
+		else 
+		{
+			this->m_Angle = Tools::RadToDeg(Tools::VectorToAngle(m_Target - this->m_Position));
+		}
 	}
 	this->m_Alive = this->m_Hp > 0;
 
@@ -454,7 +464,7 @@ void Enemy::Move(const sf::Vector2f& _playerPos, TileMap& _map)
 		this->m_Target = this->m_Path.front().GetCood();
 		this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed * (this->m_Idle ? 0.5f : 1);
 		this->m_Position += this->m_Velocity * Time::GetDeltaTime();
-		if (_map.GetTile(int(this->m_Position.x), int(this->m_Position.y)) == this->m_Path.front())
+		if (this->m_Alive && _map.GetTile(int(this->m_Position.x), int(this->m_Position.y)) == this->m_Path.front())
 		{
 			this->m_Path.erase(this->m_Path.begin());
 		}
@@ -466,7 +476,7 @@ void Enemy::Move(const sf::Vector2f& _playerPos, TileMap& _map)
 
 		this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed * (this->m_Idle ? 0.5f : 1);
 
-		if (_map.GetTile(sf::Vector2i((this->m_Position + this->m_Velocity * Time::GetDeltaTime() * (this->m_Idle ? 0.5f : 1)) + (Tools::Normalize(this->m_Velocity) * 25.f))).GetWalkable())
+		if (this->m_Alive && _map.GetTile(sf::Vector2i((this->m_Position + this->m_Velocity * Time::GetDeltaTime() * (this->m_Idle ? 0.5f : 1)) + (Tools::Normalize(this->m_Velocity) * 25.f))).GetWalkable())
 		{
 			this->m_Position += this->m_Velocity * Time::GetDeltaTime();
 		}
