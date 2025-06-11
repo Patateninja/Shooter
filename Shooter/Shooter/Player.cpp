@@ -108,7 +108,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 		this->m_Position += Tools::AngleToVector((Tools::Magnitude(this->m_Velocity) == 0.f ? 0.f : 350.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier()) + int(this->m_Caffeinated) * 100), Tools::VectorToAngle(this->m_Velocity)) * Time::GetDeltaTime();
 		if (Tools::Magnitude(this->m_Velocity) != 0.f)
 		{
-			_enemyList.AllHearSound(this->m_Position, 1);
+			_enemyList.AllHearSound(this->m_Position, 2);
 		}
 	}
 

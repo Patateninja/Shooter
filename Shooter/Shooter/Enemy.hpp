@@ -39,12 +39,15 @@ class Enemy
 		float m_PathUdpateCooldown = 0.f;
 		float m_SeePlayerUdpateCooldown = 0.f;
 		float m_LosePlayerCooldown = 0.f;
+		float m_Angle = 0.f;
 		bool m_Burning = false;
 		bool m_Active = false;
 		bool m_SeePlayer = false;
 		bool m_CanAimPlayer = false;
 		bool m_Idle = true;
 		bool m_Alive = true;
+
+		sf::CircleShape m_CirclePath = sf::CircleShape(10.f);
 
 	public :
 		Enemy() = default;
@@ -62,7 +65,6 @@ class Enemy
 		void Respawn(TileMap& _map);
 
 		void MakePatrolPath(TileMap& _map);
-
 
 		virtual void Update(const sf::Vector2f& _playerPos, TileMap& _map);
 		virtual void Display(Window& _window);
