@@ -540,6 +540,9 @@ void Enemy::TakeDamage(int _damage)
 void Enemy::Die()
 {
 	this->m_Active = false;
+	this->m_SeePlayer = false;
+	this->m_CanAimPlayer = false;
+	this->m_Idle = true;
 	Level::GainXP(this->m_MaxHp);
 	this->m_Circle.setFillColor(Color::Grey);
 	this->m_IgnoreProj.clear();
