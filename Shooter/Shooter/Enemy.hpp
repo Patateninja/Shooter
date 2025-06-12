@@ -48,8 +48,6 @@ class Enemy
 		bool m_Idle = true;
 		bool m_Alive = true;
 
-		sf::CircleShape m_CirclePath = sf::CircleShape(10.f);
-
 	public :
 		Enemy() = default;
 		Enemy(const sf::Vector2f& _stratingPos, TileMap& _map);

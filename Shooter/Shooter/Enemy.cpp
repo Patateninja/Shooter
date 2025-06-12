@@ -30,8 +30,6 @@ Enemy::Enemy(const sf::Vector2f& _startingPos, TileMap& _map)
 		this->m_Circle.setOutlineColor(sf::Color::Magenta);
 		this->m_Circle.setOutlineThickness(5.f);
 	}
-
-	this->m_CirclePath.setOrigin(10.f, 10.f);
 }
 Enemy::~Enemy()
 {
@@ -194,7 +192,7 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 		{
 			this->m_SeePlayer = this->SeePlayer(_playerPos, _map);
 			this->m_CanAimPlayer = this->PlayerAimable(_playerPos, _map);
-			this->m_SeePlayerUdpateCooldown = 0.1f;
+			this->m_SeePlayerUdpateCooldown = 0.5f;
 		}
 		else
 		{
@@ -351,33 +349,11 @@ void Enemy::Display(Window& _window)
 {
 	_window.Draw(this->m_Circle);
 
-	if (this->m_IdleBehavior == WANDER)
-	{
-		this->m_CirclePath.setPosition(this->m_IdleTileTarget.GetCood());
-		this->m_CirclePath.setFillColor(Color::Flamming);
-		_window.Draw(this->m_CirclePath);
-	}
-	else if (this->m_IdleBehavior == PATROL)
-	{
-		for (Tile& tile : this->m_PatrolTargets)
-		{
-			this->m_CirclePath.setPosition(tile.GetCood());
-			this->m_CirclePath.setFillColor(Color::LightRed);
-			_window.Draw(this->m_CirclePath);
-		}
-	}
-	else if (this->m_IdleBehavior == GUARD)
-	{
-		this->m_CirclePath.setPosition(this->m_StartingPosition);
-		this->m_CirclePath.setFillColor(sf::Color::Magenta);
-		_window.Draw(this->m_CirclePath);
-	}
-
 	sf::VertexArray fov(sf::Lines, 4);
 	fov[0].position = this->m_Position;
-	fov[1].position = Tools::AngleToVector(10 * Tile::GetSize(), Tools::DegToRad(this->m_Angle + 45.f)) + this->m_Position;
+	fov[1].position = Tools::AngleToVector(float(10 * Tile::GetSize()), Tools::DegToRad(this->m_Angle + 45.f)) + this->m_Position;
 	fov[2].position = this->m_Position;
-	fov[3].position = Tools::AngleToVector(10 * Tile::GetSize(), Tools::DegToRad(this->m_Angle - 45.f)) + this->m_Position;
+	fov[3].position = Tools::AngleToVector(float(10 * Tile::GetSize()), Tools::DegToRad(this->m_Angle - 45.f)) + this->m_Position;
 
 	fov[0].color = Color::DarkGrey;
 	fov[1].color = Color::DarkGrey;
@@ -579,8 +555,6 @@ Baseliner::Baseliner(const sf::Vector2f& _startingPos, TileMap& _map)
 		this->m_Circle.setOutlineColor(sf::Color::Magenta);
 		this->m_Circle.setOutlineThickness(5.f);
 	}
-
-	this->m_CirclePath.setOrigin(10.f, 10.f);
 }
 Baseliner::~Baseliner()
 {
@@ -631,8 +605,6 @@ Tank::Tank(const sf::Vector2f& _startingPos, TileMap& _map)
 		this->m_Circle.setOutlineColor(sf::Color::Magenta);
 		this->m_Circle.setOutlineThickness(5.f);
 	}
-
-	this->m_CirclePath.setOrigin(10.f, 10.f);
 }
 Tank::~Tank()
 {
@@ -686,8 +658,6 @@ Ranged::Ranged(const sf::Vector2f& _startingPos, TileMap& _map)
 		this->m_Circle.setOutlineColor(sf::Color::Magenta);
 		this->m_Circle.setOutlineThickness(5.f);
 	}
-
-	this->m_CirclePath.setOrigin(10.f, 10.f);
 }
 Ranged::~Ranged()
 {
@@ -761,8 +731,6 @@ Speedster::Speedster(const sf::Vector2f& _startingPos, TileMap& _map)
 		this->m_Circle.setOutlineColor(sf::Color::Magenta);
 		this->m_Circle.setOutlineThickness(5.f);
 	}
-
-	this->m_CirclePath.setOrigin(10.f, 10.f);
 }
 Speedster::~Speedster()
 {
@@ -815,8 +783,6 @@ Shielded::Shielded(const sf::Vector2f& _startingPos, TileMap& _map)
 		this->m_Circle.setOutlineColor(sf::Color::Magenta);
 		this->m_Circle.setOutlineThickness(5.f);
 	}
-
-	this->m_CirclePath.setOrigin(10.f, 10.f);
 }
 Shielded::~Shielded()
 {
@@ -883,8 +849,6 @@ RangedShielded::RangedShielded(const sf::Vector2f& _startingPos, TileMap& _map)
 		this->m_Circle.setOutlineColor(sf::Color::Magenta);
 		this->m_Circle.setOutlineThickness(5.f);
 	}
-
-	this->m_CirclePath.setOrigin(10.f, 10.f);
 }
 RangedShielded::~RangedShielded()
 {

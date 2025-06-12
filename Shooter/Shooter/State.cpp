@@ -183,24 +183,19 @@ void Game::Update()
 	}
 	else
 	{
-		this->m_Text.setString("Stage : " + std::to_string(this->m_Stage.GetNum()) + " / " + std::to_string(this->m_Player.GetHP()) + " Live(s) / " + std::to_string(this->m_Player.GetVest()) + " Vest(s) / " + std::to_string(int(1 / Time::GetDeltaTime())) + " fps");
+		this->m_Cam.Update(this->Window());
+
+		this->m_Text.setString("Stage : " + std::to_string(this->m_Stage.GetNum()) + " / " + std::to_string(this->m_Player.GetHP()) + " Live(s) / " + std::to_string(this->m_Player.GetVest()) + " Vest(s) / " + std::to_string((1 / Time::GetDeltaTime())) + " fps");
 		this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
 
 		this->m_Player.Update(this->m_Stage.GetEnemies(), this->m_Stage.GetMap(), this->m_Cam, this->Window());
 		this->m_Stage.Update(this->m_Player, this->m_Cam, this->m_BonusPopUp, this->Window());
 
+		ProjList::Update(this->m_Stage.GetMap());
+
 		if (this->m_Player.GetMoving())
 		{
-			ProjList::Update(this->m_Stage.GetMap());
-
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
-			{
-				this->m_Cam.NewTarget(this->Window(), this->Window().RelativePos(sf::Mouse::getPosition()), this->m_Stage.GetMap().GetSize());
-			}
-			else
-			{
-				this->m_Cam.NewTarget(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
-			}
+			this->m_Cam.NewTarget(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
 		}
 		else
 		{
@@ -212,7 +207,6 @@ void Game::Update()
 			}
 		}
 
-		this->m_Cam.Update(this->Window());
 
 		if (this->m_Stage.GetMoveOn())
 		{

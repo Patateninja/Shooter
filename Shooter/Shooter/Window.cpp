@@ -17,6 +17,7 @@ View::View(const sf::View& _view)
 Window::Window()
 {
 	this->m_Window.create(sf::VideoMode(1920, 1080), "Shooter", sf::Style::Fullscreen);
+	this->m_Window.setVerticalSyncEnabled(true);
 	this->m_View.SetSize(this->m_Window.getDefaultView().getSize());
 	this->m_Fullscreen = true;
 }
@@ -24,6 +25,7 @@ Window::Window()
 void Window::Create(sf::VideoMode _videoMode,const sf::String& _title, sf::Uint32 _style)
 {
 	this->m_Window.create(_videoMode, _title, _style);
+	this->m_Window.setVerticalSyncEnabled(true);
 }
 
 void Window::ToggleFullscreen()

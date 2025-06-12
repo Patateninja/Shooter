@@ -56,7 +56,7 @@ void Stage::SpawnEnemies()
 	{
 		int credits = int(this->m_Num * 1.5f) + int(this->m_Num % 5 == 0) * 6 + 1;
 
-		while (credits > 0 && this->m_EnemyList.Size() < 13)
+		while (credits > 0 && this->m_EnemyList.Size() < 10 + int(this->m_Num / 20))
 		{
 			Tile tile;
 			do
