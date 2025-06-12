@@ -194,7 +194,7 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 		{
 			this->m_SeePlayer = this->SeePlayer(_playerPos, _map);
 			this->m_CanAimPlayer = this->PlayerAimable(_playerPos, _map);
-			this->m_SeePlayerUdpateCooldown = 0.5f;
+			this->m_SeePlayerUdpateCooldown = 0.1f;
 		}
 		else
 		{
@@ -397,10 +397,6 @@ bool Enemy::SeePlayer(const sf::Vector2f& _playerPos, TileMap& _map) const
 	if (Tools::Distance(_playerPos, this->m_Position) < 10 * Tile::GetSize())
 	{
 		float angle = Tools::RadToDeg(Tools::VectorToAngle(_playerPos - this->m_Position));
-		if (angle < 0)
-		{
-			angle += 360;
-		}
 		if (angle > this->m_Angle - 45 && angle < this->m_Angle + 45)
 		{
 			for (int i = Tile::GetSize(); i <= int(Tools::Distance(_playerPos, this->m_Position)); ++i)
@@ -428,10 +424,6 @@ bool Enemy::PlayerAimable(const sf::Vector2f& _playerPos, TileMap& _map) const
 	if (Tools::Distance(_playerPos, this->m_ProjectileOrigin) - 2 * Tile::GetSize() < this->m_AttackRange)
 	{
 		float angle = Tools::RadToDeg(Tools::VectorToAngle(_playerPos - this->m_Position));
-		if (angle < 0)
-		{
-			angle += 360;
-		}
 		if (angle > this->m_Angle - 45 && angle < this->m_Angle + 45)
 		{
 			for (int i = Tile::GetSize(); i <= int(Tools::Distance(_playerPos, this->m_ProjectileOrigin)); ++i)
