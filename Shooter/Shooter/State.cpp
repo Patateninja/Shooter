@@ -185,7 +185,7 @@ void Game::Update()
 	{
 		this->m_Cam.Update(this->Window());
 
-		this->m_Text.setString("Stage : " + std::to_string(this->m_Stage.GetNum()) + " / " + std::to_string(this->m_Player.GetHP()) + " Live(s) / " + std::to_string(this->m_Player.GetVest()) + " Vest(s) / " + std::to_string((1 / Time::GetDeltaTime())) + " fps");
+		this->m_Text.setString("Stage : " + std::to_string(this->m_Stage.GetNum()) + " / " + std::to_string(this->m_Player.GetHP()) + " Live(s) / " + std::to_string(this->m_Player.GetVest()) + " Vest(s) / " + std::to_string(int(1 / Time::GetDeltaTime())) + " fps");
 		this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
 
 		this->m_Player.Update(this->m_Stage.GetEnemies(), this->m_Stage.GetMap(), this->m_Cam, this->Window());
@@ -507,7 +507,7 @@ void Option::Init()
 
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 
-	this->GetRsc<sf::Music>("Bogus").play();
+	//this->GetRsc<sf::Music>("Bogus").play();
 
 	this->m_Fullscreen = this->Window().GetFullscreen();
 
