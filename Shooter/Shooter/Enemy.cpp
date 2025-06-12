@@ -137,7 +137,7 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 					this->m_PathfidingThread.join();
 					this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_PatrolTargets.front().GetCood(), std::ref(_map));
 				}
-				else
+				if (this->m_PathUdpateCooldown > 0.f)
 				{
 					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 				}
@@ -157,7 +157,7 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 					this->m_PathfidingThread.join();
 					this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_IdleTileTarget.GetCood(), std::ref(_map));
 				}
-				else
+				if (this->m_PathUdpateCooldown > 0.f)
 				{
 					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 				}
@@ -169,7 +169,7 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 					this->m_PathfidingThread.join();
 					this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_StartingPosition, std::ref(_map));
 				}
-				else
+				if (this->m_PathUdpateCooldown > 0.f)
 				{
 					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 				}
@@ -194,7 +194,7 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 		{
 			this->m_SeePlayer = this->SeePlayer(_playerPos, _map);
 			this->m_CanAimPlayer = this->PlayerAimable(_playerPos, _map);
-			this->m_SeePlayerUdpateCooldown = 0.3f;
+			this->m_SeePlayerUdpateCooldown = 0.5f;
 		}
 		else
 		{
@@ -269,7 +269,7 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 
 			if (this->m_IdleBehavior == PATROL)
 			{
-				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_PatrolTargets.front().GetCood() && this->m_PathUdpateCooldown <= 0.f && this->m_PathfidingThread.joinable())
+				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_PatrolTargets.front().GetCood() && this->m_PathfidingThread.joinable())
 				{
 					this->m_PatrolTargets.push_back(this->m_PatrolTargets.front());
 					this->m_PatrolTargets.erase(this->m_PatrolTargets.begin());
@@ -277,14 +277,14 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 					this->m_PathfidingThread.join();
 					this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_PatrolTargets.front().GetCood(), std::ref(_map));
 				}
-				else
+				if (this->m_PathUdpateCooldown > 0.f)
 				{
 					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 				}
 			}
 			else if (this->m_IdleBehavior == WANDER)
 			{
-				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_IdleTileTarget.GetCood() && this->m_PathUdpateCooldown <= 0.f && this->m_PathfidingThread.joinable())
+				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_IdleTileTarget.GetCood() && this->m_PathfidingThread.joinable())
 				{
 					this->m_IdleTileTarget;
 					do
@@ -297,19 +297,19 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 					this->m_PathfidingThread.join();
 					this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_IdleTileTarget.GetCood(), std::ref(_map));
 				}
-				else
+				if (this->m_PathUdpateCooldown > 0.f)
 				{
 					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 				}
 			}
-			else
+			else if (this->m_IdleBehavior == GUARD)
 			{
-				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_StartingPosition && this->m_PathUdpateCooldown <= 0.f && this->m_PathfidingThread.joinable())
+				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_StartingPosition && this->m_PathfidingThread.joinable())
 				{
 					this->m_PathfidingThread.join();
 					this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_StartingPosition, std::ref(_map));
 				}
-				else
+				if (this->m_PathUdpateCooldown > 0.f)
 				{
 					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 				}
@@ -427,7 +427,12 @@ bool Enemy::PlayerAimable(const sf::Vector2f& _playerPos, TileMap& _map) const
 {
 	if (Tools::Distance(_playerPos, this->m_ProjectileOrigin) - 2 * Tile::GetSize() < this->m_AttackRange)
 	{
-		if (Tools::RadToDeg(Tools::VectorToAngle(_playerPos - this->m_Position)) + 360 > this->m_Angle - 45 + 360 && Tools::RadToDeg(Tools::VectorToAngle(_playerPos - this->m_Position)) + 360 < this->m_Angle + 45 + 360)
+		float angle = Tools::RadToDeg(Tools::VectorToAngle(_playerPos - this->m_Position));
+		if (angle < 0)
+		{
+			angle += 360;
+		}
+		if (angle > this->m_Angle - 45 && angle < this->m_Angle + 45)
 		{
 			for (int i = Tile::GetSize(); i <= int(Tools::Distance(_playerPos, this->m_ProjectileOrigin)); ++i)
 			{
