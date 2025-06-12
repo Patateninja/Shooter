@@ -136,7 +136,7 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 						if ((this->GetTile(Tools::Max<int, int, int>(i - 1, 0) * Tile::GetSize(), j * Tile::GetSize()).GetType() != FURNITURE || this->GetTile(i * Tile::GetSize(), Tools::Max<int, int, int>(y - 1, 0) * Tile::GetSize()).GetType() != FURNITURE || this->GetTile(Tools::Min<int, int, int>(i + 1, x - 1) * Tile::GetSize(), j * Tile::GetSize()).GetType() != FURNITURE || this->GetTile(i * Tile::GetSize(), Tools::Max<int, int, int>(y + 1, y - 1) * Tile::GetSize()).GetType() != FURNITURE))
 						//if (true)
 						{
-							switch (Tools::Random(3, 0))
+							switch (Tools::Random(3))
 							{
 								case 0 :
 									this->GetTile(int(tile.GetCood().x) + (i * Tile::GetSize()), int(tile.GetCood().y) + (j * Tile::GetSize())).SetType(FURNITURE);

@@ -10,7 +10,7 @@ Enemy::Enemy(const sf::Vector2f& _startingPos, TileMap& _map)
 	this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(this->m_StartingPosition), std::ref(_map));
 	this->m_MovingThread = std::thread(&Enemy::Move, this, std::ref(this->m_StartingPosition), std::ref(_map));
 	
-	this->m_IdleBehavior = IdleBehavior(Tools::Random(2, 0));
+	this->m_IdleBehavior = IdleBehavior(Tools::Random(2));
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
@@ -559,7 +559,7 @@ Baseliner::Baseliner(const sf::Vector2f& _startingPos, TileMap& _map)
 	this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(this->m_StartingPosition), std::ref(_map));
 	this->m_MovingThread = std::thread(&Enemy::Move, this, std::ref(this->m_StartingPosition), std::ref(_map));
 
-	this->m_IdleBehavior = IdleBehavior(Tools::Random(2, 0));
+	this->m_IdleBehavior = IdleBehavior(Tools::Random(2));
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
@@ -611,7 +611,7 @@ Tank::Tank(const sf::Vector2f& _startingPos, TileMap& _map)
 	this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(this->m_StartingPosition), std::ref(_map));
 	this->m_MovingThread = std::thread(&Enemy::Move, this, std::ref(this->m_StartingPosition), std::ref(_map));
 
-	this->m_IdleBehavior = IdleBehavior(Tools::Random(2, 0));
+	this->m_IdleBehavior = IdleBehavior(Tools::Random(2));
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
@@ -666,7 +666,7 @@ Ranged::Ranged(const sf::Vector2f& _startingPos, TileMap& _map)
 
 	this->m_ShootTimer = 0.5f;
 
-	this->m_IdleBehavior = IdleBehavior(Tools::Random(2, 0));
+	this->m_IdleBehavior = IdleBehavior(Tools::Random(2));
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
@@ -741,7 +741,7 @@ Speedster::Speedster(const sf::Vector2f& _startingPos, TileMap& _map)
 	this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(this->m_StartingPosition), std::ref(_map));
 	this->m_MovingThread = std::thread(&Enemy::Move, this, std::ref(this->m_StartingPosition), std::ref(_map));
 
-	this->m_IdleBehavior = IdleBehavior(Tools::Random(2, 0));
+	this->m_IdleBehavior = IdleBehavior(Tools::Random(2));
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
@@ -795,7 +795,7 @@ Shielded::Shielded(const sf::Vector2f& _startingPos, TileMap& _map)
 
 	this->m_Shield = std::make_unique<Shield>(this->m_Position);
 
-	this->m_IdleBehavior = IdleBehavior(Tools::Random(2, 0));
+	this->m_IdleBehavior = IdleBehavior(Tools::Random(2));
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
@@ -863,7 +863,7 @@ RangedShielded::RangedShielded(const sf::Vector2f& _startingPos, TileMap& _map)
 
 	this->m_Shield = std::make_unique<Shield>(this->m_Position);
 
-	this->m_IdleBehavior = IdleBehavior(Tools::Random(2, 0));
+	this->m_IdleBehavior = IdleBehavior(Tools::Random(2));
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);

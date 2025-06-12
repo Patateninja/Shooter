@@ -66,7 +66,7 @@ void Stage::SpawnEnemies()
 				tile = this->m_TileMap.GetTile(x * Tile::GetSize(), y * Tile::GetSize());
 			} while (!tile.GetWalkable());
 
-			switch (Tools::Random(6, 0))
+			switch (Tools::Random(6))
 			{
 				case 0:
 					if (credits - 1 >= 0)

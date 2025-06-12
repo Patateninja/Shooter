@@ -49,9 +49,21 @@ float Tools::DegToRad(float _deg)
 	return (_deg * (PI / 180));
 }
 
-int Tools::Random(int _max, int _min = 0)
+int Tools::Random(int _max, int _min)
 {
-	return Tools::Min<int,int,int>(_max,(rand() % (_max + 1)) + _min);
+	if (_min == _max)
+	{
+		return _min;
+	}
+	
+	if (_min > _max)
+	{
+		int temp = _min;
+		_min = _max;
+		_max = temp;
+	}
+
+	return rand() % ((_max - _min) + 1) + _min;
 }
 
 float Tools::Distance(sf::Vector2f _vect1, sf::Vector2f _vect2)

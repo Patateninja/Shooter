@@ -40,7 +40,7 @@ class Enemy
 		float m_SeePlayerUdpateCooldown = 0.f;
 		float m_LosePlayerCooldown = 0.f;
 		float m_Angle = 0.f;
-		float m_DefaultAngle = this->m_Angle = Tools::Random(3, 0) * 90.f;;
+		float m_DefaultAngle = this->m_Angle = Tools::Random(3, -1) * 90.f;;
 		bool m_Burning = false;
 		bool m_Active = false;
 		bool m_SeePlayer = false;

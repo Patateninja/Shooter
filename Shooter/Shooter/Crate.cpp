@@ -21,7 +21,7 @@ BoostCrate::BoostCrate(sf::Vector2f _pos, bool _canBeHealth, bool _canBeAmmo)
 	this->m_Rect.setFillColor(sf::Color::Red);
 	this->m_Text.setPosition(_pos);
 
-	int rand = Tools::Random(2, 0);
+	int rand = Tools::Random(2);
 	if (rand == 0 && _canBeHealth)
 	{
 		this->m_Boost = MEDKIT;
@@ -85,7 +85,7 @@ BonusCrate::BonusCrate(sf::Vector2f _pos)
 	this->m_Rect.setFillColor(sf::Color::Green);
 	this->m_Text.setPosition(_pos);
 
-	int rand = Tools::Random(2, 0);
+	int rand = Tools::Random(2);
 	if (rand == 0)
 	{
 		this->m_Bonus = COFFEE;
