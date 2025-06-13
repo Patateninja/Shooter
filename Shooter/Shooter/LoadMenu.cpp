@@ -10,11 +10,11 @@ void ReloadMenu::Update(Player& _player, Window& _window)
 	
 	this->m_BirdShot.SetPosition(sf::Vector2f(_window.RelativePos(sf::Vector2f(20.f, 75.f))));
 	this->m_BuckShot.UpdateText("Infinite");
-	this->m_BuckShot.SetPosition(sf::Vector2f(_window.RelativePos(sf::Vector2f(20.f, 135.f))));
+	this->m_BuckShot.SetPosition(_window.RelativePos(sf::Vector2f(20.f, 135.f)));
 	this->m_BuckShot.UpdateText(std::to_string(_player.GetBuckshot()));
-	this->m_DragonBreath.SetPosition(sf::Vector2f(_window.RelativePos(sf::Vector2f(20.f, 195.f))));
+	this->m_DragonBreath.SetPosition(_window.RelativePos(sf::Vector2f(20.f, 195.f)));
 	this->m_DragonBreath.UpdateText(std::to_string(_player.GetDragonBreath()));
-	this->m_Slug.SetPosition(sf::Vector2f(_window.RelativePos(sf::Vector2f(20.f, 255.f))));
+	this->m_Slug.SetPosition(_window.RelativePos(sf::Vector2f(20.f, 255.f)));
 	this->m_Slug.UpdateText(std::to_string(_player.GetSlug()));
 
 	if (this->m_BirdShot.Update(_window) && !_player.GetShotgun().Full() && this->m_InputTimer > 0.3f)

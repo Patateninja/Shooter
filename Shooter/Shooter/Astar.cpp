@@ -128,7 +128,7 @@ void Astar::BestNode(Node& _node, std::list<Node> _list)
 			}
 			else if (node.GetH() == bestNode.GetH())
 			{
-				if (bool(Tools::Random(1, 0)))
+				if (bool(Tools::Random(1)))
 				{
 					bestNode = node;
 				}

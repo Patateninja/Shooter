@@ -150,9 +150,11 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Checkbox.cpp" />
     <ClCompile Include="Colors.cpp" />
+    <ClCompile Include="CounterIcon.cpp" />
     <ClCompile Include="Crate.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Equipment.cpp" />
+    <ClCompile Include="Icon.cpp" />
     <ClCompile Include="LoadMenu.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -184,9 +186,11 @@
     <ClInclude Include="Camera.hpp" />
     <ClInclude Include="Checkbox.hpp" />
     <ClInclude Include="Colors.hpp" />
+    <ClInclude Include="CounterIcon.hpp" />
     <ClInclude Include="Crate.hpp" />
     <ClInclude Include="Enemy.hpp" />
     <ClInclude Include="Equipment.hpp" />
+    <ClInclude Include="Icon.hpp" />
     <ClInclude Include="LoadMenu.hpp" />
     <ClInclude Include="PauseMenu.hpp" />
     <ClInclude Include="Player.hpp" />

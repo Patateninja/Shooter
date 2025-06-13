@@ -5,7 +5,7 @@
 Player::Player()
 {
 	this->m_Circle = sf::CircleShape(25.f);
-	this->m_Position = sf::Vector2f(64.f, 64.f);
+	this->m_Position = sf::Vector2f(Tile::GetSize() * 2.f, Tile::GetSize() * 2.f);
 }
 
 void Player::Init(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _stock, Armor& _armor, AmmoStash& _ammoStash)
@@ -108,7 +108,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 		this->m_Position += Tools::AngleToVector((Tools::Magnitude(this->m_Velocity) == 0.f ? 0.f : 350.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier()) + int(this->m_Caffeinated) * 100), Tools::VectorToAngle(this->m_Velocity)) * Time::GetDeltaTime();
 		if (Tools::Magnitude(this->m_Velocity) != 0.f)
 		{
-			_enemyList.AllHearSound(this->m_Position, 1);
+			_enemyList.AllHearSound(this->m_Position, 2);
 		}
 	}
 
@@ -250,7 +250,7 @@ void Player::Die()
 }
 void Player::Respawn()
 {
-	this->m_Position = sf::Vector2f(64.f, 64.f); //Change to stage start pos;
+	this->m_Position = sf::Vector2f(Tile::GetSize() * 2.f, Tile::GetSize() * 2.f);
 	this->m_Angle = 0.f;
 	this->m_CanReload = true;
 	this->m_CanMove = false;

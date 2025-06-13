@@ -25,7 +25,7 @@ namespace Tools
 
 	float DegToRad(float _deg);
 
-	int Random(int _max, int _min);
+	int Random(int _max, int _min = 0);
 
 	float Distance(sf::Vector2f _vect1, sf::Vector2f _vect2);
 

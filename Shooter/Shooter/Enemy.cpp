@@ -10,7 +10,7 @@ Enemy::Enemy(const sf::Vector2f& _startingPos, TileMap& _map)
 	this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(this->m_StartingPosition), std::ref(_map));
 	this->m_MovingThread = std::thread(&Enemy::Move, this, std::ref(this->m_StartingPosition), std::ref(_map));
 	
-	this->m_IdleBehavior = IdleBehavior(Tools::Random(3, 0));
+	this->m_IdleBehavior = IdleBehavior(Tools::Random(2));
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
@@ -25,7 +25,7 @@ Enemy::Enemy(const sf::Vector2f& _startingPos, TileMap& _map)
 		this->m_Circle.setOutlineColor(sf::Color::Blue);
 		this->m_Circle.setOutlineThickness(5.f);
 	}
-	else
+	else if (this->m_IdleBehavior == GUARD)
 	{
 		this->m_Circle.setOutlineColor(sf::Color::Magenta);
 		this->m_Circle.setOutlineThickness(5.f);
@@ -66,6 +66,9 @@ void Enemy::Respawn(TileMap& _map)
 	this->m_Idle = true;
 	this->m_SeePlayer = false;
 	this->m_CanAimPlayer = false;
+	this->m_SeePlayerUdpateCooldown = 0.f;
+	this->m_LosePlayerCooldown = 0.f;
+	this->m_PathUdpateCooldown = 0.f;
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(this->m_StartingPosition, FLOOR);
@@ -78,7 +81,7 @@ void Enemy::Respawn(TileMap& _map)
 	else if (this->m_IdleBehavior == GUARD)
 	{
 		this->m_PathfidingThread.join();
-		this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_PatrolTargets.front().GetCood(), std::ref(_map));
+		this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_StartingPosition, std::ref(_map));
 	}
 }
 
@@ -120,9 +123,11 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 	{	
 		if (this->m_Idle)
 		{
+			this->m_Circle.setFillColor(Color::DarkRed);
+
 			if (this->m_IdleBehavior == PATROL)
 			{
-				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_PatrolTargets.front().GetCood() && this->m_PathUdpateCooldown <= 0.f && this->m_PathfidingThread.joinable())
+				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_PatrolTargets.front().GetCood() && this->m_PathfidingThread.joinable())
 				{
 					this->m_PatrolTargets.push_back(this->m_PatrolTargets.front());
 					this->m_PatrolTargets.erase(this->m_PatrolTargets.begin());
@@ -130,51 +135,45 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 					this->m_PathfidingThread.join();
 					this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_PatrolTargets.front().GetCood(), std::ref(_map));
 				}
-				else
-				{
-					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
-				}
 			}
 			else if (this->m_IdleBehavior == WANDER)
 			{
-				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_IdleTileTarget.GetCood() && this->m_PathUdpateCooldown <= 0.f && this->m_PathfidingThread.joinable())
+				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_IdleTileTarget.GetCood() && this->m_PathfidingThread.joinable())
 				{
 					this->m_IdleTileTarget;
 					do
 					{
-						int x = Tools::Random(_map.GetSize().x - 1, 10);
-						int y = Tools::Random(_map.GetSize().y - 1, 10);
+						int x = Tools::Random(_map.GetSize().x - 1, 15);
+						int y = Tools::Random(_map.GetSize().y - 1, 15);
 						this->m_IdleTileTarget = _map.GetTile(x * Tile::GetSize(), y * Tile::GetSize());
 					} while (!this->m_IdleTileTarget.GetWalkable());
 
 					this->m_PathfidingThread.join();
 					this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_IdleTileTarget.GetCood(), std::ref(_map));
 				}
-				else
-				{
-					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
-				}
 			}
-			else
+			else if (this->m_IdleBehavior == GUARD)
 			{
-				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_StartingPosition && this->m_PathUdpateCooldown <= 0.f && this->m_PathfidingThread.joinable())
+				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_StartingPosition && this->m_PathfidingThread.joinable())
 				{
 					this->m_PathfidingThread.join();
 					this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_StartingPosition, std::ref(_map));
 				}
-				else
-				{
-					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
-				}
+			}
+
+			if (this->m_PathUdpateCooldown > 0.f)
+			{
+				this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 			}
 		}
 		else
 		{
+			this->m_Circle.setFillColor(sf::Color::Red);
+
 			if (this->m_PathUdpateCooldown <= 0.f && this->m_PathfidingThread.joinable())
 			{
 				this->m_PathfidingThread.join();
 				this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(_playerPos), std::ref(_map));
-				this->m_PathUdpateCooldown = 1.f;
 			}
 			else
 			{
@@ -186,7 +185,7 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 		{
 			this->m_SeePlayer = this->SeePlayer(_playerPos, _map);
 			this->m_CanAimPlayer = this->PlayerAimable(_playerPos, _map);
-			this->m_SeePlayerUdpateCooldown = 1.f;
+			this->m_SeePlayerUdpateCooldown = 0.5f;
 		}
 		else
 		{
@@ -257,9 +256,11 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 	{
 		if (this->m_Alive)
 		{
+			this->m_Circle.setFillColor(Color::DarkRed);
+
 			if (this->m_IdleBehavior == PATROL)
 			{
-				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_PatrolTargets.front().GetCood() && this->m_PathUdpateCooldown <= 0.f && this->m_PathfidingThread.joinable())
+				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_PatrolTargets.front().GetCood() && this->m_PathfidingThread.joinable())
 				{
 					this->m_PatrolTargets.push_back(this->m_PatrolTargets.front());
 					this->m_PatrolTargets.erase(this->m_PatrolTargets.begin());
@@ -267,14 +268,14 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 					this->m_PathfidingThread.join();
 					this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_PatrolTargets.front().GetCood(), std::ref(_map));
 				}
-				else
+				if (this->m_PathUdpateCooldown > 0.f)
 				{
 					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 				}
 			}
 			else if (this->m_IdleBehavior == WANDER)
 			{
-				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_IdleTileTarget.GetCood() && this->m_PathUdpateCooldown <= 0.f && this->m_PathfidingThread.joinable())
+				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_IdleTileTarget.GetCood() && this->m_PathfidingThread.joinable())
 				{
 					this->m_IdleTileTarget;
 					do
@@ -287,19 +288,19 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 					this->m_PathfidingThread.join();
 					this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_IdleTileTarget.GetCood(), std::ref(_map));
 				}
-				else
+				if (this->m_PathUdpateCooldown > 0.f)
 				{
 					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 				}
 			}
-			else
+			else if (this->m_IdleBehavior == GUARD)
 			{
-				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_StartingPosition && this->m_PathUdpateCooldown <= 0.f && this->m_PathfidingThread.joinable())
+				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_StartingPosition && this->m_PathfidingThread.joinable())
 				{
 					this->m_PathfidingThread.join();
 					this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_StartingPosition, std::ref(_map));
 				}
-				else
+				if (this->m_PathUdpateCooldown > 0.f)
 				{
 					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 				}
@@ -314,6 +315,21 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 		}
 	}
 
+	if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_Target && !this->m_SeePlayer)
+	{
+		this->m_Angle = this->m_DefaultAngle;
+	}
+	else
+	{
+		if (this->m_SeePlayer)
+		{
+			this->m_Angle = Tools::RadToDeg(Tools::VectorToAngle(_playerPos - this->m_Position));
+		}
+		else 
+		{
+			this->m_Angle = Tools::RadToDeg(Tools::VectorToAngle(m_Target - this->m_Position));
+		}
+	}
 	this->m_Alive = this->m_Hp > 0;
 
 	if (this->m_Position.x < 0.f || this->m_Position.y < 0.f || this->m_Position.x > Tile::GetSize() * (_map.GetSize().x - 1) || this->m_Position.y > Tile::GetSize() * (_map.GetSize().y - 1) || this->m_Position.x != this->m_Position.x || this->m_Position.y != this->m_Position.y)
@@ -321,57 +337,48 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 		this->TakeDamage(10000);
 	}
 }
+
 void Enemy::Display(Window& _window)
 {
 	_window.Draw(this->m_Circle);
 
-	if (this->m_IdleBehavior == WANDER)
-	{
-		sf::CircleShape circle(20.f);
-		circle.setOrigin(20.f, 20.f);
-		circle.setPosition(this->m_IdleTileTarget.GetCood());
-		circle.setFillColor(Color::Flamming);
-		_window.Draw(circle);
-	}
-	else if (this->m_IdleBehavior == PATROL)
-	{
-		for (Tile& tile : this->m_PatrolTargets)
-		{
-			sf::CircleShape circle(20.f);
-			circle.setOrigin(20.f, 20.f);
-			circle.setPosition(tile.GetCood());
-			circle.setFillColor(Color::LightRed);
-			_window.Draw(circle);
-		}
-	}
-	else if (this->m_IdleBehavior == GUARD)
-	{
-		sf::CircleShape circle(20.f);
-		circle.setOrigin(20.f, 20.f);
-		circle.setPosition(this->m_StartingPosition);
-		circle.setFillColor(sf::Color::Magenta);
-		_window.Draw(circle);
-	}
+	sf::VertexArray fov(sf::Lines, 4);
+	fov[0].position = this->m_Position;
+	fov[1].position = Tools::AngleToVector(float(10 * Tile::GetSize()), Tools::DegToRad(this->m_Angle + 45.f)) + this->m_Position;
+	fov[2].position = this->m_Position;
+	fov[3].position = Tools::AngleToVector(float(10 * Tile::GetSize()), Tools::DegToRad(this->m_Angle - 45.f)) + this->m_Position;
+
+	fov[0].color = Color::DarkGrey;
+	fov[1].color = Color::DarkGrey;
+	fov[2].color = Color::DarkGrey;
+	fov[3].color = Color::DarkGrey;
+
+	_window.Draw(fov);
 }
 
 void Enemy::HearSound(sf::Vector2f& _soundPos, int _soundIntensity)
 {
-	if (Tools::Distance(this->m_Position, _soundPos) / Tile::GetSize() < _soundIntensity)
-	{
-		this->m_Idle = false;
-		this->m_LosePlayerCooldown = Tools::Min<int, float, float> (_soundIntensity, 5.f);
-	}
+	this->m_Idle = false;
+	this->m_LosePlayerCooldown = Tools::Min<int, float, float> (_soundIntensity, 5.f);
 }
 bool Enemy::SeePlayer(const sf::Vector2f& _playerPos, TileMap& _map) const 
 {
 	if (Tools::Distance(_playerPos, this->m_Position) < 10 * Tile::GetSize())
 	{
-		for (int i = 1; i <= int(Tools::Distance(_playerPos, this->m_Position)); ++i)
+		float angle = Tools::RadToDeg(Tools::VectorToAngle(_playerPos - this->m_Position));
+		if (angle > this->m_Angle - 45 && angle < this->m_Angle + 45)
 		{
-			if (_map.GetTile(sf::Vector2i(Tools::Normalize(_playerPos - this->m_Position) * float(i)) + sf::Vector2i(this->m_Position)).GetType() == WALL)
+			for (int i = Tile::GetSize(); i <= int(Tools::Distance(_playerPos, this->m_Position)); ++i)
 			{
-				return false;
+				if (_map.GetTile(sf::Vector2i(Tools::Normalize(_playerPos - this->m_Position) * float(i)) + sf::Vector2i(this->m_Position)).GetType() == WALL)
+				{
+					return false;
+				}
 			}
+		}
+		else
+		{
+			return false;
 		}
 	}
 	else
@@ -385,12 +392,20 @@ bool Enemy::PlayerAimable(const sf::Vector2f& _playerPos, TileMap& _map) const
 {
 	if (Tools::Distance(_playerPos, this->m_ProjectileOrigin) - 2 * Tile::GetSize() < this->m_AttackRange)
 	{
-		for (int i = 1; i <= int(Tools::Distance(_playerPos, this->m_ProjectileOrigin)); ++i)
+		float angle = Tools::RadToDeg(Tools::VectorToAngle(_playerPos - this->m_Position));
+		if (angle > this->m_Angle - 45 && angle < this->m_Angle + 45)
 		{
-			if (_map.GetTile(sf::Vector2i(Tools::Normalize(_playerPos - this->m_ProjectileOrigin) * float(i)) + sf::Vector2i(this->m_ProjectileOrigin)).GetType() == WALL)
+			for (int i = Tile::GetSize(); i <= int(Tools::Distance(_playerPos, this->m_ProjectileOrigin)); ++i)
 			{
-				return false;
+				if (_map.GetTile(sf::Vector2i(Tools::Normalize(_playerPos - this->m_ProjectileOrigin) * float(i)) + sf::Vector2i(this->m_ProjectileOrigin)).GetType() == WALL)
+				{
+					return false;
+				}
 			}
+		}
+		else
+		{
+			return false;
 		}
 	}
 	else
@@ -415,22 +430,24 @@ void Enemy::Move(const sf::Vector2f& _playerPos, TileMap& _map)
 		this->m_Target = this->m_Path.front().GetCood();
 		this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed * (this->m_Idle ? 0.5f : 1);
 		this->m_Position += this->m_Velocity * Time::GetDeltaTime();
-		if (_map.GetTile(int(this->m_Position.x), int(this->m_Position.y)) == this->m_Path.front())
+		if (this->m_Alive && _map.GetTile(int(this->m_Position.x), int(this->m_Position.y)) == this->m_Path.front())
 		{
 			this->m_Path.erase(this->m_Path.begin());
 		}
 		this->m_Mutex.unlock();
 	}
-	else if (Tools::Distance(this->m_Position, _playerPos) < Tile::GetSize())
+	else if (Tools::Distance(this->m_Position, _playerPos) < Tile::GetSize() * 2)
 	{
 		this->m_Target = _playerPos;
 
-		this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed * (this->m_Idle ? 0.f : 1);
+		this->m_Velocity = Tools::Normalize(this->m_Target - this->m_Position) * this->m_Speed * (this->m_Idle ? 0.5f : 1);
 
-		if (_map.GetTile(sf::Vector2i((this->m_Position + this->m_Velocity * Time::GetDeltaTime() * (this->m_Idle ? 0.5f : 1)) + (Tools::Normalize(this->m_Velocity) * 25.f))).GetWalkable())
+		if (this->m_Alive && _map.GetTile(sf::Vector2i((this->m_Position + this->m_Velocity * Time::GetDeltaTime() * (this->m_Idle ? 0.5f : 1)) + (Tools::Normalize(this->m_Velocity) * 25.f))).GetWalkable())
 		{
 			this->m_Position += this->m_Velocity * Time::GetDeltaTime();
 		}
+
+		this->m_PathUdpateCooldown = 0.f;
 	}
 
 	this->m_Circle.setPosition(this->m_Position);
@@ -484,6 +501,9 @@ void Enemy::TakeDamage(int _damage)
 void Enemy::Die()
 {
 	this->m_Active = false;
+	this->m_SeePlayer = false;
+	this->m_CanAimPlayer = false;
+	this->m_Idle = true;
 	Level::GainXP(this->m_MaxHp);
 	this->m_Circle.setFillColor(Color::Grey);
 	this->m_IgnoreProj.clear();
@@ -508,7 +528,7 @@ Baseliner::Baseliner(const sf::Vector2f& _startingPos, TileMap& _map)
 	this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(this->m_StartingPosition), std::ref(_map));
 	this->m_MovingThread = std::thread(&Enemy::Move, this, std::ref(this->m_StartingPosition), std::ref(_map));
 
-	this->m_IdleBehavior = IdleBehavior(Tools::Random(3, 0));
+	this->m_IdleBehavior = IdleBehavior(Tools::Random(2));
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
@@ -521,6 +541,11 @@ Baseliner::Baseliner(const sf::Vector2f& _startingPos, TileMap& _map)
 		this->MakePatrolPath(_map);
 
 		this->m_Circle.setOutlineColor(sf::Color::Blue);
+		this->m_Circle.setOutlineThickness(5.f);
+	}
+	else if (this->m_IdleBehavior == GUARD)
+	{
+		this->m_Circle.setOutlineColor(sf::Color::Magenta);
 		this->m_Circle.setOutlineThickness(5.f);
 	}
 }
@@ -553,20 +578,24 @@ Tank::Tank(const sf::Vector2f& _startingPos, TileMap& _map)
 	this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(this->m_StartingPosition), std::ref(_map));
 	this->m_MovingThread = std::thread(&Enemy::Move, this, std::ref(this->m_StartingPosition), std::ref(_map));
 
-	this->m_IdleBehavior = IdleBehavior(Tools::Random(3, 0));
+	this->m_IdleBehavior = IdleBehavior(Tools::Random(2));
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
 
 		this->m_Circle.setOutlineColor(sf::Color::Green);
 		this->m_Circle.setOutlineThickness(5.f);
-
 	}
 	else if (this->m_IdleBehavior == PATROL)
 	{
 		this->MakePatrolPath(_map);
 
 		this->m_Circle.setOutlineColor(sf::Color::Blue);
+		this->m_Circle.setOutlineThickness(5.f);
+	}
+	else if (this->m_IdleBehavior == GUARD)
+	{
+		this->m_Circle.setOutlineColor(sf::Color::Magenta);
 		this->m_Circle.setOutlineThickness(5.f);
 	}
 }
@@ -602,7 +631,7 @@ Ranged::Ranged(const sf::Vector2f& _startingPos, TileMap& _map)
 
 	this->m_ShootTimer = 0.5f;
 
-	this->m_IdleBehavior = IdleBehavior(Tools::Random(3, 0));
+	this->m_IdleBehavior = IdleBehavior(Tools::Random(2));
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
@@ -615,6 +644,11 @@ Ranged::Ranged(const sf::Vector2f& _startingPos, TileMap& _map)
 		this->MakePatrolPath(_map);
 
 		this->m_Circle.setOutlineColor(sf::Color::Blue);
+		this->m_Circle.setOutlineThickness(5.f);
+	}
+	else if (this->m_IdleBehavior == GUARD)
+	{
+		this->m_Circle.setOutlineColor(sf::Color::Magenta);
 		this->m_Circle.setOutlineThickness(5.f);
 	}
 }
@@ -631,7 +665,7 @@ Ranged::~Ranged()
 
 void Ranged::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 {
-	Enemy::Update(_playerPos, _map);
+	this->Enemy::Update(_playerPos, _map);
 
 	if (this->m_Active && this->m_CanAimPlayer)
 	{
@@ -670,7 +704,7 @@ Speedster::Speedster(const sf::Vector2f& _startingPos, TileMap& _map)
 	this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(this->m_StartingPosition), std::ref(_map));
 	this->m_MovingThread = std::thread(&Enemy::Move, this, std::ref(this->m_StartingPosition), std::ref(_map));
 
-	this->m_IdleBehavior = IdleBehavior(Tools::Random(3, 0));
+	this->m_IdleBehavior = IdleBehavior(Tools::Random(2));
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
@@ -683,6 +717,11 @@ Speedster::Speedster(const sf::Vector2f& _startingPos, TileMap& _map)
 		this->MakePatrolPath(_map);
 
 		this->m_Circle.setOutlineColor(sf::Color::Blue);
+		this->m_Circle.setOutlineThickness(5.f);
+	}
+	else if (this->m_IdleBehavior == GUARD)
+	{
+		this->m_Circle.setOutlineColor(sf::Color::Magenta);
 		this->m_Circle.setOutlineThickness(5.f);
 	}
 }
@@ -717,7 +756,7 @@ Shielded::Shielded(const sf::Vector2f& _startingPos, TileMap& _map)
 
 	this->m_Shield = std::make_unique<Shield>(this->m_Position);
 
-	this->m_IdleBehavior = IdleBehavior(Tools::Random(3, 0));
+	this->m_IdleBehavior = IdleBehavior(Tools::Random(2));
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
@@ -730,6 +769,11 @@ Shielded::Shielded(const sf::Vector2f& _startingPos, TileMap& _map)
 		this->MakePatrolPath(_map);
 
 		this->m_Circle.setOutlineColor(sf::Color::Blue);
+		this->m_Circle.setOutlineThickness(5.f);
+	}
+	else if (this->m_IdleBehavior == GUARD)
+	{
+		this->m_Circle.setOutlineColor(sf::Color::Magenta);
 		this->m_Circle.setOutlineThickness(5.f);
 	}
 }
@@ -746,14 +790,13 @@ Shielded::~Shielded()
 
 void Shielded::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 {
-	Enemy::Update(_playerPos,_map);
-
-	this->m_Shield->Udpate(this->m_Active, this->m_Position, Tools::RadToDeg(Tools::VectorToAngle(this->m_Target - this->m_Position)));
+	this->Enemy::Update(_playerPos,_map);
+	this->m_Shield->Udpate(this->m_Active, this->m_Position, this->m_Angle);
 }
 
 void Shielded::Display(Window& _window)
 {
-	Enemy::Display(_window);
+	this->Enemy::Display(_window);
 	this->m_Shield->Display(_window);
 }
 
@@ -779,7 +822,7 @@ RangedShielded::RangedShielded(const sf::Vector2f& _startingPos, TileMap& _map)
 
 	this->m_Shield = std::make_unique<Shield>(this->m_Position);
 
-	this->m_IdleBehavior = IdleBehavior(Tools::Random(3, 0));
+	this->m_IdleBehavior = IdleBehavior(Tools::Random(2));
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
@@ -792,6 +835,11 @@ RangedShielded::RangedShielded(const sf::Vector2f& _startingPos, TileMap& _map)
 		this->MakePatrolPath(_map);
 
 		this->m_Circle.setOutlineColor(sf::Color::Blue);
+		this->m_Circle.setOutlineThickness(5.f);
+	}
+	else if (this->m_IdleBehavior == GUARD)
+	{
+		this->m_Circle.setOutlineColor(sf::Color::Magenta);
 		this->m_Circle.setOutlineThickness(5.f);
 	}
 }
@@ -808,7 +856,7 @@ RangedShielded::~RangedShielded()
 
 void RangedShielded::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 {
-	Enemy::Update(_playerPos, _map);
+	this->Enemy::Update(_playerPos, _map);
 
 	if (this->m_Active && this->m_CanAimPlayer)
 	{
@@ -823,11 +871,11 @@ void RangedShielded::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 		}
 	}
 
-	this->m_Shield->Udpate(this->m_Active, this->m_Position, Tools::RadToDeg(Tools::VectorToAngle(this->m_Target - this->m_Position)));
+	this->m_Shield->Udpate(this->m_Active, this->m_Position, this->m_Angle);
 }
 void RangedShielded::Display(Window& _window)
 {
-	Enemy::Display(_window);
+	this->Enemy::Display(_window);
 	this->m_Shield->Display(_window);
 }
 
@@ -887,7 +935,10 @@ void EnemyList::AllHearSound(sf::Vector2f& _soundPos, int _soundIntensity)
 {
 	for (std::shared_ptr<Enemy>& enemy : this->m_List)
 	{
-		enemy->HearSound(_soundPos, _soundIntensity);
+		if (Tools::Distance(enemy->GetPos(), _soundPos) / Tile::GetSize() < _soundIntensity)
+		{
+			enemy->HearSound(_soundPos, _soundIntensity);
+		}
 	}
 }
 

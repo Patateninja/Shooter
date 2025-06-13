@@ -8,6 +8,7 @@ typedef enum TileType
 	WALL,
 	FURNITURE,
 	FLOOR,
+	DOORWAY,
 	TO_GENERATE,
 } TileType;
 

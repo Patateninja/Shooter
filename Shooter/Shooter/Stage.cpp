@@ -52,12 +52,11 @@ void Stage::GenerateMap()
 }
 void Stage::SpawnEnemies()
 {
-
-	if (this->m_Num != 1 && this->m_Num != 42)
+	if (this->m_Num != 1)
 	{
 		int credits = int(this->m_Num * 1.5f) + int(this->m_Num % 5 == 0) * 6 + 1;
 
-		while (credits > 0 && this->m_EnemyList.Size() < 15)
+		while (credits > 0 && this->m_EnemyList.Size() < 10 + int(this->m_Num / 20))
 		{
 			Tile tile;
 			do
@@ -67,7 +66,7 @@ void Stage::SpawnEnemies()
 				tile = this->m_TileMap.GetTile(x * Tile::GetSize(), y * Tile::GetSize());
 			} while (!tile.GetWalkable());
 
-			switch (Tools::Random(6, 0))
+			switch (Tools::Random(6))
 			{
 				case 0:
 					if (credits - 1 >= 0)
@@ -128,10 +127,6 @@ void Stage::SpawnEnemies()
 		} while (!tile.GetWalkable());
 
 		this->m_EnemyList.Add<Baseliner>(tile.GetCood(), this->m_TileMap);
-	}
-	else
-	{
-		//BOSS
 	}
 }
 
