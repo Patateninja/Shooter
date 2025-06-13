@@ -6,6 +6,7 @@
 #include "PauseMenu.hpp"
 #include "Slider.hpp"
 #include "Checkbox.hpp"
+#include "Icon.hpp"
 
 class StateManager;
 
@@ -85,6 +86,8 @@ class Game : public State
 		PauseMenu m_PauseMenu;
 		Player m_Player;
 		Stage m_Stage;
+		Icon m_Coffee;
+		Icon m_BMG50;
 		Camera m_Cam;
 		PopUp* m_StagePopUp = nullptr;
 		BonusPopUp* m_BonusPopUp = nullptr;

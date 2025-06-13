@@ -78,7 +78,6 @@ void Menu::Init()
 	this->m_Play = Button("Play", sf::Vector2f(25.f, 250.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("Placeholder"));
 	this->m_Option = Button("Settings", sf::Vector2f(25.f, 400.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("Placeholder"));
 	this->m_Quit = Button("Quit", sf::Vector2f(25.f, 550.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("Placeholder"));
-
 }
 void Menu::Update()
 {
@@ -144,8 +143,11 @@ void Game::Init()
 	this->m_Player.Init(State::m_Muzzle, State::m_Grip, State::m_Magazine, State::m_Stock, State::m_Armor, State::m_AmmoStash);
 	this->m_Cam.NewTarget(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
 
-	this->m_Stage.SetNum(1);
+	this->m_Stage.SetNum(3);
 	this->m_Stage.Init();
+
+	this->m_Coffee = Icon(sf::Vector2f(150.f, 70.f), sf::Vector2f(65.f, 65.f), &this->GetRsc<sf::Texture>("Placeholder"));
+	this->m_BMG50 = Icon(sf::Vector2f(225.f, 70.f), sf::Vector2f(65.f, 65.f), &this->GetRsc<sf::Texture>("Placeholder"));
 
 	this->Window().SetViewCenter(this->Window().GetDefaultView().GetCenter() - sf::Vector2f(Tile::GetSize() / 2.f, Tile::GetSize() / 2.f));
 }
@@ -207,6 +209,14 @@ void Game::Update()
 			}
 		}
 
+		if (this->m_Player.GetCoffeeEnabled())
+		{
+			this->m_Coffee.Update(this->Window());
+		}
+		if (this->m_Player.GetBmgEnabled())
+		{
+			this->m_BMG50.Update(this->Window());
+		}
 
 		if (this->m_Stage.GetMoveOn())
 		{
@@ -295,6 +305,15 @@ void Game::Display()
 	if (!this->m_Player.GetMoving())
 	{
 		this->m_ReloadMenu.Display(this->Window());
+	}
+
+	if (this->m_Player.GetCoffeeEnabled())
+	{
+		this->m_Coffee.Display(this->Window());
+	}
+	if (this->m_Player.GetBmgEnabled())
+	{
+		this->m_BMG50.Display(this->Window());
 	}
 
 	this->DisplayWindow();

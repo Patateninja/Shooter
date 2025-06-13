@@ -51,6 +51,8 @@ class Player
 		inline int&     GetSlug()         { return this->m_Slug; }
 		inline Shotgun& GetShotgun()      { return this->m_Shotgun; }
 		inline const bool     GetBmgEnabled()  const { return this->m_Got50BMG; }
+		inline const bool     GetCoffeeEnabled()  const { return this->m_Caffeinated; }
+		
 
 		inline void SetTimer(float _timer) { this->m_InputTimer = _timer; }
 
