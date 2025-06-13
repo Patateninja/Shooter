@@ -46,9 +46,6 @@
     <Filter Include="Source Files\Stage">
       <UniqueIdentifier>{7e64abe6-cb8f-4abb-8b6d-c25a560b9d2d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Stage">
-      <UniqueIdentifier>{8ec46b4b-32d8-4022-8aed-32c75eafa7df}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Upgrades">
       <UniqueIdentifier>{84611a02-5032-4c52-8eba-89f0cac563a2}</UniqueIdentifier>
     </Filter>
@@ -72,6 +69,9 @@
     </Filter>
     <Filter Include="Header Files\Save &amp; Load">
       <UniqueIdentifier>{c6f7db7d-a620-4eac-9d70-86ce2b938e0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI\Stage">
+      <UniqueIdentifier>{8ec46b4b-32d8-4022-8aed-32c75eafa7df}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +174,9 @@
     <ClCompile Include="Icon.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="CounterIcon.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tools.hpp">
@@ -210,7 +213,7 @@
       <Filter>Header Files\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Tile.hpp">
-      <Filter>Header Files\Stage</Filter>
+      <Filter>Header Files\UI\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Astar.hpp">
       <Filter>Header Files\Enemy</Filter>
@@ -219,7 +222,7 @@
       <Filter>Header Files\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Stage.hpp">
-      <Filter>Header Files\Stage</Filter>
+      <Filter>Header Files\UI\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Colors.hpp">
       <Filter>Header Files\Tools</Filter>
@@ -270,6 +273,9 @@
       <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="Icon.hpp">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CounterIcon.hpp">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>

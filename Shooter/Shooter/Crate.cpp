@@ -53,18 +53,18 @@ void BoostCrate::Update(Player& _player, bool& _coffe, bool& _bmg, bool& _vest, 
 			{
 				case MEDKIT :
 					_player.Heal();
-					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "MedKit");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "MedKit");
 					break;
 				case AMMOBOX :
 					_player.Refill();
-					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "Ammo Box");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Ammo Box");
 					break;
 				case XP :
 					Level::GainXP(250);
-					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "XP");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "XP");
 					break;
 				default :
-					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "Somehow another thing (This is worrysome)");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Somehow another thing (This is worrysome)");
 					break;
 			}
 		}
@@ -120,18 +120,18 @@ void BonusCrate::Update(Player& _player, bool& _coffee, bool& _bmg, bool& _vest,
 			{
 				case COFFEE :
 					_coffee = true;
-					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "Coffee");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Coffee");
 					break;
 				case VEST :
 					_vest = true;;
-					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "Vest");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Vest");
 					break;
 				case BMG50 :
 					_bmg = true;
-					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), ".50 BMG");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), ".50 BMG");
 					break;
 				default :
-					_popUp = new BonusPopUp(sf::Vector2f(500.f, 100.f), sf::Vector2f(720.f, 880.f), "Somehow another thing (This is worrysome)");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Somehow another thing (This is worrysome)");
 					break;
 			}
 		}	

@@ -135,10 +135,6 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 					this->m_PathfidingThread.join();
 					this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_PatrolTargets.front().GetCood(), std::ref(_map));
 				}
-				if (this->m_PathUdpateCooldown > 0.f)
-				{
-					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
-				}
 			}
 			else if (this->m_IdleBehavior == WANDER)
 			{
@@ -155,10 +151,6 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 					this->m_PathfidingThread.join();
 					this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_IdleTileTarget.GetCood(), std::ref(_map));
 				}
-				if (this->m_PathUdpateCooldown > 0.f)
-				{
-					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
-				}
 			}
 			else if (this->m_IdleBehavior == GUARD)
 			{
@@ -167,10 +159,11 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 					this->m_PathfidingThread.join();
 					this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, this->m_StartingPosition, std::ref(_map));
 				}
-				if (this->m_PathUdpateCooldown > 0.f)
-				{
-					this->m_PathUdpateCooldown -= Time::GetDeltaTime();
-				}
+			}
+
+			if (this->m_PathUdpateCooldown > 0.f)
+			{
+				this->m_PathUdpateCooldown -= Time::GetDeltaTime();
 			}
 		}
 		else

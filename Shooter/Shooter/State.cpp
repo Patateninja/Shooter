@@ -138,13 +138,18 @@ void Game::Init()
 {
 	std::cout << "Game Init" << std::endl;
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
+	this->m_Text.setCharacterSize(15);
 	//this->GetRsc<sf::Music>("Bogus").play();
 	
 	this->m_Player.Init(State::m_Muzzle, State::m_Grip, State::m_Magazine, State::m_Stock, State::m_Armor, State::m_AmmoStash);
 	this->m_Cam.NewTarget(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
 
-	this->m_Stage.SetNum(3);
+	this->m_Stage.SetNum(111);
 	this->m_Stage.Init();
+
+	this->m_StageNum = CounterIcon(sf::Vector2f(1845.f, 10.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("Placeholder"));
+	this->m_Life = CounterIcon(sf::Vector2f(1845.f, 90.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("Placeholder"));
+	this->m_Vest = CounterIcon(sf::Vector2f(1845.f, 170.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("Placeholder"));
 
 	this->m_Coffee = Icon(sf::Vector2f(150.f, 70.f), sf::Vector2f(65.f, 65.f), &this->GetRsc<sf::Texture>("Placeholder"));
 	this->m_BMG50 = Icon(sf::Vector2f(225.f, 70.f), sf::Vector2f(65.f, 65.f), &this->GetRsc<sf::Texture>("Placeholder"));
@@ -187,7 +192,7 @@ void Game::Update()
 	{
 		this->m_Cam.Update(this->Window());
 
-		this->m_Text.setString("Stage : " + std::to_string(this->m_Stage.GetNum()) + " / " + std::to_string(this->m_Player.GetHP()) + " Live(s) / " + std::to_string(this->m_Player.GetVest()) + " Vest(s) / " + std::to_string(int(1 / Time::GetDeltaTime())) + " fps");
+		this->m_Text.setString(std::to_string(int(1 / Time::GetDeltaTime())) + " fps");
 		this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
 
 		this->m_Player.Update(this->m_Stage.GetEnemies(), this->m_Stage.GetMap(), this->m_Cam, this->Window());
@@ -216,6 +221,12 @@ void Game::Update()
 		if (this->m_Player.GetBmgEnabled())
 		{
 			this->m_BMG50.Update(this->Window());
+		}
+		this->m_StageNum.Update(this->Window(), this->m_Stage.GetNum());
+		this->m_Life.Update(this->Window(), this->m_Player.GetHP());
+		if (this->m_Player.GetVest() != 0)
+		{
+			this->m_Vest.Update(this->Window(), this->m_Player.GetVest());
 		}
 
 		if (this->m_Stage.GetMoveOn())
@@ -267,39 +278,23 @@ void Game::Display()
 {
 	this->ClearWindow();
 
+	this->m_Stage.Display(this->Window());
+	ProjList::Display(this->Window());
+	this->m_Player.Display(this->Window());
+	this->Draw(this->m_Text);
+
+	if (this->m_StagePopUp)
+	{
+		this->m_StagePopUp->Display(this->Window());
+	}
+	if (this->m_BonusPopUp)
+	{
+		this->m_BonusPopUp->Display(this->Window());
+	}
+
 	if (this->m_Paused)
 	{
-		this->m_Stage.Display(this->Window());
-		ProjList::Display(this->Window());
-		this->m_Player.Display(this->Window());
-		this->Draw(this->m_Text);
-
-		if (this->m_StagePopUp)
-		{
-			this->m_StagePopUp->Display(this->Window());
-		}
-		if (this->m_BonusPopUp)
-		{
-			this->m_BonusPopUp->Display(this->Window());
-		}
-	
 		this->m_PauseMenu.Display(this->Window());
-	}
-	else
-	{
-		this->m_Stage.Display(this->Window());
-		ProjList::Display(this->Window());
-		this->m_Player.Display(this->Window());
-		this->Draw(this->m_Text);
-
-		if (this->m_StagePopUp)
-		{
-			this->m_StagePopUp->Display(this->Window());
-		}
-		if (this->m_BonusPopUp)
-		{
-			this->m_BonusPopUp->Display(this->Window());
-		}
 	}
 
 	if (!this->m_Player.GetMoving())
@@ -314,6 +309,13 @@ void Game::Display()
 	if (this->m_Player.GetBmgEnabled())
 	{
 		this->m_BMG50.Display(this->Window());
+	}
+
+	this->m_StageNum.Display(this->Window());
+	this->m_Life.Display(this->Window());
+	if (this->m_Player.GetVest() != 0)
+	{
+		this->m_Vest.Display(this->Window());
 	}
 
 	this->DisplayWindow();

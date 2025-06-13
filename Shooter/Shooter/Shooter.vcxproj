@@ -150,6 +150,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Checkbox.cpp" />
     <ClCompile Include="Colors.cpp" />
+    <ClCompile Include="CounterIcon.cpp" />
     <ClCompile Include="Crate.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Equipment.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="Camera.hpp" />
     <ClInclude Include="Checkbox.hpp" />
     <ClInclude Include="Colors.hpp" />
+    <ClInclude Include="CounterIcon.hpp" />
     <ClInclude Include="Crate.hpp" />
     <ClInclude Include="Enemy.hpp" />
     <ClInclude Include="Equipment.hpp" />

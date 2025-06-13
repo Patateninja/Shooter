@@ -5,7 +5,7 @@
 Player::Player()
 {
 	this->m_Circle = sf::CircleShape(25.f);
-	this->m_Position = sf::Vector2f(64.f, 64.f);
+	this->m_Position = sf::Vector2f(Tile::GetSize() * 2.f, Tile::GetSize() * 2.f);
 }
 
 void Player::Init(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _stock, Armor& _armor, AmmoStash& _ammoStash)
@@ -250,7 +250,7 @@ void Player::Die()
 }
 void Player::Respawn()
 {
-	this->m_Position = sf::Vector2f(64.f, 64.f); //Change to stage start pos;
+	this->m_Position = sf::Vector2f(Tile::GetSize() * 2.f, Tile::GetSize() * 2.f);
 	this->m_Angle = 0.f;
 	this->m_CanReload = true;
 	this->m_CanMove = false;
