@@ -14,6 +14,8 @@ AmmoStash State::m_AmmoStash = AmmoStash("Ammo Pouch", 0, 0);
 int State::m_SfxVolume = 100;
 int State::m_BgmVolume = 100;
 
+int State::m_StageReached = 0;
+int State::m_BestStage = 0;
 #pragma endregion
 ////////////////////////////////////////////////////////
 #pragma region State
@@ -144,7 +146,7 @@ void Game::Init()
 	this->m_Player.Init(State::m_Muzzle, State::m_Grip, State::m_Magazine, State::m_Stock, State::m_Armor, State::m_AmmoStash);
 	this->m_Cam.NewTarget(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
 
-	this->m_Stage.SetNum(111);
+	this->m_Stage.SetNum(11);
 	this->m_Stage.Init();
 
 	this->m_StageNum = CounterIcon(sf::Vector2f(1845.f, 10.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("Placeholder"));
@@ -155,6 +157,8 @@ void Game::Init()
 	this->m_BMG50 = Icon(sf::Vector2f(225.f, 70.f), sf::Vector2f(65.f, 65.f), &this->GetRsc<sf::Texture>("Placeholder"));
 
 	this->Window().SetViewCenter(this->Window().GetDefaultView().GetCenter() - sf::Vector2f(Tile::GetSize() / 2.f, Tile::GetSize() / 2.f));
+
+	State::m_StageReached = 0;
 }
 void Game::Update()
 {
@@ -270,6 +274,7 @@ void Game::Update()
 
 		if (this->m_Player.GetHP() == 0)
 		{
+			State::m_StageReached = this->m_Stage.GetNum();
 			this->ChangeState<GameOver>();
 		}
 	}
@@ -358,7 +363,13 @@ void GameOver::Init()
 	std::cout << "Menu Init" << std::endl;
 	this->Window().ResetView();
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
-	this->m_Text.setString("Game Over");
+
+	if (State::m_StageReached > State::m_BestStage)
+	{
+		State::m_BestStage = State::m_StageReached;
+	}
+
+	this->m_Text.setString("Game Over\nStage Reached : " + std::to_string(State::m_StageReached) + "\nBest Stage : " + std::to_string(State::m_BestStage));
 	this->m_Text.setPosition(this->Window().GetViewCenter().x - (this->m_Text.getGlobalBounds().width * 2.f), 150.f);
 	this->m_Text.setCharacterSize(120);
 

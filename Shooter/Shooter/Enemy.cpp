@@ -419,7 +419,7 @@ bool Enemy::PlayerAimable(const sf::Vector2f& _playerPos, TileMap& _map) const
 void Enemy::UpdatePath(const sf::Vector2f& _playerPos, TileMap& _map)
 {
 	this->m_Mutex.lock();
-	this->m_Path = Astar::Pathfinding(_map.GetTile(int(this->m_Position.x), int(this->m_Position.y)), _map.GetTile(int(_playerPos.x), int(_playerPos.y)), _map, std::ref(this->m_Alive));
+	this->m_Path = Astar::Pathfinding(_map.GetTile(int(this->m_Position.x), int(this->m_Position.y)), _map.GetTile(int(_playerPos.x), int(_playerPos.y)), _map, this->m_Alive);
 	this->m_Mutex.unlock();
 }
 void Enemy::Move(const sf::Vector2f& _playerPos, TileMap& _map)
