@@ -104,8 +104,8 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 		}
 		else if (tile.GetType() == TO_GENERATE)
 		{
-			int	x = Tools::Random(Tools::Min<int, float, int>(10, this->m_Size.x - (tile.GetCood().x / Tile::GetSize())), Tools::Min<int, float, int>(5, this->m_Size.x - (tile.GetCood().x / Tile::GetSize())));
-			int y = Tools::Random(Tools::Min<int, float, int>(10, this->m_Size.y - (tile.GetCood().y / Tile::GetSize())), Tools::Min<int, float, int>(5, this->m_Size.y - (tile.GetCood().y / Tile::GetSize())));
+			int	x = Tools::Random(Tools::Min<int, float, int>(15, this->m_Size.x - (tile.GetCood().x / Tile::GetSize())), Tools::Min<int, float, int>(5, this->m_Size.x - (tile.GetCood().x / Tile::GetSize())));
+			int y = Tools::Random(Tools::Min<int, float, int>(15, this->m_Size.y - (tile.GetCood().y / Tile::GetSize())), Tools::Min<int, float, int>(5, this->m_Size.y - (tile.GetCood().y / Tile::GetSize())));
 
 			if (tile.GetCood().x / Tile::GetSize() + x > this->m_Size.x - 3)
 			{
@@ -181,13 +181,13 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 		}
 	}
 
-	for (Tile& tile : this->m_Map)
-	{
-		if (tile.GetType() == DOORWAY)
-		{
-			tile.SetType(FLOOR);
-		}
-	}
+	//for (Tile& tile : this->m_Map)
+	//{
+	//	if (tile.GetType() == DOORWAY)
+	//	{
+	//		tile.SetType(FLOOR);
+	//	}
+	//}
 
 	_rendertexture.clear(sf::Color::Transparent);
 	sf::RectangleShape renderer = sf::RectangleShape(sf::Vector2f(float(Tile::GetSize()), float(Tile::GetSize())));

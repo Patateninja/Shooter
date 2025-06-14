@@ -3,8 +3,6 @@
 Stage::Stage(int _num)
 {
 	this->m_Num = _num;
-	this->GenerateMap();
-	this->SpawnEnemies();
 }
 Stage::~Stage()
 {

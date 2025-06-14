@@ -40,7 +40,7 @@ class Enemy
 		float m_SeePlayerUdpateCooldown = 0.f;
 		float m_LosePlayerCooldown = 0.f;
 		float m_Angle = 0.f;
-		float m_DefaultAngle = this->m_Angle = Tools::Random(3, -1) * 90.f;;
+		float m_DefaultAngle = this->m_Angle = Tools::Random(2, -1) * 90.f;;
 		bool m_Burning = false;
 		bool m_Active = false;
 		bool m_SeePlayer = false;
@@ -70,7 +70,7 @@ class Enemy
 
 		void HearSound(sf::Vector2f& _soundPos, int _soundIntensity);
 		bool SeePlayer(const sf::Vector2f& _playerPos, TileMap& _map) const;
-		bool PlayerAimable(const sf::Vector2f& _playerPos, TileMap& _map) const;
+		bool PlayerAimable(const sf::Vector2f& _playerPos, TileMap& _map);
 		
 		void UpdatePath(const sf::Vector2f& _playerPos, TileMap& _map);
 		void Move(const sf::Vector2f& _playerPos, TileMap& _map);

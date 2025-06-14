@@ -4,6 +4,11 @@ int main()
 {
 	srand(unsigned int(time(nullptr)));
 
+	for (int i = 0; i < 25; i++)
+	{
+		std::cout << Tools::Random(2, -1) * 90.f << std::endl;
+	}
+
 	StateManager statemana;
 	sf::Event event;
 
@@ -17,15 +22,15 @@ int main()
 			}
 		}
 
-		if (statemana.WindowHasFocus())
+		if (/*statemana.WindowHasFocus()*/ true)
 		{
 			statemana.Update();
+			statemana.Display();
 		}
 		else
 		{
 			Time::Restart();
 		}
-		statemana.Display();
 	}
 
 	return 42;
