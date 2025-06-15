@@ -6,11 +6,13 @@ StateManager::StateManager()
 {
 	RscMana::Init();
 	Time::Init();
+	SaveSystem::Load("save.data", Level::GetXp(), this->m_CurrentState->GetMuzzle(), this->m_CurrentState->GetGrip(), this->m_CurrentState->GetStock(), this->m_CurrentState->GetMagazine(), this->m_CurrentState->GetArmor(), this->m_CurrentState->GetAmmoStash(), this->m_CurrentState->GetSFXVolume(), this->m_CurrentState->GetBGMVolume(), this->m_CurrentState->GetBestStage());
+
+
 	this->m_CurrentState = new Menu(this);
 	this->m_CurrentState->Init();
 	this->m_InputTimer = 0;
 
-	SaveSystem::Load("save.data", Level::GetXp(), this->m_CurrentState->GetMuzzle(), this->m_CurrentState->GetGrip(), this->m_CurrentState->GetStock(), this->m_CurrentState->GetMagazine(), this->m_CurrentState->GetArmor(), this->m_CurrentState->GetAmmoStash(), this->m_CurrentState->GetSFXVolume(), this->m_CurrentState->GetBGMVolume(), this->m_CurrentState->GetBestStage());
 	while (Level::CalculateLvL());
 }
 StateManager::~StateManager()

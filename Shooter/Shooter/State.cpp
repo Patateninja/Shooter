@@ -80,6 +80,11 @@ void Menu::Init()
 	this->m_Play = Button("Play", sf::Vector2f(25.f, 250.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("Placeholder"));
 	this->m_Option = Button("Settings", sf::Vector2f(25.f, 400.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("Placeholder"));
 	this->m_Quit = Button("Quit", sf::Vector2f(25.f, 550.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("Placeholder"));
+
+	RscMana::SetSFXVolume(this->m_SfxVolume);
+	RscMana::SetBGMVolume(this->m_BgmVolume);
+
+	this->GetRsc<sf::Music>("Menu").play();
 }
 void Menu::Update()
 {
@@ -115,6 +120,11 @@ void Menu::Display()
 void Menu::DeInit()
 {
 	std::cout << "Menu DeInit" << std::endl;
+
+	if(this->GetRsc<sf::Music>("Menu").Playing)
+	{
+		this->GetRsc<sf::Music>("Menu").stop();
+	}
 }
 
 #pragma endregion
@@ -141,7 +151,6 @@ void Game::Init()
 	std::cout << "Game Init" << std::endl;
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 	this->m_Text.setCharacterSize(15);
-	//this->GetRsc<sf::Music>("Bogus").play();
 	
 	this->m_Player.Init(State::m_Muzzle, State::m_Grip, State::m_Magazine, State::m_Stock, State::m_Armor, State::m_AmmoStash);
 	this->m_Cam.NewTarget(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
@@ -159,6 +168,8 @@ void Game::Init()
 	this->Window().SetViewCenter(this->Window().GetDefaultView().GetCenter() - sf::Vector2f(Tile::GetSize() / 2.f, Tile::GetSize() / 2.f));
 
 	State::m_StageReached = 0;
+
+	this->GetRsc<sf::Music>("Bogus").play();
 }
 void Game::Update()
 {
@@ -441,6 +452,8 @@ void Upgrade::Init()
 
 	this->m_Play = Button("Start", sf::Vector2f(1695.f, 980.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
 	this->m_Menu = Button("Menu", sf::Vector2f(25.f, 980.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
+
+	this->GetRsc<sf::Music>("Armory").play();
 }
 
 void Upgrade::Update()
@@ -511,6 +524,11 @@ void Upgrade::Display()
 void Upgrade::DeInit()
 {
 	std::cout << "Upgrade DeInit" << std::endl;
+
+	if (this->GetRsc<sf::Music>("Armory").Playing)
+	{
+		this->GetRsc<sf::Music>("Armory").stop();
+	}
 }
 
 #pragma endregion
@@ -539,7 +557,7 @@ void Option::Init()
 
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 
-	//this->GetRsc<sf::Music>("Bogus").play();
+	this->GetRsc<sf::Music>("Option").play();
 
 	this->m_Fullscreen = this->Window().GetFullscreen();
 
@@ -610,6 +628,11 @@ void Option::Display()
 void Option::DeInit()
 {
 	std::cout << "Option DeInit" << std::endl;
+
+	if (this->GetRsc<sf::Music>("Option").Playing)
+	{
+		this->GetRsc<sf::Music>("Option").stop();
+	}
 }
 
 #pragma endregion

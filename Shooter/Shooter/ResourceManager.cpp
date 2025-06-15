@@ -21,16 +21,40 @@ void ResourceManager::Init()
 	this->Add<sf::Texture>("Placeholder", path + "Textures\\Placeholder.png");
 
 	//SFX
-	this->Add<sf::Sound>("Shot", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Player_Shot", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Player_Step", path + "SFX\\Footstep.mp3");
+
+	this->Add<sf::Sound>("Button_Hover", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Button_Click", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Slider_Blip", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Loading", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Loading_Denied", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Ready", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Shop_Equip", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Death", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Death_Enemies", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Death_dog", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Hurt", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Hurt_dog", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Empty_Mag", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Crate_Open", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Enemy_Shot", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Next_Stage_Popup", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("GameOver", path + "SFX\\Shot.ogg");
+
 
 	//BGM
 	this->Add<sf::Music>("Bogus", path + "BGM\\Bogus.ogg");
+	this->Add<sf::Music>("Menu", path + "BGM\\Main_Menu.ogg");
+	this->Add<sf::Music>("Armory", path + "BGM\\Shop.ogg");
+	this->Add<sf::Music>("Option", path + "BGM\\Option.ogg");
 }
 
 void ResourceManager::SetSFXVolume(int _volume)
 {
 	for (std::unordered_map<std::string, RSC*>::iterator iterator = this->m_RessourcesStorage.begin(); iterator != this->m_RessourcesStorage.end(); ++iterator)
 	{
+		if (iterator)
 		iterator->second->SetVolume(_volume);
 	}
 }

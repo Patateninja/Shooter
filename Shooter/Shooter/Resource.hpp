@@ -36,6 +36,19 @@ class Resource : public RSC
 		{
 			return this->m_Rsc;
 		}
+
+		template<typename U>
+		bool IsType()
+		{
+			if (dynamic_cast<T*>(this))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 };
 
 template <>
