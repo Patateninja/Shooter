@@ -124,6 +124,8 @@ void Enemy::MakePatrolPath(TileMap& _map)
 
 void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 {
+	srand(unsigned int(time(nullptr)));
+
 	if (this->m_Alive)
 	{
 		if (this->m_Idle)
@@ -149,7 +151,6 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 			{
 				if ((_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_IdleTileTarget.GetCood() && this->m_PathfidingThread.joinable()))
 				{
-					this->m_IdleTileTarget;
 					do
 					{
 						int x = Tools::Random(_map.GetSize().x - 2, 15);
@@ -189,6 +190,7 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 			{
 				this->m_PathfidingThread.join();
 				this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(_playerPos), std::ref(_map));
+				this->m_PathUdpateCooldown = 1.f;
 			}
 			else
 			{
@@ -270,7 +272,7 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 			}
 		}
 
-		if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_Target && !this->m_SeePlayer)
+		if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_Target && !this->m_SeePlayer && this->m_Idle)
 		{
 			this->m_Angle = this->m_DefaultAngle;
 		}
@@ -311,12 +313,36 @@ void Enemy::Display(Window& _window)
 	fov[3].color = Color::DarkGrey;
 
 	_window.Draw(fov);
+
+	sf::CircleShape m_CirclePath = sf::CircleShape(20.f);
+	m_CirclePath.setOrigin(20.f, 20.f);
+	if (this->m_IdleBehavior == WANDER)
+	{
+		m_CirclePath.setPosition(this->m_IdleTileTarget.GetCood());
+		m_CirclePath.setFillColor(Color::Flamming);
+		_window.Draw(m_CirclePath);
+	}
+	else if (this->m_IdleBehavior == PATROL)
+	{
+		for (Tile& tile : this->m_PatrolTargets)
+		{
+			m_CirclePath.setPosition(tile.GetCood());
+			m_CirclePath.setFillColor(Color::LightRed);
+			_window.Draw(m_CirclePath);
+		}
+	}
+	else if (this->m_IdleBehavior == GUARD)
+	{
+		m_CirclePath.setPosition(this->m_StartingPosition);
+		m_CirclePath.setFillColor(sf::Color::Magenta);
+		_window.Draw(m_CirclePath);
+	}
 }
 
 void Enemy::HearSound(sf::Vector2f& _soundPos, int _soundIntensity)
 {
 	this->m_Idle = false;
-	this->m_LosePlayerCooldown = Tools::Min<int, float, float> (_soundIntensity, 5.f);
+	this->m_LosePlayerCooldown = 5.f;
 }
 bool Enemy::SeePlayer(const sf::Vector2f& _playerPos, TileMap& _map) const 
 {
@@ -858,25 +884,38 @@ void RangedShielded::Shoot(const sf::Vector2f& _playerPos)
 ////////////////////////////////////////////////////////
 #pragma region EnemyList
 
-EnemyList::EnemyList()
-{
-	this->m_List.clear();
-}
 EnemyList::~EnemyList()
 {
- 	this->m_List.clear();
+ 	this->Clear();
 }
 
 void EnemyList::Clear()
 {
-	this->m_List.clear();
+	while (!m_List.empty())
+	{
+		if (this->m_List.front().first.joinable())
+		{
+			this->m_List.front().first.join();
+		}
+		this->m_List.front().second.reset();
+
+		this->m_List.erase(this->m_List.begin());
+	}
+}
+
+void EnemyList::Launch(const sf::Vector2f& _playerPos, TileMap& _map)
+{
+	for (auto& pair : this->m_List)
+	{
+		pair.first = std::thread(&Enemy::Update, pair.second.get(), std::ref(_playerPos), std::ref(_map));
+	}
 }
 
 bool EnemyList::AllDead()
 {
-	for (std::shared_ptr<Enemy>& enemy : this->m_List)
+	for (auto& pair : this->m_List)
 	{
-		if (enemy->GetHP() > 0)
+		if (pair.second->GetHP() > 0)
 		{
 			return false;
 		}
@@ -886,43 +925,67 @@ bool EnemyList::AllDead()
 
 void EnemyList::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 {
-	for (std::shared_ptr<Enemy>& enemy : this->m_List)
+	for (auto& pair : this->m_List)
 	{
-		enemy->Update(_playerPos, _map);
+		if (pair.first.joinable())
+		{
+			pair.first.join();
+			pair.first = std::thread(&Enemy::Update, pair.second.get(), std::ref(_playerPos), std::ref(_map));
+		}
 	}
 }
 void EnemyList::Display(Window& _window)
 {
-	for (std::shared_ptr<Enemy>& enemy : this->m_List)
+	for (auto& pair : this->m_List)
 	{
-		enemy->Display(_window);
+		pair.second->Display(_window);
 	}
 }
 
 void EnemyList::AllHearSound(sf::Vector2f& _soundPos, int _soundIntensity)
 {
-	for (std::shared_ptr<Enemy>& enemy : this->m_List)
+	for (auto& pair : this->m_List)
 	{
-		if (Tools::Distance(enemy->GetPos(), _soundPos) / Tile::GetSize() < _soundIntensity)
+		if (Tools::Distance(pair.second->GetPos(), _soundPos) / Tile::GetSize() < _soundIntensity)
 		{
-			enemy->HearSound(_soundPos, _soundIntensity);
+			pair.second->HearSound(_soundPos, _soundIntensity);
 		}
 	}
 }
 
 void EnemyList::Activate()
 {
-	for (std::shared_ptr<Enemy>& enemy : this->m_List)
+	for (auto& pair : this->m_List)
 	{
-		enemy->SetActive(true);
+		pair.second->SetActive(true);
 	}
 }
 void EnemyList::Respawn(TileMap& _map)
 {
-	for (std::shared_ptr<Enemy>& enemy : this->m_List)
+	for (auto& pair : this->m_List)
 	{
-		enemy->Respawn(_map);
+		if (pair.first.joinable())
+		{
+			pair.first.join();
+		}
+		pair.second->Respawn(_map);
 	}
+
+	this->Launch(sf::Vector2f(Tile::GetSize() * 3.f, Tile::GetSize() * 3.f), _map);
+}
+
+int EnemyList::Alive()
+{
+	int i = 0;
+	for (auto& pair : this->m_List)
+	{
+		if (pair.second->GetHP() > 0)
+		{
+			++i;
+		}
+	}
+
+	return i;
 }
 
 #pragma endregion

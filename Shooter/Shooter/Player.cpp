@@ -40,9 +40,9 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 
 		this->m_Shotgun.ReduceRecoil();
 
-		for (std::shared_ptr<Enemy>& enemy : _enemyList.GetList())
+		for (auto& enemy : _enemyList.GetList())
 		{
-			if (enemy->GetActive() && Tools::CircleCollision(this->m_Circle.getGlobalBounds(), enemy->GetHitbox()))
+			if (enemy.second->GetActive() && Tools::CircleCollision(this->m_Circle.getGlobalBounds(), enemy.second->GetHitbox()))
 			{
 				if (this->m_Vest == 0)
 				{
@@ -53,7 +53,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 				}
 				else
 				{
-					enemy->TakeDamage(10000);
+					enemy.second->TakeDamage(10000);
 					--this->m_Vest;
 				}
 			}
