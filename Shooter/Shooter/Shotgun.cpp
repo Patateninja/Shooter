@@ -55,9 +55,10 @@ void Shotgun::Shoot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel, float _p
 }
 void Shotgun::EmptyMagazine()
 {
-	for (std::unique_ptr<Shell>& shell : this->m_Magazine)
+	while (!this->m_Magazine.empty())
 	{
-		shell.release();
+		this->m_Magazine.front().reset();
+		this->m_Magazine.erase(this->m_Magazine.begin());
 	}
 
 	this->m_Magazine.clear();

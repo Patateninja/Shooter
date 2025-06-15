@@ -98,14 +98,10 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 
 	for (Tile& tile : this->m_Map)
 	{
-		if (tile.GetCood().x == 0 || tile.GetCood().x == (this->m_Size.x - 1) * Tile::GetSize() || tile.GetCood().y == 0 || tile.GetCood().y == (this->m_Size.y - 1) * Tile::GetSize())
+		if (tile.GetType() == TO_GENERATE)
 		{
-			tile.SetType(WALL);
-		}
-		else if (tile.GetType() == TO_GENERATE)
-		{
-			int	x = Tools::Random(Tools::Min<int, float, int>(10, this->m_Size.x - (tile.GetCood().x / Tile::GetSize())), Tools::Min<int, float, int>(5, this->m_Size.x - (tile.GetCood().x / Tile::GetSize())));
-			int y = Tools::Random(Tools::Min<int, float, int>(10, this->m_Size.y - (tile.GetCood().y / Tile::GetSize())), Tools::Min<int, float, int>(5, this->m_Size.y - (tile.GetCood().y / Tile::GetSize())));
+			int	x = Tools::Random(Tools::Min<int, float, int>(12, this->m_Size.x - (tile.GetCood().x / Tile::GetSize())), Tools::Min<int, float, int>(5, this->m_Size.x - (tile.GetCood().x / Tile::GetSize())));
+			int y = Tools::Random(Tools::Min<int, float, int>(12, this->m_Size.y - (tile.GetCood().y / Tile::GetSize())), Tools::Min<int, float, int>(5, this->m_Size.y - (tile.GetCood().y / Tile::GetSize())));
 
 			if (tile.GetCood().x / Tile::GetSize() + x > this->m_Size.x - 3)
 			{
@@ -122,7 +118,7 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 				{
 					if ((i == x-1 || j == y-1))
 					{
-						if (((i != int(x / 2)) ^ !(j != int(y / 2))) && this->GetTile(Tools::Max<int, int, int>(i - 1, 0) * Tile::GetSize(), j * Tile::GetSize()).GetType() != DOORWAY && this->GetTile(i * Tile::GetSize(), Tools::Max<int, int, int>(y - 1, 0) * Tile::GetSize()).GetType() != DOORWAY && this->GetTile(Tools::Min<int, int, int>(i + 1, x - 1) * Tile::GetSize(), j * Tile::GetSize()).GetType() != DOORWAY && this->GetTile(i * Tile::GetSize(), Tools::Max<int, int, int>(y + 1, y - 1) * Tile::GetSize()).GetType() != DOORWAY)
+						if (!((i != int(x / 2)) ^ (j != int(y / 2))) && this->GetTile(Tools::Max<int, int, int>(i - 1, 0) * Tile::GetSize(), j * Tile::GetSize()).GetType() != DOORWAY && this->GetTile(i * Tile::GetSize(), Tools::Max<int, int, int>(y - 1, 0) * Tile::GetSize()).GetType() != DOORWAY && this->GetTile(Tools::Min<int, int, int>(i + 1, x - 1) * Tile::GetSize(), j * Tile::GetSize()).GetType() != DOORWAY && this->GetTile(i * Tile::GetSize(), Tools::Max<int, int, int>(y + 1, y - 1) * Tile::GetSize()).GetType() != DOORWAY)
 						{
 							this->GetTile(int(tile.GetCood().x) + (i * Tile::GetSize()), int(tile.GetCood().y) + (j * Tile::GetSize())).SetType(WALL);
 						}
@@ -134,7 +130,6 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 					else if (i > 2 && j > 2 && i < x-3 && j < y-3 && Tools::Random(10,0) == 1 && this->GetTile(int(tile.GetCood().x) + (i * Tile::GetSize()), int(tile.GetCood().y)).GetType() != FURNITURE)
 					{
 						if ((this->GetTile(Tools::Max<int, int, int>(i - 1, 0) * Tile::GetSize(), j * Tile::GetSize()).GetType() != FURNITURE || this->GetTile(i * Tile::GetSize(), Tools::Max<int, int, int>(y - 1, 0) * Tile::GetSize()).GetType() != FURNITURE || this->GetTile(Tools::Min<int, int, int>(i + 1, x - 1) * Tile::GetSize(), j * Tile::GetSize()).GetType() != FURNITURE || this->GetTile(i * Tile::GetSize(), Tools::Max<int, int, int>(y + 1, y - 1) * Tile::GetSize()).GetType() != FURNITURE))
-						//if (true)
 						{
 							switch (Tools::Random(3))
 							{
@@ -162,17 +157,13 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 									this->GetTile(int(tile.GetCood().x) + ((i + 1) * Tile::GetSize()), int(tile.GetCood().y) + ((j - 1)*Tile::GetSize())).SetType(FURNITURE);
 									this->GetTile(int(tile.GetCood().x) + ((i + 1) * Tile::GetSize()), int(tile.GetCood().y) + ((j + 1)*Tile::GetSize())).SetType(FURNITURE);
 									break;
-								case 4 :
-									break;
-								case 5 :
-									break;
 								default:
 									this->GetTile(int(tile.GetCood().x) + (i * Tile::GetSize()), int(tile.GetCood().y) + (j * Tile::GetSize())).SetType(FURNITURE);
 									break;
 							}
 						}
 					}
-					else if (this->GetTile(i * Tile::GetSize(), j * Tile::GetSize()).GetType() != FURNITURE)
+					else if (this->GetTile(i * Tile::GetSize(), j * Tile::GetSize()).GetType() != FURNITURE && this->GetTile(i * Tile::GetSize(), j * Tile::GetSize()).GetType() != WALL)
 					{
 						this->GetTile(int(tile.GetCood().x) + (i * Tile::GetSize()), int(tile.GetCood().y) + (j * Tile::GetSize())).SetType(FLOOR);
 					}
@@ -183,6 +174,10 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 
 	for (Tile& tile : this->m_Map)
 	{
+	  if (tile.GetCood().x == 0 || tile.GetCood().x == (this->m_Size.x - 1) * Tile::GetSize() || tile.GetCood().y == 0 || tile.GetCood().y == (this->m_Size.y - 1) * Tile::GetSize())
+		{
+			tile.SetType(WALL);
+		}
 		if (tile.GetType() == DOORWAY)
 		{
 			tile.SetType(FLOOR);

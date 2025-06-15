@@ -2,7 +2,7 @@
 
 namespace SaveSystem
 {
-	void Save(std::string _filename, int& _xp, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammoStash, int& _sfxVolume, int& _bgmVolume)
+	void Save(std::string _filename, int& _xp, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammoStash, int& _sfxVolume, int& _bgmVolume, int& _bestStage)
 	{
 		std::ofstream file;
 		file.open("..\\Save\\" + _filename);
@@ -20,40 +20,40 @@ namespace SaveSystem
 		file << std::to_string(_sfxVolume) + '\n';
 		file << std::to_string(_bgmVolume) + '\n';
 
+		file << std::to_string(_bestStage) + '\n';
+
 		file.close();
 	}
 
-	void Load(std::string _filename, int& _xp, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammoStash, int& _sfxVolume, int& _bgmVolume)
+	void Load(std::string _filename, int& _xp, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammoStash, int& _sfxVolume, int& _bgmVolume, int& _bestStage)
 	{
 		std::ifstream file;
 		file.open("..\\Save\\" + _filename);
 
 		if (file.is_open())
 		{
-			std::string xp;
-			std::getline(file >> std::ws, xp);
+			std::string str;
+			std::getline(file >> std::ws, str);
 			try
 			{
-				_xp = std::stoi(xp);
+				_xp = std::stoi(str);
 			}
 			catch (std::exception)
 			{
 				_xp = 0;
 			}
 
-			std::string name;
-
 			#pragma region Muzzle
-			std::getline(file >> std::ws, name);
-			if (name == "Choke Muzzle")
+			std::getline(file >> std::ws, str);
+			if (str == "Choke Muzzle")
 			{
 				_muzzle = Muzzle("Choke Muzzle", 3, 0.5f, 1.3f, 1.2f);
 			}
-			else if (name == "Muzzle Brake")
+			else if (str == "Muzzle Brake")
 			{
 				_muzzle = Muzzle("Muzzle Brake", 10, 0.7f, 1.2f, 1.5f);
 			}
-			else if (name == "Sawed Off")
+			else if (str == "Sawed Off")
 			{
 				_muzzle = Muzzle("Sawed Off", 20, 2.f, 1.2f, 0.5f);
 			}
@@ -64,16 +64,16 @@ namespace SaveSystem
 			#pragma endregion
 
 			#pragma region Grip
-			std::getline(file >> std::ws, name);
-			if (name == "Vertical Grip")
+			std::getline(file >> std::ws, str);
+			if (str == "Vertical Grip")
 			{
 				_grip = Grip("Vertical Grip", 4, 1.5f, 0.85f, 1.1f);
 			}
-			else if (name == "Horizontal Grip")
+			else if (str == "Horizontal Grip")
 			{
 				_grip = Grip("Horizontal Grip", 9, 1.1f, 0.5f, 1.15f);
 			}
-			else if (name == "Speed Grip")
+			else if (str == "Speed Grip")
 			{
 				_grip = Grip("Speed Grip", 18, 1.15f, 0.9f, 1.5f);
 			}
@@ -84,16 +84,16 @@ namespace SaveSystem
 			#pragma endregion
 
 			#pragma region Stock
-			std::getline(file >> std::ws, name);
-			if (name == "Light Recon Stock")
+			std::getline(file >> std::ws, str);
+			if (str == "Light Recon Stock")
 			{
 				_stock = Stock("Light Recon Stock", 5, 1.25f, 0.85f, 1.1f);
 			}
-			else if (name == "Heavy Assault Stock")
+			else if (str == "Heavy Assault Stock")
 			{
 				_stock = Stock("Heavy Assault Stock", 8, 0.9f, 0.5f, 0.9f);
 			}
-			else if (name == "No Stock")
+			else if (str == "No Stock")
 			{
 				_stock = Stock("No Stock", 26, 0.5f, 1.5f, 1.3f);
 			}
@@ -104,16 +104,16 @@ namespace SaveSystem
 			#pragma endregion
 
 			#pragma region Magazine
-			std::getline(file >> std::ws, name);
-			if (name == "6 Shell Tube")
+			std::getline(file >> std::ws, str);
+			if (str == "6 Shell Tube")
 			{
 				_magazine = Magazine("6 Shell Tube", 6, 2);
 			}
-			else if (name == "8 Shell Tube")
+			else if (str == "8 Shell Tube")
 			{
 				_magazine = Magazine("8 Shell Tube", 14, 4);
 			}
-			else if (name == "12 Shell Drum")
+			else if (str == "12 Shell Drum")
 			{
 				_magazine = Magazine("12 Shell Drum", 29, 8);
 			}
@@ -124,20 +124,20 @@ namespace SaveSystem
 			#pragma endregion
 
 			#pragma region Armor
-			std::getline(file >> std::ws, name);
-			if (name == "Flak Vest")
+			std::getline(file >> std::ws, str);
+			if (str == "Flak Vest")
 			{
 				_armor = Armor("Flak Vest", 2, 1, 1.f);
 			}
-			else if (name == "Marine Armor")
+			else if (str == "Marine Armor")
 			{
 				_armor = Armor("Marine Armor", 7, 2, 1.f);
 			}
-			else if (name == "Recon Armor")
+			else if (str == "Recon Armor")
 			{
 				_armor = Armor("Recon Armor", 16, 3, 1.2f);
 			}
-			else if (name == "Jugernaut Armor")
+			else if (str == "Jugernaut Armor")
 			{
 				_armor = Armor("Jugernaut Armor", 32, 8, 0.7f);
 			}
@@ -148,20 +148,20 @@ namespace SaveSystem
 			#pragma endregion
 
 			#pragma region AmmoStash
-			std::getline(file >> std::ws, name);
-			if (name == "Ammo Belt")
+			std::getline(file >> std::ws, str);
+			if (str == "Ammo Belt")
 			{
 				_ammoStash = AmmoStash("Ammo Belt", 1, 5);
 			}
-			else if (name == "Bandolier")
+			else if (str == "Bandolier")
 			{
 				_ammoStash = AmmoStash("Bandolier", 12, 10);
 			}
-			else if (name == "Satchel")
+			else if (str == "Satchel")
 			{
 				_ammoStash = AmmoStash("Satchel", 23, 20);
 			}
-			else if (name == "Tactical Backpack")
+			else if (str == "Tactical Backpack")
 			{
 				_ammoStash = AmmoStash("Tactical Backpack", 35, 40);
 			}
@@ -171,25 +171,34 @@ namespace SaveSystem
 			}
 			#pragma endregion
 
-			std::string volume;
-			std::getline(file >> std::ws, volume);
+			std::getline(file >> std::ws, str);
 			try
 			{
-				_sfxVolume = std::stoi(volume);
+				_sfxVolume = std::stoi(str);
 			}
 			catch (std::exception)
 			{
 				_sfxVolume = 100;
 			}
 
-			std::getline(file >> std::ws, volume);
+			std::getline(file >> std::ws, str);
 			try
 			{
-				_bgmVolume = std::stoi(volume);
+				_bgmVolume = std::stoi(str);
 			}
 			catch (std::exception)
 			{
 				_bgmVolume = 100;
+			}
+
+			std::getline(file >> std::ws, str);
+			try
+			{
+				_bestStage = std::stoi(str);
+			}
+			catch (std::exception)
+			{
+				_bestStage = 0;
 			}
 		}
 		else
@@ -203,6 +212,7 @@ namespace SaveSystem
 			_ammoStash = AmmoStash("Ammo Pouch", 0, 0);
 			_sfxVolume = 100;
 			_bgmVolume = 100;
+			_bestStage = 0;
 		}
 
 		file.close();

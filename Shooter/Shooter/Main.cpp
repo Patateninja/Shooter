@@ -17,15 +17,15 @@ int main()
 			}
 		}
 
-		if (statemana.WindowHasFocus())
+		if (/*statemana.WindowHasFocus()*/ true)
 		{
 			statemana.Update();
+			statemana.Display();
 		}
 		else
 		{
 			Time::Restart();
 		}
-		statemana.Display();
 	}
 
 	return 42;

@@ -3,8 +3,6 @@
 Stage::Stage(int _num)
 {
 	this->m_Num = _num;
-	this->GenerateMap();
-	this->SpawnEnemies();
 }
 Stage::~Stage()
 {
@@ -134,6 +132,8 @@ void Stage::Init()
 {
 	this->GenerateMap();
 	this->SpawnEnemies();
+
+	this->m_EnemyList.Launch(sf::Vector2f(Tile::GetSize() * 3, Tile::GetSize() * 3), this->m_TileMap);
 }
 void Stage::Update(Player& _player, Camera& _cam, BonusPopUp*& _popUp, Window& _window)
 {

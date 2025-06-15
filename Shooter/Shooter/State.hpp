@@ -26,6 +26,9 @@ class State
 
 		static int m_SfxVolume;
 		static int m_BgmVolume;
+
+		static int m_StageReached;
+		static int m_BestStage;
 		
 	public :
 		State() = default;
@@ -53,6 +56,8 @@ class State
 
 		static int& GetSFXVolume() { return State::m_SfxVolume; }
 		static int& GetBGMVolume() { return State::m_BgmVolume; }
+
+		static int& GetBestStage() { return State::m_BestStage; }
 
 		virtual void Init() = 0;
 		virtual void Update() = 0;

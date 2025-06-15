@@ -40,7 +40,7 @@ class Enemy
 		float m_SeePlayerUdpateCooldown = 0.f;
 		float m_LosePlayerCooldown = 0.f;
 		float m_Angle = 0.f;
-		float m_DefaultAngle = this->m_Angle = Tools::Random(3, -1) * 90.f;;
+		float m_DefaultAngle = this->m_Angle = Tools::Random(2, -1) * 90.f;;
 		bool m_Burning = false;
 		bool m_Active = false;
 		bool m_SeePlayer = false;
@@ -70,7 +70,7 @@ class Enemy
 
 		void HearSound(sf::Vector2f& _soundPos, int _soundIntensity);
 		bool SeePlayer(const sf::Vector2f& _playerPos, TileMap& _map) const;
-		bool PlayerAimable(const sf::Vector2f& _playerPos, TileMap& _map) const;
+		bool PlayerAimable(const sf::Vector2f& _playerPos, TileMap& _map);
 		
 		void UpdatePath(const sf::Vector2f& _playerPos, TileMap& _map);
 		void Move(const sf::Vector2f& _playerPos, TileMap& _map);
@@ -148,26 +148,28 @@ class RangedShielded : public Enemy
 class EnemyList
 {
 	private :
-		std::list<std::shared_ptr<Enemy>> m_List;
+		std::list<std::pair<std::thread,std::shared_ptr<Enemy>>> m_List;
 	public :
-		EnemyList();
+		EnemyList() = default;
 		~EnemyList();
 
-		inline std::list<std::shared_ptr<Enemy>>& GetList() { return this->m_List; };
+		inline std::list<std::pair<std::thread, std::shared_ptr<Enemy>>>& GetList() { return this->m_List; }
 
 		template <typename T>
 		void Add(const sf::Vector2f& _startingPos, TileMap& _map)
 		{
-			this->m_List.push_back(std::make_unique<T>(_startingPos, _map));
+			this->m_List.push_back(std::make_pair<std::thread, std::shared_ptr<Enemy>>(std::thread(), std::make_shared<T>(_startingPos, _map)));
 		}
 		template <typename T>
 		void Add(Enemy& _enemy, TileMap& _map)
 		{
-			this->m_List.push_back(std::make_unique<Enemy>(_enemy, _map));
+			this->m_List.push_back(std::make_pair<std::thread, std::shared_ptr<Enemy>>(std::thread(), std::make_shared<Enemy>(_enemy, _map)));
 		}
 		void Clear();
 
 		bool AllDead();
+
+		void Launch(const sf::Vector2f& _playerPos, TileMap& _map);
 
 		void Update(const sf::Vector2f& _playerPos, TileMap& _map);
 		void Display(Window& _window);
@@ -177,6 +179,7 @@ class EnemyList
 		void Activate();
 		void Respawn(TileMap& _map);
 
-		inline int Size() { return int(this->m_List.size()); };
-		inline int Alive() { int i = 0; for (std::shared_ptr<Enemy>& enemy : this->m_List) { if (enemy->GetHP() > 0) { ++i; } } return i; }
+		inline int Size() { return int(this->m_List.size()); }
+		
+		int Alive();
 };
