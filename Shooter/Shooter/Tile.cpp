@@ -174,7 +174,7 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 
 	for (Tile& tile : this->m_Map)
 	{
-	  if (tile.GetCood().x == 0 || tile.GetCood().x == (this->m_Size.x - 1) * Tile::GetSize() || tile.GetCood().y == 0 || tile.GetCood().y == (this->m_Size.y - 1) * Tile::GetSize())
+		if (tile.GetCood().x == 0 || tile.GetCood().x == (this->m_Size.x - 1) * Tile::GetSize() || tile.GetCood().y == 0 || tile.GetCood().y == (this->m_Size.y - 1) * Tile::GetSize())
 		{
 			tile.SetType(WALL);
 		}
@@ -194,6 +194,7 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 		{
 			case WALL :
 				renderer.setFillColor(Color::Wall);
+				renderer.setTexture(nullptr);
 				break;
 			case FURNITURE :
 				renderer.setFillColor(sf::Color::White);

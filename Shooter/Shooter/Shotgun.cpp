@@ -52,6 +52,10 @@ void Shotgun::Shoot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel, float _p
 			this->m_Recoil = 2.f;
 		}
 	}
+	else
+	{
+		RscMana::Get<sf::Sound>("EmptyMag").play();
+	}
 }
 void Shotgun::EmptyMagazine()
 {

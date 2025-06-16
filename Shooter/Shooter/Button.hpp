@@ -9,6 +9,7 @@ class Button
 		sf::Text m_Text;
 		sf::RectangleShape m_Rect;
 		bool m_Locked = false;
+		bool m_HoverSoundPlayed = false;
 
 	public :
 		Button() = default;

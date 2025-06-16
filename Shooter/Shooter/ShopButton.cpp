@@ -27,6 +27,14 @@ bool ShopButton::Update(Window& _window, std::optional<int> _linkedAttachementLv
 
 		if (this->Button::Update(_window))
 		{
+			if (RscMana::Get<sf::Sound>("ButtonClicked").getStatus() == sf::Sound::Playing)
+			{
+				RscMana::Get<sf::Sound>("ButtonClicked").stop();
+			}
+			if (!this->m_Active)
+			{
+				RscMana::Get<sf::Sound>("EquipementSelected").play();
+			}
 			this->m_Active = true;
 			return true;
 		}

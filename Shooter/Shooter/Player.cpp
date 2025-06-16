@@ -101,8 +101,11 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->m_InputTimer > 0.75f)
 		{
 			this->m_InputTimer = 0.f;
+			if (!this->m_Shotgun.Empty())
+			{
+				_enemyList.AllHearSound(this->m_Position, 15);
+			}
 			this->m_Shotgun.Shoot(this->m_Position, this->m_Velocity, this->m_Angle, _window);
-			_enemyList.AllHearSound(this->m_Position, 15);
 		}
 
 		this->m_Position += Tools::AngleToVector((Tools::Magnitude(this->m_Velocity) == 0.f ? 0.f : 350.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier()) + int(this->m_Caffeinated) * 100), Tools::VectorToAngle(this->m_Velocity)) * Time::GetDeltaTime();
