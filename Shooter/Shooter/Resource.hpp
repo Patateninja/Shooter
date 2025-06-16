@@ -9,6 +9,8 @@ class RSC
 		virtual void Deletor() {}
 
 		virtual void SetVolume(int _volume) {} //Find better way to do it
+		virtual bool IsMusic() { return false; } //Find better way to do it
+		virtual bool IsSound() { return false; } //Find better way to do it
 };
 
 template <typename T>
@@ -16,6 +18,7 @@ class Resource : public RSC
 {
 	private:
 		T m_Rsc;
+
 	public:
 		Resource(std::string _path)
 		{
@@ -37,18 +40,8 @@ class Resource : public RSC
 			return this->m_Rsc;
 		}
 
-		template<typename U>
-		bool IsType()
-		{
-			if (dynamic_cast<T*>(this))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
+		bool IsMusic() override { return false; } //Find better way to do it
+		bool IsSound() override { return false; } //Find better way to do it
 };
 
 template <>
@@ -56,6 +49,7 @@ class Resource<sf::Music> : public RSC
 {
 	private:
 		sf::Music m_Music;
+
 	public:
 		Resource(std::string _path)
 		{
@@ -82,6 +76,9 @@ class Resource<sf::Music> : public RSC
 		{
 			return this->m_Music;
 		}
+
+		bool IsMusic() override { return true; } //Find better way to do it
+		bool IsSound() override { return false; } //Find better way to do it
 };
 
 template <>
@@ -90,6 +87,7 @@ class Resource<sf::Sound> : public RSC
 	private:
 		sf::SoundBuffer m_Buffer;
 		sf::Sound m_Sound;
+
 	public:
 		Resource(std::string _path)
 		{
@@ -116,4 +114,7 @@ class Resource<sf::Sound> : public RSC
 		{
 			return this->m_Sound;
 		}
+
+		bool IsMusic() override { return false; } //Find better way to do it
+		bool IsSound() override { return true; } //Find better way to do it
 };

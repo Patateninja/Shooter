@@ -77,9 +77,9 @@ void Menu::Init()
 	this->m_Text.setPosition(10.f, 5.f);
 	this->m_Text.setCharacterSize(120);
 
-	this->m_Play = Button("Play", sf::Vector2f(25.f, 250.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("Placeholder"));
-	this->m_Option = Button("Settings", sf::Vector2f(25.f, 400.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("Placeholder"));
-	this->m_Quit = Button("Quit", sf::Vector2f(25.f, 550.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("Placeholder"));
+	this->m_Play = Button("", sf::Vector2f(25.f, 250.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("PlayButton"));
+	this->m_Option = Button("", sf::Vector2f(25.f, 400.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("OptButton"));
+	this->m_Quit = Button("", sf::Vector2f(25.f, 550.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("ExitButton"));
 
 	RscMana::SetSFXVolume(this->m_SfxVolume);
 	RscMana::SetBGMVolume(this->m_BgmVolume);
@@ -121,7 +121,7 @@ void Menu::DeInit()
 {
 	std::cout << "Menu DeInit" << std::endl;
 
-	if(this->GetRsc<sf::Music>("Menu").Playing)
+	if(this->GetRsc<sf::Music>("Menu").getStatus() == sf::Sound::Status::Playing)
 	{
 		this->GetRsc<sf::Music>("Menu").stop();
 	}
@@ -348,6 +348,11 @@ void Game::DeInit()
 	{
 		delete this->m_BonusPopUp;
 	}
+
+	if (this->GetRsc<sf::Music>("Bogus").getStatus() == sf::Sound::Status::Playing)
+	{
+		this->GetRsc<sf::Music>("Bogus").stop();
+	}
 }
 
 #pragma endregion
@@ -371,7 +376,7 @@ void GameOver::Deletor()
 
 void GameOver::Init()
 {
-	std::cout << "Menu Init" << std::endl;
+	std::cout << "GameOver Init" << std::endl;
 	this->Window().ResetView();
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 
@@ -386,6 +391,8 @@ void GameOver::Init()
 
 	this->m_ToMenu = Button("Main Menu", sf::Vector2f(250.f, 800.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
 	this->m_ToShop = Button("Shop", sf::Vector2f(1420.f, 800.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
+
+	this->GetRsc<sf::Music>("Game_Over").play();
 }
 void GameOver::Update()
 {
@@ -415,6 +422,11 @@ void GameOver::Display()
 void GameOver::DeInit()
 {
 	std::cout << "GameOver DeInit" << std::endl;
+
+	if (this->GetRsc<sf::Music>("Game_Over").getStatus() == sf::Sound::Status::Playing)
+	{
+		this->GetRsc<sf::Music>("Game_Over").stop();
+	}
 }
 
 #pragma endregion
@@ -525,7 +537,7 @@ void Upgrade::DeInit()
 {
 	std::cout << "Upgrade DeInit" << std::endl;
 
-	if (this->GetRsc<sf::Music>("Armory").Playing)
+	if (this->GetRsc<sf::Music>("Armory").getStatus() == sf::Sound::Status::Playing)
 	{
 		this->GetRsc<sf::Music>("Armory").stop();
 	}
@@ -629,7 +641,7 @@ void Option::DeInit()
 {
 	std::cout << "Option DeInit" << std::endl;
 
-	if (this->GetRsc<sf::Music>("Option").Playing)
+	if (this->GetRsc<sf::Music>("Option").getStatus() == sf::Sound::Status::Playing)
 	{
 		this->GetRsc<sf::Music>("Option").stop();
 	}

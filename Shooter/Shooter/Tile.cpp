@@ -196,10 +196,24 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 				renderer.setFillColor(Color::Wall);
 				break;
 			case FURNITURE :
-				renderer.setFillColor(Color::Furniture);
+				renderer.setFillColor(sf::Color::White);
+				switch (Tools::Random(1,0))
+				{
+					case 0 :
+						renderer.setTexture(&RscMana::Get<sf::Texture>("Table"));
+						break;
+					case 1 :
+						renderer.setTexture(&RscMana::Get<sf::Texture>("Barrel"));
+						break;
+					default :
+						break;
+				}
+				renderer.setTextureRect(sf::IntRect(Tools::Random(2, 0) * 64, 0, 64, 64));
 				break;
 			case FLOOR :
-				renderer.setFillColor(Color::Flooring);
+				renderer.setFillColor(sf::Color::White);
+				renderer.setTexture(&RscMana::Get<sf::Texture>("FloorTile"));
+				renderer.setTextureRect(sf::IntRect(Tools::Random(2, 0) * 64, 0, 64, 64));
 				break;
 			default :
 				renderer.setFillColor(sf::Color::White);
