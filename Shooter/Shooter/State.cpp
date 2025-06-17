@@ -158,9 +158,9 @@ void Game::Init()
 	this->m_Stage.SetNum(1);
 	this->m_Stage.Init();
 
-	this->m_StageNum = CounterIcon(sf::Vector2f(1845.f, 10.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("Placeholder"));
-	this->m_Life = CounterIcon(sf::Vector2f(1845.f, 90.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("Placeholder"));
-	this->m_Vest = CounterIcon(sf::Vector2f(1845.f, 170.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("Placeholder"));
+	this->m_StageNum = CounterIcon(sf::Vector2f(1845.f, 10.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("StageIcon"));
+	this->m_Life = CounterIcon(sf::Vector2f(1845.f, 90.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("HpIcon"));
+	this->m_Vest = CounterIcon(sf::Vector2f(1845.f, 170.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("VestIcon"));
 
 	this->m_Coffee = Icon(sf::Vector2f(150.f, 70.f), sf::Vector2f(65.f, 65.f), &this->GetRsc<sf::Texture>("Placeholder"));
 	this->m_BMG50 = Icon(sf::Vector2f(225.f, 70.f), sf::Vector2f(65.f, 65.f), &this->GetRsc<sf::Texture>("Placeholder"));
@@ -169,7 +169,7 @@ void Game::Init()
 
 	State::m_StageReached = 0;
 
-	this->GetRsc<sf::Music>("Bogus").play();
+	this->GetRsc<sf::Music>("Game").play();
 }
 void Game::Update()
 {
@@ -350,9 +350,9 @@ void Game::DeInit()
 		delete this->m_BonusPopUp;
 	}
 
-	if (this->GetRsc<sf::Music>("Bogus").getStatus() == sf::Sound::Status::Playing)
+	if (this->GetRsc<sf::Music>("Game").getStatus() == sf::Sound::Status::Playing)
 	{
-		this->GetRsc<sf::Music>("Bogus").stop();
+		this->GetRsc<sf::Music>("Game").stop();
 	}
 }
 
@@ -390,10 +390,10 @@ void GameOver::Init()
 	this->m_Text.setPosition(this->Window().GetViewCenter().x - (this->m_Text.getGlobalBounds().width * 2.f), 150.f);
 	this->m_Text.setCharacterSize(120);
 
-	this->m_ToMenu = Button("Main Menu", sf::Vector2f(250.f, 800.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
-	this->m_ToShop = Button("Shop", sf::Vector2f(1420.f, 800.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
+	this->m_ToMenu = Button("", sf::Vector2f(250.f, 800.f), sf::Vector2f(300.f, 75.f), &RscMana::Get<sf::Texture>("MenuButton"));
+	this->m_ToShop = Button("", sf::Vector2f(1420.f, 800.f), sf::Vector2f(300.f, 75.f), &RscMana::Get<sf::Texture>("ShopButton"));
 
-	this->GetRsc<sf::Music>("Game_Over").play();
+	this->GetRsc<sf::Music>("GameOverMusic").play();
 }
 void GameOver::Update()
 {
@@ -424,9 +424,9 @@ void GameOver::DeInit()
 {
 	std::cout << "GameOver DeInit" << std::endl;
 
-	if (this->GetRsc<sf::Music>("Game_Over").getStatus() == sf::Sound::Status::Playing)
+	if (this->GetRsc<sf::Music>("GameOverMusic").getStatus() == sf::Sound::Status::Playing)
 	{
-		this->GetRsc<sf::Music>("Game_Over").stop();
+		this->GetRsc<sf::Music>("GameOverMusic").stop();
 	}
 }
 
@@ -463,8 +463,8 @@ void Upgrade::Init()
 	this->m_DelayRect.setPosition(sf::Vector2f(0.f, 0.f));
 	this->m_DelayRect.setTexture(&this->GetRsc<sf::Texture>("Placeholder"));
 
-	this->m_Play = Button("Start", sf::Vector2f(1695.f, 980.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
-	this->m_Menu = Button("Menu", sf::Vector2f(25.f, 980.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
+	this->m_Play = Button("", sf::Vector2f(1595.f, 980.f), sf::Vector2f(300.f, 75.f), &RscMana::Get<sf::Texture>("PlayButton"));
+	this->m_Menu = Button("", sf::Vector2f(25.f, 980.f), sf::Vector2f(300.f, 75.f), &RscMana::Get<sf::Texture>("MenuButton"));
 
 	this->GetRsc<sf::Music>("Armory").play();
 }
@@ -576,8 +576,8 @@ void Option::Init()
 
 	this->m_SFX = Slider(sf::Vector2f(300.f, 250.f), sf::Vector2f(700.f, 25.f), 0);
 	this->m_BGM = Slider(sf::Vector2f(300.f, 450.f), sf::Vector2f(700.f, 25.f), 0);
-	this->m_FullscreenCheckbox = Checkbox("", sf::Vector2f(200.f, 700.f), sf::Vector2f(75.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"), this->m_Fullscreen);
-	this->m_Menu = Button("Menu", sf::Vector2f(25.f, 980.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
+	this->m_FullscreenCheckbox = Checkbox("", sf::Vector2f(200.f, 700.f), sf::Vector2f(75.f, 75.f), &RscMana::Get<sf::Texture>("Checkbox"), this->m_Fullscreen);
+	this->m_Menu = Button("", sf::Vector2f(25.f, 980.f), sf::Vector2f(400, 100.f), &RscMana::Get<sf::Texture>("MenuButton"));
 }
 void Option::Update()
 {
@@ -620,7 +620,7 @@ void Option::Display()
 	
 	this->m_Text.setCharacterSize(30);
 	this->m_Text.setString("Fullscreen");
-	this->m_Text.setPosition(280.f, 720.f);
+	this->m_Text.setPosition(300.f, 720.f);
 	this->Draw(this->m_Text);
 	this->m_FullscreenCheckbox.Display(this->Window());
 	

@@ -21,12 +21,25 @@ void ResourceManager::Init()
 	this->Add<sf::Texture>("PlayButton", path + "Textures\\Button_Play.png");
 	this->Add<sf::Texture>("OptButton", path + "Textures\\Button_Option.png");
 	this->Add<sf::Texture>("ExitButton", path + "Textures\\Button_Exit.png");
+	this->Add<sf::Texture>("MenuButton", path + "Textures\\Button_Menu.png");
+	this->Add<sf::Texture>("ShopButton", path + "Textures\\Button_Shop.png");
 
-	this->Add<sf::Texture>("Red_Shell", path + "Textures\\Red_Shell.png");
+	this->Add<sf::Texture>("Ammo", path + "Textures\\Ammo.png");
+	this->Add<sf::Texture>("Bird", path + "Textures\\Green_Shell.png");
+	this->Add<sf::Texture>("Buck", path + "Textures\\Red_Shell.png");
+	this->Add<sf::Texture>("Dragon", path + "Textures\\Blue_Shell.png");
+	this->Add<sf::Texture>("Slug", path + "Textures\\Yellow_Shell.png");
+	this->Add<sf::Texture>("Bmg", path + "Textures\\Not_a_Shell.png");
 
 	this->Add<sf::Texture>("FloorTile", path + "Textures\\Floor.png");
 	this->Add<sf::Texture>("Table", path + "Textures\\Table.png");
 	this->Add<sf::Texture>("Barrel", path + "Textures\\Barrel.png");
+
+	this->Add<sf::Texture>("HpIcon", path + "Textures\\HpIcon.png");
+	this->Add<sf::Texture>("StageIcon", path + "Textures\\StageIcon.png");
+	this->Add<sf::Texture>("VestIcon", path + "Textures\\Vest.png");
+
+	this->Add<sf::Texture>("Checkbox", path + "Textures\\CheckBox.png");
 
 	this->Add<sf::Texture>("Placeholder", path + "Textures\\Placeholder.png");
 
@@ -63,13 +76,11 @@ void ResourceManager::Init()
 	this->Add<sf::Sound>("ButtonHover", path + "SFX\\Button_Hover.ogg");
 
 	//BGM
-	this->Add<sf::Music>("Bogus", path + "BGM\\Bogus.ogg");
-
 	this->Add<sf::Music>("Menu", path + "BGM\\Main_Menu.ogg");
 	this->Add<sf::Music>("Option", path + "BGM\\Option.ogg");
 	this->Add<sf::Music>("Armory", path + "BGM\\Shop.ogg");
-	this->Add<sf::Music>("Game", path + "BGM\\Main_Menu.ogg");
-	this->Add<sf::Music>("Game_Over", path + "BGM\\Main_Menu.ogg");
+	this->Add<sf::Music>("Game", path + "BGM\\Game.ogg");
+	this->Add<sf::Music>("GameOverMusic", path + "BGM\\Game_Over.ogg");
 }
 
 void ResourceManager::SetSFXVolume(int _volume)

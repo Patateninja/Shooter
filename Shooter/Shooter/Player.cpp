@@ -73,28 +73,28 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 		{
 			if (this->CheckWallCollision(_map,UP))
 			{
-				this->m_Velocity.y = -1;
+				this->m_Velocity.y -= 1;
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
 			if (this->CheckWallCollision(_map, DOWN))
 			{
-				this->m_Velocity.y = 1;
+				this->m_Velocity.y += 1;
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 		{
 			if (this->CheckWallCollision(_map, LEFT))
 			{
-				this->m_Velocity.x = -1;
+				this->m_Velocity.x -= 1;
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
 			if (this->CheckWallCollision(_map, RIGHT))
 			{
-				this->m_Velocity.x = 1;
+				this->m_Velocity.x += 1;
 			}
 		}
 
