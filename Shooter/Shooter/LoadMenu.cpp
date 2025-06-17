@@ -1,9 +1,48 @@
 #include "LoadMenu.hpp"
 
+void ReloadMenu::SwitchButtonMode(bool _bmg)
+{
+	if (_bmg)
+	{
+		this->m_BirdShot.SetPopUpText("Insanely strong ammo not even meant for this shotgun.\nStill fit however, and will kill everithing it touch.");
+		this->m_BirdShot.SetPopUpTexture("Bmg");
+
+		this->m_BuckShot.SetPopUpText("Insanely strong ammo not even meant for this shotgun.\nStill fit however, and will kill everithing it touch.");
+		this->m_BuckShot.SetPopUpTexture("Bmg");
+
+		this->m_DragonBreath.SetPopUpText("Insanely strong ammo not even meant for this shotgun.\nStill fit however, and will kill everithing it touch.");
+		this->m_DragonBreath.SetPopUpTexture("Bmg");
+
+		this->m_Slug.SetPopUpText("Insanely strong ammo not even meant for this shotgun.\nStill fit however, and will kill everithing it touch.");
+		this->m_Slug.SetPopUpTexture("Bmg");
+	}
+	else
+	{
+		this->m_BirdShot.SetPopUpText("A small cartrige with not a lot of fire power but a lot of lead.\nLuckly you have plenty of those.");
+		this->m_BirdShot.SetPopUpTexture("Bird");
+
+		this->m_BuckShot.SetPopUpText("Launch a volley of pellets at whatever you're aiming for.\nPretty efficient at close range.");
+		this->m_BuckShot.SetPopUpTexture("Buck");
+
+		this->m_DragonBreath.SetPopUpText("A special ammunition, spewing firery projectiles, setting everything afflame.\nSet ennemies on fire, dealing damage over time.");
+		this->m_DragonBreath.SetPopUpTexture("Dragon");
+
+		this->m_Slug.SetPopUpText("An unique but powefull chunck of metal, shreading everything in its path\nPierce trough flesh & steel.");
+		this->m_Slug.SetPopUpTexture("Slug");
+	}
+}
+
+
 void ReloadMenu::Update(Player& _player, Window& _window)
 {
 	this->m_InputTimer += Time::GetDeltaTime();
 	
+	if (this->m_BMG != _player.GetBmgEnabled())
+	{
+		this->m_BMG = _player.GetBmgEnabled();
+		this->SwitchButtonMode(this->m_BMG);
+	}
+
 	this->m_Rect.setFillColor(Color::LightGrey);
 
 	this->m_Rect.setPosition(_window.RelativePos(sf::Vector2f(10.f, 65.f)));
@@ -11,13 +50,34 @@ void ReloadMenu::Update(Player& _player, Window& _window)
 	this->m_BirdShot.SetPosition(_window,_window.RelativePos(sf::Vector2f(20.f, 75.f)));
 
 	this->m_BuckShot.SetPosition(_window, _window.RelativePos(sf::Vector2f(20.f, 135.f)));
-	this->m_BuckShot.UpdateText(std::to_string(_player.GetBuckshot()));
+	if (this->m_BMG)
+	{
+		this->m_BuckShot.UpdateText("");
+	}
+	else
+	{
+		this->m_BuckShot.UpdateText(std::to_string(_player.GetBuckshot()));
+	}
 
 	this->m_DragonBreath.SetPosition(_window, _window.RelativePos(sf::Vector2f(20.f, 195.f)));
-	this->m_DragonBreath.UpdateText(std::to_string(_player.GetDragonBreath()));
+	if (this->m_BMG)
+	{
+		this->m_BuckShot.UpdateText("");
+	}
+	else
+	{
+		this->m_DragonBreath.UpdateText(std::to_string(_player.GetDragonBreath()));
+	}
 
 	this->m_Slug.SetPosition(_window, _window.RelativePos(sf::Vector2f(20.f, 255.f)));
-	this->m_Slug.UpdateText(std::to_string(_player.GetSlug()));
+	if (this->m_BMG)
+	{
+		this->m_BuckShot.UpdateText("");
+	}
+	else
+	{
+		this->m_Slug.UpdateText(std::to_string(_player.GetSlug()));
+	}
 
 	if (RscMana::Get<sf::Sound>("ButtonClicked").getStatus() == sf::Sound::Playing)
 	{

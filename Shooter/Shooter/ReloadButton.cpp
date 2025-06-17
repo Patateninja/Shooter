@@ -15,8 +15,8 @@ ReloadButton::ReloadButton(std::string _str, std::string _strPopUp, sf::Vector2f
 	this->m_PopUpText.setString(_strPopUp);
 	this->m_PopUpText.setCharacterSize(20);
 
-	this->m_PopUpRect.setSize(sf::Vector2f(this->m_PopUpText.getGlobalBounds().getSize()) + sf::Vector2f(5.f,5.f));
-	this->m_PopUpRect.setPosition(_pos + sf::Vector2f(_size.x + 10,0));
+	this->m_PopUpRect.setSize(this->m_PopUpText.getGlobalBounds().getSize() + sf::Vector2f(10.f, 10.f));
+	this->m_PopUpRect.setPosition(_pos + sf::Vector2f(_size.x + 10.f, 0.f));
 	this->m_PopUpRect.setFillColor(Color::DarkGrey);
 	this->m_PopUpRect.setOutlineColor(Color::Grey);
 	this->m_PopUpRect.setOutlineThickness(2);
@@ -30,6 +30,19 @@ void ReloadButton::SetPosition(Window& _window, sf::Vector2f _pos)
 	
 	this->m_PopUpRect.setPosition(_pos + sf::Vector2f(this->m_Rect.getSize().x + 10, 0));
 	this->m_PopUpText.setPosition(_pos + sf::Vector2f(this->m_Rect.getSize().x + 11, 1));
+}
+
+void ReloadButton::SetPopUpText(std::string _str)
+{
+	this->m_PopUpText.setPosition(this->m_Rect.getPosition() + sf::Vector2f(float(this->m_Rect.getSize().x) + 1, 1));
+	this->m_PopUpText.setString(_str);
+
+	this->m_PopUpRect.setSize(this->m_PopUpText.getGlobalBounds().getSize() + sf::Vector2f(10.f, 10.f));
+	this->m_PopUpRect.setPosition(this->m_Rect.getPosition() + sf::Vector2f(this->m_Rect.getSize().x + 10, 0));
+}
+void ReloadButton::SetPopUpTexture(std::string _texturename)
+{
+	this->m_Rect.setTexture(&RscMana::Get<sf::Texture>(_texturename));
 }
 
 bool ReloadButton::Update(Window& _window)

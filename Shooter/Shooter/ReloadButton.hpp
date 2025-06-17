@@ -14,6 +14,8 @@ class ReloadButton : public Button
 		~ReloadButton() = default;
 
 		void SetPosition(Window& _window, sf::Vector2f _pos);
+		void SetPopUpText(std::string _str);
+		void SetPopUpTexture(std::string _texturename);
 
 		bool Update(Window& _window) override;
 		void Display(Window& _window) override;

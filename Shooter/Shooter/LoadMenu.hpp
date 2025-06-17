@@ -11,10 +11,13 @@ class ReloadMenu
 		ReloadButton m_Slug = ReloadButton("", "An unique but powefull chunck of metal, shreading everything in its path\nPierce trough flesh & steel.", sf::Vector2f(), sf::Vector2f(140.f, 50.f),  &RscMana::Get<sf::Texture>("Slug"));
 		sf::RectangleShape m_Rect = sf::RectangleShape(sf::Vector2f(160.f, 250.f));
 		float m_InputTimer = 1.f;
+		bool m_BMG = false;
 
 	public :
 		ReloadMenu() = default;
 		~ReloadMenu() = default;
+
+		void SwitchButtonMode(bool _bmg);
 
 		void Update(Player& _player, Window& _window);
 		void Display(Window& _window);
