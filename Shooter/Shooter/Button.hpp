@@ -25,6 +25,6 @@ class Button
 		inline void Lock() { this->m_Locked = true; }
 		inline void Unlock() { this->m_Locked = false; }
 
-		bool Update(Window& _window);
+		virtual bool Update(Window& _window);
 		virtual void Display(Window& _window);
 };

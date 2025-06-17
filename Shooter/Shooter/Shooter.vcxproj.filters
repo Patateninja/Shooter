@@ -177,6 +177,9 @@
     <ClCompile Include="CounterIcon.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="ReloadButton.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tools.hpp">
@@ -276,6 +279,9 @@
       <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="CounterIcon.hpp">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ReloadButton.hpp">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>

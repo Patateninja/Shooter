@@ -8,13 +8,15 @@ void ReloadMenu::Update(Player& _player, Window& _window)
 
 	this->m_Rect.setPosition(_window.RelativePos(sf::Vector2f(10.f, 65.f)));
 	
-	this->m_BirdShot.SetPosition(sf::Vector2f(_window.RelativePos(sf::Vector2f(20.f, 75.f))));
-	this->m_BuckShot.UpdateText("Infinite");
-	this->m_BuckShot.SetPosition(_window.RelativePos(sf::Vector2f(20.f, 135.f)));
+	this->m_BirdShot.SetPosition(_window,_window.RelativePos(sf::Vector2f(20.f, 75.f)));
+
+	this->m_BuckShot.SetPosition(_window, _window.RelativePos(sf::Vector2f(20.f, 135.f)));
 	this->m_BuckShot.UpdateText(std::to_string(_player.GetBuckshot()));
-	this->m_DragonBreath.SetPosition(_window.RelativePos(sf::Vector2f(20.f, 195.f)));
+
+	this->m_DragonBreath.SetPosition(_window, _window.RelativePos(sf::Vector2f(20.f, 195.f)));
 	this->m_DragonBreath.UpdateText(std::to_string(_player.GetDragonBreath()));
-	this->m_Slug.SetPosition(_window.RelativePos(sf::Vector2f(20.f, 255.f)));
+
+	this->m_Slug.SetPosition(_window, _window.RelativePos(sf::Vector2f(20.f, 255.f)));
 	this->m_Slug.UpdateText(std::to_string(_player.GetSlug()));
 
 	if (RscMana::Get<sf::Sound>("ButtonClicked").getStatus() == sf::Sound::Playing)

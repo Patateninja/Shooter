@@ -314,11 +314,6 @@ void Game::Display()
 		this->m_PauseMenu.Display(this->Window());
 	}
 
-	if (!this->m_Player.GetMoving())
-	{
-		this->m_ReloadMenu.Display(this->Window());
-	}
-
 	if (this->m_Player.GetCoffeeEnabled())
 	{
 		this->m_Coffee.Display(this->Window());
@@ -333,6 +328,11 @@ void Game::Display()
 	if (this->m_Player.GetVest() != 0)
 	{
 		this->m_Vest.Display(this->Window());
+	}
+
+	if (!this->m_Player.GetMoving())
+	{
+		this->m_ReloadMenu.Display(this->Window());
 	}
 
 	this->DisplayWindow();
@@ -472,7 +472,6 @@ void Upgrade::Init()
 void Upgrade::Update()
 {	
 	this->m_InputTimer += Time::GetDeltaTime();
-	
 
 	if (!this->m_ShopActive && this->m_InputTimer > 0.5f)
 	{
