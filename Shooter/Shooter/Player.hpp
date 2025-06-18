@@ -32,7 +32,7 @@ class Player
 		bool m_CanMove = false;
 		bool m_CanReload = true;
 		bool m_Caffeinated = false;
-		bool m_Got50BMG = false;
+		bool m_Got50BMG = true;
 
 	public :
 		Player();
@@ -46,10 +46,10 @@ class Player
 		inline const int           GetVest()   const { return this->m_Vest; }
 		inline const bool          GetMoving() const { return this->m_CanMove; }
 
-		inline int&     GetBuckshot()     { return this->m_BuckShot; }
-		inline int&     GetDragonBreath() { return this->m_DragonBreath; };
-		inline int&     GetSlug()         { return this->m_Slug; }
-		inline Shotgun& GetShotgun()      { return this->m_Shotgun; }
+		inline int&			  GetBuckshot()     { return this->m_BuckShot; }
+		inline int&			  GetDragonBreath() { return this->m_DragonBreath; }
+		inline int&			  GetSlug()         { return this->m_Slug; }
+		inline Shotgun&		  GetShotgun()      { return this->m_Shotgun; }
 		inline const bool     GetBmgEnabled()  const { return this->m_Got50BMG; }
 		inline const bool     GetCoffeeEnabled()  const { return this->m_Caffeinated; }
 		

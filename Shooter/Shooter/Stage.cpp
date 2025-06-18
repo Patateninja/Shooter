@@ -133,7 +133,7 @@ void Stage::Init()
 	this->GenerateMap();
 	this->SpawnEnemies();
 
-	this->m_EnemyList.Launch(sf::Vector2f(Tile::GetSize() * 3, Tile::GetSize() * 3), this->m_TileMap);
+	this->m_EnemyList.Launch(sf::Vector2f(float(Tile::GetSize() * 3), float(Tile::GetSize() * 3)), this->m_TileMap);
 }
 void Stage::Update(Player& _player, Camera& _cam, BonusPopUp*& _popUp, Window& _window)
 {

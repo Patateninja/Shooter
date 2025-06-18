@@ -105,11 +105,11 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 
 			if (tile.GetCood().x / Tile::GetSize() + x > this->m_Size.x - 3)
 			{
-				x = this->m_Size.x - (tile.GetCood().x / Tile::GetSize());
+				x = this->m_Size.x - int(tile.GetCood().x / Tile::GetSize());
 			}
 			if (tile.GetCood().y / Tile::GetSize() + y > this->m_Size.y - 3)
 			{
-				y = this->m_Size.y - (tile.GetCood().y / Tile::GetSize());
+				y = this->m_Size.y - int(tile.GetCood().y / Tile::GetSize());
 			}
 
 			for (int i = 0; i < x; ++i)

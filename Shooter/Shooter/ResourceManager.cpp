@@ -24,6 +24,7 @@ void ResourceManager::Init()
 	this->Add<sf::Texture>("ExitButton", path + "Textures\\Button_Exit.png");
 	this->Add<sf::Texture>("MenuButton", path + "Textures\\Button_Menu.png");
 	this->Add<sf::Texture>("ShopButton", path + "Textures\\Button_Shop.png");
+	this->Add<sf::Texture>("ResumeButton", path + "Textures\\Button_Resume.png");
 
 	this->Add<sf::Texture>("Ammo", path + "Textures\\Ammo.png");
 	this->Add<sf::Texture>("Bird", path + "Textures\\Green_Shell.png");
