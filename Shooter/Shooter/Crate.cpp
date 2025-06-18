@@ -46,7 +46,7 @@ void BoostCrate::Update(Player& _player, bool& _coffe, bool& _bmg, bool& _vest, 
 		{
 			this->m_Opened = true;
 			this->m_Rect.setFillColor(sf::Color::Black);
-			RscMana::Get<sf::Sound>("OpenCrate").play();
+			RscMana::Get<sf::Sound>("CrateOpen").play();
 
 			switch (this->m_Boost)
 			{

@@ -32,7 +32,7 @@ class Player
 		bool m_CanMove = false;
 		bool m_CanReload = true;
 		bool m_Caffeinated = false;
-		bool m_Got50BMG = true;
+		bool m_Got50BMG = false;
 
 	public :
 		Player();

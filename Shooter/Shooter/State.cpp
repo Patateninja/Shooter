@@ -162,8 +162,8 @@ void Game::Init()
 	this->m_Life = CounterIcon(sf::Vector2f(1845.f, 90.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("HpIcon"));
 	this->m_Vest = CounterIcon(sf::Vector2f(1845.f, 170.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("VestIcon"));
 
-	this->m_Coffee = Icon(sf::Vector2f(150.f, 70.f), sf::Vector2f(65.f, 65.f), &this->GetRsc<sf::Texture>("Placeholder"));
-	this->m_BMG50 = Icon(sf::Vector2f(225.f, 70.f), sf::Vector2f(65.f, 65.f), &this->GetRsc<sf::Texture>("Placeholder"));
+	this->m_Coffee = Icon(sf::Vector2f(185.f, 70.f), sf::Vector2f(65.f, 65.f), &this->GetRsc<sf::Texture>("CoffeeIcon"));
+	this->m_BMG50 = Icon(sf::Vector2f(260.f, 70.f), sf::Vector2f(65.f, 65.f), &this->GetRsc<sf::Texture>("BmgIcon"));
 
 	this->Window().SetViewCenter(this->Window().GetDefaultView().GetCenter() - sf::Vector2f(Tile::GetSize() / 2.f, Tile::GetSize() / 2.f));
 
@@ -500,19 +500,6 @@ void Upgrade::Update()
 		this->m_InputTimer = 0.f;
 		this->ChangeState<Menu>();
 	}
-
-	/// Temp ///
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add) && this->m_InputTimer > 0.2f)
-	{
-		this->m_InputTimer = 0.f;
-		if (this->m_PlayerLevel < 35)
-		{
-			Level::GainXP(28510);
-			this->m_PlayerLevel = Level::GetLvl();
-			this->m_Shop.SetLevel(this->m_PlayerLevel);
-		}
-	}
-	////////////
 }
 void Upgrade::Display()
 {

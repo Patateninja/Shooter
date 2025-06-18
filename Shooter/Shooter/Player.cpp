@@ -19,7 +19,6 @@ void Player::Init(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _sto
 
 void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& _window)
 {
-
 	if (this->m_CanReload)
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && this->m_InputTimer > 0.3f)
@@ -260,6 +259,7 @@ void Player::Respawn()
 {
 	this->m_Position = sf::Vector2f(Tile::GetSize() * 2.f, Tile::GetSize() * 2.f);
 	this->m_Angle = 0.f;
+	this->m_InputTimer = 0.f;
 	this->m_CanReload = true;
 	this->m_CanMove = false;
 

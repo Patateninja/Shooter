@@ -25,6 +25,8 @@ void ResourceManager::Init()
 	this->Add<sf::Texture>("MenuButton", path + "Textures\\Button_Menu.png");
 	this->Add<sf::Texture>("ShopButton", path + "Textures\\Button_Shop.png");
 	this->Add<sf::Texture>("ResumeButton", path + "Textures\\Button_Resume.png");
+	this->Add<sf::Texture>("ReadyButton", path + "Textures\\Button_Ready.png");
+	
 
 	this->Add<sf::Texture>("Ammo", path + "Textures\\Ammo.png");
 	this->Add<sf::Texture>("Bird", path + "Textures\\Green_Shell.png");
@@ -40,6 +42,8 @@ void ResourceManager::Init()
 	this->Add<sf::Texture>("HpIcon", path + "Textures\\HpIcon.png");
 	this->Add<sf::Texture>("StageIcon", path + "Textures\\StageIcon.png");
 	this->Add<sf::Texture>("VestIcon", path + "Textures\\Vest.png");
+	this->Add<sf::Texture>("BmgIcon", path + "Textures\\BMG_Icon.png");
+	this->Add<sf::Texture>("CoffeeIcon", path + "Textures\\Coffee_Icon.png");
 
 	this->Add<sf::Texture>("Checkbox", path + "Textures\\CheckBox.png");
 
