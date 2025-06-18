@@ -221,7 +221,7 @@ void Game::Update()
 		}
 		else
 		{
-			this->m_ReloadMenu.Update(this->m_Player,this->Window());
+			this->m_ReloadMenu.Update(this->m_Player,this->m_Stage.GetEnemies(),this->Window());
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
@@ -576,7 +576,7 @@ void Option::Init()
 	this->m_SFX = Slider(sf::Vector2f(300.f, 250.f), sf::Vector2f(700.f, 25.f), 0);
 	this->m_BGM = Slider(sf::Vector2f(300.f, 450.f), sf::Vector2f(700.f, 25.f), 0);
 	this->m_FullscreenCheckbox = Checkbox("", sf::Vector2f(200.f, 700.f), sf::Vector2f(75.f, 75.f), &RscMana::Get<sf::Texture>("Checkbox"), this->m_Fullscreen);
-	this->m_Menu = Button("", sf::Vector2f(25.f, 980.f), sf::Vector2f(400, 100.f), &RscMana::Get<sf::Texture>("MenuButton"));
+	this->m_Menu = Button("", sf::Vector2f(25.f, 960.f), sf::Vector2f(400, 100.f), &RscMana::Get<sf::Texture>("MenuButton"));
 }
 void Option::Update()
 {

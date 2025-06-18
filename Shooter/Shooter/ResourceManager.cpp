@@ -14,8 +14,9 @@ void ResourceManager::Init()
 	std::string path = "..\\Resources\\";
 
 	//Fonts
+	this->Add<sf::Font>("Ubuntu", path + "Fonts\\Ubuntu.ttf");
 	this->Add<sf::Font>("Mono", path + "Fonts\\Mono_Regular.ttf");
-
+	this->Add<sf::Font>("Pixel", path + "Fonts\\pixelatedczs.ttf");
 
 	//Textures
 	this->Add<sf::Texture>("PlayButton", path + "Textures\\Button_Play.png");
@@ -23,6 +24,7 @@ void ResourceManager::Init()
 	this->Add<sf::Texture>("ExitButton", path + "Textures\\Button_Exit.png");
 	this->Add<sf::Texture>("MenuButton", path + "Textures\\Button_Menu.png");
 	this->Add<sf::Texture>("ShopButton", path + "Textures\\Button_Shop.png");
+	this->Add<sf::Texture>("ResumeButton", path + "Textures\\Button_Resume.png");
 
 	this->Add<sf::Texture>("Ammo", path + "Textures\\Ammo.png");
 	this->Add<sf::Texture>("Bird", path + "Textures\\Green_Shell.png");

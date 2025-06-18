@@ -19,7 +19,6 @@ void Player::Init(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _sto
 
 void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& _window)
 {
-	this->m_InputTimer += Time::GetDeltaTime() * this->m_Shotgun.GetRoFMultiplier();
 
 	if (this->m_CanReload)
 	{
@@ -35,6 +34,8 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 	}
 	else if (this->m_CanMove)
 	{
+		this->m_InputTimer += Time::GetDeltaTime() * this->m_Shotgun.GetRoFMultiplier();
+
 		this->m_Angle = Tools::VectorToAngle(_window.RelativePos(sf::Vector2i(0, 0)) - (_window.RelativePos(this->m_Position) - _window.RelativePos(sf::Mouse::getPosition(_window.Unwrap()))));
 		this->m_Circle.setRotation(Tools::RadToDeg(this->m_Angle));
 

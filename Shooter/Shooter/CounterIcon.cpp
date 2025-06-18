@@ -3,8 +3,8 @@
 CounterIcon::CounterIcon(sf::Vector2f _pos, sf::Vector2f _size, sf::Texture* _texture)
 {
 	this->m_Icon = Icon(_pos, _size, _texture);
-	this->m_Text.setFont(RscMana::Get<sf::Font>("Mono"));
-	this->m_Text.setCharacterSize(45.f);
+	this->m_Text.setFont(RscMana::Get<sf::Font>("Pixel"));
+	this->m_Text.setCharacterSize(45);
 }
 
 void CounterIcon::Update(Window& _window, int _count)
