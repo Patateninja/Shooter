@@ -492,8 +492,8 @@ Baseliner::Baseliner(const sf::Vector2f& _startingPos, TileMap& _map)
 	this->m_Circle.setPosition(_startingPos);
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
-	this->m_MaxHp = 35;
-	this->m_Hp = 35;
+	this->m_MaxHp = 50;
+	this->m_Hp = 50;
 	this->m_Speed = 250.f;
 	this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(this->m_StartingPosition), std::ref(_map));
 	this->m_MovingThread = std::thread(&Enemy::Move, this, std::ref(this->m_StartingPosition), std::ref(_map));
@@ -542,8 +542,8 @@ Tank::Tank(const sf::Vector2f& _startingPos, TileMap& _map)
 	this->m_Circle.setPosition(_startingPos);
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
-	this->m_MaxHp = 75;
-	this->m_Hp = 75;
+	this->m_MaxHp = 125;
+	this->m_Hp = 125;
 	this->m_Speed = 200.f;
 	this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(this->m_StartingPosition), std::ref(_map));
 	this->m_MovingThread = std::thread(&Enemy::Move, this, std::ref(this->m_StartingPosition), std::ref(_map));
@@ -593,8 +593,8 @@ Ranged::Ranged(const sf::Vector2f& _startingPos, TileMap& _map)
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
 	this->m_AttackRange = Tile::GetSize() * 7.f;
-	this->m_MaxHp = 25;
-	this->m_Hp = 25;
+	this->m_MaxHp = 45;
+	this->m_Hp = 45;
 	this->m_Speed = 250.f;
 	this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(this->m_StartingPosition), std::ref(_map));
 	this->m_MovingThread = std::thread(&Enemy::Move, this, std::ref(this->m_StartingPosition), std::ref(_map));
@@ -668,8 +668,8 @@ Speedster::Speedster(const sf::Vector2f& _startingPos, TileMap& _map)
 	this->m_Circle.setPosition(_startingPos);
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
-	this->m_MaxHp = 10;
-	this->m_Hp = 10;
+	this->m_MaxHp = 20;
+	this->m_Hp = 20;
 	this->m_Speed = 400.f;
 	this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(this->m_StartingPosition), std::ref(_map));
 	this->m_MovingThread = std::thread(&Enemy::Move, this, std::ref(this->m_StartingPosition), std::ref(_map));
@@ -718,8 +718,8 @@ Shielded::Shielded(const sf::Vector2f& _startingPos, TileMap& _map)
 	this->m_Circle.setPosition(_startingPos);
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
-	this->m_MaxHp = 35;
-	this->m_Hp = 35;
+	this->m_MaxHp = 50;
+	this->m_Hp = 50;
 	this->m_Speed = 200.f;
 	this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(this->m_StartingPosition), std::ref(_map));
 	this->m_MovingThread = std::thread(&Enemy::Move, this, std::ref(this->m_StartingPosition), std::ref(_map));
@@ -783,8 +783,8 @@ RangedShielded::RangedShielded(const sf::Vector2f& _startingPos, TileMap& _map)
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
 	this->m_AttackRange = Tile::GetSize() * 5.f;
-	this->m_MaxHp = 50;
-	this->m_Hp = 50;
+	this->m_MaxHp = 40;
+	this->m_Hp = 40;
 	this->m_Speed = 150.f;
 	this->m_ShootTimer = 0.5f;
 	this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(this->m_StartingPosition), std::ref(_map));
