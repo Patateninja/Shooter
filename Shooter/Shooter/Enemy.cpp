@@ -477,6 +477,7 @@ void Enemy::Die()
 	Level::GainXP(this->m_MaxHp);
 	this->m_Circle.setFillColor(Color::Grey);
 	this->m_IgnoreProj.clear();
+	RscMana::Get<sf::Sound>("Death_Enemies").play();
 }
 
 #pragma endregion
@@ -642,7 +643,6 @@ void Ranged::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 		if (this->m_ShootTimer <= 0.f)
 		{
 			this->Shoot(_playerPos);
-			this->m_ShootTimer = 1.5f;
 		}
 		else
 		{
@@ -654,6 +654,8 @@ void Ranged::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 void Ranged::Shoot(const sf::Vector2f& _playerPos)
 {
 	ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000.f, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin) + Tools::DegToRad(float(Tools::Random(5, -5)))), CLASSIC, 1, 1000, ENEMY);
+	RscMana::Get<sf::Sound>("EnemyShot").play();
+	this->m_ShootTimer = 1.5f;
 }
 
 #pragma endregion
@@ -833,7 +835,6 @@ void RangedShielded::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 		if (this->m_ShootTimer <= 0.f)
 		{
 			this->Shoot(_playerPos);
-			this->m_ShootTimer = 2.5f;
 		}
 		else
 		{
@@ -852,6 +853,7 @@ void RangedShielded::Display(Window& _window)
 void RangedShielded::Shoot(const sf::Vector2f& _playerPos)
 {
 	ProjList::Add(this->m_ProjectileOrigin, Tools::AngleToVector(1000.f, Tools::VectorToAngle(_playerPos - this->m_ProjectileOrigin) + Tools::DegToRad(float(Tools::Random(5, -5)))), CLASSIC, 1, 1000, ENEMY);
+	RscMana::Get<sf::Sound>("EnemyShot").play();
 	this->m_ShootTimer = 2.5f;
 }
 

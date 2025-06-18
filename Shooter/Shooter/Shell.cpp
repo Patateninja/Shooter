@@ -4,7 +4,7 @@
 
 BirdShot::BirdShot(float _spread, float _range, float _velocity)
 {
-	this->m_Damage = 1;
+	this->m_Damage = 2;
 	this->m_Range = int(400 * _range);
 	this->m_Spread = int(50 * _spread);
 	this->m_Pellets = 25;
