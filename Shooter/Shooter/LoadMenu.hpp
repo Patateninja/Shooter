@@ -1,20 +1,23 @@
 #pragma once
-#include "Button.hpp"
+#include "ReloadButton.hpp"
 #include "Player.hpp"
 
 class ReloadMenu
 {
 	private :
-		Button m_BirdShot = Button("", sf::Vector2f(), sf::Vector2f(110.f, 50.f), &RscMana::Get<sf::Texture>("Placeholder"));
-		Button m_BuckShot = Button("", sf::Vector2f(), sf::Vector2f(110.f, 50.f),  &RscMana::Get<sf::Texture>("Red_Shell"));
-		Button m_DragonBreath = Button("", sf::Vector2f(), sf::Vector2f(110.f, 50.f), &RscMana::Get<sf::Texture>("Placeholder"));
-		Button m_Slug = Button("", sf::Vector2f(), sf::Vector2f(110.f, 50.f),  &RscMana::Get<sf::Texture>("Placeholder"));
-		sf::RectangleShape m_Rect = sf::RectangleShape(sf::Vector2f(130.f, 250.f));
+		ReloadButton m_BirdShot = ReloadButton("", "A small cartrige with not a lot of fire power but a lot of lead.\nLuckly you have plenty of those.", sf::Vector2f(), sf::Vector2f(140.f, 50.f), &RscMana::Get<sf::Texture>("Bird"));
+		ReloadButton m_BuckShot = ReloadButton("", "Launch a volley of pellets at whatever you're aiming for.\nPretty efficient at close range.", sf::Vector2f(), sf::Vector2f(140.f, 50.f),  &RscMana::Get<sf::Texture>("Buck"));
+		ReloadButton m_DragonBreath = ReloadButton("", "A special ammunition, spewing firery projectiles, setting everything afflame.\nSet ennemies on fire, dealing damage over time.", sf::Vector2f(), sf::Vector2f(140.f, 50.f), &RscMana::Get<sf::Texture>("Dragon"));
+		ReloadButton m_Slug = ReloadButton("", "An unique but powefull chunck of metal, shreading everything in its path\nPierce trough flesh & steel.", sf::Vector2f(), sf::Vector2f(140.f, 50.f),  &RscMana::Get<sf::Texture>("Slug"));
+		sf::RectangleShape m_Rect = sf::RectangleShape(sf::Vector2f(160.f, 250.f));
 		float m_InputTimer = 1.f;
+		bool m_BMG = false;
 
 	public :
 		ReloadMenu() = default;
 		~ReloadMenu() = default;
+
+		void SwitchButtonMode(bool _bmg);
 
 		void Update(Player& _player, Window& _window);
 		void Display(Window& _window);

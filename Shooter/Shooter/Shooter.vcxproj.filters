@@ -70,7 +70,7 @@
     <Filter Include="Header Files\Save &amp; Load">
       <UniqueIdentifier>{c6f7db7d-a620-4eac-9d70-86ce2b938e0a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\UI\Stage">
+    <Filter Include="Header Files\Stage">
       <UniqueIdentifier>{8ec46b4b-32d8-4022-8aed-32c75eafa7df}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -177,6 +177,9 @@
     <ClCompile Include="CounterIcon.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="ReloadButton.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tools.hpp">
@@ -213,7 +216,7 @@
       <Filter>Header Files\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Tile.hpp">
-      <Filter>Header Files\UI\Stage</Filter>
+      <Filter>Header Files\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Astar.hpp">
       <Filter>Header Files\Enemy</Filter>
@@ -222,7 +225,7 @@
       <Filter>Header Files\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Stage.hpp">
-      <Filter>Header Files\UI\Stage</Filter>
+      <Filter>Header Files\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Colors.hpp">
       <Filter>Header Files\Tools</Filter>
@@ -276,6 +279,9 @@
       <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="CounterIcon.hpp">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ReloadButton.hpp">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>

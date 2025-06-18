@@ -14,11 +14,11 @@ Checkbox::Checkbox(std::string _str, sf::Vector2f _pos, sf::Vector2f _size, sf::
 
 	if (this->m_Active)
 	{
-		this->m_Rect.setFillColor(sf::Color::Blue);
+		this->m_Rect.setTextureRect(sf::IntRect(0, 0, 75, 75));
 	}
 	else
 	{
-		this->m_Rect.setFillColor(sf::Color::Red);
+		this->m_Rect.setTextureRect(sf::IntRect(75, 0, 75, 75));
 	}
 }
 
@@ -33,11 +33,11 @@ void Checkbox::Update(Window& _window, bool& _bool)
 
 	if (this->m_Active)
 	{
-		this->m_Rect.setFillColor(sf::Color::Blue);
+		this->m_Rect.setTextureRect(sf::IntRect(0, 0, 75, 75));
 	}
 	else
 	{
-		this->m_Rect.setFillColor(sf::Color::Red);
+		this->m_Rect.setTextureRect(sf::IntRect(75, 0, 75, 75));
 	}
 
 	_bool = this->m_Active;

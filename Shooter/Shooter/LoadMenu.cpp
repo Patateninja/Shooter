@@ -1,25 +1,97 @@
 #include "LoadMenu.hpp"
 
+void ReloadMenu::SwitchButtonMode(bool _bmg)
+{
+	if (_bmg)
+	{
+		this->m_BirdShot.SetPopUpText("Insanely strong ammo not even meant for this shotgun.\nStill fit however, and will kill everithing it touch.");
+		this->m_BirdShot.SetPopUpTexture("Bmg");
+
+		this->m_BuckShot.SetPopUpText("Insanely strong ammo not even meant for this shotgun.\nStill fit however, and will kill everithing it touch.");
+		this->m_BuckShot.SetPopUpTexture("Bmg");
+
+		this->m_DragonBreath.SetPopUpText("Insanely strong ammo not even meant for this shotgun.\nStill fit however, and will kill everithing it touch.");
+		this->m_DragonBreath.SetPopUpTexture("Bmg");
+
+		this->m_Slug.SetPopUpText("Insanely strong ammo not even meant for this shotgun.\nStill fit however, and will kill everithing it touch.");
+		this->m_Slug.SetPopUpTexture("Bmg");
+	}
+	else
+	{
+		this->m_BirdShot.SetPopUpText("A small cartrige with not a lot of fire power but a lot of lead.\nLuckly you have plenty of those.");
+		this->m_BirdShot.SetPopUpTexture("Bird");
+
+		this->m_BuckShot.SetPopUpText("Launch a volley of pellets at whatever you're aiming for.\nPretty efficient at close range.");
+		this->m_BuckShot.SetPopUpTexture("Buck");
+
+		this->m_DragonBreath.SetPopUpText("A special ammunition, spewing firery projectiles, setting everything afflame.\nSet ennemies on fire, dealing damage over time.");
+		this->m_DragonBreath.SetPopUpTexture("Dragon");
+
+		this->m_Slug.SetPopUpText("An unique but powefull chunck of metal, shreading everything in its path\nPierce trough flesh & steel.");
+		this->m_Slug.SetPopUpTexture("Slug");
+	}
+}
+
+
 void ReloadMenu::Update(Player& _player, Window& _window)
 {
 	this->m_InputTimer += Time::GetDeltaTime();
 	
+	if (this->m_BMG != _player.GetBmgEnabled())
+	{
+		this->m_BMG = _player.GetBmgEnabled();
+		this->SwitchButtonMode(this->m_BMG);
+	}
+
 	this->m_Rect.setFillColor(Color::LightGrey);
 
 	this->m_Rect.setPosition(_window.RelativePos(sf::Vector2f(10.f, 65.f)));
 	
-	this->m_BirdShot.SetPosition(sf::Vector2f(_window.RelativePos(sf::Vector2f(20.f, 75.f))));
-	this->m_BuckShot.UpdateText("Infinite");
-	this->m_BuckShot.SetPosition(_window.RelativePos(sf::Vector2f(20.f, 135.f)));
-	this->m_BuckShot.UpdateText(std::to_string(_player.GetBuckshot()));
-	this->m_DragonBreath.SetPosition(_window.RelativePos(sf::Vector2f(20.f, 195.f)));
-	this->m_DragonBreath.UpdateText(std::to_string(_player.GetDragonBreath()));
-	this->m_Slug.SetPosition(_window.RelativePos(sf::Vector2f(20.f, 255.f)));
-	this->m_Slug.UpdateText(std::to_string(_player.GetSlug()));
+	this->m_BirdShot.SetPosition(_window,_window.RelativePos(sf::Vector2f(20.f, 75.f)));
+
+	this->m_BuckShot.SetPosition(_window, _window.RelativePos(sf::Vector2f(20.f, 135.f)));
+	if (this->m_BMG)
+	{
+		this->m_BuckShot.UpdateText("");
+	}
+	else
+	{
+		this->m_BuckShot.UpdateText(std::to_string(_player.GetBuckshot()));
+	}
+
+	this->m_DragonBreath.SetPosition(_window, _window.RelativePos(sf::Vector2f(20.f, 195.f)));
+	if (this->m_BMG)
+	{
+		this->m_BuckShot.UpdateText("");
+	}
+	else
+	{
+		this->m_DragonBreath.UpdateText(std::to_string(_player.GetDragonBreath()));
+	}
+
+	this->m_Slug.SetPosition(_window, _window.RelativePos(sf::Vector2f(20.f, 255.f)));
+	if (this->m_BMG)
+	{
+		this->m_BuckShot.UpdateText("");
+	}
+	else
+	{
+		this->m_Slug.UpdateText(std::to_string(_player.GetSlug()));
+	}
+
+	if (RscMana::Get<sf::Sound>("ButtonClicked").getStatus() == sf::Sound::Playing)
+	{
+		RscMana::Get<sf::Sound>("ButtonClicked").stop();
+	}
+	if (RscMana::Get<sf::Sound>("ButtonHover").getStatus() == sf::Sound::Playing)
+	{
+		RscMana::Get<sf::Sound>("ButtonHover").stop();
+	}
 
 	if (this->m_BirdShot.Update(_window) && !_player.GetShotgun().Full() && this->m_InputTimer > 0.3f)
 	{
 		this->m_InputTimer = 0.f;
+		RscMana::Get<sf::Sound>("Reload").play();
 		if (!_player.GetBmgEnabled())
 		{
 			_player.GetShotgun().Load(1);
@@ -29,44 +101,69 @@ void ReloadMenu::Update(Player& _player, Window& _window)
 			_player.GetShotgun().Load(5);
 		}
 	}
-	if (this->m_BuckShot.Update(_window) && !_player.GetShotgun().Full() && _player.GetBuckshot() != 0 && this->m_InputTimer > 0.3f)
+	if (this->m_BuckShot.Update(_window) && !_player.GetShotgun().Full() && this->m_InputTimer > 0.3f)
 	{
 		this->m_InputTimer = 0.f;
-		if (!_player.GetBmgEnabled())
+		if (_player.GetBuckshot() != 0)
 		{
-			--_player.GetBuckshot();
-			_player.GetShotgun().Load(2);
+			RscMana::Get<sf::Sound>("Reload").play();
+			if (!_player.GetBmgEnabled())
+			{
+				--_player.GetBuckshot();
+				_player.GetShotgun().Load(2);
+			}
+			else
+			{
+				_player.GetShotgun().Load(5);
+			}
 		}
 		else
 		{
-			_player.GetShotgun().Load(5);
+			RscMana::Get<sf::Sound>("Reload_Denied").play();
 		}
 	}
-	if (this->m_DragonBreath.Update(_window) && !_player.GetShotgun().Full() && _player.GetDragonBreath() != 0 && this->m_InputTimer > 0.3f)
+	if (this->m_DragonBreath.Update(_window) && !_player.GetShotgun().Full() && this->m_InputTimer > 0.3f)
 	{
 		this->m_InputTimer = 0.f;
-		if (!_player.GetBmgEnabled())
+		if (_player.GetDragonBreath() != 0)
 		{
-			--_player.GetDragonBreath();
-			_player.GetShotgun().Load(3);
+			RscMana::Get<sf::Sound>("Reload").play();
+			if (!_player.GetBmgEnabled())
+			{
+				--_player.GetDragonBreath();
+				_player.GetShotgun().Load(3);
+			}
+			else
+			{
+				_player.GetShotgun().Load(5);
+			}
 		}
 		else
 		{
-			_player.GetShotgun().Load(5);
+			RscMana::Get<sf::Sound>("Reload_Denied").play();
 		}
 	}
-	if (this->m_Slug.Update(_window) && !_player.GetShotgun().Full() && _player.GetSlug() != 0 && this->m_InputTimer > 0.3f)
+	if (this->m_Slug.Update(_window) && !_player.GetShotgun().Full() && this->m_InputTimer > 0.3f)
 	{
 		this->m_InputTimer = 0.f;
-		if (!_player.GetBmgEnabled())
+		if (_player.GetSlug() != 0)
 		{
-			--_player.GetSlug();
-			_player.GetShotgun().Load(4);
+			RscMana::Get<sf::Sound>("Reload").play();
+			if (!_player.GetBmgEnabled())
+			{
+				--_player.GetSlug();
+				_player.GetShotgun().Load(4);
+			}
+			else
+			{
+				_player.GetShotgun().Load(5);
+			}
 		}
 		else
 		{
-			_player.GetShotgun().Load(5);
+			RscMana::Get<sf::Sound>("Reload_Denied").play();
 		}
+
 	}
 }
 

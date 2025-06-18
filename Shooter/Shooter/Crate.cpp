@@ -42,12 +42,11 @@ void BoostCrate::Update(Player& _player, bool& _coffe, bool& _bmg, bool& _vest, 
 	{
 		this->m_PlayerClose = true;
 
-		//Input PopUp
-
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 		{
 			this->m_Opened = true;
 			this->m_Rect.setFillColor(sf::Color::Black);
+			RscMana::Get<sf::Sound>("OpenCrate").play();
 
 			switch (this->m_Boost)
 			{
@@ -115,6 +114,7 @@ void BonusCrate::Update(Player& _player, bool& _coffee, bool& _bmg, bool& _vest,
 		{
 			this->m_Opened = true;
 			this->m_Rect.setFillColor(sf::Color::Black);
+			RscMana::Get<sf::Sound>("CrateOpen").play();
 
 			switch (this->m_Bonus)
 			{

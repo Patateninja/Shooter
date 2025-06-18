@@ -73,41 +73,48 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 		{
 			if (this->CheckWallCollision(_map,UP))
 			{
-				this->m_Velocity.y = -1;
+				this->m_Velocity.y -= 1;
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
 			if (this->CheckWallCollision(_map, DOWN))
 			{
-				this->m_Velocity.y = 1;
+				this->m_Velocity.y += 1;
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 		{
 			if (this->CheckWallCollision(_map, LEFT))
 			{
-				this->m_Velocity.x = -1;
+				this->m_Velocity.x -= 1;
 			}
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
 			if (this->CheckWallCollision(_map, RIGHT))
 			{
-				this->m_Velocity.x = 1;
+				this->m_Velocity.x += 1;
 			}
 		}
 
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->m_InputTimer > 0.75f)
 		{
 			this->m_InputTimer = 0.f;
+			if (!this->m_Shotgun.Empty())
+			{
+				_enemyList.AllHearSound(this->m_Position, 15);
+			}
 			this->m_Shotgun.Shoot(this->m_Position, this->m_Velocity, this->m_Angle, _window);
-			_enemyList.AllHearSound(this->m_Position, 15);
 		}
 
 		this->m_Position += Tools::AngleToVector((Tools::Magnitude(this->m_Velocity) == 0.f ? 0.f : 350.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier()) + int(this->m_Caffeinated) * 100), Tools::VectorToAngle(this->m_Velocity)) * Time::GetDeltaTime();
 		if (Tools::Magnitude(this->m_Velocity) != 0.f)
 		{
+			if (RscMana::Get<sf::Sound>("Player_Step").getStatus() == sf::Sound::Stopped)
+			{
+				RscMana::Get<sf::Sound>("Player_Step").play();
+			}
 			_enemyList.AllHearSound(this->m_Position, 2);
 		}
 	}

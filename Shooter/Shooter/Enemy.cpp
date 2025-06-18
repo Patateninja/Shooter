@@ -313,30 +313,6 @@ void Enemy::Display(Window& _window)
 	fov[3].color = Color::DarkGrey;
 
 	_window.Draw(fov);
-
-	sf::CircleShape m_CirclePath = sf::CircleShape(20.f);
-	m_CirclePath.setOrigin(20.f, 20.f);
-	if (this->m_IdleBehavior == WANDER)
-	{
-		m_CirclePath.setPosition(this->m_IdleTileTarget.GetCood());
-		m_CirclePath.setFillColor(Color::Flamming);
-		_window.Draw(m_CirclePath);
-	}
-	else if (this->m_IdleBehavior == PATROL)
-	{
-		for (Tile& tile : this->m_PatrolTargets)
-		{
-			m_CirclePath.setPosition(tile.GetCood());
-			m_CirclePath.setFillColor(Color::LightRed);
-			_window.Draw(m_CirclePath);
-		}
-	}
-	else if (this->m_IdleBehavior == GUARD)
-	{
-		m_CirclePath.setPosition(this->m_StartingPosition);
-		m_CirclePath.setFillColor(sf::Color::Magenta);
-		_window.Draw(m_CirclePath);
-	}
 }
 
 void Enemy::HearSound(sf::Vector2f& _soundPos, int _soundIntensity)

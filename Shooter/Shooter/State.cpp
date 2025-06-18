@@ -77,9 +77,14 @@ void Menu::Init()
 	this->m_Text.setPosition(10.f, 5.f);
 	this->m_Text.setCharacterSize(120);
 
-	this->m_Play = Button("Play", sf::Vector2f(25.f, 250.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("Placeholder"));
-	this->m_Option = Button("Settings", sf::Vector2f(25.f, 400.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("Placeholder"));
-	this->m_Quit = Button("Quit", sf::Vector2f(25.f, 550.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("Placeholder"));
+	this->m_Play = Button("", sf::Vector2f(25.f, 250.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("PlayButton"));
+	this->m_Option = Button("", sf::Vector2f(25.f, 400.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("OptButton"));
+	this->m_Quit = Button("", sf::Vector2f(25.f, 550.f), sf::Vector2f(400.f, 100.f), &RscMana::Get<sf::Texture>("ExitButton"));
+
+	RscMana::SetSFXVolume(this->m_SfxVolume);
+	RscMana::SetBGMVolume(this->m_BgmVolume);
+
+	this->GetRsc<sf::Music>("Menu").play();
 }
 void Menu::Update()
 {
@@ -115,6 +120,11 @@ void Menu::Display()
 void Menu::DeInit()
 {
 	std::cout << "Menu DeInit" << std::endl;
+
+	if(this->GetRsc<sf::Music>("Menu").getStatus() == sf::Sound::Status::Playing)
+	{
+		this->GetRsc<sf::Music>("Menu").stop();
+	}
 }
 
 #pragma endregion
@@ -141,17 +151,16 @@ void Game::Init()
 	std::cout << "Game Init" << std::endl;
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 	this->m_Text.setCharacterSize(15);
-	//this->GetRsc<sf::Music>("Bogus").play();
 	
 	this->m_Player.Init(State::m_Muzzle, State::m_Grip, State::m_Magazine, State::m_Stock, State::m_Armor, State::m_AmmoStash);
 	this->m_Cam.NewTarget(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
 
-	this->m_Stage.SetNum(30);
+	this->m_Stage.SetNum(1);
 	this->m_Stage.Init();
 
-	this->m_StageNum = CounterIcon(sf::Vector2f(1845.f, 10.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("Placeholder"));
-	this->m_Life = CounterIcon(sf::Vector2f(1845.f, 90.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("Placeholder"));
-	this->m_Vest = CounterIcon(sf::Vector2f(1845.f, 170.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("Placeholder"));
+	this->m_StageNum = CounterIcon(sf::Vector2f(1845.f, 10.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("StageIcon"));
+	this->m_Life = CounterIcon(sf::Vector2f(1845.f, 90.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("HpIcon"));
+	this->m_Vest = CounterIcon(sf::Vector2f(1845.f, 170.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("VestIcon"));
 
 	this->m_Coffee = Icon(sf::Vector2f(150.f, 70.f), sf::Vector2f(65.f, 65.f), &this->GetRsc<sf::Texture>("Placeholder"));
 	this->m_BMG50 = Icon(sf::Vector2f(225.f, 70.f), sf::Vector2f(65.f, 65.f), &this->GetRsc<sf::Texture>("Placeholder"));
@@ -159,6 +168,8 @@ void Game::Init()
 	this->Window().SetViewCenter(this->Window().GetDefaultView().GetCenter() - sf::Vector2f(Tile::GetSize() / 2.f, Tile::GetSize() / 2.f));
 
 	State::m_StageReached = 0;
+
+	this->GetRsc<sf::Music>("Game").play();
 }
 void Game::Update()
 {
@@ -275,6 +286,7 @@ void Game::Update()
 		if (this->m_Player.GetHP() == 0)
 		{
 			State::m_StageReached = this->m_Stage.GetNum();
+			RscMana::Get<sf::Sound>("PlayerDeath").play();
 			this->ChangeState<GameOver>();
 		}
 	}
@@ -302,11 +314,6 @@ void Game::Display()
 		this->m_PauseMenu.Display(this->Window());
 	}
 
-	if (!this->m_Player.GetMoving())
-	{
-		this->m_ReloadMenu.Display(this->Window());
-	}
-
 	if (this->m_Player.GetCoffeeEnabled())
 	{
 		this->m_Coffee.Display(this->Window());
@@ -323,6 +330,11 @@ void Game::Display()
 		this->m_Vest.Display(this->Window());
 	}
 
+	if (!this->m_Player.GetMoving())
+	{
+		this->m_ReloadMenu.Display(this->Window());
+	}
+
 	this->DisplayWindow();
 }
 void Game::DeInit()
@@ -336,6 +348,11 @@ void Game::DeInit()
 	if (this->m_BonusPopUp)
 	{
 		delete this->m_BonusPopUp;
+	}
+
+	if (this->GetRsc<sf::Music>("Game").getStatus() == sf::Sound::Status::Playing)
+	{
+		this->GetRsc<sf::Music>("Game").stop();
 	}
 }
 
@@ -360,7 +377,7 @@ void GameOver::Deletor()
 
 void GameOver::Init()
 {
-	std::cout << "Menu Init" << std::endl;
+	std::cout << "GameOver Init" << std::endl;
 	this->Window().ResetView();
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 
@@ -373,8 +390,10 @@ void GameOver::Init()
 	this->m_Text.setPosition(this->Window().GetViewCenter().x - (this->m_Text.getGlobalBounds().width * 2.f), 150.f);
 	this->m_Text.setCharacterSize(120);
 
-	this->m_ToMenu = Button("Main Menu", sf::Vector2f(250.f, 800.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
-	this->m_ToShop = Button("Shop", sf::Vector2f(1420.f, 800.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
+	this->m_ToMenu = Button("", sf::Vector2f(250.f, 800.f), sf::Vector2f(300.f, 75.f), &RscMana::Get<sf::Texture>("MenuButton"));
+	this->m_ToShop = Button("", sf::Vector2f(1420.f, 800.f), sf::Vector2f(300.f, 75.f), &RscMana::Get<sf::Texture>("ShopButton"));
+
+	this->GetRsc<sf::Music>("GameOverMusic").play();
 }
 void GameOver::Update()
 {
@@ -404,6 +423,11 @@ void GameOver::Display()
 void GameOver::DeInit()
 {
 	std::cout << "GameOver DeInit" << std::endl;
+
+	if (this->GetRsc<sf::Music>("GameOverMusic").getStatus() == sf::Sound::Status::Playing)
+	{
+		this->GetRsc<sf::Music>("GameOverMusic").stop();
+	}
 }
 
 #pragma endregion
@@ -439,14 +463,15 @@ void Upgrade::Init()
 	this->m_DelayRect.setPosition(sf::Vector2f(0.f, 0.f));
 	this->m_DelayRect.setTexture(&this->GetRsc<sf::Texture>("Placeholder"));
 
-	this->m_Play = Button("Start", sf::Vector2f(1695.f, 980.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
-	this->m_Menu = Button("Menu", sf::Vector2f(25.f, 980.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
+	this->m_Play = Button("", sf::Vector2f(1595.f, 980.f), sf::Vector2f(300.f, 75.f), &RscMana::Get<sf::Texture>("PlayButton"));
+	this->m_Menu = Button("", sf::Vector2f(25.f, 980.f), sf::Vector2f(300.f, 75.f), &RscMana::Get<sf::Texture>("MenuButton"));
+
+	this->GetRsc<sf::Music>("Armory").play();
 }
 
 void Upgrade::Update()
 {	
 	this->m_InputTimer += Time::GetDeltaTime();
-	
 
 	if (!this->m_ShopActive && this->m_InputTimer > 0.5f)
 	{
@@ -511,6 +536,11 @@ void Upgrade::Display()
 void Upgrade::DeInit()
 {
 	std::cout << "Upgrade DeInit" << std::endl;
+
+	if (this->GetRsc<sf::Music>("Armory").getStatus() == sf::Sound::Status::Playing)
+	{
+		this->GetRsc<sf::Music>("Armory").stop();
+	}
 }
 
 #pragma endregion
@@ -539,14 +569,14 @@ void Option::Init()
 
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 
-	//this->GetRsc<sf::Music>("Bogus").play();
+	this->GetRsc<sf::Music>("Option").play();
 
 	this->m_Fullscreen = this->Window().GetFullscreen();
 
 	this->m_SFX = Slider(sf::Vector2f(300.f, 250.f), sf::Vector2f(700.f, 25.f), 0);
 	this->m_BGM = Slider(sf::Vector2f(300.f, 450.f), sf::Vector2f(700.f, 25.f), 0);
-	this->m_FullscreenCheckbox = Checkbox("", sf::Vector2f(200.f, 700.f), sf::Vector2f(75.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"), this->m_Fullscreen);
-	this->m_Menu = Button("Menu", sf::Vector2f(25.f, 980.f), sf::Vector2f(200.f, 75.f), &RscMana::Get<sf::Texture>("Placeholder"));
+	this->m_FullscreenCheckbox = Checkbox("", sf::Vector2f(200.f, 700.f), sf::Vector2f(75.f, 75.f), &RscMana::Get<sf::Texture>("Checkbox"), this->m_Fullscreen);
+	this->m_Menu = Button("", sf::Vector2f(25.f, 980.f), sf::Vector2f(400, 100.f), &RscMana::Get<sf::Texture>("MenuButton"));
 }
 void Option::Update()
 {
@@ -589,7 +619,7 @@ void Option::Display()
 	
 	this->m_Text.setCharacterSize(30);
 	this->m_Text.setString("Fullscreen");
-	this->m_Text.setPosition(280.f, 720.f);
+	this->m_Text.setPosition(300.f, 720.f);
 	this->Draw(this->m_Text);
 	this->m_FullscreenCheckbox.Display(this->Window());
 	
@@ -610,6 +640,11 @@ void Option::Display()
 void Option::DeInit()
 {
 	std::cout << "Option DeInit" << std::endl;
+
+	if (this->GetRsc<sf::Music>("Option").getStatus() == sf::Sound::Status::Playing)
+	{
+		this->GetRsc<sf::Music>("Option").stop();
+	}
 }
 
 #pragma endregion

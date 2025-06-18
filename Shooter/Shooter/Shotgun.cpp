@@ -42,7 +42,7 @@ void Shotgun::Shoot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel, float _p
 {
 	if (!this->m_Magazine.empty())
 	{
-		RscMana::Get<sf::Sound>("Shot").play();
+		RscMana::Get<sf::Sound>("Player_Shot").play();
 		this->m_Magazine.front()->Shot(_playerPos, _playerVel, _playerAngle + Tools::DegToRad(Tools::Random(3,-3) / this->GetAccuracyMultiplier()), this->m_Recoil, _window);
 		this->m_Magazine.erase(this->m_Magazine.begin());
 
@@ -51,6 +51,10 @@ void Shotgun::Shoot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel, float _p
 		{
 			this->m_Recoil = 2.f;
 		}
+	}
+	else
+	{
+		RscMana::Get<sf::Sound>("EmptyMag").play();
 	}
 }
 void Shotgun::EmptyMagazine()
@@ -79,38 +83,38 @@ void Shotgun::ReduceRecoil()
 
 void Shotgun::DisplayMagazine(Window& _window)
 {
-	this->m_Renderer.setSize(sf::Vector2f((this->m_DefaultCapacity + this->m_MagazineAttachement.GetCapacity()) * 135.f + 10.f, 50.f));
+	this->m_Renderer.setSize(sf::Vector2f((this->m_DefaultCapacity + this->m_MagazineAttachement.GetCapacity()) * 135.f + 20.f, 50.f));
 	this->m_Renderer.setTexture(nullptr);
 	this->m_Renderer.setPosition(_window.RelativePos(sf::Vector2f(10.f, 10.f)));
 	this->m_Renderer.setFillColor(Color::Grey);
 	_window.Draw(this->m_Renderer);
 
+	this->m_Renderer.setTexture(&RscMana::Get<sf::Texture>("Ammo"));
+	this->m_Renderer.setFillColor(sf::Color::White);
 	for (int i = 0; i < this->m_Magazine.size(); ++i)
 	{
-		this->m_Renderer.setSize(sf::Vector2f(125.f, 37.5f));
-		this->m_Renderer.setPosition(_window.RelativePos(sf::Vector2f(i * 125.f + (i + 1) * 10.f + 10.f, 16.25f)));
-		this->m_Renderer.setTexture(nullptr);
-		this->m_Renderer.setFillColor(sf::Color::White);
+		this->m_Renderer.setSize(sf::Vector2f(126.f, 45.f));
+		this->m_Renderer.setPosition(_window.RelativePos(sf::Vector2f(i * 126.f + (i + 1) * 10.f + 10.f, 12.5)));
 
 		if (dynamic_cast<BirdShot*>(this->m_Magazine[i].get()))
 		{
-			this->m_Renderer.setFillColor(sf::Color::Green);
+			this->m_Renderer.setTextureRect(sf::IntRect(140, 0, 70, 25));
 		}
 		else if (dynamic_cast<BuckShot*>(this->m_Magazine[i].get()))
 		{
-			this->m_Renderer.setTexture(&RscMana::Get<sf::Texture>("Red_Shell"));
+			this->m_Renderer.setTextureRect(sf::IntRect(0,0,70,25));
 		}
 		else if (dynamic_cast<DragonBreath*>(this->m_Magazine[i].get()))
 		{
-			this->m_Renderer.setFillColor(Color::Flamming);
+			this->m_Renderer.setTextureRect(sf::IntRect(70, 0, 70, 25));
 		}
 		else if (dynamic_cast<Slug*>(this->m_Magazine[i].get()))
 		{
-			this->m_Renderer.setFillColor(sf::Color::Yellow);
+			this->m_Renderer.setTextureRect(sf::IntRect(210, 0, 70, 25));
 		}
 		else if (dynamic_cast<BMG*>(this->m_Magazine[i].get()))
 		{
-			this->m_Renderer.setFillColor(sf::Color::Cyan);
+			this->m_Renderer.setTextureRect(sf::IntRect(280, 0, 70, 25));
 		}
 
 		_window.Draw(this->m_Renderer);

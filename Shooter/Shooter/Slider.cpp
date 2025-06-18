@@ -15,7 +15,6 @@ Slider::Slider(sf::Vector2f _pos, sf::Vector2f _size, int _percent)
 
 void Slider::Update(Window& _window, int& _percent)
 {
-	
 	if (this->m_Bar.getGlobalBounds().contains(_window.RelativePos(sf::Mouse::getPosition(_window.Unwrap()))))
 	{
 		this->m_Cursor.setFillColor(Color::LightGrey);
@@ -30,6 +29,7 @@ void Slider::Update(Window& _window, int& _percent)
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->m_Bar.getGlobalBounds().contains(_window.RelativePos(sf::Mouse::getPosition(_window.Unwrap()))))
 	{
 		_percent = int((Tools::Distance(this->m_Bar.getPosition(), _window.RelativePos(sf::Mouse::getPosition(_window.Unwrap()))) / this->m_Bar.getGlobalBounds().width) * 100);
+		RscMana::Get<sf::Sound>("ButtonClicked").play();
 	}
 
 	this->m_Percentage = _percent;
