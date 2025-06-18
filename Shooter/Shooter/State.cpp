@@ -221,7 +221,7 @@ void Game::Update()
 		}
 		else
 		{
-			this->m_ReloadMenu.Update(this->m_Player,this->Window());
+			this->m_ReloadMenu.Update(this->m_Player,this->m_Stage.GetEnemies(),this->Window());
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{

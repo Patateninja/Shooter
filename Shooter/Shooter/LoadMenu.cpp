@@ -32,8 +32,7 @@ void ReloadMenu::SwitchButtonMode(bool _bmg)
 	}
 }
 
-
-void ReloadMenu::Update(Player& _player, Window& _window)
+void ReloadMenu::Update(Player& _player, EnemyList& _enemyList, Window& _window)
 {
 	this->m_InputTimer += Time::GetDeltaTime();
 	
@@ -41,6 +40,18 @@ void ReloadMenu::Update(Player& _player, Window& _window)
 	{
 		this->m_BMG = _player.GetBmgEnabled();
 		this->SwitchButtonMode(this->m_BMG);
+	}
+	if (this->m_ShotgunHasAmmo != !_player.GetShotgun().Empty())
+	{
+		this->m_ShotgunHasAmmo = !_player.GetShotgun().Empty();
+		if (this->m_ShotgunHasAmmo)
+		{
+			this->m_Rect.setSize(sf::Vector2f(160.f, 310.f));
+		}
+		else
+		{
+			this->m_Rect.setSize(sf::Vector2f(160.f, 250.f));
+		}
 	}
 
 	this->m_Rect.setFillColor(Color::LightGrey);
@@ -79,6 +90,18 @@ void ReloadMenu::Update(Player& _player, Window& _window)
 		this->m_Slug.UpdateText(std::to_string(_player.GetSlug()));
 	}
 
+
+	if (this->m_ShotgunHasAmmo)
+	{
+		this->m_Ready.SetPosition(_window.RelativePos(sf::Vector2f(20.f, 315.f)));
+		if (this->m_Ready.Update(_window) && this->m_InputTimer > 0.3f)
+		{
+			this->m_InputTimer = 0.f;
+			_player.Ready();
+			_enemyList.Activate();
+		}
+	}
+	
 	if (RscMana::Get<sf::Sound>("ButtonClicked").getStatus() == sf::Sound::Playing)
 	{
 		RscMana::Get<sf::Sound>("ButtonClicked").stop();
@@ -174,4 +197,9 @@ void ReloadMenu::Display(Window& _window)
 	this->m_BuckShot.Display(_window);
 	this->m_DragonBreath.Display(_window);
 	this->m_Slug.Display(_window);
+
+	if (this->m_ShotgunHasAmmo)
+	{
+		this->m_Ready.Display(_window);
+	}
 }

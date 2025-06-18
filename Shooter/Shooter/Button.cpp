@@ -5,7 +5,7 @@
 Button::Button(std::string _str, sf::Vector2f _pos, sf::Vector2f _size, sf::Texture* _texture)
 {
 	this->m_Text.setString(_str);
-	this->m_Text.setFont(RscMana::Get<sf::Font>("Mono"));
+	this->m_Text.setFont(RscMana::Get<sf::Font>("Pixel"));
 	this->m_Text.setPosition(_pos + sf::Vector2f(1.f, 1.f));
 	this->m_Rect.setPosition(_pos);
 	this->m_Rect.setSize(_size);
