@@ -115,7 +115,6 @@ void Stage::SpawnEnemies()
 	}
 	else if (this->m_Num == 1)
 	{
-
 		Tile tile;
 		do
 		{
