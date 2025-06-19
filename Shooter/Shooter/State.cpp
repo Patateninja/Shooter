@@ -158,6 +158,8 @@ void Game::Init()
 	this->m_Stage.SetNum(1);
 	this->m_Stage.Init();
 
+	this->m_RetryButon = Button("Retry", sf::Vector2f(1810.f,230.f), sf::Vector2f(70.f, 70.f), &RscMana::Get<sf::Texture>("Placeholder"));
+
 	this->m_StageNum = CounterIcon(sf::Vector2f(1845.f, 10.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("StageIcon"));
 	this->m_Life = CounterIcon(sf::Vector2f(1845.f, 90.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("HpIcon"));
 	this->m_Vest = CounterIcon(sf::Vector2f(1845.f, 170.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("VestIcon"));
@@ -210,24 +212,29 @@ void Game::Update()
 		this->m_Text.setString(std::to_string(int(1 / Time::GetDeltaTime())) + " fps");
 		this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
 
-		this->m_Player.Update(this->m_Stage.GetEnemies(), this->m_Stage.GetMap(), this->m_Cam, this->Window());
-		this->m_Stage.Update(this->m_Player, this->m_Cam, this->m_BonusPopUp, this->Window());
-
-		ProjList::Update(this->m_Stage.GetMap());
-
 		if (this->m_Player.GetMoving())
 		{
 			this->m_Cam.NewTarget(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
+			if (this->m_RetryButon.Update(this->Window()))
+			{
+				this->m_Player.Die(this->m_Stage.GetEnemies(), this->m_Stage.GetMap(), this->m_Cam, this->Window());
+				RscMana::Get<sf::Sound>("Player_Shot").play();
+			}
 		}
 		else
 		{
-			this->m_ReloadMenu.Update(this->m_Player,this->m_Stage.GetEnemies(),this->Window());
+			this->m_ReloadMenu.Update(this->m_Player, this->m_Stage.GetEnemies(), this->Window());
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
 				this->m_Cam.NewTarget(this->Window(), this->Window().RelativePos(sf::Mouse::getPosition()), this->m_Stage.GetMap().GetSize());
 			}
 		}
+
+		this->m_Player.Update(this->m_Stage.GetEnemies(), this->m_Stage.GetMap(), this->m_Cam, this->Window());
+		this->m_Stage.Update(this->m_Player, this->m_Cam, this->m_BonusPopUp, this->Window());
+
+		ProjList::Update(this->m_Stage.GetMap());
 
 		if (this->m_Player.GetCoffeeEnabled())
 		{
@@ -333,6 +340,11 @@ void Game::Display()
 	if (!this->m_Player.GetMoving())
 	{
 		this->m_ReloadMenu.Display(this->Window());
+
+	}
+	else if(this->m_Player.GetMoving())
+	{
+		this->m_RetryButon.Display(this->Window());
 	}
 
 	this->DisplayWindow();

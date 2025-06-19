@@ -38,6 +38,35 @@ void Shotgun::Load(int _input)
 		}
 	}
 }
+void Shotgun::Unload(int& _buckshot, int& _dragonbreath, int& _slug, int& _maxammo)
+{
+	for (const std::unique_ptr<Shell>& shell : this->m_Magazine)
+	{
+		if (dynamic_cast<BuckShot*>(shell.get()))
+		{
+			if (_buckshot < _maxammo)
+			{
+				++_buckshot;
+			}
+		}
+		else if (dynamic_cast<DragonBreath*>(shell.get()))
+		{
+			if (_dragonbreath < _maxammo)
+			{
+				++_dragonbreath;
+			}
+		}
+		else if (dynamic_cast<Slug*>(shell.get()))
+		{
+			if (_slug < _maxammo)
+			{
+				++_slug;
+			}
+		}
+	}
+
+	this->EmptyMagazine();
+}
 void Shotgun::Shoot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel, float _playerAngle, Window& _window)
 {
 	if (!this->m_Magazine.empty())
@@ -102,11 +131,11 @@ void Shotgun::DisplayMagazine(Window& _window)
 		}
 		else if (dynamic_cast<BuckShot*>(this->m_Magazine[i].get()))
 		{
-			this->m_Renderer.setTextureRect(sf::IntRect(0,0,70,25));
+			this->m_Renderer.setTextureRect(sf::IntRect(70,0,70,25));
 		}
 		else if (dynamic_cast<DragonBreath*>(this->m_Magazine[i].get()))
 		{
-			this->m_Renderer.setTextureRect(sf::IntRect(70, 0, 70, 25));
+			this->m_Renderer.setTextureRect(sf::IntRect(0, 0, 70, 25));
 		}
 		else if (dynamic_cast<Slug*>(this->m_Magazine[i].get()))
 		{

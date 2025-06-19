@@ -46,7 +46,7 @@ void ReloadMenu::Update(Player& _player, EnemyList& _enemyList, Window& _window)
 		this->m_ShotgunHasAmmo = !_player.GetShotgun().Empty();
 		if (this->m_ShotgunHasAmmo)
 		{
-			this->m_Rect.setSize(sf::Vector2f(160.f, 310.f));
+			this->m_Rect.setSize(sf::Vector2f(160.f, 370.f));
 		}
 		else
 		{
@@ -93,12 +93,19 @@ void ReloadMenu::Update(Player& _player, EnemyList& _enemyList, Window& _window)
 
 	if (this->m_ShotgunHasAmmo)
 	{
-		this->m_Ready.SetPosition(_window.RelativePos(sf::Vector2f(20.f, 315.f)));
+		this->m_Ready.SetPosition(_window.RelativePos(sf::Vector2f(20.f, 375.f)));
 		if (this->m_Ready.Update(_window) && this->m_InputTimer > 0.3f)
 		{
 			this->m_InputTimer = 0.f;
 			_player.Ready();
 			_enemyList.Activate();
+		}
+
+		this->m_Reset.SetPosition(_window.RelativePos(sf::Vector2f(20.f, 315.f)));
+		if (this->m_Reset.Update(_window) && this->m_InputTimer > 0.3f)
+		{
+			this->m_InputTimer = 0.f;
+			_player.Unload();
 		}
 	}
 	
@@ -201,5 +208,6 @@ void ReloadMenu::Display(Window& _window)
 	if (this->m_ShotgunHasAmmo)
 	{
 		this->m_Ready.Display(_window);
+		this->m_Reset.Display(_window);
 	}
 }

@@ -127,7 +127,7 @@ void TileMap::Generate(sf::RenderTexture& _rendertexture)
 							this->GetTile(int(tile.GetCood().x) + (i * Tile::GetSize()), int(tile.GetCood().y) + (j * Tile::GetSize())).SetType(DOORWAY);
 						}
 					}
-					else if (i > 2 && j > 2 && i < x - 4 && j < y - 4 && Tools::Random(6, 0) == 1 && this->GetTile(int(tile.GetCood().x), int(tile.GetCood().y)).GetType() != (FURNITURE && tile.GetCood().x != Tile::GetSize() * 2 && tile.GetCood().y && tile.GetCood().y != Tile::GetSize() * 2))
+					else if (i > 2 && j > 2 && i < x - 4 && j < y - 4 && Tools::Random(6, 0) == 1 && this->GetTile(int(tile.GetCood().x), int(tile.GetCood().y)).GetType() != FURNITURE && (tile.GetCood().x != Tile::GetSize() * 2 && tile.GetCood().y && tile.GetCood().y != Tile::GetSize() * 2))
 					{
 						switch (Tools::Random(3))
 						{

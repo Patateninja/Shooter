@@ -9,6 +9,7 @@ class ReloadMenu
 		ReloadButton m_BuckShot = ReloadButton("", "Launch a volley of pellets at whatever you're aiming for.\nPretty efficient at close range.", sf::Vector2f(), sf::Vector2f(140.f, 50.f),  &RscMana::Get<sf::Texture>("Buck"));
 		ReloadButton m_DragonBreath = ReloadButton("", "A special ammunition, spewing firery projectiles, setting everything afflame.\nSet ennemies on fire, dealing damage over time.", sf::Vector2f(), sf::Vector2f(140.f, 50.f), &RscMana::Get<sf::Texture>("Dragon"));
 		ReloadButton m_Slug = ReloadButton("", "An unique but powefull chunck of metal, shreading everything in its path\nPierce trough flesh & steel.", sf::Vector2f(), sf::Vector2f(140.f, 50.f),  &RscMana::Get<sf::Texture>("Slug"));
+		Button m_Reset = Button("Reset²", sf::Vector2f(), sf::Vector2f(140.f, 50.f), &RscMana::Get<sf::Texture>("Placeholder"));
 		Button m_Ready = Button("", sf::Vector2f(), sf::Vector2f(140.f, 50.f), &RscMana::Get<sf::Texture>("ReadyButton"));
 		sf::RectangleShape m_Rect = sf::RectangleShape(sf::Vector2f(160.f, 250.f));
 		float m_InputTimer = 1.f;

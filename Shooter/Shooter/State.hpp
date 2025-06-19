@@ -91,6 +91,7 @@ class Game : public State
 		PauseMenu m_PauseMenu;
 		Player m_Player;
 		Stage m_Stage;
+		Button m_RetryButon;
 		CounterIcon m_StageNum;
 		CounterIcon m_Life;
 		CounterIcon m_Vest;

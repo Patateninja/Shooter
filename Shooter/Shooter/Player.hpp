@@ -31,7 +31,7 @@ class Player
 		int m_Slug = 5;
 		bool m_CanMove = false;
 		bool m_CanReload = true;
-		bool m_Caffeinated = true;
+		bool m_Caffeinated = false;
 		bool m_Got50BMG = false;
 
 	public :
@@ -67,9 +67,10 @@ class Player
 		bool CheckDamage();
 
 		void Ready();
-		void Die();
+		void Die(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& _window);
 		void Respawn();
 
+		void Unload();
 		void Refill();
 		void Heal();
 		void AddVest();

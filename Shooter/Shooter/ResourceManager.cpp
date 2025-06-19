@@ -41,8 +41,8 @@ void ResourceManager::Init()
 
 	this->Add<sf::Texture>("Ammo", path + "Textures\\Ammo.png");
 	this->Add<sf::Texture>("Bird", path + "Textures\\Green_Shell.png");
-	this->Add<sf::Texture>("Buck", path + "Textures\\Red_Shell.png");
-	this->Add<sf::Texture>("Dragon", path + "Textures\\Blue_Shell.png");
+	this->Add<sf::Texture>("Dragon", path + "Textures\\Red_Shell.png");
+	this->Add<sf::Texture>("Buck", path + "Textures\\Blue_Shell.png");
 	this->Add<sf::Texture>("Slug", path + "Textures\\Yellow_Shell.png");
 	this->Add<sf::Texture>("Bmg", path + "Textures\\Not_a_Shell.png");
 

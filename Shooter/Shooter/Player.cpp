@@ -19,19 +19,7 @@ void Player::Init(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _sto
 
 void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& _window)
 {
-	if (this->m_CanReload)
-	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && this->m_InputTimer > 0.3f)
-		{
-			if (!this->m_Shotgun.Empty())
-			{
-				this->m_InputTimer = 0.f;
-				this->Ready();
-				_enemyList.Activate();
-			}
-		}
-	}
-	else if (this->m_CanMove)
+	if (this->m_CanMove)
 	{
 		this->m_InputTimer += Time::GetDeltaTime() * this->m_Shotgun.GetRoFMultiplier();
 
@@ -46,9 +34,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 			{
 				if (this->m_Vest == 0)
 				{
-					this->Die();
-					_enemyList.Respawn(_map);
-					_cam.NewTarget(_window, this->m_Position, _map.GetSize());
+					this->Die(_enemyList, _map, _cam, _window);
 					return;
 				}
 				else
@@ -61,9 +47,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 
 		if (this->CheckDamage())
 		{
-			this->Die();
-			_enemyList.Respawn(_map);
-			_cam.NewTarget(_window, this->m_Position, _map.GetSize());
+			this->Die(_enemyList,_map,_cam,_window);
 			return;
 		}
 
@@ -270,10 +254,12 @@ void Player::Ready()
 	this->m_CanMove = true;
 	this->m_CanReload = false;
 }
-void Player::Die()
+void Player::Die(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& _window)
 {
 	--this->m_Life;
 	this->Respawn();
+	_enemyList.Respawn(_map);
+	_cam.NewTarget(_window, this->m_Position, _map.GetSize());
 }
 void Player::Respawn()
 {
@@ -285,34 +271,13 @@ void Player::Respawn()
 
 	ProjList::Clear();
 
-	for (const std::unique_ptr<Shell>& shell : this->m_Shotgun.GetShells())
-	{
-		if (dynamic_cast<BuckShot*>(shell.get()))
-		{
-			if (this->m_BuckShot < this->m_MaxAmmo + this->m_AmmoStash.GetCapacity())
-			{
-				++this->m_BuckShot;
-			}
-		}
-		else if (dynamic_cast<DragonBreath*>(shell.get()))
-		{
-			if (this->m_DragonBreath < this->m_MaxAmmo + this->m_AmmoStash.GetCapacity())
-			{
-				++this->m_DragonBreath;
-			}
-		}
-		else if (dynamic_cast<Slug*>(shell.get()))
-		{
-			if (this->m_Slug < this->m_MaxAmmo + this->m_AmmoStash.GetCapacity())
-			{
-				++this->m_Slug;
-			}
-		}
-	}
-
-	this->m_Shotgun.EmptyMagazine();
+	this->Unload();
 }
 
+void Player::Unload()
+{
+	this->m_Shotgun.Unload(this->m_BuckShot, this->m_DragonBreath, this->m_Slug, this->m_MaxAmmo);
+}
 void Player::Refill()
 {
 	this->m_BuckShot = this->m_MaxAmmo;
