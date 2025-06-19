@@ -79,7 +79,7 @@ class Enemy
 		void CheckDamage();
 		void TakeDamage(std::shared_ptr<Projectile>& _projectile);
 		void TakeDamage(int _damage);
-		void Die();
+		virtual void Die();
 };
 
 class Baseliner : public Enemy
@@ -115,6 +115,8 @@ class Speedster : public Enemy
 	public:
 		Speedster(const sf::Vector2f& _stratingPos, TileMap& _map);
 		~Speedster();
+		
+		void Die() override;
 };
 
 class Shielded : public Enemy

@@ -8,6 +8,7 @@ class PopUp
 		sf::Text m_Text;
 		sf::RectangleShape m_Rect;
 		sf::Vector2f m_Position;
+		float m_Opacity = 0.f;
 
 	public :
 		PopUp() = default;

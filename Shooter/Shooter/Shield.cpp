@@ -25,7 +25,7 @@ void Shield::Udpate(bool _active, sf::Vector2f _pos, float _angle)
 			{
 				angle += 360.f;
 			}
-			float rotation = Tools::Sign(angle) * Tools::Min<float, float, float>(std::abs(angle) * Time::GetDeltaTime() * 2.f, std::abs(angle));
+			float rotation = Tools::Sign(angle) * Tools::Min<float, float, float>(std::abs(angle) * Time::GetDeltaTime() * 2.5f, std::abs(angle));
 
 			this->m_Rect.setRotation(this->m_Rect.getRotation() + rotation);
 		}

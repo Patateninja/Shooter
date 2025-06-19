@@ -98,8 +98,10 @@ class Game : public State
 		Icon m_Coffee;
 		Icon m_BMG50;
 		Camera m_Cam;
-		PopUp* m_StagePopUp = nullptr;
+		PopUp* m_StageClearPopUp = nullptr;
+		PopUp* m_NextStagePopUp = nullptr;
 		BonusPopUp* m_BonusPopUp = nullptr;
+		float m_PopTimer = 0.f;
 		bool m_Paused = false;
 		bool m_PickupPopUpPause = false;
 

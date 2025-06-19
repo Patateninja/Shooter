@@ -74,12 +74,12 @@ void ResourceManager::Init()
 	this->Add<sf::Sound>("Hurt_Enemies", path + "SFX\\Placeholder.ogg");
 	this->Add<sf::Sound>("Death_Enemies", path + "SFX\\Enemy_Death.ogg");
 	this->Add<sf::Sound>("Hurt_dog", path + "SFX\\Placeholder.ogg");
-	this->Add<sf::Sound>("Death_dog", path + "SFX\\Placeholder.ogg");
+	this->Add<sf::Sound>("Death_dog", path + "SFX\\Dog_Death.ogg");
 
 	this->Add<sf::Sound>("CrateOpen", path + "SFX\\Open_Crate.ogg");
 	this->Add<sf::Sound>("EquipementSelected", path + "SFX\\Equip.ogg");
 
-	this->Add<sf::Sound>("Next_Stage_Popup", path + "SFX\\Placeholder.ogg");
+	this->Add<sf::Sound>("Next_Stage_Popup", path + "SFX\\Victory.ogg");
 
 	this->Add<sf::Sound>("ButtonClicked", path + "SFX\\Button_Clicked.ogg");
 	this->Add<sf::Sound>("ButtonHover", path + "SFX\\Button_Hover.ogg");

@@ -158,7 +158,7 @@ void Game::Init()
 	this->m_Stage.SetNum(1);
 	this->m_Stage.Init();
 
-	this->m_RetryButon = Button("Retry", sf::Vector2f(1810.f,230.f), sf::Vector2f(70.f, 70.f), &RscMana::Get<sf::Texture>("Placeholder"));
+	this->m_RetryButon = Button("Retry", sf::Vector2f(1845.f,250.f), sf::Vector2f(70.f, 70.f), &RscMana::Get<sf::Texture>("Placeholder"));
 
 	this->m_StageNum = CounterIcon(sf::Vector2f(1845.f, 10.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("StageIcon"));
 	this->m_Life = CounterIcon(sf::Vector2f(1845.f, 90.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("HpIcon"));
@@ -209,12 +209,11 @@ void Game::Update()
 	{
 		this->m_Cam.Update(this->Window());
 
-		this->m_Text.setString(std::to_string(int(1 / Time::GetDeltaTime())) + " fps");
-		this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
-
 		if (this->m_Player.GetMoving())
 		{
 			this->m_Cam.NewTarget(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
+
+			this->m_RetryButon.SetPosition(this->Window().RelativePos(sf::Vector2f(1845.f, 250.f)));
 			if (this->m_RetryButon.Update(this->Window()))
 			{
 				this->m_Player.Die(this->m_Stage.GetEnemies(), this->m_Stage.GetMap(), this->m_Cam, this->Window());
@@ -253,22 +252,50 @@ void Game::Update()
 
 		if (this->m_Stage.GetMoveOn())
 		{
-			if (this->m_StagePopUp == nullptr)
+			if (this->m_PopTimer == 0.f)
 			{
-				this->m_StagePopUp = new PopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Stage Cleared\nPress Enter to continue");
+				this->GetRsc<sf::Sound>("Next_Stage_Popup").play();
 			}
-			else
+
+			if (this->m_StageClearPopUp == nullptr && this->m_PopTimer > 0.5f)
 			{
-				this->m_StagePopUp->Update(this->Window());
+				this->m_StageClearPopUp = new PopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 200.f), "Stage Cleared");
+			}
+			else if (this->m_PopTimer < 0.5f)
+			{
+				this->m_PopTimer += Time::GetDeltaTime();
+			}
+			if (this->m_StageClearPopUp != nullptr)
+			{
+				this->m_StageClearPopUp->Update(this->Window());
+			}
+
+			if (this->m_NextStagePopUp == nullptr && this->m_PopTimer > 1.f)
+			{
+				this->m_NextStagePopUp = new PopUp(sf::Vector2f(590.f, 540.f), sf::Vector2f(800.f, 200.f), "Press Enter to continue");
+			}
+			else if (this->m_PopTimer < 1.f && this->m_PopTimer > 0.5f)
+			{
+				this->m_PopTimer += Time::GetDeltaTime();
+			}
+			if (this->m_NextStagePopUp != nullptr)
+			{
+				this->m_NextStagePopUp->Update(this->Window());
 			}
 		}
 		else
 		{
-			if (this->m_StagePopUp)
+			if (this->m_StageClearPopUp)
 			{
-				delete this->m_StagePopUp;
-				this->m_StagePopUp = nullptr;
+				delete this->m_StageClearPopUp;
+				this->m_StageClearPopUp = nullptr;
 			}
+			if (this->m_NextStagePopUp)
+			{
+				delete this->m_NextStagePopUp;
+				this->m_NextStagePopUp = nullptr;
+			}
+			this->m_PopTimer = 0.f;
 		}
 
 		if (this->m_BonusPopUp)
@@ -307,9 +334,13 @@ void Game::Display()
 	this->m_Player.Display(this->Window());
 	this->Draw(this->m_Text);
 
-	if (this->m_StagePopUp)
+	if (this->m_StageClearPopUp)
 	{
-		this->m_StagePopUp->Display(this->Window());
+		this->m_StageClearPopUp->Display(this->Window());
+	}
+	if (this->m_NextStagePopUp)
+	{
+		this->m_NextStagePopUp->Display(this->Window());
 	}
 	if (this->m_BonusPopUp)
 	{
@@ -353,9 +384,9 @@ void Game::DeInit()
 {
 	std::cout << "Game DeInit" << std::endl;
 
-	if (this->m_StagePopUp)
+	if (this->m_StageClearPopUp)
 	{
-		delete this->m_StagePopUp;
+		delete this->m_StageClearPopUp;
 	}
 	if (this->m_BonusPopUp)
 	{

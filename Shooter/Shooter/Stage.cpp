@@ -123,7 +123,7 @@ void Stage::SpawnEnemies()
 			tile = this->m_TileMap.GetTile(x * Tile::GetSize(), y * Tile::GetSize());
 		} while (!tile.GetWalkable());
 
-		this->m_EnemyList.Add<Baseliner>(tile.GetCood(), this->m_TileMap);
+		this->m_EnemyList.Add<Speedster>(tile.GetCood(), this->m_TileMap);
 	}
 }
 

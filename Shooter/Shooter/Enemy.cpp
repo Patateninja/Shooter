@@ -633,8 +633,8 @@ void Ranged::Shoot(const sf::Vector2f& _playerPos)
 
 Speedster::Speedster(const sf::Vector2f& _startingPos, TileMap& _map)
 {
-	this->m_Circle = sf::RectangleShape(sf::Vector2f(30.f, 30.f));;
-	this->m_Circle.setOrigin(15.f, 15.f);
+	this->m_Circle = sf::RectangleShape(sf::Vector2f(45.f, 45.f));;
+	this->m_Circle.setOrigin(22.5f, 22.5f);
 	this->m_Circle.setFillColor(sf::Color::White);
 	this->m_Circle.setPosition(_startingPos);
 	this->m_Circle.setTexture(&RscMana::Get<sf::Texture>("Dog"));
@@ -667,6 +667,17 @@ Speedster::~Speedster()
 	this->m_PathfidingThread.join();
 }
 
+void Speedster::Die()
+{
+	this->m_Active = false;
+	this->m_SeePlayer = false;
+	this->m_CanAimPlayer = false;
+	this->m_Idle = true;
+	Level::GainXP(this->m_MaxHp);
+	this->m_Circle.setFillColor(Color::Grey);
+	this->m_IgnoreProj.clear();
+	RscMana::Get<sf::Sound>("Death_dog").play();
+}
 #pragma endregion
 ////////////////////////////////////////////////////////
 #pragma region Shielded
@@ -680,8 +691,8 @@ Shielded::Shielded(const sf::Vector2f& _startingPos, TileMap& _map)
 	this->m_Circle.setTexture(&RscMana::Get<sf::Texture>("Shielded"));
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
-	this->m_MaxHp = 50;
-	this->m_Hp = 50;
+	this->m_MaxHp = 65;
+	this->m_Hp = 65;
 	this->m_Speed = 200.f;
 	this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(this->m_StartingPosition), std::ref(_map));
 	this->m_MovingThread = std::thread(&Enemy::Move, this, std::ref(this->m_StartingPosition), std::ref(_map));
@@ -735,8 +746,8 @@ RangedShielded::RangedShielded(const sf::Vector2f& _startingPos, TileMap& _map)
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
 	this->m_AttackRange = Tile::GetSize() * 5.f;
-	this->m_MaxHp = 40;
-	this->m_Hp = 40;
+	this->m_MaxHp = 55;
+	this->m_Hp = 55;
 	this->m_Speed = 150.f;
 	this->m_ShootTimer = 0.5f;
 	this->m_PathfidingThread = std::thread(&Enemy::UpdatePath, this, std::ref(this->m_StartingPosition), std::ref(_map));

@@ -114,8 +114,8 @@ void Player::Display(Window& _window)
 	lines[1].color = sf::Color::Red;
 	_window.Draw(lines);
 
-	this->m_Shotgun.DisplayMagazine(_window);
 	_window.Draw(this->m_Circle);
+	this->m_Shotgun.DisplayMagazine(_window);
 }
 
 void Player::ModifyShotgun(Muzzle& _muzzle, Grip&_grip, Magazine&_magazine, Stock& _stock)
