@@ -27,6 +27,17 @@ void ResourceManager::Init()
 	this->Add<sf::Texture>("ResumeButton", path + "Textures\\Button_Resume.png");
 	this->Add<sf::Texture>("ReadyButton", path + "Textures\\Button_Ready.png");
 	
+	this->Add<sf::Texture>("Player", path + "Textures\\Player_Shotgun.png");
+
+	this->Add<sf::Texture>("Baseliner", path + "Textures\\Baseliner.png");
+	this->Add<sf::Texture>("Tank", path + "Textures\\Tank.png");
+	this->Add<sf::Texture>("Ranged", path + "Textures\\Ranged.png");
+	this->Add<sf::Texture>("Dog", path + "Textures\\Speedster.png");
+	this->Add<sf::Texture>("Shielded", path + "Textures\\Shielded.png");
+	this->Add<sf::Texture>("RangedShielded", path + "Textures\\Shielded_ranged.png");
+
+	this->Add<sf::Texture>("Shield", path + "Textures\\Shield.png");
+	this->Add<sf::Texture>("Projectile", path + "Textures\\Projectile.png");
 
 	this->Add<sf::Texture>("Ammo", path + "Textures\\Ammo.png");
 	this->Add<sf::Texture>("Bird", path + "Textures\\Green_Shell.png");

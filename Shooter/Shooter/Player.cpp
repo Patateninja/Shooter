@@ -11,7 +11,7 @@ Player::Player()
 void Player::Init(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _stock, Armor& _armor, AmmoStash& _ammoStash)
 {
 	this->m_Circle.setOrigin(this->m_Circle.getRadius(), this->m_Circle.getRadius());
-	this->m_Circle.setFillColor(sf::Color::Blue);
+	this->m_Circle.setTexture(&RscMana::Get<sf::Texture>("Player"));
 
 	this->ModifyShotgun(_muzzle, _grip, _magazine, _stock);
 	this->Equip(_armor, _ammoStash);
@@ -123,8 +123,6 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 }
 void Player::Display(Window& _window)
 {
-	_window.Draw(this->m_Circle);
-
 	sf::VertexArray lines(sf::Lines, 2);
 	lines[0].position = this->m_Position;
 	lines[0].color = sf::Color::Red;
@@ -133,6 +131,7 @@ void Player::Display(Window& _window)
 	_window.Draw(lines);
 
 	this->m_Shotgun.DisplayMagazine(_window);
+	_window.Draw(this->m_Circle);
 }
 
 void Player::ModifyShotgun(Muzzle& _muzzle, Grip&_grip, Magazine&_magazine, Stock& _stock)
@@ -143,6 +142,27 @@ void Player::Equip(Armor& _armor, AmmoStash& _ammoStash)
 {
 	this->m_Armor = _armor;
 	this->m_AmmoStash = _ammoStash;
+
+	if (this->m_Armor.GetName() == "None")
+	{
+		this->m_Circle.setTextureRect(sf::IntRect(0,0,25,25));
+	}
+	else if (this->m_Armor.GetName() == "Flak Vest")
+	{
+		this->m_Circle.setTextureRect(sf::IntRect(25, 0, 25, 25));
+	}
+	else if (this->m_Armor.GetName() == "Marine Armor")
+	{
+		this->m_Circle.setTextureRect(sf::IntRect(50, 0, 25, 25));
+	}
+	else if (this->m_Armor.GetName() == "Recon Armor")
+	{
+		this->m_Circle.setTextureRect(sf::IntRect(75, 0, 25, 25));
+	}
+	else if (this->m_Armor.GetName() == "Jugernaut Armor")
+	{
+		this->m_Circle.setTextureRect(sf::IntRect(100, 0, 25, 25));
+	}
 
 	this->m_Life += this->m_Armor.GetLife();
 	this->m_MaxAmmo += this->m_AmmoStash.GetCapacity();

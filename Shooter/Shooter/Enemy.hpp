@@ -16,7 +16,7 @@ typedef enum IdleBehavior
 class Enemy
 {
 	protected :
-		sf::CircleShape m_Circle;
+		sf::RectangleShape m_Circle;
 		std::vector<std::weak_ptr<Projectile>> m_IgnoreProj;
 		std::vector<Tile> m_PatrolTargets;
 		std::list<Tile> m_Path;
@@ -39,6 +39,7 @@ class Enemy
 		float m_PathUdpateCooldown = 0.f;
 		float m_SeePlayerUdpateCooldown = 0.f;
 		float m_LosePlayerCooldown = 0.f;
+		float m_ViewResetCooldown = 0.f;
 		float m_Angle = 0.f;
 		float m_DefaultAngle = this->m_Angle = Tools::Random(2, -1) * 90.f;;
 		bool m_Burning = false;
@@ -149,6 +150,7 @@ class EnemyList
 {
 	private :
 		std::list<std::pair<std::thread,std::shared_ptr<Enemy>>> m_List;
+
 	public :
 		EnemyList() = default;
 		~EnemyList();

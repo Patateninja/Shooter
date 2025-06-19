@@ -6,7 +6,7 @@ Projectile::Projectile(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _typ
 {
 	this->m_Circle = sf::CircleShape(5.f);
 	this->m_Circle.setOrigin(sf::Vector2f(5.f, 5.f));
-	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_Circle.setTexture(&RscMana::Get < sf::Texture>("Projectile"));
 	this->m_Position = _pos;
 	this->m_Velocity = _vel;
 	this->m_Type = _type;
@@ -24,7 +24,7 @@ bool Projectile::Update(float _deltatime, TileMap& _map)
 
 		this->m_Circle.setPosition(this->m_Position);
 
-		if (this->m_Distance > this->m_Range || !_map.GetTile(int(this->m_Position.x), int(this->m_Position.y)).GetBulletThrough() || !_map.GetTile(int(this->m_Position.x + 1), int(this->m_Position.y + 1)).GetBulletThrough())
+		if (this->m_Distance > this->m_Range || !_map.GetTile(int(this->m_Position.x), int(this->m_Position.y)).GetBulletThrough() || !_map.GetTile(int(this->m_Position.x + 3), int(this->m_Position.y + 3)).GetBulletThrough())
 		{
 			return true;
 		}

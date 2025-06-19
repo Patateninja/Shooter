@@ -14,21 +14,10 @@ Enemy::Enemy(const sf::Vector2f& _startingPos, TileMap& _map)
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
-
-		this->m_Circle.setOutlineColor(sf::Color::Green);
-		this->m_Circle.setOutlineThickness(5.f);
 	}
 	else if (this->m_IdleBehavior == PATROL)
 	{
 		this->MakePatrolPath(_map);
-
-		this->m_Circle.setOutlineColor(sf::Color::Blue);
-		this->m_Circle.setOutlineThickness(5.f);
-	}
-	else if (this->m_IdleBehavior == GUARD)
-	{
-		this->m_Circle.setOutlineColor(sf::Color::Magenta);
-		this->m_Circle.setOutlineThickness(5.f);
 	}
 }
 Enemy::~Enemy()
@@ -56,7 +45,8 @@ void Enemy::Respawn(TileMap& _map)
 	this->m_Burning = false;
 	this->m_BurnCooldown = 0.f;
 	this->m_BurningDamage = 0;
-	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_ViewResetCooldown = 0.f;
+	this->m_Circle.setFillColor(sf::Color::White);
 	this->m_IgnoreProj.clear();
 	this->m_Path.clear();
 
@@ -130,8 +120,6 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 	{
 		if (this->m_Idle)
 		{
-			this->m_Circle.setFillColor(Color::DarkRed);
-
 			if (this->m_IdleBehavior == PATROL)
 			{
 				if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_PatrolTargets.front().GetCood() && this->m_PathfidingThread.joinable())
@@ -184,8 +172,6 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 		}
 		else
 		{
-			this->m_Circle.setFillColor(sf::Color::Red);
-
 			if (this->m_PathUdpateCooldown <= 0.f && this->m_PathfidingThread.joinable() || this->m_Path.empty())
 			{
 				this->m_PathfidingThread.join();
@@ -274,10 +260,18 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 
 		if (_map.GetTile(sf::Vector2i(this->m_Position)).GetCood() == this->m_Target && !this->m_SeePlayer && this->m_Idle)
 		{
-			this->m_Angle = this->m_DefaultAngle;
+			if (this->m_ViewResetCooldown <= 0.f)
+			{
+				this->m_Angle = this->m_DefaultAngle;
+			}
+			else
+			{
+				this->m_ViewResetCooldown -= Time::GetDeltaTime();
+			}
 		}
 		else
 		{
+			this->m_ViewResetCooldown = 0.2f;
 			if (this->m_SeePlayer)
 			{
 				this->m_Angle = Tools::RadToDeg(Tools::VectorToAngle(_playerPos - this->m_Position));
@@ -287,6 +281,8 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 				this->m_Angle = Tools::RadToDeg(Tools::VectorToAngle(m_Target - this->m_Position));
 			}
 		}
+
+		this->m_Circle.setRotation(this->m_Angle);
 
 		this->m_Alive = this->m_Hp > 0;
 
@@ -299,8 +295,6 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 
 void Enemy::Display(Window& _window)
 {
-	_window.Draw(this->m_Circle);
-
 	sf::VertexArray fov(sf::Lines, 4);
 	fov[0].position = this->m_Position;
 	fov[1].position = Tools::AngleToVector(float(10 * Tile::GetSize()), Tools::DegToRad(this->m_Angle + 45.f)) + this->m_Position;
@@ -313,6 +307,7 @@ void Enemy::Display(Window& _window)
 	fov[3].color = Color::DarkGrey;
 
 	_window.Draw(fov);
+	_window.Draw(this->m_Circle);
 }
 
 void Enemy::HearSound(sf::Vector2f& _soundPos, int _soundIntensity)
@@ -487,10 +482,11 @@ void Enemy::Die()
 
 Baseliner::Baseliner(const sf::Vector2f& _startingPos, TileMap& _map)
 {
-	this->m_Circle = sf::CircleShape(25.f);
+	this->m_Circle = sf::RectangleShape(sf::Vector2f(50.f,50.f));
 	this->m_Circle.setOrigin(25.f, 25.f);
-	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_Circle.setFillColor(sf::Color::White);
 	this->m_Circle.setPosition(_startingPos);
+	this->m_Circle.setTexture(&RscMana::Get<sf::Texture>("Baseliner"));
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
 	this->m_MaxHp = 50;
@@ -503,21 +499,10 @@ Baseliner::Baseliner(const sf::Vector2f& _startingPos, TileMap& _map)
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
-
-		this->m_Circle.setOutlineColor(sf::Color::Green);
-		this->m_Circle.setOutlineThickness(5.f);
 	}
 	else if (this->m_IdleBehavior == PATROL)
 	{
 		this->MakePatrolPath(_map);
-
-		this->m_Circle.setOutlineColor(sf::Color::Blue);
-		this->m_Circle.setOutlineThickness(5.f);
-	}
-	else if (this->m_IdleBehavior == GUARD)
-	{
-		this->m_Circle.setOutlineColor(sf::Color::Magenta);
-		this->m_Circle.setOutlineThickness(5.f);
 	}
 }
 Baseliner::~Baseliner()
@@ -537,10 +522,11 @@ Baseliner::~Baseliner()
 
 Tank::Tank(const sf::Vector2f& _startingPos, TileMap& _map)
 {
-	this->m_Circle = sf::CircleShape(30.f);
+	this->m_Circle = sf::RectangleShape(sf::Vector2f(60.f, 60.f));
 	this->m_Circle.setOrigin(30.f, 30.f);
-	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_Circle.setFillColor(sf::Color::White);
 	this->m_Circle.setPosition(_startingPos);
+	this->m_Circle.setTexture(&RscMana::Get<sf::Texture>("Tank"));
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
 	this->m_MaxHp = 125;
@@ -553,21 +539,10 @@ Tank::Tank(const sf::Vector2f& _startingPos, TileMap& _map)
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
-
-		this->m_Circle.setOutlineColor(sf::Color::Green);
-		this->m_Circle.setOutlineThickness(5.f);
 	}
 	else if (this->m_IdleBehavior == PATROL)
 	{
 		this->MakePatrolPath(_map);
-
-		this->m_Circle.setOutlineColor(sf::Color::Blue);
-		this->m_Circle.setOutlineThickness(5.f);
-	}
-	else if (this->m_IdleBehavior == GUARD)
-	{
-		this->m_Circle.setOutlineColor(sf::Color::Magenta);
-		this->m_Circle.setOutlineThickness(5.f);
 	}
 }
 Tank::~Tank()
@@ -587,10 +562,11 @@ Tank::~Tank()
 
 Ranged::Ranged(const sf::Vector2f& _startingPos, TileMap& _map)
 {
-	this->m_Circle = sf::CircleShape(25.f);
+	this->m_Circle = sf::RectangleShape(sf::Vector2f(50.f, 50.f));;
 	this->m_Circle.setOrigin(25.f, 25.f);
-	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_Circle.setFillColor(sf::Color::White);
 	this->m_Circle.setPosition(_startingPos);
+	this->m_Circle.setTexture(&RscMana::Get<sf::Texture>("Ranged"));
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
 	this->m_AttackRange = Tile::GetSize() * 7.f;
@@ -606,21 +582,10 @@ Ranged::Ranged(const sf::Vector2f& _startingPos, TileMap& _map)
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
-
-		this->m_Circle.setOutlineColor(sf::Color::Green);
-		this->m_Circle.setOutlineThickness(5.f);
 	}
 	else if (this->m_IdleBehavior == PATROL)
 	{
 		this->MakePatrolPath(_map);
-
-		this->m_Circle.setOutlineColor(sf::Color::Blue);
-		this->m_Circle.setOutlineThickness(5.f);
-	}
-	else if (this->m_IdleBehavior == GUARD)
-	{
-		this->m_Circle.setOutlineColor(sf::Color::Magenta);
-		this->m_Circle.setOutlineThickness(5.f);
 	}
 }
 Ranged::~Ranged()
@@ -664,10 +629,11 @@ void Ranged::Shoot(const sf::Vector2f& _playerPos)
 
 Speedster::Speedster(const sf::Vector2f& _startingPos, TileMap& _map)
 {
-	this->m_Circle = sf::CircleShape(15.f);
+	this->m_Circle = sf::RectangleShape(sf::Vector2f(30.f, 30.f));;
 	this->m_Circle.setOrigin(15.f, 15.f);
-	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_Circle.setFillColor(sf::Color::White);
 	this->m_Circle.setPosition(_startingPos);
+	this->m_Circle.setTexture(&RscMana::Get<sf::Texture>("Dog"));
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
 	this->m_MaxHp = 20;
@@ -680,21 +646,10 @@ Speedster::Speedster(const sf::Vector2f& _startingPos, TileMap& _map)
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
-
-		this->m_Circle.setOutlineColor(sf::Color::Green);
-		this->m_Circle.setOutlineThickness(5.f);
 	}
 	else if (this->m_IdleBehavior == PATROL)
 	{
 		this->MakePatrolPath(_map);
-
-		this->m_Circle.setOutlineColor(sf::Color::Blue);
-		this->m_Circle.setOutlineThickness(5.f);
-	}
-	else if (this->m_IdleBehavior == GUARD)
-	{
-		this->m_Circle.setOutlineColor(sf::Color::Magenta);
-		this->m_Circle.setOutlineThickness(5.f);
 	}
 }
 Speedster::~Speedster()
@@ -714,10 +669,11 @@ Speedster::~Speedster()
 
 Shielded::Shielded(const sf::Vector2f& _startingPos, TileMap& _map)
 {
-	this->m_Circle = sf::CircleShape(25.f);
+	this->m_Circle = sf::RectangleShape(sf::Vector2f(50.f, 50.f));;
 	this->m_Circle.setOrigin(25.f, 25.f);
-	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_Circle.setFillColor(sf::Color::White);
 	this->m_Circle.setPosition(_startingPos);
+	this->m_Circle.setTexture(&RscMana::Get<sf::Texture>("Shielded"));
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
 	this->m_MaxHp = 50;
@@ -732,21 +688,10 @@ Shielded::Shielded(const sf::Vector2f& _startingPos, TileMap& _map)
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
-
-		this->m_Circle.setOutlineColor(sf::Color::Green);
-		this->m_Circle.setOutlineThickness(5.f);
 	}
 	else if (this->m_IdleBehavior == PATROL)
 	{
 		this->MakePatrolPath(_map);
-
-		this->m_Circle.setOutlineColor(sf::Color::Blue);
-		this->m_Circle.setOutlineThickness(5.f);
-	}
-	else if (this->m_IdleBehavior == GUARD)
-	{
-		this->m_Circle.setOutlineColor(sf::Color::Magenta);
-		this->m_Circle.setOutlineThickness(5.f);
 	}
 }
 Shielded::~Shielded()
@@ -763,7 +708,7 @@ Shielded::~Shielded()
 void Shielded::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 {
 	this->Enemy::Update(_playerPos,_map);
-	this->m_Shield->Udpate(this->m_Active, this->m_Position, this->m_Angle);
+	this->m_Shield->Udpate(this->m_Alive, this->m_Position, this->m_Angle);
 }
 
 void Shielded::Display(Window& _window)
@@ -778,10 +723,11 @@ void Shielded::Display(Window& _window)
 
 RangedShielded::RangedShielded(const sf::Vector2f& _startingPos, TileMap& _map)
 {
-	this->m_Circle = sf::CircleShape(25.f);
+	this->m_Circle = sf::RectangleShape(sf::Vector2f(50.f, 50.f));;
 	this->m_Circle.setOrigin(25.f, 25.f);
-	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_Circle.setFillColor(sf::Color::White);
 	this->m_Circle.setPosition(_startingPos);
+	this->m_Circle.setTexture(&RscMana::Get<sf::Texture>("RangedShielded"));
 	this->m_StartingPosition = _startingPos;
 	this->m_Position = _startingPos;
 	this->m_AttackRange = Tile::GetSize() * 5.f;
@@ -798,21 +744,10 @@ RangedShielded::RangedShielded(const sf::Vector2f& _startingPos, TileMap& _map)
 	if (this->m_IdleBehavior == WANDER)
 	{
 		this->m_IdleTileTarget = Tile(_startingPos, FLOOR);
-
-		this->m_Circle.setOutlineColor(sf::Color::Green);
-		this->m_Circle.setOutlineThickness(5.f);
 	}
 	else if (this->m_IdleBehavior == PATROL)
 	{
 		this->MakePatrolPath(_map);
-
-		this->m_Circle.setOutlineColor(sf::Color::Blue);
-		this->m_Circle.setOutlineThickness(5.f);
-	}
-	else if (this->m_IdleBehavior == GUARD)
-	{
-		this->m_Circle.setOutlineColor(sf::Color::Magenta);
-		this->m_Circle.setOutlineThickness(5.f);
 	}
 }
 RangedShielded::~RangedShielded()
@@ -842,7 +777,7 @@ void RangedShielded::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 		}
 	}
 
-	this->m_Shield->Udpate(this->m_Active, this->m_Position, this->m_Angle);
+	this->m_Shield->Udpate(this->m_Alive, this->m_Position, this->m_Angle);
 }
 void RangedShielded::Display(Window& _window)
 {

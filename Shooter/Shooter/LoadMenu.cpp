@@ -73,7 +73,7 @@ void ReloadMenu::Update(Player& _player, EnemyList& _enemyList, Window& _window)
 	this->m_DragonBreath.SetPosition(_window, _window.RelativePos(sf::Vector2f(20.f, 195.f)));
 	if (this->m_BMG)
 	{
-		this->m_BuckShot.UpdateText("");
+		this->m_DragonBreath.UpdateText("");
 	}
 	else
 	{
@@ -83,7 +83,7 @@ void ReloadMenu::Update(Player& _player, EnemyList& _enemyList, Window& _window)
 	this->m_Slug.SetPosition(_window, _window.RelativePos(sf::Vector2f(20.f, 255.f)));
 	if (this->m_BMG)
 	{
-		this->m_BuckShot.UpdateText("");
+		this->m_Slug.UpdateText("");
 	}
 	else
 	{
