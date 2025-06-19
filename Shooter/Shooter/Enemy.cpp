@@ -295,18 +295,22 @@ void Enemy::Update(const sf::Vector2f& _playerPos, TileMap& _map)
 
 void Enemy::Display(Window& _window)
 {
-	sf::VertexArray fov(sf::Lines, 4);
-	fov[0].position = this->m_Position;
-	fov[1].position = Tools::AngleToVector(float(10 * Tile::GetSize()), Tools::DegToRad(this->m_Angle + 45.f)) + this->m_Position;
-	fov[2].position = this->m_Position;
-	fov[3].position = Tools::AngleToVector(float(10 * Tile::GetSize()), Tools::DegToRad(this->m_Angle - 45.f)) + this->m_Position;
+	if (this->m_Alive)
+	{
+		sf::VertexArray fov(sf::Lines, 4);
+		fov[0].position = this->m_Position;
+		fov[1].position = Tools::AngleToVector(float(10 * Tile::GetSize()), Tools::DegToRad(this->m_Angle + 45.f)) + this->m_Position;
+		fov[2].position = this->m_Position;
+		fov[3].position = Tools::AngleToVector(float(10 * Tile::GetSize()), Tools::DegToRad(this->m_Angle - 45.f)) + this->m_Position;
 
-	fov[0].color = Color::DarkGrey;
-	fov[1].color = Color::DarkGrey;
-	fov[2].color = Color::DarkGrey;
-	fov[3].color = Color::DarkGrey;
+		fov[0].color = Color::DarkGrey;
+		fov[1].color = Color::DarkGrey;
+		fov[2].color = Color::DarkGrey;
+		fov[3].color = Color::DarkGrey;
 
-	_window.Draw(fov);
+		_window.Draw(fov);
+	}
+
 	_window.Draw(this->m_Circle);
 }
 
