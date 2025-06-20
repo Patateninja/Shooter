@@ -16,7 +16,7 @@ typedef enum IdleBehavior
 class Enemy
 {
 	protected :
-		sf::RectangleShape m_Circle;
+		sf::RectangleShape m_Rect;
 		std::vector<std::weak_ptr<Projectile>> m_IgnoreProj;
 		std::vector<Tile> m_PatrolTargets;
 		std::list<Tile> m_Path;
@@ -58,7 +58,7 @@ class Enemy
 		inline const sf::Vector2f GetPos() const { return this->m_Position; };
 		inline const sf::Vector2f GetProjOrigin()const { return this->m_ProjectileOrigin; };
 		inline const int GetHP() const { return this->m_Hp; };
-		inline sf::FloatRect GetHitbox() { return this->m_Circle.getGlobalBounds(); };
+		inline sf::FloatRect GetHitbox() { return this->m_Rect.getGlobalBounds(); };
 		inline const bool GetActive() const { return this->m_Active; };
 		inline void SetActive(bool _input) { this->m_Active = _input; };
 

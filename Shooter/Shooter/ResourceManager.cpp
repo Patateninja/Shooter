@@ -63,11 +63,11 @@ void ResourceManager::Init()
 	this->Add<sf::Texture>("StageClear", path + "Textures\\Stage_Clear.png");
 	this->Add<sf::Texture>("NextStage", path + "Textures\\Next_Stage.png");
 	this->Add<sf::Texture>("BmgPopUp", path + "Textures\\Bmg_PopUp.png");
-	this->Add<sf::Texture>("CoffeePopUp", path + "Textures\\Placeholder.png");
-	this->Add<sf::Texture>("AmmoPopUp", path + "Textures\\Placeholder.png");
+	this->Add<sf::Texture>("CoffeePopUp", path + "Textures\\Coffee_PopUp.png");
+	this->Add<sf::Texture>("AmmoPopUp", path + "Textures\\Ammo_PopUp.png");
 	this->Add<sf::Texture>("MedkitPopUp", path + "Textures\\Med_PopUp.png");
-	this->Add<sf::Texture>("VestPopUp", path + "Textures\\Placeholder.png");
-	this->Add<sf::Texture>("XpPopUp", path + "Textures\\Placeholder.png");
+	this->Add<sf::Texture>("VestPopUp", path + "Textures\\Vest_PopUp.png");
+	this->Add<sf::Texture>("XpPopUp", path + "Textures\\XP_PopUp.png");
 
 
 	this->Add<sf::Texture>("Placeholder", path + "Textures\\Placeholder.png");

@@ -30,7 +30,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 
 		for (auto& enemy : _enemyList.GetList())
 		{
-			if (enemy.second->GetActive() && Tools::CircleCollision(this->m_Circle.getGlobalBounds(), enemy.second->GetHitbox()))
+			if (enemy.second->GetActive() && this->m_Circle.getGlobalBounds().intersects(enemy.second->GetHitbox()))
 			{
 				if (this->m_Vest == 0)
 				{

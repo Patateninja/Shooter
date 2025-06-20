@@ -52,15 +52,15 @@ void BoostCrate::Update(Player& _player, bool& _coffe, bool& _bmg, bool& _vest, 
 			{
 				case MEDKIT :
 					_player.Heal();
-					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "MedKit", "MedkitPopUp");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "", "MedkitPopUp");
 					break;
 				case AMMOBOX :
 					_player.Refill();
-					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Ammo Box", "BmgPopUp");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Ammo Box", "AmmoPopUp");
 					break;
 				case XP :
 					Level::GainXP(250);
-					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "XP", "BmgPopUp");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "", "XpPopUp");
 					break;
 				default :
 					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Somehow another thing (This is worrysome)", "Placeholder");
@@ -120,15 +120,15 @@ void BonusCrate::Update(Player& _player, bool& _coffee, bool& _bmg, bool& _vest,
 			{
 				case COFFEE :
 					_coffee = true;
-					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Coffee", "BmgPopUp");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "", "CoffeePopUp");
 					break;
 				case VEST :
 					_vest = true;;
-					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Vest", "BmgPopUp");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Vest", "VestPopUp");
 					break;
 				case BMG50 :
 					_bmg = true;
-					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), ".50 BMG", "BmgPopUp");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "", "BmgPopUp");
 					break;
 				default :
 					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Somehow another thing (This is worrysome)", "Placeholder");

@@ -231,9 +231,8 @@ void Game::Update()
 		}
 
 		this->m_Player.Update(this->m_Stage.GetEnemies(), this->m_Stage.GetMap(), this->m_Cam, this->Window());
-		this->m_Stage.Update(this->m_Player, this->m_Cam, this->m_BonusPopUp, this->Window());
-
 		ProjList::Update(this->m_Stage.GetMap());
+		this->m_Stage.Update(this->m_Player, this->m_Cam, this->m_BonusPopUp, this->Window());
 
 		if (this->m_Player.GetCoffeeEnabled())
 		{

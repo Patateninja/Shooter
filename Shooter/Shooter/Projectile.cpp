@@ -49,7 +49,15 @@ void ProjectileList::Update(TileMap& _map)
 {
 	for (std::list<std::shared_ptr<Projectile>>::iterator proj = this->m_List.begin(); proj != this->m_List.end(); ++proj)
 	{
-		if (proj->get()->GetToDestroy() || proj->get()->Update(Time::GetDeltaTime(), _map))
+		if (proj->get()->GetToDestroy())
+		{
+			proj = this->m_List.erase(proj);
+			if (proj == this->m_List.end())
+			{
+				break;
+			}
+		}
+		else if (proj->get()->Update(Time::GetDeltaTime(), _map))
 		{
 			proj = this->m_List.erase(proj);
 			if (proj == this->m_List.end())
