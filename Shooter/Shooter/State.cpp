@@ -158,7 +158,7 @@ void Game::Init()
 	this->m_Stage.SetNum(1);
 	this->m_Stage.Init();
 
-	this->m_RetryButon = Button("Retry", sf::Vector2f(1845.f,250.f), sf::Vector2f(70.f, 70.f), &RscMana::Get<sf::Texture>("Placeholder"));
+	this->m_RetryButon = Button("", sf::Vector2f(1845.f,250.f), sf::Vector2f(70.f, 70.f), &RscMana::Get<sf::Texture>("RetryButton"));
 
 	this->m_StageNum = CounterIcon(sf::Vector2f(1845.f, 10.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("StageIcon"));
 	this->m_Life = CounterIcon(sf::Vector2f(1845.f, 90.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("HpIcon"));
@@ -259,7 +259,7 @@ void Game::Update()
 
 			if (this->m_StageClearPopUp == nullptr && this->m_PopTimer > 0.5f)
 			{
-				this->m_StageClearPopUp = new PopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 200.f), "Stage Cleared");
+				this->m_StageClearPopUp = new PopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 200.f), "", "StageClear");
 			}
 			else if (this->m_PopTimer < 0.5f)
 			{
@@ -272,7 +272,7 @@ void Game::Update()
 
 			if (this->m_NextStagePopUp == nullptr && this->m_PopTimer > 1.f)
 			{
-				this->m_NextStagePopUp = new PopUp(sf::Vector2f(590.f, 540.f), sf::Vector2f(800.f, 200.f), "Press Enter to continue");
+				this->m_NextStagePopUp = new PopUp(sf::Vector2f(590.f, 540.f), sf::Vector2f(800.f, 200.f), "", "NextStage");
 			}
 			else if (this->m_PopTimer < 1.f && this->m_PopTimer > 0.5f)
 			{

@@ -139,7 +139,7 @@ namespace SaveSystem
 			}
 			else if (str == "Jugernaut Armor")
 			{
-				_armor = Armor("Jugernaut Armor", 32, 12, 0.7f);
+				_armor = Armor("Jugernaut Armor", 32, 12, 0.8f);
 			}
 			else
 			{

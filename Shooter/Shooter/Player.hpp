@@ -24,7 +24,7 @@ class Player
 		float m_Angle = 0.f;
 		float m_InputTimer = 0.f;
 		int m_Life = 3;
-		int m_Vest = 1;
+		int m_Vest = 0;
 		int m_MaxAmmo = 5;
 		int m_BuckShot = 5;
 		int m_DragonBreath = 5;

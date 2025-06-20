@@ -3,7 +3,7 @@
 Shield::Shield(sf::Vector2f _pos)
 {
 	this->m_Rect.setSize(sf::Vector2f(5.f, 50.f));
-	this->m_Rect.setOrigin(-15.f, 25.f);
+	this->m_Rect.setOrigin(-25.f, 25.f);
 	this->m_Rect.setPosition(_pos);
 	this->m_Rect.setTexture(&RscMana::Get<sf::Texture>("Shield"));
 }

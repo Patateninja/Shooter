@@ -92,7 +92,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 			this->m_Shotgun.Shoot(this->m_Position, this->m_Velocity, this->m_Angle, _window);
 		}
 
-		this->m_Position += Tools::AngleToVector((Tools::Magnitude(this->m_Velocity) == 0.f ? 0.f : 350.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier()) + int(this->m_Caffeinated) * 100), Tools::VectorToAngle(this->m_Velocity)) * Time::GetDeltaTime();
+		this->m_Position += Tools::AngleToVector((Tools::Magnitude(this->m_Velocity) == 0.f ? 0.f : 250.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier()) + int(this->m_Caffeinated) * 100), Tools::VectorToAngle(this->m_Velocity)) * Time::GetDeltaTime();
 		if (Tools::Magnitude(this->m_Velocity) != 0.f)
 		{
 			if (RscMana::Get<sf::Sound>("Player_Step").getStatus() == sf::Sound::Stopped)
@@ -163,7 +163,7 @@ bool Player::CheckWallCollision(TileMap& _map, Direction _direction)
 	sf::Vector2f PlayerTopLeft   = this->m_Position + sf::Vector2f(-this->m_Circle.getRadius(), -this->m_Circle.getRadius());
 	sf::Vector2f PlayerDownLeft  = this->m_Position + sf::Vector2f(this->m_Circle.getRadius(), -this->m_Circle.getRadius());
 
-	float velocity = 350.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier()) + int(this->m_Caffeinated) * 100;
+	float velocity = 250.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier()) + int(this->m_Caffeinated) * 100;
 
 	switch (_direction)
 	{

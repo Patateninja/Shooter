@@ -97,7 +97,7 @@ void Shop::Init(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine&
 	this->AddEquipment(std::string("Flak Vest"), sf::Vector2f(280.f, 650.f), buttonsize, "Placeholder", new Armor("Flak Vest", 2, 1, 1.f));
 	this->AddEquipment(std::string("Marine Armor"), sf::Vector2f(550.f, 650.f), buttonsize, "Placeholder", new Armor("Marine Armor", 7, 3, 1.f));
 	this->AddEquipment(std::string("Recon Armor"), sf::Vector2f(820.f, 650.f), buttonsize, "Placeholder", new Armor("Recon Armor", 16, 5, 1.20f));
-	this->AddEquipment(std::string("Juggernaut Armor"), sf::Vector2f(1090.f, 650.f), buttonsize, "Placeholder", new Armor("Jugernaut Armor", 32, 12, 0.7f));
+	this->AddEquipment(std::string("Juggernaut Armor"), sf::Vector2f(1090.f, 650.f), buttonsize, "Placeholder", new Armor("Jugernaut Armor", 32, 12, 0.8f));
 	#pragma endregion
 
 	#pragma region AmmoStash

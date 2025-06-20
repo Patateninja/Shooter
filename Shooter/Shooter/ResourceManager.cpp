@@ -26,6 +26,8 @@ void ResourceManager::Init()
 	this->Add<sf::Texture>("ShopButton", path + "Textures\\Button_Shop.png");
 	this->Add<sf::Texture>("ResumeButton", path + "Textures\\Button_Resume.png");
 	this->Add<sf::Texture>("ReadyButton", path + "Textures\\Button_Ready.png");
+	this->Add<sf::Texture>("ResetButton", path + "Textures\\Reset_Button.png");
+	this->Add<sf::Texture>("RetryButton", path + "Textures\\Retry.png");
 	
 	this->Add<sf::Texture>("Player", path + "Textures\\Player_Shotgun.png");
 
@@ -57,6 +59,16 @@ void ResourceManager::Init()
 	this->Add<sf::Texture>("CoffeeIcon", path + "Textures\\Coffee_Icon.png");
 
 	this->Add<sf::Texture>("Checkbox", path + "Textures\\CheckBox.png");
+
+	this->Add<sf::Texture>("StageClear", path + "Textures\\Stage_Clear.png");
+	this->Add<sf::Texture>("NextStage", path + "Textures\\Next_Stage.png");
+	this->Add<sf::Texture>("BmgPopUp", path + "Textures\\Bmg_PopUp.png");
+	this->Add<sf::Texture>("CoffeePopUp", path + "Textures\\Placeholder.png");
+	this->Add<sf::Texture>("AmmoPopUp", path + "Textures\\Placeholder.png");
+	this->Add<sf::Texture>("MedkitPopUp", path + "Textures\\Med_PopUp.png");
+	this->Add<sf::Texture>("VestPopUp", path + "Textures\\Placeholder.png");
+	this->Add<sf::Texture>("XpPopUp", path + "Textures\\Placeholder.png");
+
 
 	this->Add<sf::Texture>("Placeholder", path + "Textures\\Placeholder.png");
 

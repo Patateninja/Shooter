@@ -12,7 +12,7 @@ class PopUp
 
 	public :
 		PopUp() = default;
-		PopUp(sf::Vector2f _pos, sf::Vector2f _size, std::string _text);
+		PopUp(sf::Vector2f _pos, sf::Vector2f _size, std::string _text, std::string _textureName);
 		~PopUp() = default;
 
 		virtual void Update(Window& _window);
