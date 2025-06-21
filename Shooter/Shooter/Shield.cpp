@@ -1,5 +1,7 @@
 #include "Shield.hpp"
 
+////////////////////////////////////////////////////////
+
 Shield::Shield(sf::Vector2f _pos)
 {
 	this->m_Rect.setSize(sf::Vector2f(5.f, 50.f));
@@ -46,3 +48,5 @@ void Shield::CheckContact()
 		}
 	}
 }
+
+////////////////////////////////////////////////////////

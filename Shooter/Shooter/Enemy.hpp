@@ -1,5 +1,4 @@
 #pragma once
-#include "Projectile.hpp"
 #include "Astar.hpp"
 #include "Shield.hpp"
 #include "Xp.hpp"
@@ -91,7 +90,7 @@ class Baseliner : public Enemy
 
 class Tank : public Enemy
 {
-	public:
+	public :
 		Tank(const sf::Vector2f& _stratingPos, TileMap& _map);
 		~Tank();
 };
@@ -101,7 +100,7 @@ class Ranged : public Enemy
 	private :
 		float m_ShootTimer;
 
-	public:
+	public :
 		Ranged(const sf::Vector2f& _stratingPos, TileMap& _map);
 		~Ranged();
 
@@ -112,7 +111,7 @@ class Ranged : public Enemy
 
 class Speedster : public Enemy
 {
-	public:
+	public :
 		Speedster(const sf::Vector2f& _stratingPos, TileMap& _map);
 		~Speedster();
 		
@@ -124,7 +123,7 @@ class Shielded : public Enemy
 	private :
 		std::unique_ptr<Shield> m_Shield;
 
-	public:
+	public :
 		Shielded(const sf::Vector2f& _stratingPos, TileMap& _map);
 		~Shielded();
 
@@ -134,11 +133,11 @@ class Shielded : public Enemy
 
 class RangedShielded : public Enemy
 {
-	private:
+	private :
 		float m_ShootTimer;
 		std::unique_ptr<Shield> m_Shield;
 
-	public:
+	public :
 		RangedShielded(const sf::Vector2f& _stratingPos, TileMap& _map);
 		~RangedShielded();
 

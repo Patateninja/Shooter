@@ -56,7 +56,7 @@ void BoostCrate::Update(Player& _player, bool& _coffe, bool& _bmg, bool& _vest, 
 					break;
 				case AMMOBOX :
 					_player.Refill();
-					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Ammo Box", "AmmoPopUp");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "", "AmmoPopUp");
 					break;
 				case XP :
 					Level::GainXP(250);
@@ -72,6 +72,11 @@ void BoostCrate::Update(Player& _player, bool& _coffe, bool& _bmg, bool& _vest, 
 	{
 		this->m_PlayerClose = false;
 	}
+}
+
+void BoostCrate::Delete()
+{
+	this->~BoostCrate();
 }
 
 ////////////////////////////////////////////////////////
@@ -99,11 +104,6 @@ BonusCrate::BonusCrate(sf::Vector2f _pos)
 	}
 }
 
-void BoostCrate::Delete()
-{
-	this->~BoostCrate();
-}
-
 void BonusCrate::Update(Player& _player, bool& _coffee, bool& _bmg, bool& _vest, BonusPopUp*& _popUp)
 {
 	if (Tools::Distance(this->m_Pos, _player.GetPos()) < Tile::GetSize() * 2 && !this->m_Opened)
@@ -124,7 +124,7 @@ void BonusCrate::Update(Player& _player, bool& _coffee, bool& _bmg, bool& _vest,
 					break;
 				case VEST :
 					_vest = true;;
-					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Vest", "VestPopUp");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "", "VestPopUp");
 					break;
 				case BMG50 :
 					_bmg = true;

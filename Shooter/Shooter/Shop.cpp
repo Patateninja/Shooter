@@ -1,5 +1,7 @@
 #include "Shop.hpp"
 
+////////////////////////////////////////////////////////
+
 Shop::~Shop()
 {
 	for (AttachmentButton attachment : this->m_AttachementsList)
@@ -114,6 +116,8 @@ void Shop::Init(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine&
 	this->m_PopUpRect.setOutlineThickness(5.f);
 	this->m_PopUpText.setFont(RscMana::Get<sf::Font>("Mono"));
 	this->m_PopUpText.setCharacterSize(20);
+	
+	this->LockItem();
 }
 
 template <typename T>
@@ -131,8 +135,6 @@ void Shop::AddEquipment(std::string _buttonName, sf::Vector2f _buttonPos, sf::Ve
 
 void Shop::Update(Window& _window)
 {
-	this->LockItem(); //Move to Init after debug
-
 	this->m_PopUp = false;
 
 	for (AttachmentButton& button : this->m_AttachementsList)
@@ -147,7 +149,6 @@ void Shop::Update(Window& _window)
 			button.SetActive(true);
 		}
 
-		/// Temp ///
 		if (this->m_EquipedMuzzle.GetUnlockLevel() > this->m_PlayerLevel)
 		{
 			this->m_EquipedMuzzle = Muzzle("Default Muzzle", 0, 1.f, 1.f, 1.f);
@@ -164,7 +165,6 @@ void Shop::Update(Window& _window)
 		{
 			this->m_EquipedMag = Magazine("Default Magazine", 0, 0);
 		}
-		////////////
 
 		if (button.Update(_window, button.Get()->GetUnlockLevel()))
 		{
@@ -235,7 +235,6 @@ void Shop::Update(Window& _window)
 			button.SetActive(true);
 		}
 
-		/// Temp ///
 		if (this->m_EquipedArmor.GetUnlockLevel() > this->m_PlayerLevel)
 		{
 			this->m_EquipedArmor = Armor("None", 0, 0, 1.f);
@@ -244,7 +243,6 @@ void Shop::Update(Window& _window)
 		{
 			this->m_EquipedAmmoStash = AmmoStash("Ammo Pouch", 0, 0);
 		}
-		////////////
 
 		if (button.Update(_window, button.Get()->GetUnlockLevel()))
 		{
@@ -309,3 +307,5 @@ void Shop::Display(Window& _window)
 		_window.Draw(this->m_PopUpText);
 	}
 }
+
+////////////////////////////////////////////////////////

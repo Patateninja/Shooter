@@ -1,5 +1,7 @@
 #include "Stage.hpp"
 
+////////////////////////////////////////////////////////
+
 Stage::Stage(int _num)
 {
 	this->m_Num = _num;
@@ -196,3 +198,5 @@ void Stage::Display(Window& _window)
 	}
 	this->m_EnemyList.Display(_window);
 }
+
+////////////////////////////////////////////////////////

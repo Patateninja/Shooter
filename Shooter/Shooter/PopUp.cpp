@@ -1,5 +1,7 @@
 #include "PopUp.hpp"
 
+////////////////////////////////////////////////////////
+
 PopUp::PopUp(sf::Vector2f _pos, sf::Vector2f _size, std::string _text, std::string _textureName)
 {
 	this->m_Position = _pos;
@@ -29,8 +31,8 @@ void PopUp::Update(Window& _window)
 	this->m_Rect.setPosition(_window.RelativePos(this->m_Position));
 	this->m_Text.setPosition(_window.RelativePos(this->m_Position));
 
-	this->m_Rect.setFillColor(sf::Color(255, 255, 255, (this->m_Opacity / 100.f) * 255.f));
-	this->m_Text.setFillColor(sf::Color(255, 255, 255, (this->m_Opacity / 100.f) * 255.f));
+	this->m_Rect.setFillColor(sf::Color(255, 255, 255, sf::Uint8(this->m_Opacity / 100.f) * 255));
+	this->m_Text.setFillColor(sf::Color(255, 255, 255, sf::Uint8(this->m_Opacity / 100.f) * 255));
 }
 
 void PopUp::Display(Window& _window)
@@ -38,3 +40,5 @@ void PopUp::Display(Window& _window)
 	_window.Draw(this->m_Rect);
 	_window.Draw(this->m_Text);
 }
+
+////////////////////////////////////////////////////////

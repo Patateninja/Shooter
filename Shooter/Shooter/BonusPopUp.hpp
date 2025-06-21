@@ -5,7 +5,7 @@
 class BonusPopUp : public PopUp
 {
 	private :
-		Button m_CloseButton;
+		Button m_CloseButton = Button::Button("OK", sf::Vector2f(), sf::Vector2f(100.f, 35.f), nullptr);
 		bool m_ToDelete = false;
 
 	public :

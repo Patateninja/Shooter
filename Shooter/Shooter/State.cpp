@@ -55,12 +55,7 @@ T& State::GetRsc(const std::string& _name)
 
 Menu::Menu(StateManager* _stateManager)
 {
-	std::cout << "Menu Created" << std::endl;
 	this->m_StateManager = _stateManager;
-}
-Menu::~Menu()
-{
-	std::cout << "Menu Deleted" << std::endl;
 }
 
 void Menu::Deletor()
@@ -70,7 +65,6 @@ void Menu::Deletor()
 
 void Menu::Init()
 {
-	std::cout << "Menu Init" << std::endl;
 	this->Window().ResetView();
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 	this->m_Text.setString("BREACH");
@@ -119,8 +113,6 @@ void Menu::Display()
 }
 void Menu::DeInit()
 {
-	std::cout << "Menu DeInit" << std::endl;
-
 	if(this->GetRsc<sf::Music>("Menu").getStatus() == sf::Sound::Status::Playing)
 	{
 		this->GetRsc<sf::Music>("Menu").stop();
@@ -133,12 +125,7 @@ void Menu::DeInit()
 
 Game::Game(StateManager* _stateManager)
 {
-	std::cout << "Game Created" << std::endl;
 	this->m_StateManager = _stateManager;
-}
-Game::~Game()
-{
-	std::cout << "Game Deleted" << std::endl;
 }
 
 void Game::Deletor()
@@ -148,7 +135,6 @@ void Game::Deletor()
 
 void Game::Init()
 {
-	std::cout << "Game Init" << std::endl;
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 	this->m_Text.setCharacterSize(15);
 	
@@ -346,11 +332,6 @@ void Game::Display()
 		this->m_BonusPopUp->Display(this->Window());
 	}
 
-	if (this->m_Paused)
-	{
-		this->m_PauseMenu.Display(this->Window());
-	}
-
 	if (this->m_Player.GetCoffeeEnabled())
 	{
 		this->m_Coffee.Display(this->Window());
@@ -377,12 +358,15 @@ void Game::Display()
 		this->m_RetryButon.Display(this->Window());
 	}
 
+	if (this->m_Paused)
+	{
+		this->m_PauseMenu.Display(this->Window());
+	}
+
 	this->DisplayWindow();
 }
 void Game::DeInit()
 {
-	std::cout << "Game DeInit" << std::endl;
-
 	if (this->m_StageClearPopUp)
 	{
 		delete this->m_StageClearPopUp;
@@ -404,12 +388,7 @@ void Game::DeInit()
 
 GameOver::GameOver(StateManager* _stateManager)
 {
-	std::cout << "GameOver Created" << std::endl;
 	this->m_StateManager = _stateManager;
-}
-GameOver::~GameOver()
-{
-	std::cout << "GameOver Deleted" << std::endl;
 }
 
 void GameOver::Deletor()
@@ -419,7 +398,6 @@ void GameOver::Deletor()
 
 void GameOver::Init()
 {
-	std::cout << "GameOver Init" << std::endl;
 	this->Window().ResetView();
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 
@@ -464,8 +442,6 @@ void GameOver::Display()
 }
 void GameOver::DeInit()
 {
-	std::cout << "GameOver DeInit" << std::endl;
-
 	if (this->GetRsc<sf::Music>("GameOverMusic").getStatus() == sf::Sound::Status::Playing)
 	{
 		this->GetRsc<sf::Music>("GameOverMusic").stop();
@@ -478,12 +454,7 @@ void GameOver::DeInit()
 
 Upgrade::Upgrade(StateManager* _stateManager)
 {
-	std::cout << "Upgrade Created" << std::endl;
 	this->m_StateManager = _stateManager;
-}
-Upgrade::~Upgrade()
-{
-	std::cout << "Upgrade Deleted" << std::endl;
 }
 
 void Upgrade::Deletor()
@@ -493,7 +464,6 @@ void Upgrade::Deletor()
 
 void Upgrade::Init()
 {
-	std::cout << "Upgrade Init" << std::endl;
 	this->Window().ResetView();
 	this->m_Shop.Init(Level::GetLvl(), State::GetMuzzle(), State::m_Grip, State::m_Stock, State::m_Magazine, State::m_Armor, State::m_AmmoStash);
 	
@@ -564,8 +534,6 @@ void Upgrade::Display()
 }
 void Upgrade::DeInit()
 {
-	std::cout << "Upgrade DeInit" << std::endl;
-
 	if (this->GetRsc<sf::Music>("Armory").getStatus() == sf::Sound::Status::Playing)
 	{
 		this->GetRsc<sf::Music>("Armory").stop();
@@ -578,12 +546,7 @@ void Upgrade::DeInit()
 
 Option::Option(StateManager* _stateManager)
 {
-	std::cout << "Option Created" << std::endl;
 	this->m_StateManager = _stateManager;
-}
-Option::~Option()
-{
-	std::cout << "Option Deleted" << std::endl;
 }
 
 void Option::Deletor()
@@ -593,7 +556,6 @@ void Option::Deletor()
 
 void Option::Init()
 {
-	std::cout << "Option Init" << std::endl;
 	this->Window().ResetView();
 
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
@@ -668,8 +630,6 @@ void Option::Display()
 }
 void Option::DeInit()
 {
-	std::cout << "Option DeInit" << std::endl;
-
 	if (this->GetRsc<sf::Music>("Option").getStatus() == sf::Sound::Status::Playing)
 	{
 		this->GetRsc<sf::Music>("Option").stop();
@@ -682,12 +642,7 @@ void Option::DeInit()
 
 Quit::Quit(StateManager* _stateManager)
 {
-	std::cout << "Quit Created" << std::endl;
 	this->m_StateManager = _stateManager;
-}
-Quit::~Quit()
-{
-	std::cout << "Quit Deleted" << std::endl;
 }
 
 void Quit::Deletor()
@@ -697,21 +652,14 @@ void Quit::Deletor()
 
 void Quit::Init()
 {
-	std::cout << "Quit Init" << std::endl;
 	this->Window().ResetView();
 }
 void Quit::Update()
 {
 	this->Window().Close();
 }
-void Quit::Display()
-{
-
-}
-void Quit::DeInit()
-{
-	std::cout << "Quit DeInit" << std::endl;
-}
+void Quit::Display() {}
+void Quit::DeInit() {}
 
 #pragma endregion
 ////////////////////////////////////////////////////////

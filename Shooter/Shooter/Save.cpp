@@ -1,5 +1,7 @@
 #include "Save.hpp"
 
+////////////////////////////////////////////////////////
+
 namespace SaveSystem
 {
 	void Save(std::string _filename, int& _xp, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammoStash, int& _sfxVolume, int& _bgmVolume, int& _bestStage)
@@ -218,3 +220,5 @@ namespace SaveSystem
 		file.close();
 	}
 }
+
+////////////////////////////////////////////////////////

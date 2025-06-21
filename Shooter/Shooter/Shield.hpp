@@ -8,6 +8,7 @@ class Shield
 		sf::RectangleShape m_Rect;
 		float m_TargetAngle = 0.f;
 		bool m_Active = true;
+
 	public :
 		Shield(sf::Vector2f _pos);
 		~Shield() = default;

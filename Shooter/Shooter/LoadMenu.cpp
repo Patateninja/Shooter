@@ -1,5 +1,7 @@
 #include "LoadMenu.hpp"
 
+////////////////////////////////////////////////////////
+
 void ReloadMenu::SwitchButtonMode(bool _bmg)
 {
 	if (_bmg)
@@ -211,3 +213,5 @@ void ReloadMenu::Display(Window& _window)
 		this->m_Reset.Display(_window);
 	}
 }
+
+////////////////////////////////////////////////////////

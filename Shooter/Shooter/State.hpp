@@ -1,5 +1,4 @@
 #pragma once
-#include "Player.hpp"
 #include "Stage.hpp"
 #include "Shop.hpp"
 #include "LoadMenu.hpp"
@@ -74,7 +73,7 @@ class Menu : public State
 
 	public :
 		Menu(StateManager* _stateManager);
-		~Menu();
+		~Menu() = default;
 
 		void Deletor() override;
 
@@ -107,7 +106,7 @@ class Game : public State
 
 	public :
 		Game(StateManager* _stateManager);
-		~Game();
+		~Game() = default;
 
 		void Deletor() override;
 
@@ -125,7 +124,7 @@ class GameOver : public State
 
 	public:
 		GameOver(StateManager* _stateManager);
-		~GameOver();
+		~GameOver() = default;
 
 		void Deletor() override;
 
@@ -147,7 +146,7 @@ class Upgrade : public State
 
 	public :
 		Upgrade(StateManager* _stateManager);
-		~Upgrade();
+		~Upgrade() = default;
 
 		void Deletor() override;
 
@@ -168,7 +167,7 @@ class Option : public State
 
 	public :
 		Option(StateManager* _stateManager);
-		~Option();
+		~Option() = default;
 
 		void Deletor() override;
 
@@ -184,7 +183,7 @@ class Quit : public State
 
 	public :
 		Quit(StateManager* _stateManager);
-		~Quit();
+		~Quit() = default;
 
 		void Deletor() override;
 

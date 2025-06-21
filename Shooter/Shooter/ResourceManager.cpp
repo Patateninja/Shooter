@@ -1,5 +1,7 @@
 #include "ResourceManager.hpp"
 
+////////////////////////////////////////////////////////
+
 ResourceManager::~ResourceManager()
 {
 	while (!this->m_RessourcesStorage.empty())
@@ -154,3 +156,5 @@ namespace RscMana
 		rscm.SetSFXVolume(_volume);
 	}
 }
+
+////////////////////////////////////////////////////////
