@@ -42,16 +42,17 @@ class Player
 
 		inline const sf::Vector2f& GetPos()    const { return this->m_Position; }
 		inline const sf::Vector2f& GetVel()    const { return this->m_Velocity; }
-		inline const int           GetHP()     const { return this->m_Life; }
-		inline const int           GetVest()   const { return this->m_Vest; }
-		inline const bool          GetMoving() const { return this->m_CanMove; }
+		inline const int GetHP() const { return this->m_Life; }
+		inline const int GetVest() const { return this->m_Vest; }
+		inline const int GetMaxAmmo() const { return this->m_MaxAmmo; }
+		inline const bool GetMoving() const { return this->m_CanMove; }
 
-		inline int&			  GetBuckshot()     { return this->m_BuckShot; }
-		inline int&			  GetDragonBreath() { return this->m_DragonBreath; }
-		inline int&			  GetSlug()         { return this->m_Slug; }
-		inline Shotgun&		  GetShotgun()      { return this->m_Shotgun; }
-		inline const bool     GetBmgEnabled()  const { return this->m_Got50BMG; }
-		inline const bool     GetCoffeeEnabled()  const { return this->m_Caffeinated; }
+		inline int&	GetBuckshot()     { return this->m_BuckShot; }
+		inline int&	GetDragonBreath() { return this->m_DragonBreath; }
+		inline int& GetSlug()         { return this->m_Slug; }
+		inline Shotgun& GetShotgun()      { return this->m_Shotgun; }
+		inline const bool GetBmgEnabled()  const { return this->m_Got50BMG; }
+		inline const bool GetCoffeeEnabled()  const { return this->m_Caffeinated; }
 		
 
 		inline void SetTimer(float _timer) { this->m_InputTimer = _timer; }

@@ -14,7 +14,7 @@ Stage::~Stage()
 	}
 }
 
-void Stage::GenerateMap()
+void Stage::GenerateMap(Player& _player)
 {
 	this->m_MapTexture.create(Tile::GetSize() * 40, Tile::GetSize() * 40);
 	this->m_TileMap.Generate(this->m_MapTexture);
@@ -43,7 +43,7 @@ void Stage::GenerateMap()
 			tile = this->m_TileMap.GetTile(x * Tile::GetSize(), y * Tile::GetSize());
 		} while (!tile.GetWalkable());
 
-		this->m_Crate = new BoostCrate(tile.GetCood(), true, true);
+		this->m_Crate = new BoostCrate(tile.GetCood(), _player.GetHP() < 3, (_player.GetSlug() < _player.GetBuckshot() * 0.3f && _player.GetDragonBreath() < _player.GetMaxAmmo() * 0.3f & _player.GetSlug() < _player.GetMaxAmmo() * 0.3f));
 	}
 	else
 	{
@@ -129,9 +129,9 @@ void Stage::SpawnEnemies()
 	}
 }
 
-void Stage::Init()
+void Stage::Init(Player& _player)
 {
-	this->GenerateMap();
+	this->GenerateMap(_player);
 	this->SpawnEnemies();
 
 	this->m_EnemyList.Launch(sf::Vector2f(float(Tile::GetSize() * 3), float(Tile::GetSize() * 3)), this->m_TileMap);
@@ -156,7 +156,7 @@ void Stage::Update(Player& _player, Camera& _cam, BonusPopUp*& _popUp, Window& _
 			this->m_EnemyList.Clear();
 			this->m_ReadyToMoveOn = false;
 			delete this->m_Crate;
-			this->Init();
+			this->Init(_player);
 			_player.Respawn();
 			if (this->m_GiveCoffee)
 			{
