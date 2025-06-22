@@ -1,5 +1,7 @@
 #include "Shop.hpp"
 
+////////////////////////////////////////////////////////
+
 Shop::~Shop()
 {
 	for (AttachmentButton attachment : this->m_AttachementsList)
@@ -95,9 +97,9 @@ void Shop::Init(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine&
 	#pragma region Armor
 	this->AddEquipment(std::string("None"), sf::Vector2f(10.f, 650.f), buttonsize, "Placeholder", new Armor("None", 0, 0, 1.f));
 	this->AddEquipment(std::string("Flak Vest"), sf::Vector2f(280.f, 650.f), buttonsize, "Placeholder", new Armor("Flak Vest", 2, 1, 1.f));
-	this->AddEquipment(std::string("Marine Armor"), sf::Vector2f(550.f, 650.f), buttonsize, "Placeholder", new Armor("Marine Armor", 7, 2, 1.f));
-	this->AddEquipment(std::string("Recon Armor"), sf::Vector2f(820.f, 650.f), buttonsize, "Placeholder", new Armor("Recon Armor", 16, 3, 1.20f));
-	this->AddEquipment(std::string("Juggernaut Armor"), sf::Vector2f(1090.f, 650.f), buttonsize, "Placeholder", new Armor("Jugernaut Armor", 32, 8, 0.7f));
+	this->AddEquipment(std::string("Marine Armor"), sf::Vector2f(550.f, 650.f), buttonsize, "Placeholder", new Armor("Marine Armor", 7, 3, 1.f));
+	this->AddEquipment(std::string("Recon Armor"), sf::Vector2f(820.f, 650.f), buttonsize, "Placeholder", new Armor("Recon Armor", 16, 5, 1.20f));
+	this->AddEquipment(std::string("Juggernaut Armor"), sf::Vector2f(1090.f, 650.f), buttonsize, "Placeholder", new Armor("Jugernaut Armor", 32, 12, 0.8f));
 	#pragma endregion
 
 	#pragma region AmmoStash
@@ -114,6 +116,8 @@ void Shop::Init(int _lvl, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine&
 	this->m_PopUpRect.setOutlineThickness(5.f);
 	this->m_PopUpText.setFont(RscMana::Get<sf::Font>("Mono"));
 	this->m_PopUpText.setCharacterSize(20);
+	
+	this->LockItem();
 }
 
 template <typename T>
@@ -131,8 +135,6 @@ void Shop::AddEquipment(std::string _buttonName, sf::Vector2f _buttonPos, sf::Ve
 
 void Shop::Update(Window& _window)
 {
-	this->LockItem(); //Move to Init after debug
-
 	this->m_PopUp = false;
 
 	for (AttachmentButton& button : this->m_AttachementsList)
@@ -147,7 +149,6 @@ void Shop::Update(Window& _window)
 			button.SetActive(true);
 		}
 
-		/// Temp ///
 		if (this->m_EquipedMuzzle.GetUnlockLevel() > this->m_PlayerLevel)
 		{
 			this->m_EquipedMuzzle = Muzzle("Default Muzzle", 0, 1.f, 1.f, 1.f);
@@ -164,7 +165,6 @@ void Shop::Update(Window& _window)
 		{
 			this->m_EquipedMag = Magazine("Default Magazine", 0, 0);
 		}
-		////////////
 
 		if (button.Update(_window, button.Get()->GetUnlockLevel()))
 		{
@@ -216,7 +216,7 @@ void Shop::Update(Window& _window)
 			else if (dynamic_cast<Magazine*>(button.Get()))
 			{
 				this->m_PopUpString = button.Get()->GetName()
-					+ "\nCapacity : " + (std::to_string(dynamic_cast<Magazine*>(button.Get())->GetCapacity()));
+					+ "\nCapacity : " + (std::to_string(dynamic_cast<Magazine*>(button.Get())->GetCapacity() + 4));
 			}
 
 			this->m_PopUpText.setString(this->m_PopUpString);
@@ -235,7 +235,6 @@ void Shop::Update(Window& _window)
 			button.SetActive(true);
 		}
 
-		/// Temp ///
 		if (this->m_EquipedArmor.GetUnlockLevel() > this->m_PlayerLevel)
 		{
 			this->m_EquipedArmor = Armor("None", 0, 0, 1.f);
@@ -244,7 +243,6 @@ void Shop::Update(Window& _window)
 		{
 			this->m_EquipedAmmoStash = AmmoStash("Ammo Pouch", 0, 0);
 		}
-		////////////
 
 		if (button.Update(_window, button.Get()->GetUnlockLevel()))
 		{
@@ -267,13 +265,13 @@ void Shop::Update(Window& _window)
 			if (dynamic_cast<Armor*>(button.Get()))
 			{
 				this->m_PopUpString = button.Get()->GetName()
-					+ "\nLife : " + (std::to_string(dynamic_cast<Armor*>(button.Get())->GetLife()))
+					+ "\nLife : " + (std::to_string(dynamic_cast<Armor*>(button.Get())->GetLife() + 3))
 					+ "\nWalk Speed : " + (dynamic_cast<Armor*>(button.Get())->GetWalkSpeedMod() > 1 ? "+" : "") + std::to_string(Tools::ToRoundPercent(dynamic_cast<Armor*>(button.Get())->GetWalkSpeedMod())) + "%";
 			}
 			else if (dynamic_cast<AmmoStash*>(button.Get()))
 			{
 				this->m_PopUpString = button.Get()->GetName()
-					+ "\nCapacity : " + (std::to_string(dynamic_cast<AmmoStash*>(button.Get())->GetCapacity()));
+					+ "\nCapacity : " + (std::to_string(dynamic_cast<AmmoStash*>(button.Get())->GetCapacity() + 5));
 			}
 
 			this->m_PopUpText.setString(this->m_PopUpString);
@@ -309,3 +307,5 @@ void Shop::Display(Window& _window)
 		_window.Draw(this->m_PopUpText);
 	}
 }
+
+////////////////////////////////////////////////////////

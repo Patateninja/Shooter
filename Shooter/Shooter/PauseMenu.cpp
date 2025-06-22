@@ -2,6 +2,8 @@
 
 #include "StateManager.hpp"
 
+////////////////////////////////////////////////////////
+
 void PauseMenu::Update(Window& _window, bool& _pause, StateManager& _stateManager)
 {
 	this->m_Resume.SetPosition(_window.RelativePos(sf::Vector2f(785.f, 75.f)));
@@ -36,3 +38,5 @@ void PauseMenu::Display(Window& _window)
 	this->m_ToMenu.Display(_window);
 	this->m_ToDesktop.Display(_window);
 }
+
+////////////////////////////////////////////////////////

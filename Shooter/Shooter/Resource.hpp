@@ -16,20 +16,16 @@ class RSC
 template <typename T>
 class Resource : public RSC
 {
-	private:
+	private :
 		T m_Rsc;
 
-	public:
+	public :
 		Resource(std::string _path)
 		{
 			this->m_Rsc.loadFromFile(_path);
-			std::cout << "Resource created with path : " << _path << std::endl;
 		}
-		~Resource()
-		{
-			std::cout << "Resource deleted" << std::endl;
-		}
-		
+		~Resource() = default;
+
 		void Deletor() override
 		{
 			this->~Resource();
@@ -47,20 +43,16 @@ class Resource : public RSC
 template <>
 class Resource<sf::Music> : public RSC
 {
-	private:
+	private :
 		sf::Music m_Music;
 
-	public:
+	public :
 		Resource(std::string _path)
 		{
 			this->m_Music.openFromFile(_path);
 			this->m_Music.setLoop(true);
-			std::cout << "Resource created with path : " << _path << std::endl;
 		}
-		~Resource()
-		{
-			std::cout << "Resource deleted" << std::endl;
-		}
+		~Resource() = default;
 
 		void Deletor() override
 		{
@@ -84,21 +76,17 @@ class Resource<sf::Music> : public RSC
 template <>
 class Resource<sf::Sound> : public RSC
 {
-	private:
+	private :
 		sf::SoundBuffer m_Buffer;
 		sf::Sound m_Sound;
 
-	public:
+	public :
 		Resource(std::string _path)
 		{
 			this->m_Buffer.loadFromFile(_path);
 			this->m_Sound.setBuffer(this->m_Buffer);
-			std::cout << "Resource created with path : " << _path << std::endl;
 		}
-		~Resource()
-		{
-			std::cout << "Resource deleted" << std::endl;
-		}
+		~Resource() = default;
 
 		void Deletor() override
 		{

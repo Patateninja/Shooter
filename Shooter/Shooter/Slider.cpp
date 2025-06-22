@@ -1,5 +1,7 @@
 #include "Slider.hpp"
 
+////////////////////////////////////////////////////////
+
 Slider::Slider(sf::Vector2f _pos, sf::Vector2f _size, int _percent)
 {
 	this->m_Percentage = _percent;
@@ -41,3 +43,5 @@ void Slider::Display(Window& _window)
 	_window.Draw(this->m_Bar);
 	_window.Draw(this->m_Cursor);
 }
+
+////////////////////////////////////////////////////////

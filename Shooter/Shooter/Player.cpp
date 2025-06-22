@@ -11,7 +11,7 @@ Player::Player()
 void Player::Init(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _stock, Armor& _armor, AmmoStash& _ammoStash)
 {
 	this->m_Circle.setOrigin(this->m_Circle.getRadius(), this->m_Circle.getRadius());
-	this->m_Circle.setFillColor(sf::Color::Blue);
+	this->m_Circle.setTexture(&RscMana::Get<sf::Texture>("Player"));
 
 	this->ModifyShotgun(_muzzle, _grip, _magazine, _stock);
 	this->Equip(_armor, _ammoStash);
@@ -19,20 +19,7 @@ void Player::Init(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _sto
 
 void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& _window)
 {
-
-	if (this->m_CanReload)
-	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && this->m_InputTimer > 0.3f)
-		{
-			if (!this->m_Shotgun.Empty())
-			{
-				this->m_InputTimer = 0.f;
-				this->Ready();
-				_enemyList.Activate();
-			}
-		}
-	}
-	else if (this->m_CanMove)
+	if (this->m_CanMove)
 	{
 		this->m_InputTimer += Time::GetDeltaTime() * this->m_Shotgun.GetRoFMultiplier();
 
@@ -43,13 +30,11 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 
 		for (auto& enemy : _enemyList.GetList())
 		{
-			if (enemy.second->GetActive() && Tools::CircleCollision(this->m_Circle.getGlobalBounds(), enemy.second->GetHitbox()))
+			if (enemy.second->GetHP() > 0 && this->m_Circle.getGlobalBounds().intersects(enemy.second->GetHitbox()))
 			{
 				if (this->m_Vest == 0)
 				{
-					this->Die();
-					_enemyList.Respawn(_map);
-					_cam.NewTarget(_window, this->m_Position, _map.GetSize());
+					this->Die(_enemyList, _map, _cam, _window);
 					return;
 				}
 				else
@@ -62,9 +47,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 
 		if (this->CheckDamage())
 		{
-			this->Die();
-			_enemyList.Respawn(_map);
-			_cam.NewTarget(_window, this->m_Position, _map.GetSize());
+			this->Die(_enemyList,_map,_cam,_window);
 			return;
 		}
 
@@ -109,7 +92,7 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 			this->m_Shotgun.Shoot(this->m_Position, this->m_Velocity, this->m_Angle, _window);
 		}
 
-		this->m_Position += Tools::AngleToVector((Tools::Magnitude(this->m_Velocity) == 0.f ? 0.f : 350.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier()) + int(this->m_Caffeinated) * 100), Tools::VectorToAngle(this->m_Velocity)) * Time::GetDeltaTime();
+		this->m_Position += Tools::AngleToVector((Tools::Magnitude(this->m_Velocity) == 0.f ? 0.f : 300.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier()) + int(this->m_Caffeinated) * 100), Tools::VectorToAngle(this->m_Velocity)) * Time::GetDeltaTime();
 		if (Tools::Magnitude(this->m_Velocity) != 0.f)
 		{
 			if (RscMana::Get<sf::Sound>("Player_Step").getStatus() == sf::Sound::Stopped)
@@ -124,8 +107,6 @@ void Player::Update(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& 
 }
 void Player::Display(Window& _window)
 {
-	_window.Draw(this->m_Circle);
-
 	sf::VertexArray lines(sf::Lines, 2);
 	lines[0].position = this->m_Position;
 	lines[0].color = sf::Color::Red;
@@ -133,6 +114,7 @@ void Player::Display(Window& _window)
 	lines[1].color = sf::Color::Red;
 	_window.Draw(lines);
 
+	_window.Draw(this->m_Circle);
 	this->m_Shotgun.DisplayMagazine(_window);
 }
 
@@ -144,6 +126,27 @@ void Player::Equip(Armor& _armor, AmmoStash& _ammoStash)
 {
 	this->m_Armor = _armor;
 	this->m_AmmoStash = _ammoStash;
+
+	if (this->m_Armor.GetName() == "None")
+	{
+		this->m_Circle.setTextureRect(sf::IntRect(0,0,25,25));
+	}
+	else if (this->m_Armor.GetName() == "Flak Vest")
+	{
+		this->m_Circle.setTextureRect(sf::IntRect(25, 0, 25, 25));
+	}
+	else if (this->m_Armor.GetName() == "Marine Armor")
+	{
+		this->m_Circle.setTextureRect(sf::IntRect(50, 0, 25, 25));
+	}
+	else if (this->m_Armor.GetName() == "Recon Armor")
+	{
+		this->m_Circle.setTextureRect(sf::IntRect(75, 0, 25, 25));
+	}
+	else if (this->m_Armor.GetName() == "Jugernaut Armor")
+	{
+		this->m_Circle.setTextureRect(sf::IntRect(100, 0, 25, 25));
+	}
 
 	this->m_Life += this->m_Armor.GetLife();
 	this->m_MaxAmmo += this->m_AmmoStash.GetCapacity();
@@ -160,7 +163,7 @@ bool Player::CheckWallCollision(TileMap& _map, Direction _direction)
 	sf::Vector2f PlayerTopLeft   = this->m_Position + sf::Vector2f(-this->m_Circle.getRadius(), -this->m_Circle.getRadius());
 	sf::Vector2f PlayerDownLeft  = this->m_Position + sf::Vector2f(this->m_Circle.getRadius(), -this->m_Circle.getRadius());
 
-	float velocity = 350.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier()) + int(this->m_Caffeinated) * 100;
+	float velocity = 300.f * (this->m_Armor.GetWalkSpeedMod() * this->m_Shotgun.GetWalkSpeedMultiplier()) + int(this->m_Caffeinated) * 100;
 
 	switch (_direction)
 	{
@@ -251,48 +254,30 @@ void Player::Ready()
 	this->m_CanMove = true;
 	this->m_CanReload = false;
 }
-void Player::Die()
+void Player::Die(EnemyList& _enemyList, TileMap& _map, Camera& _cam, Window& _window)
 {
 	--this->m_Life;
 	this->Respawn();
+	_enemyList.Respawn(_map);
+	_cam.NewTarget(_window, this->m_Position, _map.GetSize());
 }
 void Player::Respawn()
 {
 	this->m_Position = sf::Vector2f(Tile::GetSize() * 2.f, Tile::GetSize() * 2.f);
 	this->m_Angle = 0.f;
+	this->m_InputTimer = 0.f;
 	this->m_CanReload = true;
 	this->m_CanMove = false;
 
 	ProjList::Clear();
 
-	for (const std::unique_ptr<Shell>& shell : this->m_Shotgun.GetShells())
-	{
-		if (dynamic_cast<BuckShot*>(shell.get()))
-		{
-			if (this->m_BuckShot < this->m_MaxAmmo + this->m_AmmoStash.GetCapacity())
-			{
-				++this->m_BuckShot;
-			}
-		}
-		else if (dynamic_cast<DragonBreath*>(shell.get()))
-		{
-			if (this->m_DragonBreath < this->m_MaxAmmo + this->m_AmmoStash.GetCapacity())
-			{
-				++this->m_DragonBreath;
-			}
-		}
-		else if (dynamic_cast<Slug*>(shell.get()))
-		{
-			if (this->m_Slug < this->m_MaxAmmo + this->m_AmmoStash.GetCapacity())
-			{
-				++this->m_Slug;
-			}
-		}
-	}
-
-	this->m_Shotgun.EmptyMagazine();
+	this->Unload();
 }
 
+void Player::Unload()
+{
+	this->m_Shotgun.Unload(this->m_BuckShot, this->m_DragonBreath, this->m_Slug, this->m_MaxAmmo);
+}
 void Player::Refill()
 {
 	this->m_BuckShot = this->m_MaxAmmo;

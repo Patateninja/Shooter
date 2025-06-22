@@ -17,7 +17,7 @@ int main()
 			}
 		}
 
-		if (/*statemana.WindowHasFocus()*/ true)
+		if (statemana.WindowHasFocus())
 		{
 			statemana.Update();
 			statemana.Display();

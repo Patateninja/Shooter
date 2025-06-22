@@ -1,5 +1,4 @@
 #pragma once
-#include "Player.hpp"
 #include "Stage.hpp"
 #include "Shop.hpp"
 #include "LoadMenu.hpp"
@@ -74,7 +73,7 @@ class Menu : public State
 
 	public :
 		Menu(StateManager* _stateManager);
-		~Menu();
+		~Menu() = default;
 
 		void Deletor() override;
 
@@ -91,20 +90,23 @@ class Game : public State
 		PauseMenu m_PauseMenu;
 		Player m_Player;
 		Stage m_Stage;
+		Button m_RetryButon;
 		CounterIcon m_StageNum;
 		CounterIcon m_Life;
 		CounterIcon m_Vest;
 		Icon m_Coffee;
 		Icon m_BMG50;
 		Camera m_Cam;
-		PopUp* m_StagePopUp = nullptr;
+		PopUp* m_StageClearPopUp = nullptr;
+		PopUp* m_NextStagePopUp = nullptr;
 		BonusPopUp* m_BonusPopUp = nullptr;
+		float m_PopTimer = 0.f;
 		bool m_Paused = false;
 		bool m_PickupPopUpPause = false;
 
 	public :
 		Game(StateManager* _stateManager);
-		~Game();
+		~Game() = default;
 
 		void Deletor() override;
 
@@ -122,7 +124,7 @@ class GameOver : public State
 
 	public:
 		GameOver(StateManager* _stateManager);
-		~GameOver();
+		~GameOver() = default;
 
 		void Deletor() override;
 
@@ -144,7 +146,7 @@ class Upgrade : public State
 
 	public :
 		Upgrade(StateManager* _stateManager);
-		~Upgrade();
+		~Upgrade() = default;
 
 		void Deletor() override;
 
@@ -165,7 +167,7 @@ class Option : public State
 
 	public :
 		Option(StateManager* _stateManager);
-		~Option();
+		~Option() = default;
 
 		void Deletor() override;
 
@@ -181,7 +183,7 @@ class Quit : public State
 
 	public :
 		Quit(StateManager* _stateManager);
-		~Quit();
+		~Quit() = default;
 
 		void Deletor() override;
 

@@ -8,12 +8,13 @@ class StateManager
 		Window m_Window;
 		State* m_CurrentState;
 		float m_InputTimer;
+
 	public :
 		StateManager();
 		~StateManager();
 
-		inline State* GetState() { return StateManager::m_CurrentState; };
-		inline void SetState(State* _state) { StateManager::m_CurrentState = _state; };
+		inline State* GetState() { return StateManager::m_CurrentState; }
+		inline void SetState(State* _state) { StateManager::m_CurrentState = _state; }
 
 		template <typename T>
 		State* ChangeState()
@@ -27,9 +28,9 @@ class StateManager
 			return StateManager::m_CurrentState;
 		}
 
-		Window& GetWindow() { return this->m_Window; };
-		bool WindowIsOpen() { return this->m_Window.IsOpen(); };
-		bool WindowHasFocus() { return this->m_Window.HasFocus(); };
+		Window& GetWindow() { return this->m_Window; }
+		bool WindowIsOpen() { return this->m_Window.IsOpen(); }
+		bool WindowHasFocus() { return this->m_Window.HasFocus(); }
 
 		void ClearWindow();
 		void Draw(const sf::Drawable& _toDraw);

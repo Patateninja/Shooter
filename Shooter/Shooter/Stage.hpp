@@ -30,10 +30,10 @@ class Stage
 
 		inline void SetNum(int _num) { this->m_Num = _num; };
 
-		void GenerateMap();
+		void GenerateMap(Player& _player);
 		void SpawnEnemies();
 
-		void Init();
+		void Init(Player& _player);
 		void Update(Player& _playerpos, Camera& _cam, BonusPopUp*& _popUp, Window& _window);
 		void Display(Window& _window);
 };

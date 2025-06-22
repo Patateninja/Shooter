@@ -1,5 +1,7 @@
 #include "ResourceManager.hpp"
 
+////////////////////////////////////////////////////////
+
 ResourceManager::~ResourceManager()
 {
 	while (!this->m_RessourcesStorage.empty())
@@ -25,11 +27,26 @@ void ResourceManager::Init()
 	this->Add<sf::Texture>("MenuButton", path + "Textures\\Button_Menu.png");
 	this->Add<sf::Texture>("ShopButton", path + "Textures\\Button_Shop.png");
 	this->Add<sf::Texture>("ResumeButton", path + "Textures\\Button_Resume.png");
+	this->Add<sf::Texture>("ReadyButton", path + "Textures\\Button_Ready.png");
+	this->Add<sf::Texture>("ResetButton", path + "Textures\\Reset_Button.png");
+	this->Add<sf::Texture>("RetryButton", path + "Textures\\Retry.png");
+	
+	this->Add<sf::Texture>("Player", path + "Textures\\Player_Shotgun.png");
+
+	this->Add<sf::Texture>("Baseliner", path + "Textures\\Baseliner.png");
+	this->Add<sf::Texture>("Tank", path + "Textures\\Tank.png");
+	this->Add<sf::Texture>("Ranged", path + "Textures\\Ranged.png");
+	this->Add<sf::Texture>("Dog", path + "Textures\\Speedster.png");
+	this->Add<sf::Texture>("Shielded", path + "Textures\\Shielded.png");
+	this->Add<sf::Texture>("RangedShielded", path + "Textures\\Shielded_ranged.png");
+
+	this->Add<sf::Texture>("Shield", path + "Textures\\Shield.png");
+	this->Add<sf::Texture>("Projectile", path + "Textures\\Projectile.png");
 
 	this->Add<sf::Texture>("Ammo", path + "Textures\\Ammo.png");
 	this->Add<sf::Texture>("Bird", path + "Textures\\Green_Shell.png");
-	this->Add<sf::Texture>("Buck", path + "Textures\\Red_Shell.png");
-	this->Add<sf::Texture>("Dragon", path + "Textures\\Blue_Shell.png");
+	this->Add<sf::Texture>("Dragon", path + "Textures\\Red_Shell.png");
+	this->Add<sf::Texture>("Buck", path + "Textures\\Blue_Shell.png");
 	this->Add<sf::Texture>("Slug", path + "Textures\\Yellow_Shell.png");
 	this->Add<sf::Texture>("Bmg", path + "Textures\\Not_a_Shell.png");
 
@@ -40,8 +57,20 @@ void ResourceManager::Init()
 	this->Add<sf::Texture>("HpIcon", path + "Textures\\HpIcon.png");
 	this->Add<sf::Texture>("StageIcon", path + "Textures\\StageIcon.png");
 	this->Add<sf::Texture>("VestIcon", path + "Textures\\Vest.png");
+	this->Add<sf::Texture>("BmgIcon", path + "Textures\\BMG_Icon.png");
+	this->Add<sf::Texture>("CoffeeIcon", path + "Textures\\Coffee_Icon.png");
 
 	this->Add<sf::Texture>("Checkbox", path + "Textures\\CheckBox.png");
+
+	this->Add<sf::Texture>("StageClear", path + "Textures\\Stage_Clear.png");
+	this->Add<sf::Texture>("NextStage", path + "Textures\\Next_Stage.png");
+	this->Add<sf::Texture>("BmgPopUp", path + "Textures\\Bmg_PopUp.png");
+	this->Add<sf::Texture>("CoffeePopUp", path + "Textures\\Coffee_PopUp.png");
+	this->Add<sf::Texture>("AmmoPopUp", path + "Textures\\Ammo_PopUp.png");
+	this->Add<sf::Texture>("MedkitPopUp", path + "Textures\\Med_PopUp.png");
+	this->Add<sf::Texture>("VestPopUp", path + "Textures\\Vest_PopUp.png");
+	this->Add<sf::Texture>("XpPopUp", path + "Textures\\XP_PopUp.png");
+
 
 	this->Add<sf::Texture>("Placeholder", path + "Textures\\Placeholder.png");
 
@@ -49,30 +78,22 @@ void ResourceManager::Init()
 	this->Add<sf::Sound>("Player_Shot", path + "SFX\\Player_Shot.ogg");
 	this->Add<sf::Sound>("Player_Step", path + "SFX\\Walking.ogg");
 
-	this->Add<sf::Sound>("Button_Hover", path + "SFX\\Shot.ogg");
-	this->Add<sf::Sound>("Button_Click", path + "SFX\\Shot.ogg");
-	this->Add<sf::Sound>("Slider_Blip", path + "SFX\\Shot.ogg");
-
-	this->Add<sf::Sound>("Shop_Equip", path + "SFX\\Shot.ogg");
-
 	this->Add<sf::Sound>("Reload", path + "SFX\\Reload.ogg");
 	this->Add<sf::Sound>("Reload_Denied", path + "SFX\\No_Ammo.ogg");
-	this->Add<sf::Sound>("Ready", path + "SFX\\Shot.ogg");
 	this->Add<sf::Sound>("EmptyMag", path + "SFX\\Empty_Mag.ogg");
 
-	this->Add<sf::Sound>("Enemy_Shot", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("EnemyShot", path + "SFX\\Enemy_Shot.ogg");
 
 	this->Add<sf::Sound>("PlayerDeath", path + "SFX\\Game_Over.ogg");
-	this->Add<sf::Sound>("Hurt_Enemies", path + "SFX\\Shot.ogg");
-	this->Add<sf::Sound>("Death_Enemies", path + "SFX\\Shot.ogg");
-	this->Add<sf::Sound>("Hurt_dog", path + "SFX\\Shot.ogg");
-	this->Add<sf::Sound>("Death_dog", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Hurt_Enemies", path + "SFX\\Placeholder.ogg");
+	this->Add<sf::Sound>("Death_Enemies", path + "SFX\\Enemy_Death.ogg");
+	this->Add<sf::Sound>("Hurt_dog", path + "SFX\\Placeholder.ogg");
+	this->Add<sf::Sound>("Death_dog", path + "SFX\\Dog_Death.ogg");
 
 	this->Add<sf::Sound>("CrateOpen", path + "SFX\\Open_Crate.ogg");
 	this->Add<sf::Sound>("EquipementSelected", path + "SFX\\Equip.ogg");
 
-	this->Add<sf::Sound>("Next_Stage_Popup", path + "SFX\\Shot.ogg");
-	this->Add<sf::Sound>("GameOver", path + "SFX\\Shot.ogg");
+	this->Add<sf::Sound>("Next_Stage_Popup", path + "SFX\\Victory.ogg");
 
 	this->Add<sf::Sound>("ButtonClicked", path + "SFX\\Button_Clicked.ogg");
 	this->Add<sf::Sound>("ButtonHover", path + "SFX\\Button_Hover.ogg");
@@ -135,3 +156,5 @@ namespace RscMana
 		rscm.SetSFXVolume(_volume);
 	}
 }
+
+////////////////////////////////////////////////////////

@@ -1,5 +1,7 @@
 #include "Checkbox.hpp"
 
+////////////////////////////////////////////////////////
+
 Checkbox::Checkbox(std::string _str, sf::Vector2f _pos, sf::Vector2f _size, sf::Texture* _texture, bool _active)
 {
 	this->m_Text.setString(_str);
@@ -48,3 +50,5 @@ void Checkbox::Display(Window& _window)
 	_window.Draw(this->m_Rect);
 	_window.Draw(this->m_Text);
 }
+
+////////////////////////////////////////////////////////

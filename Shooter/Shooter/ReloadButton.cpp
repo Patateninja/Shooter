@@ -1,5 +1,7 @@
 #include "ReloadButton.hpp"
 
+////////////////////////////////////////////////////////
+
 ReloadButton::ReloadButton(std::string _str, std::string _strPopUp, sf::Vector2f _pos, sf::Vector2f _size, sf::Texture* _texture)
 {
 	this->m_Text.setString(_str);
@@ -77,3 +79,5 @@ void ReloadButton::Display(Window& _window)
 		_window.Draw(this->m_PopUpText);
 	}
 }
+
+////////////////////////////////////////////////////////

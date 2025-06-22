@@ -4,9 +4,9 @@
 
 Projectile::Projectile(sf::Vector2f _pos, sf::Vector2f _vel, ProjectileType _type, int _dmg, int _range, Team _team)
 {
-	this->m_Circle = sf::CircleShape(5.f);
-	this->m_Circle.setOrigin(sf::Vector2f(5.f, 5.f));
-	this->m_Circle.setFillColor(sf::Color::Red);
+	this->m_Circle = sf::CircleShape(3.f);
+	this->m_Circle.setOrigin(sf::Vector2f(3.f, 3.f));
+	this->m_Circle.setTexture(&RscMana::Get < sf::Texture>("Projectile"));
 	this->m_Position = _pos;
 	this->m_Velocity = _vel;
 	this->m_Type = _type;
@@ -49,7 +49,15 @@ void ProjectileList::Update(TileMap& _map)
 {
 	for (std::list<std::shared_ptr<Projectile>>::iterator proj = this->m_List.begin(); proj != this->m_List.end(); ++proj)
 	{
-		if (proj->get()->GetToDestroy() || proj->get()->Update(Time::GetDeltaTime(), _map))
+		if (proj->get()->GetToDestroy())
+		{
+			proj = this->m_List.erase(proj);
+			if (proj == this->m_List.end())
+			{
+				break;
+			}
+		}
+		else if (proj->get()->Update(Time::GetDeltaTime(), _map))
 		{
 			proj = this->m_List.erase(proj);
 			if (proj == this->m_List.end())

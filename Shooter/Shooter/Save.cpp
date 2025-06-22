@@ -1,5 +1,7 @@
 #include "Save.hpp"
 
+////////////////////////////////////////////////////////
+
 namespace SaveSystem
 {
 	void Save(std::string _filename, int& _xp, Muzzle& _muzzle, Grip& _grip, Stock& _stock, Magazine& _magazine, Armor& _armor, AmmoStash& _ammoStash, int& _sfxVolume, int& _bgmVolume, int& _bestStage)
@@ -131,15 +133,15 @@ namespace SaveSystem
 			}
 			else if (str == "Marine Armor")
 			{
-				_armor = Armor("Marine Armor", 7, 2, 1.f);
+				_armor = Armor("Marine Armor", 7, 3, 1.f);
 			}
 			else if (str == "Recon Armor")
 			{
-				_armor = Armor("Recon Armor", 16, 3, 1.2f);
+				_armor = Armor("Recon Armor", 16, 5, 1.2f);
 			}
 			else if (str == "Jugernaut Armor")
 			{
-				_armor = Armor("Jugernaut Armor", 32, 8, 0.7f);
+				_armor = Armor("Jugernaut Armor", 32, 12, 0.8f);
 			}
 			else
 			{
@@ -218,3 +220,5 @@ namespace SaveSystem
 		file.close();
 	}
 }
+
+////////////////////////////////////////////////////////

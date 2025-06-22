@@ -1,5 +1,7 @@
 #include "Icon.hpp"
 
+////////////////////////////////////////////////////////
+
 Icon::Icon(sf::Vector2f _pos, sf::Vector2f _size, sf::Texture* _texture)
 {
 	this->m_Rect.setSize(_size);
@@ -17,3 +19,5 @@ void Icon::Display(Window& _window)
 {
 	_window.Draw(this->m_Rect);
 }
+
+////////////////////////////////////////////////////////

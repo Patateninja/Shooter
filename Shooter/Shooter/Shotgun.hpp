@@ -29,6 +29,7 @@ class Shotgun
 		void Modify(Muzzle& _muzzle, Grip& _grip, Magazine& _magazine, Stock& _stock);
 
 		void Load(int _input);
+		void Unload(int& _buckshot, int& _dragonbreath, int& _slug, int& _maxammo);
 		void Shoot(sf::Vector2f& _playerPos, sf::Vector2f& _playerVel, float _playerAngle, Window& _window);
 		void EmptyMagazine();
 

@@ -46,24 +46,24 @@ void BoostCrate::Update(Player& _player, bool& _coffe, bool& _bmg, bool& _vest, 
 		{
 			this->m_Opened = true;
 			this->m_Rect.setFillColor(sf::Color::Black);
-			RscMana::Get<sf::Sound>("OpenCrate").play();
+			RscMana::Get<sf::Sound>("CrateOpen").play();
 
 			switch (this->m_Boost)
 			{
 				case MEDKIT :
 					_player.Heal();
-					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "MedKit");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "", "MedkitPopUp");
 					break;
 				case AMMOBOX :
 					_player.Refill();
-					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Ammo Box");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "", "AmmoPopUp");
 					break;
 				case XP :
 					Level::GainXP(250);
-					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "XP");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "", "XpPopUp");
 					break;
 				default :
-					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Somehow another thing (This is worrysome)");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Somehow another thing (This is worrysome)", "Placeholder");
 					break;
 			}
 		}
@@ -72,6 +72,11 @@ void BoostCrate::Update(Player& _player, bool& _coffe, bool& _bmg, bool& _vest, 
 	{
 		this->m_PlayerClose = false;
 	}
+}
+
+void BoostCrate::Delete()
+{
+	this->~BoostCrate();
 }
 
 ////////////////////////////////////////////////////////
@@ -99,11 +104,6 @@ BonusCrate::BonusCrate(sf::Vector2f _pos)
 	}
 }
 
-void BoostCrate::Delete()
-{
-	this->~BoostCrate();
-}
-
 void BonusCrate::Update(Player& _player, bool& _coffee, bool& _bmg, bool& _vest, BonusPopUp*& _popUp)
 {
 	if (Tools::Distance(this->m_Pos, _player.GetPos()) < Tile::GetSize() * 2 && !this->m_Opened)
@@ -120,18 +120,18 @@ void BonusCrate::Update(Player& _player, bool& _coffee, bool& _bmg, bool& _vest,
 			{
 				case COFFEE :
 					_coffee = true;
-					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Coffee");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "", "CoffeePopUp");
 					break;
 				case VEST :
 					_vest = true;;
-					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Vest");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "", "VestPopUp");
 					break;
 				case BMG50 :
 					_bmg = true;
-					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), ".50 BMG");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "", "BmgPopUp");
 					break;
 				default :
-					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Somehow another thing (This is worrysome)");
+					_popUp = new BonusPopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Somehow another thing (This is worrysome)", "Placeholder");
 					break;
 			}
 		}	

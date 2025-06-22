@@ -1,5 +1,7 @@
 #include "Camera.hpp"
 
+////////////////////////////////////////////////////////
+
 void Camera::Reset()
 {
 	this->m_Target = sf::Vector2f(0.f, 0.f);
@@ -28,3 +30,5 @@ void Camera::NewTarget(Window& _window, sf::Vector2f _pos, sf::Vector2i _mapsize
 
 	this->m_Target = target;
 }
+
+////////////////////////////////////////////////////////

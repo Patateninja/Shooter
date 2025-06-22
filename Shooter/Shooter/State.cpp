@@ -55,12 +55,7 @@ T& State::GetRsc(const std::string& _name)
 
 Menu::Menu(StateManager* _stateManager)
 {
-	std::cout << "Menu Created" << std::endl;
 	this->m_StateManager = _stateManager;
-}
-Menu::~Menu()
-{
-	std::cout << "Menu Deleted" << std::endl;
 }
 
 void Menu::Deletor()
@@ -70,7 +65,6 @@ void Menu::Deletor()
 
 void Menu::Init()
 {
-	std::cout << "Menu Init" << std::endl;
 	this->Window().ResetView();
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 	this->m_Text.setString("BREACH");
@@ -119,8 +113,6 @@ void Menu::Display()
 }
 void Menu::DeInit()
 {
-	std::cout << "Menu DeInit" << std::endl;
-
 	if(this->GetRsc<sf::Music>("Menu").getStatus() == sf::Sound::Status::Playing)
 	{
 		this->GetRsc<sf::Music>("Menu").stop();
@@ -133,12 +125,7 @@ void Menu::DeInit()
 
 Game::Game(StateManager* _stateManager)
 {
-	std::cout << "Game Created" << std::endl;
 	this->m_StateManager = _stateManager;
-}
-Game::~Game()
-{
-	std::cout << "Game Deleted" << std::endl;
 }
 
 void Game::Deletor()
@@ -148,7 +135,6 @@ void Game::Deletor()
 
 void Game::Init()
 {
-	std::cout << "Game Init" << std::endl;
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 	this->m_Text.setCharacterSize(15);
 	
@@ -156,14 +142,16 @@ void Game::Init()
 	this->m_Cam.NewTarget(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
 
 	this->m_Stage.SetNum(1);
-	this->m_Stage.Init();
+	this->m_Stage.Init(this->m_Player);
+
+	this->m_RetryButon = Button("", sf::Vector2f(1845.f,250.f), sf::Vector2f(70.f, 70.f), &RscMana::Get<sf::Texture>("RetryButton"));
 
 	this->m_StageNum = CounterIcon(sf::Vector2f(1845.f, 10.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("StageIcon"));
 	this->m_Life = CounterIcon(sf::Vector2f(1845.f, 90.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("HpIcon"));
 	this->m_Vest = CounterIcon(sf::Vector2f(1845.f, 170.f), sf::Vector2f(70.f, 70.f), &this->GetRsc<sf::Texture>("VestIcon"));
 
-	this->m_Coffee = Icon(sf::Vector2f(150.f, 70.f), sf::Vector2f(65.f, 65.f), &this->GetRsc<sf::Texture>("Placeholder"));
-	this->m_BMG50 = Icon(sf::Vector2f(225.f, 70.f), sf::Vector2f(65.f, 65.f), &this->GetRsc<sf::Texture>("Placeholder"));
+	this->m_Coffee = Icon(sf::Vector2f(185.f, 70.f), sf::Vector2f(65.f, 65.f), &this->GetRsc<sf::Texture>("CoffeeIcon"));
+	this->m_BMG50 = Icon(sf::Vector2f(260.f, 70.f), sf::Vector2f(65.f, 65.f), &this->GetRsc<sf::Texture>("BmgIcon"));
 
 	this->Window().SetViewCenter(this->Window().GetDefaultView().GetCenter() - sf::Vector2f(Tile::GetSize() / 2.f, Tile::GetSize() / 2.f));
 
@@ -207,27 +195,30 @@ void Game::Update()
 	{
 		this->m_Cam.Update(this->Window());
 
-		this->m_Text.setString(std::to_string(int(1 / Time::GetDeltaTime())) + " fps");
-		this->m_Text.setPosition(this->Window().RelativePos(sf::Vector2f(1900.f - this->m_Text.getGlobalBounds().width, 0.f)));
-
-		this->m_Player.Update(this->m_Stage.GetEnemies(), this->m_Stage.GetMap(), this->m_Cam, this->Window());
-		this->m_Stage.Update(this->m_Player, this->m_Cam, this->m_BonusPopUp, this->Window());
-
-		ProjList::Update(this->m_Stage.GetMap());
-
 		if (this->m_Player.GetMoving())
 		{
 			this->m_Cam.NewTarget(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
+
+			this->m_RetryButon.SetPosition(this->Window().RelativePos(sf::Vector2f(1845.f, 250.f)));
+			if (this->m_RetryButon.Update(this->Window()))
+			{
+				this->m_Player.Die(this->m_Stage.GetEnemies(), this->m_Stage.GetMap(), this->m_Cam, this->Window());
+				RscMana::Get<sf::Sound>("Player_Shot").play();
+			}
 		}
 		else
 		{
-			this->m_ReloadMenu.Update(this->m_Player,this->m_Stage.GetEnemies(),this->Window());
+			this->m_ReloadMenu.Update(this->m_Player, this->m_Stage.GetEnemies(), this->Window());
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
 			{
 				this->m_Cam.NewTarget(this->Window(), this->Window().RelativePos(sf::Mouse::getPosition()), this->m_Stage.GetMap().GetSize());
 			}
 		}
+
+		this->m_Player.Update(this->m_Stage.GetEnemies(), this->m_Stage.GetMap(), this->m_Cam, this->Window());
+		ProjList::Update(this->m_Stage.GetMap());
+		this->m_Stage.Update(this->m_Player, this->m_Cam, this->m_BonusPopUp, this->Window());
 
 		if (this->m_Player.GetCoffeeEnabled())
 		{
@@ -246,22 +237,50 @@ void Game::Update()
 
 		if (this->m_Stage.GetMoveOn())
 		{
-			if (this->m_StagePopUp == nullptr)
+			if (this->m_PopTimer == 0.f)
 			{
-				this->m_StagePopUp = new PopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 400.f), "Stage Cleared\nPress Enter to continue");
+				this->GetRsc<sf::Sound>("Next_Stage_Popup").play();
 			}
-			else
+
+			if (this->m_StageClearPopUp == nullptr && this->m_PopTimer > 0.5f)
 			{
-				this->m_StagePopUp->Update(this->Window());
+				this->m_StageClearPopUp = new PopUp(sf::Vector2f(590.f, 340.f), sf::Vector2f(800.f, 200.f), "", "StageClear");
+			}
+			else if (this->m_PopTimer < 0.5f)
+			{
+				this->m_PopTimer += Time::GetDeltaTime();
+			}
+			if (this->m_StageClearPopUp != nullptr)
+			{
+				this->m_StageClearPopUp->Update(this->Window());
+			}
+
+			if (this->m_NextStagePopUp == nullptr && this->m_PopTimer > 1.f)
+			{
+				this->m_NextStagePopUp = new PopUp(sf::Vector2f(590.f, 540.f), sf::Vector2f(800.f, 200.f), "", "NextStage");
+			}
+			else if (this->m_PopTimer < 1.f && this->m_PopTimer > 0.5f)
+			{
+				this->m_PopTimer += Time::GetDeltaTime();
+			}
+			if (this->m_NextStagePopUp != nullptr)
+			{
+				this->m_NextStagePopUp->Update(this->Window());
 			}
 		}
 		else
 		{
-			if (this->m_StagePopUp)
+			if (this->m_StageClearPopUp)
 			{
-				delete this->m_StagePopUp;
-				this->m_StagePopUp = nullptr;
+				delete this->m_StageClearPopUp;
+				this->m_StageClearPopUp = nullptr;
 			}
+			if (this->m_NextStagePopUp)
+			{
+				delete this->m_NextStagePopUp;
+				this->m_NextStagePopUp = nullptr;
+			}
+			this->m_PopTimer = 0.f;
 		}
 
 		if (this->m_BonusPopUp)
@@ -300,18 +319,17 @@ void Game::Display()
 	this->m_Player.Display(this->Window());
 	this->Draw(this->m_Text);
 
-	if (this->m_StagePopUp)
+	if (this->m_StageClearPopUp)
 	{
-		this->m_StagePopUp->Display(this->Window());
+		this->m_StageClearPopUp->Display(this->Window());
+	}
+	if (this->m_NextStagePopUp)
+	{
+		this->m_NextStagePopUp->Display(this->Window());
 	}
 	if (this->m_BonusPopUp)
 	{
 		this->m_BonusPopUp->Display(this->Window());
-	}
-
-	if (this->m_Paused)
-	{
-		this->m_PauseMenu.Display(this->Window());
 	}
 
 	if (this->m_Player.GetCoffeeEnabled())
@@ -333,17 +351,25 @@ void Game::Display()
 	if (!this->m_Player.GetMoving())
 	{
 		this->m_ReloadMenu.Display(this->Window());
+
+	}
+	else if(this->m_Player.GetMoving())
+	{
+		this->m_RetryButon.Display(this->Window());
+	}
+
+	if (this->m_Paused)
+	{
+		this->m_PauseMenu.Display(this->Window());
 	}
 
 	this->DisplayWindow();
 }
 void Game::DeInit()
 {
-	std::cout << "Game DeInit" << std::endl;
-
-	if (this->m_StagePopUp)
+	if (this->m_StageClearPopUp)
 	{
-		delete this->m_StagePopUp;
+		delete this->m_StageClearPopUp;
 	}
 	if (this->m_BonusPopUp)
 	{
@@ -362,12 +388,7 @@ void Game::DeInit()
 
 GameOver::GameOver(StateManager* _stateManager)
 {
-	std::cout << "GameOver Created" << std::endl;
 	this->m_StateManager = _stateManager;
-}
-GameOver::~GameOver()
-{
-	std::cout << "GameOver Deleted" << std::endl;
 }
 
 void GameOver::Deletor()
@@ -377,7 +398,6 @@ void GameOver::Deletor()
 
 void GameOver::Init()
 {
-	std::cout << "GameOver Init" << std::endl;
 	this->Window().ResetView();
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
 
@@ -422,8 +442,6 @@ void GameOver::Display()
 }
 void GameOver::DeInit()
 {
-	std::cout << "GameOver DeInit" << std::endl;
-
 	if (this->GetRsc<sf::Music>("GameOverMusic").getStatus() == sf::Sound::Status::Playing)
 	{
 		this->GetRsc<sf::Music>("GameOverMusic").stop();
@@ -436,12 +454,7 @@ void GameOver::DeInit()
 
 Upgrade::Upgrade(StateManager* _stateManager)
 {
-	std::cout << "Upgrade Created" << std::endl;
 	this->m_StateManager = _stateManager;
-}
-Upgrade::~Upgrade()
-{
-	std::cout << "Upgrade Deleted" << std::endl;
 }
 
 void Upgrade::Deletor()
@@ -451,7 +464,6 @@ void Upgrade::Deletor()
 
 void Upgrade::Init()
 {
-	std::cout << "Upgrade Init" << std::endl;
 	this->Window().ResetView();
 	this->m_Shop.Init(Level::GetLvl(), State::GetMuzzle(), State::m_Grip, State::m_Stock, State::m_Magazine, State::m_Armor, State::m_AmmoStash);
 	
@@ -500,19 +512,6 @@ void Upgrade::Update()
 		this->m_InputTimer = 0.f;
 		this->ChangeState<Menu>();
 	}
-
-	/// Temp ///
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Add) && this->m_InputTimer > 0.2f)
-	{
-		this->m_InputTimer = 0.f;
-		if (this->m_PlayerLevel < 35)
-		{
-			Level::GainXP(28510);
-			this->m_PlayerLevel = Level::GetLvl();
-			this->m_Shop.SetLevel(this->m_PlayerLevel);
-		}
-	}
-	////////////
 }
 void Upgrade::Display()
 {
@@ -535,8 +534,6 @@ void Upgrade::Display()
 }
 void Upgrade::DeInit()
 {
-	std::cout << "Upgrade DeInit" << std::endl;
-
 	if (this->GetRsc<sf::Music>("Armory").getStatus() == sf::Sound::Status::Playing)
 	{
 		this->GetRsc<sf::Music>("Armory").stop();
@@ -549,12 +546,7 @@ void Upgrade::DeInit()
 
 Option::Option(StateManager* _stateManager)
 {
-	std::cout << "Option Created" << std::endl;
 	this->m_StateManager = _stateManager;
-}
-Option::~Option()
-{
-	std::cout << "Option Deleted" << std::endl;
 }
 
 void Option::Deletor()
@@ -564,7 +556,6 @@ void Option::Deletor()
 
 void Option::Init()
 {
-	std::cout << "Option Init" << std::endl;
 	this->Window().ResetView();
 
 	this->m_Text.setFont(this->GetRsc<sf::Font>("Mono"));
@@ -639,8 +630,6 @@ void Option::Display()
 }
 void Option::DeInit()
 {
-	std::cout << "Option DeInit" << std::endl;
-
 	if (this->GetRsc<sf::Music>("Option").getStatus() == sf::Sound::Status::Playing)
 	{
 		this->GetRsc<sf::Music>("Option").stop();
@@ -653,12 +642,7 @@ void Option::DeInit()
 
 Quit::Quit(StateManager* _stateManager)
 {
-	std::cout << "Quit Created" << std::endl;
 	this->m_StateManager = _stateManager;
-}
-Quit::~Quit()
-{
-	std::cout << "Quit Deleted" << std::endl;
 }
 
 void Quit::Deletor()
@@ -668,21 +652,14 @@ void Quit::Deletor()
 
 void Quit::Init()
 {
-	std::cout << "Quit Init" << std::endl;
 	this->Window().ResetView();
 }
 void Quit::Update()
 {
 	this->Window().Close();
 }
-void Quit::Display()
-{
-
-}
-void Quit::DeInit()
-{
-	std::cout << "Quit DeInit" << std::endl;
-}
+void Quit::Display() {}
+void Quit::DeInit() {}
 
 #pragma endregion
 ////////////////////////////////////////////////////////

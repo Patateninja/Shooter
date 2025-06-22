@@ -1,5 +1,4 @@
 #pragma once
-#include "Projectile.hpp"
 #include "Astar.hpp"
 #include "Shield.hpp"
 #include "Xp.hpp"
@@ -16,7 +15,7 @@ typedef enum IdleBehavior
 class Enemy
 {
 	protected :
-		sf::CircleShape m_Circle;
+		sf::RectangleShape m_Rect;
 		std::vector<std::weak_ptr<Projectile>> m_IgnoreProj;
 		std::vector<Tile> m_PatrolTargets;
 		std::list<Tile> m_Path;
@@ -39,6 +38,7 @@ class Enemy
 		float m_PathUdpateCooldown = 0.f;
 		float m_SeePlayerUdpateCooldown = 0.f;
 		float m_LosePlayerCooldown = 0.f;
+		float m_ViewResetCooldown = 0.f;
 		float m_Angle = 0.f;
 		float m_DefaultAngle = this->m_Angle = Tools::Random(2, -1) * 90.f;;
 		bool m_Burning = false;
@@ -57,7 +57,7 @@ class Enemy
 		inline const sf::Vector2f GetPos() const { return this->m_Position; };
 		inline const sf::Vector2f GetProjOrigin()const { return this->m_ProjectileOrigin; };
 		inline const int GetHP() const { return this->m_Hp; };
-		inline sf::FloatRect GetHitbox() { return this->m_Circle.getGlobalBounds(); };
+		inline sf::FloatRect GetHitbox() { return this->m_Rect.getGlobalBounds(); };
 		inline const bool GetActive() const { return this->m_Active; };
 		inline void SetActive(bool _input) { this->m_Active = _input; };
 
@@ -78,7 +78,7 @@ class Enemy
 		void CheckDamage();
 		void TakeDamage(std::shared_ptr<Projectile>& _projectile);
 		void TakeDamage(int _damage);
-		void Die();
+		virtual void Die();
 };
 
 class Baseliner : public Enemy
@@ -90,7 +90,7 @@ class Baseliner : public Enemy
 
 class Tank : public Enemy
 {
-	public:
+	public :
 		Tank(const sf::Vector2f& _stratingPos, TileMap& _map);
 		~Tank();
 };
@@ -100,7 +100,7 @@ class Ranged : public Enemy
 	private :
 		float m_ShootTimer;
 
-	public:
+	public :
 		Ranged(const sf::Vector2f& _stratingPos, TileMap& _map);
 		~Ranged();
 
@@ -111,9 +111,11 @@ class Ranged : public Enemy
 
 class Speedster : public Enemy
 {
-	public:
+	public :
 		Speedster(const sf::Vector2f& _stratingPos, TileMap& _map);
 		~Speedster();
+		
+		void Die() override;
 };
 
 class Shielded : public Enemy
@@ -121,7 +123,7 @@ class Shielded : public Enemy
 	private :
 		std::unique_ptr<Shield> m_Shield;
 
-	public:
+	public :
 		Shielded(const sf::Vector2f& _stratingPos, TileMap& _map);
 		~Shielded();
 
@@ -131,11 +133,11 @@ class Shielded : public Enemy
 
 class RangedShielded : public Enemy
 {
-	private:
+	private :
 		float m_ShootTimer;
 		std::unique_ptr<Shield> m_Shield;
 
-	public:
+	public :
 		RangedShielded(const sf::Vector2f& _stratingPos, TileMap& _map);
 		~RangedShielded();
 
@@ -149,6 +151,7 @@ class EnemyList
 {
 	private :
 		std::list<std::pair<std::thread,std::shared_ptr<Enemy>>> m_List;
+
 	public :
 		EnemyList() = default;
 		~EnemyList();
