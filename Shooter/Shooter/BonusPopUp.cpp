@@ -33,8 +33,8 @@ void BonusPopUp::Update(Window& _window)
 	this->m_Text.setPosition(_window.RelativePos(this->m_Position));
 	this->m_CloseButton.SetPosition(_window.RelativePos(this->m_Position + sf::Vector2f(this->m_Rect.getSize().x * 0.5f - 50.f, this->m_Rect.getSize().y * 0.8f)));
 
-	this->m_Rect.setFillColor(sf::Color(255, 255, 255, sf::Uint8(this->m_Opacity / 100.f) * 255));
-	this->m_Text.setFillColor(sf::Color(255, 255, 255, sf::Uint8(this->m_Opacity / 100.f) * 255));
+	this->m_Rect.setFillColor(sf::Color(255, 255, 255, (this->m_Opacity / 100.f) * 255));
+	this->m_Text.setFillColor(sf::Color(255, 255, 255, (this->m_Opacity / 100.f) * 255));
 
 	if (this->m_CloseButton.Update(_window))
 	{
