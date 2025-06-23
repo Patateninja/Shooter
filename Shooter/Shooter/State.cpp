@@ -184,7 +184,7 @@ void Game::Update()
 			}
 		}
 
-		if (this->m_Paused)
+		if (this->m_Paused && !this->m_BonusPopUp)
 		{
 			this->m_PauseMenu.Update(this->Window(), this->m_Paused, *this->m_StateManager);
 		}
@@ -358,7 +358,7 @@ void Game::Display()
 		this->m_RetryButon.Display(this->Window());
 	}
 
-	if (this->m_Paused)
+	if (this->m_Paused && ! this->m_BonusPopUp)
 	{
 		this->m_PauseMenu.Display(this->Window());
 	}
