@@ -43,7 +43,7 @@ void Stage::GenerateMap(Player& _player)
 			tile = this->m_TileMap.GetTile(x * Tile::GetSize(), y * Tile::GetSize());
 		} while (!tile.GetWalkable());
 
-		this->m_Crate = new BoostCrate(tile.GetCood(), _player.GetHP() < 3, (_player.GetSlug() < _player.GetBuckshot() * 0.3f && _player.GetDragonBreath() < _player.GetMaxAmmo() * 0.3f & _player.GetSlug() < _player.GetMaxAmmo() * 0.3f));
+		this->m_Crate = new BoostCrate(tile.GetCood(), _player.GetHP() < 3, bool(_player.GetSlug() < _player.GetBuckshot() * 0.3f && _player.GetDragonBreath() < _player.GetMaxAmmo() * 0.3f && _player.GetSlug() < _player.GetMaxAmmo() * 0.3f));
 	}
 	else
 	{
