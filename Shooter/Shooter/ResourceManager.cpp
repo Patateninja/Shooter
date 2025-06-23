@@ -53,6 +53,9 @@ void ResourceManager::Init()
 	this->Add<sf::Texture>("FloorTile", path + "Textures\\Floor.png");
 	this->Add<sf::Texture>("Table", path + "Textures\\Table.png");
 	this->Add<sf::Texture>("Barrel", path + "Textures\\Barrel.png");
+	this->Add<sf::Texture>("BoostCrate", path + "Textures\\Crate_1.png");
+	this->Add<sf::Texture>("BonusCrate", path + "Textures\\Crate_2.png");
+
 
 	this->Add<sf::Texture>("HpIcon", path + "Textures\\HpIcon.png");
 	this->Add<sf::Texture>("StageIcon", path + "Textures\\StageIcon.png");

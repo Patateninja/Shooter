@@ -141,7 +141,7 @@ void Game::Init()
 	this->m_Player.Init(State::m_Muzzle, State::m_Grip, State::m_Magazine, State::m_Stock, State::m_Armor, State::m_AmmoStash);
 	this->m_Cam.NewTarget(this->Window(), this->m_Player.GetPos(), this->m_Stage.GetMap().GetSize());
 
-	this->m_Stage.SetNum(1);
+	this->m_Stage.SetNum(4);
 	this->m_Stage.Init(this->m_Player);
 
 	this->m_RetryButon = Button("", sf::Vector2f(1845.f,250.f), sf::Vector2f(70.f, 70.f), &RscMana::Get<sf::Texture>("RetryButton"));
@@ -184,7 +184,7 @@ void Game::Update()
 			}
 		}
 
-		if (this->m_Paused)
+		if (this->m_Paused && !this->m_BonusPopUp)
 		{
 			this->m_PauseMenu.Update(this->Window(), this->m_Paused, *this->m_StateManager);
 		}
@@ -358,7 +358,7 @@ void Game::Display()
 		this->m_RetryButon.Display(this->Window());
 	}
 
-	if (this->m_Paused)
+	if (this->m_Paused && ! this->m_BonusPopUp)
 	{
 		this->m_PauseMenu.Display(this->Window());
 	}

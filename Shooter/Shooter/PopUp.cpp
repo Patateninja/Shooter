@@ -31,8 +31,8 @@ void PopUp::Update(Window& _window)
 	this->m_Rect.setPosition(_window.RelativePos(this->m_Position));
 	this->m_Text.setPosition(_window.RelativePos(this->m_Position));
 
-	this->m_Rect.setFillColor(sf::Color(255, 255, 255, sf::Uint8(this->m_Opacity / 100.f) * 255));
-	this->m_Text.setFillColor(sf::Color(255, 255, 255, sf::Uint8(this->m_Opacity / 100.f) * 255));
+	this->m_Rect.setFillColor(sf::Color(255, 255, 255, (this->m_Opacity / 100.f) * 255));
+	this->m_Text.setFillColor(sf::Color(255, 255, 255, (this->m_Opacity / 100.f) * 255));
 }
 
 void PopUp::Display(Window& _window)

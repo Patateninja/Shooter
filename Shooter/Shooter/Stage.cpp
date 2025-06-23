@@ -21,7 +21,7 @@ void Stage::GenerateMap(Player& _player)
 	this->m_MapSprite.setTexture(this->m_MapTexture.getTexture());
 	this->m_MapSprite.setPosition(-Tile::GetSize() / 2.f, -Tile::GetSize() / 2.f);
 
-	if (this->m_Num % 3 == 0)
+	if (this->m_Num % 4 == 0)
 	{
 		Tile tile;
 		do
@@ -33,7 +33,7 @@ void Stage::GenerateMap(Player& _player)
 
 		this->m_Crate = new BonusCrate(tile.GetCood());
 	}
-	else if (this->m_Num % 5 == 0)
+	else if (this->m_Num % 6 == 0)
 	{
 		Tile tile;
 		do

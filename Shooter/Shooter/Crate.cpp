@@ -18,8 +18,9 @@ BoostCrate::BoostCrate(sf::Vector2f _pos, bool _canBeHealth, bool _canBeAmmo)
 	this->m_Pos = _pos;
 	this->m_Rect.setPosition(_pos);
 	this->m_Rect.setOrigin(this->m_Rect.getSize() / 2.f);
-	this->m_Rect.setFillColor(sf::Color::Red);
-	this->m_Text.setPosition(_pos);
+	this->m_Rect.setTexture(&RscMana::Get<sf::Texture>("BoostCrate"));
+	this->m_Rect.setTextureRect(sf::IntRect(0,0,64,64));
+	this->m_Text.setPosition(_pos - sf::Vector2f(this->m_Text.getGlobalBounds().getSize().x / 2.f, this->m_Rect.getSize().y / 2.f + this->m_Text.getGlobalBounds().getSize().y));
 
 	int rand = Tools::Random(2);
 	if (rand == 0 && _canBeHealth)
@@ -45,7 +46,7 @@ void BoostCrate::Update(Player& _player, bool& _coffe, bool& _bmg, bool& _vest, 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 		{
 			this->m_Opened = true;
-			this->m_Rect.setFillColor(sf::Color::Black);
+			this->m_Rect.setTextureRect(sf::IntRect(64, 0, 64, 64));
 			RscMana::Get<sf::Sound>("CrateOpen").play();
 
 			switch (this->m_Boost)
@@ -86,8 +87,9 @@ BonusCrate::BonusCrate(sf::Vector2f _pos)
 	this->m_Pos = _pos;
 	this->m_Rect.setPosition(_pos);
 	this->m_Rect.setOrigin(this->m_Rect.getSize() / 2.f);
-	this->m_Rect.setFillColor(sf::Color::Green);
-	this->m_Text.setPosition(_pos);
+	this->m_Rect.setTexture(&RscMana::Get<sf::Texture>("BonusCrate"));
+	this->m_Rect.setTextureRect(sf::IntRect(0, 0, 64, 64));
+	this->m_Text.setPosition(_pos - sf::Vector2f(this->m_Text.getGlobalBounds().getSize().x / 2.f, this->m_Rect.getSize().y / 2.f + this->m_Text.getGlobalBounds().getSize().y));
 
 	int rand = Tools::Random(2);
 	if (rand == 0)
@@ -113,7 +115,7 @@ void BonusCrate::Update(Player& _player, bool& _coffee, bool& _bmg, bool& _vest,
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 		{
 			this->m_Opened = true;
-			this->m_Rect.setFillColor(sf::Color::Black);
+			this->m_Rect.setTextureRect(sf::IntRect(64, 0, 64, 64));
 			RscMana::Get<sf::Sound>("CrateOpen").play();
 
 			switch (this->m_Bonus)
